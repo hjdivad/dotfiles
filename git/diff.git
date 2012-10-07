@@ -1,0 +1,10 @@
+[alias]
+  dc = diff --cached
+  dcw = diff --cached --ignore-all-space --color-words
+  dw = diff --ignore-all-space --color-words
+
+[diff]
+  renames = true
+
+
+# vim:ft=gitconfig:

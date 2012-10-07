@@ -1,0 +1,26 @@
+[alias]
+  ca = "!f() { git add -A && git commit -a -v \"$@\"; }; f"
+  cam = "!f() { git add -A && git commit -a -v --amend \"$@\"; }; f"
+  cm = commit -v --amend
+  cmm = commit -v --amend -CHEAD
+
+  # Commit (squash fragment)
+  #   e.g.  git commit -m 'subtopic1'
+  #         git commit -m 'subtopic2'
+  #         git cs 'subtopic1'  # => fixup! subtopic1
+  cs = "!f() { { [ -n \"$1\" ] && git log origin/master.. --pretty=format:%s | grep -v -P '^(squash!)|(fixup!)' | uniq | grep -q \"$1\" 2> /dev/null; } \
+                    || { \
+                         echo Unable to find squash-target $1.  Squash targets found:\n   \
+                         echo \n \
+                         git --no-pager log origin/master.. --pretty=format:%s | uniq | grep -v -P '^(squash!)|(fixup!)'; false; } \
+                    && { git commit -m \"fixup! $1\n\n$2\"; }; \
+        }; f"
+  # Commit all (squash fragment)
+  cas = "!f() { git add -A && git cs \"$@\"; }; f"
+
+
+  ap = add --patch
+  au = add -u
+
+
+# vim:ft=gitconfig:

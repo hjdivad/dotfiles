@@ -1,0 +1,18 @@
+set completion-ignore-case on
+set completion-query-items 250
+
+# Don't have completion cycle through options
+set show-all-if-ambiguous on
+
+# Complete ./foo as ./foo/ when foo is symlinked to a directory.
+set mark-symlinked-directories on
+
+
+TAB: complete
+
+
+# For readline enabled programs, use modal line editing.
+set editing-mode vi
+
+
+# vim:ft=readline:

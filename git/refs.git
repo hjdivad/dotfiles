@@ -1,0 +1,9 @@
+[alias]
+	name-of = name-rev --name-only
+
+  # Finds least common ancestor.  Note this won't find the fork point if we've
+  # merged commits that have also been merged to master.
+  fpm = merge-base HEAD master
+	fpmn = "!f() { git name-of `git fpm`; }; f"
+
+# vim:ft=gitconfig:

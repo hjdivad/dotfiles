@@ -1,0 +1,6 @@
+# login shells should do at least everything that interactive shells do.
+[ -f ~/.bashrc ] && source ~/.bashrc
+
+
+
+# vim:ft=sh:

@@ -1,0 +1,9 @@
+# Depends on a git-completion that supports checking these configuration
+# options.
+[complete]
+  wm = branch
+  ca = commit
+  cam = commit
+
+
+# vim:ft=gitconfig:

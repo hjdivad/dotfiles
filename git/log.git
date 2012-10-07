@@ -1,0 +1,21 @@
+[alias]
+  wc = whatchanged -p -w -B
+  wcw = whatchanged -p -w --color-words
+  wcwb = whatchanged -p -w --color-words origin/master..
+
+
+  lg = log --no-merges --stat -i
+  ln = log --no-merges -r -i --name-status
+  lgb = log --no-merges --stat -i origin/master..
+  logb = log origin/master..
+
+  gl = log --decorate --cherry-mark --oneline --graph --boundary
+
+  head = show -w --color-words HEAD
+	count = shortlog -sn
+
+  tags = tag -l -n24601
+
+	st = status -sb -uall
+
+# vim:ft=gitconfig:

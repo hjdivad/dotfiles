@@ -1,0 +1,10 @@
+[color]
+	grep = true
+  branch = true
+  interactive = true
+  pager = true
+  showbranch = true
+  status = true
+  ui = true
+
+# vim:ft=gitconfig:

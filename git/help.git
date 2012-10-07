@@ -1,0 +1,4 @@
+[alias]
+  h = help
+
+# vim:ft=gitconfig:
