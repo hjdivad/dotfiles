@@ -7,8 +7,9 @@ _prompt_rvm() {
 
 _prompt_git() {
   if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
-    # We have a git, ask him questions
-    if [ -z "$(git status -z)" ]; then
+    # We have a git, ask him questions, unless it's disabled
+    if  git config prompt.dontCheckStatus > /dev/null ||\
+        [ -z "$(git status -z)" ]; then
       # Clean
       local state_prefix=""
     else

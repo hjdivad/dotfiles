@@ -14,3 +14,7 @@ _git_ca() {
 _git_cam() {
   _git_commit $@
 }
+
+_git_camm() {
+  _git_commit $@
+}

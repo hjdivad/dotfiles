@@ -5,6 +5,6 @@
   upstream = "!f() { local b=`git branch-current` && local r=`git config branch.$b.remote` && local m=`git config branch.$b.merge` && [ -n \"$r\" ] && [ -n \"$m\" ] && echo $r/${m#refs/heads/}  || echo 'master'; }; f"
 
 [push]
-  default = matching
+  default = upstream
 
 # vim:ft=gitconfig:

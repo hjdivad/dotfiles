@@ -1,5 +1,6 @@
 [alias]
   c = checkout
+  cp = checkout --patch
 
   b = branch
   br = branch -r

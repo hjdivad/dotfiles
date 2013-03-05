@@ -3,6 +3,7 @@
   cam = "!f() { git add -A && git commit -a -v --amend \"$@\"; }; f"
   cm = commit -v --amend
   cmm = commit -v --amend -CHEAD
+  camm = "!f() { git add -A && git commit -a -v --amend -CHEAD \"$@\"; }; f"
 
   # Commit (squash fragment)
   #   e.g.  git commit -m 'subtopic1'

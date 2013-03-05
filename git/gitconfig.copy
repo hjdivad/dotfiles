@@ -5,6 +5,7 @@
   path = .dotfiles/git/complete.git
   path = .dotfiles/git/core.git
   path = .dotfiles/git/diff.git
+  path = .dotfiles/git/github.git
   path = .dotfiles/git/help.git
   path = .dotfiles/git/log.git
   path = .dotfiles/git/refs.git

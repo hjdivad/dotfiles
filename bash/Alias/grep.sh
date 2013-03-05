@@ -2,4 +2,4 @@
 alias gi='grep -r -i --color'
 
 # Grep with perl regex.
-alias gp='grep -r -P --color'
+alias gp='grep -r -p --color'
