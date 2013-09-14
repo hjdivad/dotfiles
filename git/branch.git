@@ -1,6 +1,9 @@
 [alias]
   c = checkout
   cp = checkout --patch
+  # checkout pull-request.  This assumes pull requests exist as refs under
+  # refs/pull/<n>
+  cpr = "!f() { git checkout -b pull/$1 pull-requests/$1; }; f"
 
   b = branch
   br = branch -r

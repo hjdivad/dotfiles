@@ -18,3 +18,16 @@ _git_cam() {
 _git_camm() {
   _git_commit $@
 }
+
+__git_pull_refs() {
+	local dir="$(__gitdir)"
+	if [ -d "$dir" ]; then
+		git --git-dir="$dir" for-each-ref --format='%(refname:short)' \
+			refs/pull-requests | sed 's/^pull-requests\///'
+		return
+	fi
+}
+
+_git_cpr() {
+  __gitcomp_nl "$(__git_pull_refs)"
+}

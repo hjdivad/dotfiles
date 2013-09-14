@@ -1,0 +1,3 @@
+export ALPHA=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+export ALPHANUM="$ALPHA"0123456789
+export PWS_SECONDS=60
