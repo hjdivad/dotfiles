@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-which rvm-prompt 2>&1 > /dev/null
-if [[ $? != 0 ]]; then
+which rvm-prompt > /dev/null 2>&1
+if [[ $? == 0 ]]; then
   _prompt_rvm() {
     local rvm_current=$(rvm-prompt)
     echo "$orange${rvm_current#ruby-}$reset_color "
