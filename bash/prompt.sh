@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
-_prompt_rvm() {
-  local rvm_current=$(rvm-prompt)
-  echo "$orange${rvm_current#ruby-}$reset_color "
-}
+which rvm-prompt 2>&1 > /dev/null
+if [[ $? != 0 ]]; then
+  _prompt_rvm() {
+    local rvm_current=$(rvm-prompt)
+    echo "$orange${rvm_current#ruby-}$reset_color "
+  }
+else
+  _prompt_rvm() { echo ""; }
+fi
 
 _prompt_git() {
   if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
