@@ -14,7 +14,7 @@ _prompt_git() {
   if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
     # We have a git, ask him questions, unless it's disabled
     if  git config prompt.dontCheckStatus > /dev/null ||\
-        [ -z "$(git status -z)" ]; then
+        [ -z "$(git status --ignore-submodules -z)" ]; then
       # Clean
       local state_prefix=""
     else
