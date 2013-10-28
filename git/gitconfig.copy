@@ -1,4 +1,4 @@
-[includes]
+[include]
   path = .dotfiles/git/branch.git
   path = .dotfiles/git/colour.git
   path = .dotfiles/git/commit.git
