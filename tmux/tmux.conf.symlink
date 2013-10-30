@@ -1,5 +1,5 @@
 # reset prefix
-set -g prefix F12 # bind caps lock to f12 to make this reasonable
+set -g prefix pgdn # bind caps lock to pgdn to make this reasonable
 
 # keybindings
 setw -g mode-keys vi

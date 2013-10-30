@@ -10,8 +10,11 @@ else
   _prompt_rvm() { echo ""; }
 fi
 
+# OPTIMISE: This is the slowest part of my prompt
+# 
 _prompt_git() {
-  if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+  local ref=$(git symbolic-ref HEAD 2> /dev/null)
+  if [ -n "$ref" ]; then
     # We have a git, ask him questions, unless it's disabled
     if  git config prompt.dontCheckStatus > /dev/null ||\
         [ -z "$(git status --ignore-submodules -z)" ]; then
@@ -21,7 +24,6 @@ _prompt_git() {
       # Dirty
       local state_prefix="[$red+$reset_color]"
     fi
-    local ref=$(git symbolic-ref HEAD 2> /dev/null)
     local branch=${ref#refs/heads/}
     echo "$state_prefix$green$branch$reset_color "
   else
