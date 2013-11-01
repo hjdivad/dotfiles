@@ -1,6 +1,8 @@
 # reset prefix
 set -g prefix pgdn # bind caps lock to pgdn to make this reasonable
 
+set-option -g default-command "reattach-to-user-namespace -l bash"
+
 # keybindings
 setw -g mode-keys vi
 
@@ -21,7 +23,7 @@ bind ">" resize-pane -R 1
 bind "<" resize-pane -L 1
 bind "_" resize-pane -y 9999
 bind "|" resize-pane -x 9999
-bind "=" select-layout tiled
+bind "=" resize-pane -x "$HALF_COLUMNS" -y "$HALF_LINES"
 
 # speed up
 set-option -s escape-time 10
