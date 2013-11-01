@@ -17,6 +17,7 @@ bind v split-window -h
 bind n split-window -v
 bind c kill-pane
 
+# Pane resizing
 bind "+" resize-pane -U 1
 bind "-" resize-pane -D 1
 bind ">" resize-pane -R 1
@@ -24,6 +25,10 @@ bind "<" resize-pane -L 1
 bind "_" resize-pane -y 9999
 bind "|" resize-pane -x 9999
 bind "=" resize-pane -x "$HALF_COLUMNS" -y "$HALF_LINES"
+
+# Copy mode
+bind -t vi-copy y begin-selection
+
 
 # speed up
 set-option -s escape-time 10
