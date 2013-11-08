@@ -6,11 +6,12 @@ set-option -g default-command "safe-reattach-to-user-namespace -l $SHELL"
 # keybindings
 setw -g mode-keys vi
 
-# move between panes
+# moving around
 bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
+bind t last-window
 
 # split windows to create more panes
 bind v split-window -h
@@ -18,10 +19,11 @@ bind n split-window -v
 bind c kill-pane
 
 # Pane resizing
-bind "+" resize-pane -U 1
-bind "-" resize-pane -D 1
-bind ">" resize-pane -R 1
-bind "<" resize-pane -L 1
+bind f resize-pane -Z
+bind -r "+" resize-pane -U 1
+bind -r "-" resize-pane -D 1
+bind -r ">" resize-pane -R 1
+bind -r "<" resize-pane -L 1
 bind "_" resize-pane -y 9999
 bind "|" resize-pane -x 9999
 bind "=" resize-pane -x "$HALF_COLUMNS" -y "$HALF_LINES"
