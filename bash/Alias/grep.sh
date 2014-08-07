@@ -10,4 +10,4 @@ which ggrep > /dev/null &&\
   alias gp='grep -r -P --color'
 
 # Grep git repo.
-alias gg='git grep'
+alias gg='git grep --untracked'

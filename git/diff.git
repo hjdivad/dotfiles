@@ -2,6 +2,7 @@
   dc = diff --cached
   dcw = diff --cached --ignore-all-space --color-words
   dw = diff --ignore-all-space --color-words
+  diff-rebase-mine = "!f() { local gitdir=`git rev-parse --show-toplevel`; local sha=`cat $gitdir/.git/rebase-apply/orig-head`; git diff $sha^..$sha $@; }; f"
 
 [diff]
   renames = true

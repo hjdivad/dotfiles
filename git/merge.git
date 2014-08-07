@@ -1,0 +1,4 @@
+[merge]
+  tool = vimdiff
+
+# vim:ft=gitconfig:

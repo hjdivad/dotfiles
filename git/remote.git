@@ -7,7 +7,4 @@
 [push]
   default = upstream
 
-[remote "origin"]
-	fetch = +refs/pull/*/head:refs/pull-requests/*
-
 # vim:ft=gitconfig:
