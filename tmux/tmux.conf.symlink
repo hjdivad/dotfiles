@@ -60,7 +60,9 @@ bind "="  select-pane -t bottom-left \;\
           resize-pane -y 10
 
 # Copy mode
-bind -t vi-copy y begin-selection
+bind -t vi-copy v begin-selection
+bind -t vi-copy V rectangle-toggle
+bind -t vi-copy y copy-selection
 
 
 # speed up
