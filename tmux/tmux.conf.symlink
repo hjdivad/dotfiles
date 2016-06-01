@@ -68,6 +68,10 @@ bind -t vi-copy y copy-selection
 # speed up
 set-option -s escape-time 10
 
+# Work around stupid os x bugs
+# see https://forums.developer.apple.com/thread/9753
+set -g status-interval 0
+
 # look good
 set -g default-terminal "screen-256color"
 
@@ -92,7 +96,6 @@ set-window-option -g window-status-current-attr bold
 set-window-option -g window-status-current-format ' #I #W '
 
 set-option -g visual-activity off
-set-option -g visual-content off
 set-window-option -g monitor-activity off
 set-window-option -g automatic-rename off
 
@@ -103,13 +106,11 @@ set-window-option -g window-status-attr bold
 
 # starts windows at 1 not 0
 set-option -g base-index 1
+set-window-option -g pane-base-index 1
 
 set-option -g pane-active-border-fg green
 set-option -g pane-border-fg white
-set-option -g mode-mouse on
-set-option -g mouse-resize-pane on
-set-option -g mouse-select-pane on
-set-option -g mouse-select-window on
+set-option -g mouse
 
 setw -g automatic-rename
 

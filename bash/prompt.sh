@@ -10,6 +10,15 @@ else
   _prompt_rvm() { echo ""; }
 fi
 
+if declare -f | grep -q -p '^nvm '; then
+  _prompt_nvm() {
+    local nvm_current=$(nvm_ls current)
+    echo "$green${nvm_current#v}$reset_color "
+  }
+else
+  _prompt_nvm() { echo ""; }
+fi
+
 # OPTIMISE: This is the slowest part of my prompt
 # 
 _prompt_git() {
@@ -46,7 +55,7 @@ _prompt_command_indicator() {
 }
 
 set_prompt() {
-  PS1="$(_prompt_host)$(_prompt_path)$(_prompt_git)$(_prompt_rvm)\n$(_prompt_command_indicator)"
+  PS1="$(_prompt_host)$(_prompt_path)$(_prompt_git)$(_prompt_rvm)$(_prompt_nvm)\n$(_prompt_command_indicator)"
 }
 
 

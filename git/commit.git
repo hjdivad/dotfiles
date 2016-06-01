@@ -21,6 +21,9 @@
 
 
   ap = add --patch
+  # add --patch new file; take the next unstaged file, register with the index
+  # and then add --patch
+  apn = "!f() { local nf=$(git status --porcelain -uall | grep -p \"^\\?\" | cut -d' ' -f 2 | head -n 1); git add -N \"$nf\" 2> /dev/null; git add -p \"$nf\"; }; f"
   au = add -u
 
 
