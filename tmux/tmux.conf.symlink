@@ -54,10 +54,6 @@ bind -r ">" resize-pane -R 1
 bind -r "<" resize-pane -L 1
 bind "_" resize-pane -y 9999
 bind "|" resize-pane -x 9999
-bind "="  select-pane -t bottom-left \;\
-          resize-pane -y 10 \;\
-          select-pane -t bottom-right \;\
-          resize-pane -y 10
 
 # Copy mode
 bind -t vi-copy v begin-selection

@@ -1,7 +1,7 @@
 [alias]
   pr = !hub pull-request
   checkout-pr = "!f() { { [ -n \"$1\" -a -z \"$3\" ] &&\
-    echo git remote fetch origin/pull/$1/*:refs/remotes/origin/pull/* &&\
+    git fetch origin refs/pull/$1/*:refs/remotes/origin/pull/$1/* &&\
       git checkout -b pr/$1 refs/remotes/origin/pull/$1/head; } \
     || { echo Usage: git checkout-pr PR_NUMBER; }\
   }; f"
