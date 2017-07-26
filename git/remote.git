@@ -6,5 +6,6 @@
 
 [push]
   default = upstream
+  followTags = true
 
 # vim:ft=gitconfig:
