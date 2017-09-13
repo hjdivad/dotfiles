@@ -5,7 +5,7 @@ alias gi='grep -r -i --color'
 alias gin='grep -r -i -n --color'
 
 # Grep with perl regex.
-which ggrep > /dev/null &&\
+which ggrep > /dev/null 2>&1 &&\
   alias gp='ggrep -r -P --color' ||\
   alias gp='grep -r -P --color'
 
