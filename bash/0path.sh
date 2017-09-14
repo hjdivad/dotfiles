@@ -23,4 +23,8 @@ if [ -d /Library/TeX/texbin ]; then
   export PATH=$PATH:/Library/TeX/texbin
 fi
 
+if which yarn > /dev/null 2>&1; then
+  export PATH=$PATH:$(yarn global bin)
+fi
+
 # vim:set tw=0:
