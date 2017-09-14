@@ -242,6 +242,16 @@ if has('nvim')
 end
 
 
+augroup TermExtra
+  autocmd!
+  " When switching to a term window, go to insert mode by default (this is
+  " only pleasant when you also have window motions in terminal mode)
+  autocmd BufEnter term://* start!
+  autocmd TermOpen * setlocal winfixwidth winfixheight
+augroup end
+
+
+
 " Use <CR> to clear text search, but unmap it when in the command window as
 " <CR> there is used to run command
 function s:install_enter_hook()
