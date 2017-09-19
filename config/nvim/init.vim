@@ -34,9 +34,8 @@ Plug 'vim-airline/vim-airline-themes'
 " e some_file:123  open some_file at line 123
 Plug 'bogado/file-line'
 
-" These two seem to do something very similar
-Plug 'nathanaelkane/vim-indent-guides'
-Plug 'Yggdroot/indentLine'
+" This is nice but it conflicts with conceallevel in javascript at least
+" Plug 'Yggdroot/indentLine'
 
 " autoclose quotes &c.  Definitely not sure if I want this
 Plug 'Raimondi/delimitMate'
@@ -143,8 +142,9 @@ set spellfile+=~/.vim/spell/sv.utf-8.add
 
 
 set conceallevel=2
-" Don't use conceallevel in insert mode for the cursor line
-set concealcursor=nc
+" Don't use conceal characters for cursor line.  It causes many rendering
+" problems
+set concealcursor=
 
 let g:javascript_conceal=1
 let g:javascript_conceal_function   = "ƒ"
@@ -282,8 +282,13 @@ nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ne :lnext<CR>
 nmap <leader>tt :terminal<CR>
 nmap <leader>d :Bclose!<CR>:enew<CR>
-" Yank file (to clipboard)
-nmap <leader>yf :let @+=expand('%')<CR>
+if has('clipboard')
+  " Yank file (to clipboard)
+  nmap <leader>yf :let @+=expand('%')<CR>
+else
+  " Yank file (to clipboard)
+  nmap <leader>yf :let @"=expand('%')<CR>
+endif
 
 " Window-motion out of terminals
 tnoremap <C-w>h <C-\><C-n><C-w>h
