@@ -247,7 +247,7 @@ augroup TermExtra
   " When switching to a term window, go to insert mode by default (this is
   " only pleasant when you also have window motions in terminal mode)
   autocmd BufEnter term://* start!
-  autocmd TermOpen * setlocal winfixwidth winfixheight
+  autocmd TermOpen * setlocal winfixwidth winfixheight | vertical resize 100
 augroup end
 
 
