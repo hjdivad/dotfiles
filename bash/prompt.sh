@@ -10,7 +10,7 @@ else
   _prompt_rvm() { echo ""; }
 fi
 
-if declare -f | grep -q -p '^nvm '; then
+if declare -f | $GREP -q -P '^nvm '; then
   _prompt_nvm() {
     local nvm_current=$(nvm_ls current)
     echo "$green${nvm_current#v}$reset_color "

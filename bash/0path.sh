@@ -27,4 +27,12 @@ if which yarn > /dev/null 2>&1; then
   export PATH=$PATH:$(yarn global bin)
 fi
 
+# This variable is used elsewhere to write an os-agnostic grep either with gnu
+# grep installed on macos or it being present on linux systems
+if which ggrep > /dev/null 2>&1; then
+  export GREP=$(which ggrep)
+elif [ -x /usr/bin/grep ]; then
+  export GREP=/usr/bin/grep
+fi
+
 # vim:set tw=0:
