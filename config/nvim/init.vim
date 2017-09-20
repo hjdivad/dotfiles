@@ -2,9 +2,14 @@ let mapleader = ','
 let maplocalleader = ','
 
 set noswapfile
-set backupdir=/private/tmp
-set dir=/private/tmp
 set clipboard=unnamed
+if has('macunix')
+  set backupdir=/private/tmp
+  set dir=/private/tmp
+elseif has('unix')
+  set backupdir=/tmp
+  set dir=/tmp
+end
 
 " Ignore conflicting swap files.
 " autocmd SwapExists * let v:swapchoice='e'
