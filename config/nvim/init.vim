@@ -222,6 +222,13 @@ let g:markdown_fold_style = 'nested'
 
 let g:bclose_no_default_mapping=1
 
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\}
+
 " Replace this with r, R similar
 "
 " function! REPLSend(lines)
