@@ -229,39 +229,66 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \}
 
-" Replace this with r, R similar
-"
-" function! REPLSend(lines)
-"   call jobsend(g:repl_terminal_job, add(a:lines, ''))
-" endfunction
-
-" function! R(command)
-"   call jobsend(g:repl_terminal_job, a:command . "\n")
-" endfunction
-
-" function! Repl()
-"   e term://fish
-"   let g:repl_terminal_job = b:terminal_job_id
-" endfunction
-
-" nnoremap <leader>r :nnoremap <leader>r :silent exec('!tmux send-keys -t bottom-left "" c-m') \\| execute ':redraw!' <lt>CR><C-F>?"<CR>:nohl<CR>i
-
-" map <leader>R to a command to set up <leader>r
-" nnoremap <leader>R :nnoremap <leader>R :silent exec('!tmux send-keys -t bottom-left "" c-m; and tmux select-pane -t bottom-left') \\| execute ':redraw!' <lt>CR><C-F>?"<CR>:nohl<CR>i
-
 if has('nvim')
   let $GIT_EDITOR='nvr -cc split --remote-wait'
 end
 
+
+function! s:GetVisual() range
+  let reg_save = getreg('"')
+  let regtype_save = getregtype('"')
+  let cb_save = &clipboard
+  set clipboard&
+  normal! ""gvy
+  let selection = getreg('"')
+  call setreg('"', reg_save, regtype_save)
+  let &clipboard = cb_save
+  return selection
+endfunction
+
+function! s:TerminalRun(mapping)
+  let l:job_var = 'g:terminal_run_' . a:mapping . '_job'
+  let l:job_cmd_var = 'g:terminal_run_' . a:mapping . '_cmd'
+
+  if !exists(l:job_cmd_var)
+    echom 'termianl command for ' . mapping . ' has not been set up yet'
+    return
+  endif
+
+  call jobsend({l:job_var}, {l:job_cmd_var})
+endfunction
+
+function! s:SetupTerminalRun(mapping) range
+  let l:job_var = 'g:terminal_run_' . a:mapping . '_job'
+  let l:job_cmd_var = 'g:terminal_run_' . a:mapping . '_cmd'
+  let l:selection = <SID>GetVisual()
+  let l:terminal_cmd = [l:selection, '']
+
+  let {l:job_var} = b:terminal_job_id
+  let {l:job_cmd_var} = l:terminal_cmd
+endfunction
+
+function s:setup_terminal()
+  setlocal winfixwidth 
+  vertical resize 100
+
+  vmap <buffer> <leader>rr :call <SID>SetupTerminalRun('rr')<CR>
+  vmap <buffer> <leader>rd :call <SID>SetupTerminalRun('rd')<CR>
+  vmap <buffer> <leader>rt :call <SID>SetupTerminalRun('rt')<CR>
+endfunction
+
+nmap <leader>rr :call <SID>TerminalRun('rr')<CR>
+nmap <leader>rd :call <SID>TerminalRun('rd')<CR>
+nmap <leader>rt :call <SID>TerminalRun('rt')<CR>
 
 augroup TermExtra
   autocmd!
   " When switching to a term window, go to insert mode by default (this is
   " only pleasant when you also have window motions in terminal mode)
   autocmd BufEnter term://* start!
-  autocmd TermOpen * setlocal winfixwidth | vertical resize 100
+  autocmd TermOpen * call <SID>setup_terminal()
+  autocmd TermClose * setlocal nowinfixwidth
 augroup end
-
 
 
 " Use <CR> to clear text search, but unmap it when in the command window as
