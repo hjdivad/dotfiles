@@ -229,10 +229,6 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \}
 
-if has('nvim')
-  let $GIT_EDITOR='nvr -cc split --remote-wait'
-end
-
 
 function! s:GetVisual() range
   let reg_save = getreg('"')
