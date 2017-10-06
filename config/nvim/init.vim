@@ -42,8 +42,8 @@ Plug 'bogado/file-line'
 " This is nice but it conflicts with conceallevel in javascript at least
 " Plug 'Yggdroot/indentLine'
 
-" autoclose quotes &c.  Definitely not sure if I want this
-Plug 'Raimondi/delimitMate'
+" autoclose quotes &c.  Does more harm than good.
+" Plug 'Raimondi/delimitMate'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
