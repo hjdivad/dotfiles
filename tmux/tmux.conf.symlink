@@ -19,26 +19,27 @@ bind t last-window
 
 # tmux-vim navigation
 
-
-bind -n C-W \
-	bind -n   h run "tmux-vim-select-pane -L; tmux-unbind" \; \
-	bind -n c-h run "tmux-vim-select-pane -L; tmux-unbind" \; \
-	bind -n   j run "tmux-vim-select-pane -D; tmux-unbind" \; \
-	bind -n c-j run "tmux-vim-select-pane -D; tmux-unbind" \; \
-	bind -n   k run "tmux-vim-select-pane -U; tmux-unbind" \; \
-	bind -n c-k run "tmux-vim-select-pane -U; tmux-unbind" \; \
-	bind -n   l run "tmux-vim-select-pane -R; tmux-unbind" \; \
-	bind -n c-l run "tmux-vim-select-pane -R; tmux-unbind" \; \
-	bind -n   v send-keys c-w v\\; run "tmux-unbind" \; \
-	bind -n c-v send-keys c-w v\\; run "tmux-unbind" \; \
-	bind -n   o send-keys c-w o\\; run "tmux-unbind" \; \
-	bind -n c-o send-keys c-w o\\; run "tmux-unbind" \; \
-	bind -n   c send-keys c-w c\\; run "tmux-unbind" \; \
-	bind -n c-c send-keys c-w c\\; run "tmux-unbind" \; \
-	bind -n   r send-keys c-w r\\; run "tmux-unbind" \; \
-	bind -n c-r send-keys c-w r\\; run "tmux-unbind" \; \
-	bind -n   n send-keys c-w n\\; run "tmux-unbind" \; \
-	bind -n c-n send-keys c-w n\\; run "tmux-unbind" \; \
+# Use neovim instead
+#
+# bind -n C-W \
+# 	bind -n   h run "tmux-vim-select-pane -L; tmux-unbind" \; \
+# 	bind -n c-h run "tmux-vim-select-pane -L; tmux-unbind" \; \
+# 	bind -n   j run "tmux-vim-select-pane -D; tmux-unbind" \; \
+# 	bind -n c-j run "tmux-vim-select-pane -D; tmux-unbind" \; \
+# 	bind -n   k run "tmux-vim-select-pane -U; tmux-unbind" \; \
+# 	bind -n c-k run "tmux-vim-select-pane -U; tmux-unbind" \; \
+# 	bind -n   l run "tmux-vim-select-pane -R; tmux-unbind" \; \
+# 	bind -n c-l run "tmux-vim-select-pane -R; tmux-unbind" \; \
+# 	bind -n   v send-keys c-w v\\; run "tmux-unbind" \; \
+# 	bind -n c-v send-keys c-w v\\; run "tmux-unbind" \; \
+# 	bind -n   o send-keys c-w o\\; run "tmux-unbind" \; \
+# 	bind -n c-o send-keys c-w o\\; run "tmux-unbind" \; \
+# 	bind -n   c send-keys c-w c\\; run "tmux-unbind" \; \
+# 	bind -n c-c send-keys c-w c\\; run "tmux-unbind" \; \
+# 	bind -n   r send-keys c-w r\\; run "tmux-unbind" \; \
+# 	bind -n c-r send-keys c-w r\\; run "tmux-unbind" \; \
+# 	bind -n   n send-keys c-w n\\; run "tmux-unbind" \; \
+# 	bind -n c-n send-keys c-w n\\; run "tmux-unbind" \; \
 	
 
 # split windows to create more panes
