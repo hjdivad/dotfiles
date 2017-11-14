@@ -1,1 +1,1 @@
-alias ta='tmux new-session -As'
+alias t='tmux'
