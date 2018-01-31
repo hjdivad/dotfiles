@@ -265,7 +265,7 @@ function! s:SetupTerminalRun(mapping) range
 endfunction
 
 function s:setup_terminal()
-  setlocal winfixwidth 
+  setlocal winfixwidth nonumber norelativenumber
   vertical resize 100
 
   vmap <buffer> <leader>rr :call <SID>SetupTerminalRun('rr')<CR>
@@ -282,7 +282,7 @@ augroup TermExtra
   " When switching to a term window, go to insert mode by default (this is
   " only pleasant when you also have window motions in terminal mode)
   autocmd BufEnter term://* start!
-  autocmd TermOpen * call <SID>setup_terminal()
+  autocmd TermOpen * call <SID>setup_terminal() | start!
   autocmd TermClose * setlocal nowinfixwidth
 augroup end
 
