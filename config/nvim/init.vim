@@ -229,6 +229,12 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \}
 
+" Put the fzf window at top as it's less likely to shift something I'm reading
+" from the terminal (eg after a grep)
+let g:fzf_layout = {
+\   'up': '~40%'
+\}
+
 
 function! s:GetVisual() range
   let reg_save = getreg('"')
