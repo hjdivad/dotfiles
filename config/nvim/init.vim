@@ -301,6 +301,7 @@ augroup EnterKeyManager
 augroup end
 call s:install_enter_hook()
 
+let g:gitgutter_map_keys = 0
 
 " Keybindings
 " nmap <leader>r
@@ -311,7 +312,8 @@ nmap <leader>fs :GFiles?<CR>
 nmap <leader>fb :Buffers<CR>
 nmap <leader>gn :GitGutterNextHunk<CR>
 nmap <Leader>ga :GitGutterStageHunk<CR>
-nmap <Leader>gu :GitGutterRevertHunk<CR>
+nmap <Leader>gu :GitGutterUndoHunk<CR>
+nmap <Leader>gp :GitGutterPreviewHunk<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ne :lnext<CR>
