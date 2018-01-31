@@ -8,13 +8,13 @@ set-option -g default-command "safe-reattach-to-user-namespace -l $SHELL"
 setw -g mode-keys vi
 
 # moving around
-bind h select-pane -L
-bind j select-pane -D
-bind J select-pane -D \;\
-        select-pane -R
-bind k select-pane -U
-bind l select-pane -R
-bind t last-window
+# bind h select-pane -L
+# bind j select-pane -D
+# bind J select-pane -D \;\
+#         select-pane -R
+# bind k select-pane -U
+# bind l select-pane -R
+# bind t last-window
 
 
 # tmux-vim navigation
@@ -57,9 +57,9 @@ bind "_" resize-pane -y 9999
 bind "|" resize-pane -x 9999
 
 # Copy mode
-bind -t vi-copy v begin-selection
-bind -t vi-copy V rectangle-toggle
-bind -t vi-copy y copy-selection
+# bind -t vi-copy v begin-selection
+# bind -t vi-copy V rectangle-toggle
+# bind -t vi-copy y copy-selection
 
 
 # speed up
