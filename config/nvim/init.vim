@@ -229,10 +229,10 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \}
 
-" Put the fzf window at top as it's less likely to shift something I'm reading
-" from the terminal (eg after a grep)
+" Put the fzf window to the right to not interfere with terminals (which i
+" keep on the left)
 let g:fzf_layout = {
-\   'up': '~40%'
+\   'right': '~40%'
 \}
 
 
