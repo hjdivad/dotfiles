@@ -316,7 +316,8 @@ nmap <Leader>gu :GitGutterUndoHunk<CR>
 nmap <Leader>gp :GitGutterPreviewHunk<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
-nmap <leader>ne :lnext<CR>
+nmap <leader>ln :ALENext<CR>
+nmap <leader>lf :ALEFix<CR>
 nmap <leader>tt :terminal<CR>
 nmap <leader>d :Bclose!<CR>:enew<CR>
 if has('clipboard')
