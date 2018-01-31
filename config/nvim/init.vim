@@ -397,6 +397,7 @@ endif
 " emoji
 abbreviate :beer: 🍺
 abbreviate :beers: 🍻
+abbreviate :hamster: 🐹
 
 " TODO: https://github.com/hjdivad/vim-config/blob/master/vimrc.d/resize.vim
 " TODO: https://github.com/hjdivad/vim-config/blob/master/vimrc.d/keybindings.vim#L42-L48
