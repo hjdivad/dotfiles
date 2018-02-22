@@ -3,6 +3,23 @@ let maplocalleader = ','
 
 set noswapfile
 set clipboard=unnamed
+
+
+if $SSH_TTY != '' || $SSH_CLIENT != ''
+  let g:clipboard = {
+    \   'name': 'ssh-pbcopy',
+    \   'copy': {
+    \     '+': 'ssh client pbcopy',
+    \     '*': 'ssh client pbcopy'
+    \   },
+    \   'paste': {
+    \     '+': 'ssh client pbpaste',
+    \     '*': 'ssh client pbpaste'
+    \   },
+    \   'cache_enabled': 1
+    \ }
+endif
+
 if has('macunix')
   set backupdir=/private/tmp
   set dir=/private/tmp
