@@ -309,6 +309,13 @@ augroup TermExtra
   autocmd TermClose * setlocal nowinfixwidth
 augroup end
 
+augroup WindowManagement
+  autocmd!
+
+  " re-arrange windows on resize
+  autocmd VimResized * wincmd =
+augroup end
+
 
 " Use <CR> to clear text search, but unmap it when in the command window as
 " <CR> there is used to run command
@@ -318,7 +325,7 @@ endfunction
 
 augroup EnterKeyManager
   autocmd!
-  
+
   autocmd CmdwinEnter * nunmap <CR>
   autocmd CmdwinLeave * call s:install_enter_hook() 
 augroup end
