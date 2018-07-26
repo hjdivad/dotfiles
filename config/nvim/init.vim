@@ -82,8 +82,9 @@ Plug 'sbdchd/neoformat'
 " rails.vim for node
 Plug 'moll/vim-node'
 Plug 'leafgarland/typescript-vim'
-" make vim a lang-server for typescript
-Plug 'Quramy/tsuquyomi'
+" make vim a client for typescript lang-server
+"   doesn't work in neovim but see https://github.com/neovim/neovim/pull/6856
+" Plug 'Quramy/tsuquyomi'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'rust-lang/rust.vim'
 Plug 'pangloss/vim-javascript'
@@ -341,9 +342,10 @@ nmap <leader>ff :Files<CR>
 nmap <leader>fs :GFiles?<CR>
 nmap <leader>fb :Buffers<CR>
 nmap <leader>gn :GitGutterNextHunk<CR>
+nmap <Leader>gp :GitGutterPrevHunk<CR>
 nmap <Leader>ga :GitGutterStageHunk<CR>
 nmap <Leader>gu :GitGutterUndoHunk<CR>
-nmap <Leader>gp :GitGutterPreviewHunk<CR>
+nmap <Leader>gP :GitGutterPreviewHunk<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ln :ALENext<CR>
