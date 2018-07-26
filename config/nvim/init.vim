@@ -349,6 +349,8 @@ nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ln :ALENext<CR>
 nmap <leader>lf :ALEFix<CR>
 nmap <leader>tt :terminal<CR>
+nmap <leader>fd :ALEGoToDefinition<CR>
+nmap <leader>fr :ALEFindReferences<CR>
 nmap <leader>d :Bclose!<CR>:enew<CR>
 if has('clipboard')
   " Yank file (to clipboard)
