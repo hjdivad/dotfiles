@@ -4,7 +4,6 @@ else
   path=$PATH
   export __PATH_RESET=$path
 fi
-export PATH=$HOME/.dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/local/share/npm/bin:$path
 
 # Android SDK
 if [ -d $HOME/Library/Android/sdk/platform-tools ]; then
@@ -34,5 +33,13 @@ if which ggrep > /dev/null 2>&1; then
 elif [ -x /usr/bin/grep ]; then
   export GREP=/usr/bin/grep
 fi
+
+export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/share/npm/bin:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/.notion/bin:$PATH
+export PATH=$HOME/.notion/shim:$PATH
+export PATH=$HOME/.dotfiles/bin:$path
+export PATH=$HOME/bin:$PATH
 
 # vim:set tw=0:
