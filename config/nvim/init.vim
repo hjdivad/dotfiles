@@ -85,15 +85,23 @@ Plug 'leafgarland/typescript-vim'
 " make vim a client for typescript lang-server
 "   doesn't work in neovim but see https://github.com/neovim/neovim/pull/6856
 " Plug 'Quramy/tsuquyomi'
+
+" Language supports
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'rust-lang/rust.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'dag/vim-fish'
+Plug 'gutenye/json5.vim'
+
 
 Plug 'altercation/vim-colors-solarized'
 
 " This can be slow
 Plug 'nelstrom/vim-markdown-folding'
+
+" TODO: get this working
+" Plug 'kassio/neoterm'
+" Plug 'janko-m/vim-test'
 
 call plug#end()
 
