@@ -349,6 +349,7 @@ nmap <leader>fg :GFiles<CR>
 nmap <leader>ff :Files<CR>
 nmap <leader>fs :GFiles?<CR>
 nmap <leader>fb :Buffers<CR>
+nmap <leader>fm :Marks<CR>
 nmap <leader>gn :GitGutterNextHunk<CR>
 nmap <Leader>gp :GitGutterPrevHunk<CR>
 nmap <Leader>ga :GitGutterStageHunk<CR>
