@@ -316,6 +316,7 @@ augroup TermExtra
   autocmd BufEnter term://* start!
   autocmd TermOpen * call <SID>setup_terminal() | start!
   autocmd TermClose * setlocal nowinfixwidth
+  autocmd WinLeave term://* :checktime
 augroup end
 
 augroup WindowManagement
