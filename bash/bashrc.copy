@@ -8,6 +8,7 @@ for bash_file in `ls $DOTFILES/bash/*/*.sh $DOTFILES/bash/*.sh`; do
   source $bash_file
 done
 
+[ -f ~/.bashrc.local.sh ] && source ~/.bashrc.local.sh
 
 
 # vim:ft=sh:
