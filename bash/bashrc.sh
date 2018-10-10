@@ -114,6 +114,10 @@ export PWS_SECONDS=60
 export HALF_COLUMNS=$(($COLUMNS/2))
 export HALF_LINES=$(($LINES/2))
 
+if [[ -r $HOME/.ssh/ssh_auth_sock ]]; then
+  export SSH_AUTH_SOCK=$HOME/.ssh/ssh_auth_sock
+fi
+
 
 # fzf 
 if [ -f "$HOME/src/rupa/z/z.sh" ]; then
