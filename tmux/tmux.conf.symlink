@@ -73,7 +73,10 @@ set-window-option -g pane-base-index 1
 
 set-option -g pane-active-border-fg green
 set-option -g pane-border-fg white
-set-option -g mouse
+
+# In version 2.1 "mouse" replaced the previous 4 mouse options
+if-shell -b '[ "$(echo "$TMUX_VERSION >= 2.1" | bc)" = 1 ]' \
+  "set -g mouse on"
 
 setw -g automatic-rename
 
