@@ -52,7 +52,8 @@ if [ -d /Library/TeX/texbin ]; then
 fi
 
 if which yarn > /dev/null 2>&1; then
-  export PATH=$PATH:$(yarn global bin)
+  # export PATH=$PATH:$(yarn global bin)
+  export PATH=$PATH:$HOME/.yarn/bin # yarn global bin is really slow
 fi
 
 # This variable is used elsewhere to write an os-agnostic grep either with gnu
@@ -68,7 +69,7 @@ export PATH=/usr/local/share/npm/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/.notion/bin:$PATH
 export PATH=$HOME/.notion/shim:$PATH
-export PATH=$HOME/.dotfiles/bin:$path
+export PATH=$HOME/.dotfiles/bin:$PATH
 export PATH=$HOME/bin:$PATH
 
 # }}}
@@ -78,8 +79,8 @@ export PATH=$HOME/bin:$PATH
 export NOTION_HOME=$HOME/.notion
 
 # Load nvm, if it is present.
-export NVM_DIR=$HOME/.nvm
-[[ -n "$(which brew > /dev/null 2>&1)" ]] && [[ -s "$(brew --prefix nvm)/nvm.sh" ]] && source "$(brew --prefix nvm)/nvm.sh"
+# export NVM_DIR=$HOME/.nvm
+# [[ -n "$(which brew > /dev/null 2>&1)" ]] && [[ -s "$(brew --prefix nvm)/nvm.sh" ]] && source "$(brew --prefix nvm)/nvm.sh"
 
 # initialize rbenv
 if [ -x /usr/local/bin/rbenv ]; then
@@ -225,15 +226,6 @@ else
   _prompt_rvm() { echo ""; }
 fi
 
-if declare -f | $GREP -q -P '^nvm '; then
-  _prompt_nvm() {
-    local nvm_current=$(nvm_ls current)
-    echo "$green${nvm_current#v}$reset_color "
-  }
-else
-  _prompt_nvm() { echo ""; }
-fi
-
 # OPTIMISE: This is the slowest part of my prompt
 # 
 _prompt_git() {
@@ -270,7 +262,7 @@ _prompt_command_indicator() {
 }
 
 set_prompt() {
-  PS1="$(_prompt_host)$(_prompt_path)$(_prompt_git)$(_prompt_rvm)$(_prompt_nvm)\n$(_prompt_command_indicator)"
+  PS1="$(_prompt_host)$(_prompt_path)$(_prompt_git)$(_prompt_rvm)\n$(_prompt_command_indicator)"
 }
 
 
