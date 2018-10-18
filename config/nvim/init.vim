@@ -81,7 +81,9 @@ Plug 'sbdchd/neoformat'
 
 " rails.vim for node
 Plug 'moll/vim-node'
+
 Plug 'leafgarland/typescript-vim'
+" Plug "Shougo/vimproc" " might help make tsuoquyomi work per @rwjblue
 " make vim a client for typescript lang-server
 "   doesn't work in neovim but see https://github.com/neovim/neovim/pull/6856
 " Plug 'Quramy/tsuquyomi'
@@ -250,10 +252,14 @@ let g:bclose_no_default_mapping=1
 
 let g:ale_linters = {
 \   'javascript': ['eslint'],
+\   'typescript': ['tslint'],
 \}
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \}
+
+" Have ale report the linter that is saying whatever it is that's being said
+let g:ale_echo_msg_format = '%linter%: %code: %%s'
 
 " Put the fzf window to the right to not interfere with terminals (which i
 " keep on the left)
