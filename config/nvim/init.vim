@@ -267,6 +267,9 @@ let g:fzf_layout = {
 \   'right': '~40%'
 \}
 
+" It's way more useful to see the diff against master than against the index
+let g:gitgutter_diff_base = 'origin/master'
+
 
 function! s:GetVisual() range
   let reg_save = getreg('"')
