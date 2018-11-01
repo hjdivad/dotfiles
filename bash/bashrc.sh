@@ -118,14 +118,6 @@ if [[ -r $HOME/.ssh/ssh_auth_sock ]]; then
   export SSH_AUTH_SOCK=$HOME/.ssh/ssh_auth_sock
 fi
 
-
-# fzf 
-if [ -f "$HOME/src/rupa/z/z.sh" ]; then
-  source "$HOME/src/rupa/z/z.sh"
-elif [ -f /usr/local/Cellar/z/1.9/etc/profile.d/z.sh ]; then
-  source /usr/local/Cellar/z/1.9/etc/profile.d/z.sh
-fi
-
 #}}}
 
 # Aliases {{{
@@ -271,6 +263,13 @@ set_prompt() {
 
 
 PROMPT_COMMAND=set_prompt
+
+# z jumparound; this must be sourced after $PROMPT_COMMAND is set
+if [ -f "$HOME/src/rupa/z/z.sh" ]; then
+  source "$HOME/src/rupa/z/z.sh"
+elif [ -f /usr/local/Cellar/z/1.9/etc/profile.d/z.sh ]; then
+  source /usr/local/Cellar/z/1.9/etc/profile.d/z.sh
+fi
 
 #}}}
 
