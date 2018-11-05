@@ -178,8 +178,21 @@ alias sudo='sudo '
 
 
 # tmux
+function __ts {
+  if [ "$TMUX" ]; then
+    t_cmd='switch-client'
+  else
+    t_cmd='attach'
+  fi
+
+# tmux list-sessions | fzf  | cut -d':' -f 1 | echo xargs tmux ${t_cmd} -t 
+t_session=$(tmux list-sessions | fzf  | cut -d':' -f 1)
+
+tmux $t_cmd -t $t_session
+}
+
 alias t='tmux'
-alias ts='tmux list-sessions | fzf  | cut -d':' -f 1 | xargs tmux switch-client -t'
+alias ts='__ts'
 alias tw='tmux list-windows | fzf  | cut -d':' -f 1 | xargs tmux select-window -t'
 
 
