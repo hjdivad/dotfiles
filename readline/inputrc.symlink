@@ -15,4 +15,6 @@ TAB: complete
 set editing-mode vi
 
 
+set bell-style none
+
 # vim:ft=readline:
