@@ -217,9 +217,11 @@ shopt -s checkwinsize
 # Skip over duplicates in bash history
 HISTCONTROL=ignoredups
 
+if [[ $(umask) = "0000" ]]; then
+  # set a sane umask for wsl
+  umask 0022
+fi
 
-
-#!/usr/bin/env bash
 
 which rvm-prompt > /dev/null 2>&1
 if [[ $? == 0 ]]; then
