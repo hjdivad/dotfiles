@@ -110,10 +110,6 @@ export ALPHA=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 export ALPHANUM="$ALPHA"0123456789
 export PWS_SECONDS=60
 
-# useable for term, multiplexers, not really used any more
-export HALF_COLUMNS=$(($COLUMNS/2))
-export HALF_LINES=$(($LINES/2))
-
 if [[ -r $HOME/.ssh/ssh_auth_sock ]]; then
   export SSH_AUTH_SOCK=$HOME/.ssh/ssh_auth_sock
 fi

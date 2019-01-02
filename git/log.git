@@ -4,7 +4,7 @@
   wcwb = whatchanged -p -w --color-words origin/master..
 
 
-  lg = log --no-merges --stat -i --decorate
+  lg = log --stat -i --decorate
   ln = log --no-merges -r -i --name-status --decorate
   lgb = log --no-merges --stat -i --decorate origin/master..
   logb = log --decorate origin/master..
