@@ -6,6 +6,7 @@ set clipboard=unnamed
 
 
 if $SSH_TTY != '' || $SSH_CLIENT != ''
+  " We're in a remote terminal
   let g:clipboard = {
     \   'name': 'ssh-pbcopy',
     \   'copy': {
@@ -18,6 +19,23 @@ if $SSH_TTY != '' || $SSH_CLIENT != ''
     \   },
     \   'cache_enabled': 1
     \ }
+else
+  " Check if we're in WSL
+  let x=system('grep -q Microsoft /proc/version')
+  if !v:shell_error
+    let g:clipboard = {
+      \   'name': 'wsl-1083',
+      \   'copy': {
+      \     '+': 'clip.exe',
+      \     '*': 'clip.exe'
+      \   },
+      \   'paste': {
+      \     '+': 'powershell.exe Get-Clipboard',
+      \     '*': 'powershell.exe Get-Clipboard'
+      \   },
+      \   'cache_enabled': 1
+      \ }
+  endif
 endif
 
 if has('macunix')
