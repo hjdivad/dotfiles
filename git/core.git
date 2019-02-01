@@ -1,6 +1,7 @@
 [core]
 	editor = /usr/bin/vim
   excludesfile = ~/.dotfiles/git/excludes
+  pager = 
 
 
 # vim:ft=gitconfig:
