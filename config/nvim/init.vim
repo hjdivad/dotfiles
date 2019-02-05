@@ -384,11 +384,17 @@ nmap <Leader>gp :GitGutterPrevHunk<CR>
 nmap <Leader>ga :GitGutterStageHunk<CR>
 nmap <Leader>gu :GitGutterUndoHunk<CR>
 nmap <Leader>gP :GitGutterPreviewHunk<CR>
+nmap <leader>ne :edit .<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ln :ALENext<CR>
 nmap <leader>lf :ALEFix<CR>
 nmap <leader>tt :terminal<CR>
+" TODO: these don't work from  a new buffer for reasons that aren't clear to
+" me; it seems that nothing works after a wincmd; i'll have to debug later
+" with verbose
+" nmap <leader>ts <C-w>v<CR> <Cmd>terminal bash -ic ts<CR>
+" nmap <leader>tw <C-w>v<CR> <Cmd>terminal bash -ic tw<CR>
 nmap <leader>fd :ALEGoToDefinition<CR>
 nmap <leader>fr :ALEFindReferences<CR>
 nmap <leader>d :Bclose!<CR>:enew<CR>
