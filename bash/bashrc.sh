@@ -186,12 +186,15 @@ function __ts {
 # tmux list-sessions | fzf  | cut -d':' -f 1 | echo xargs tmux ${t_cmd} -t 
 t_session=$(tmux list-sessions | fzf  | cut -d':' -f 1)
 
-tmux $t_cmd -t $t_session
+if [[ -n "$t_session" ]]; then
+  tmux $t_cmd -t $t_session
+fi
+
 }
 
 alias t='tmux'
 alias ts='__ts'
-alias tw='tmux list-windows | fzf  | cut -d':' -f 1 | xargs tmux select-window -t'
+alias tw='tmux list-windows | fzf  | cut -d':' -f 1 | xargs -r tmux select-window -t'
 
 
 # vim
