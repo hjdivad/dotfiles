@@ -66,6 +66,7 @@ fi
 
 export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
+export PATH=$HOME/local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/.notion/bin:$PATH
 export PATH=$HOME/.notion/shim:$PATH
