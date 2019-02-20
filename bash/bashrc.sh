@@ -70,6 +70,7 @@ export PATH=$HOME/local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/.notion/bin:$PATH
 export PATH=$HOME/.notion/shim:$PATH
+export PATH=$HOME/.notion:$PATH
 export PATH=$HOME/.dotfiles/bin:$PATH
 export PATH=$HOME/bin:$PATH
 
