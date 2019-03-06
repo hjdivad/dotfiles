@@ -1,10 +1,9 @@
 let mapleader = ','
 let maplocalleader = ','
 
-set noswapfile
+" clipboard {{{
+
 set clipboard=unnamed
-
-
 if $SSH_TTY != '' || $SSH_CLIENT != ''
   " We're in a remote terminal
   let g:clipboard = {
@@ -38,6 +37,12 @@ else
   endif
 endif
 
+"}}}
+
+" auto-generated files (swap, backup &c.) {{{
+
+set noswapfile
+
 if has('macunix')
   set backupdir=/private/tmp
   set dir=/private/tmp
@@ -49,6 +54,9 @@ end
 " Ignore conflicting swap files.
 " autocmd SwapExists * let v:swapchoice='e'
 
+"}}}
+
+" Plugins {{{
 
 " Using https://github.com/junegunn/vim-plug
 " for managing plugins
@@ -125,6 +133,8 @@ Plug 'nelstrom/vim-markdown-folding'
 
 call plug#end()
 
+"}}}
+
 set background=dark
 colorscheme solarized
 
@@ -197,6 +207,7 @@ set conceallevel=2
 " problems
 set concealcursor=
 
+let g:javascript_plugin_jsdoc=1
 let g:javascript_conceal=1
 let g:javascript_conceal_function   = "ƒ"
 let g:javascript_conceal_null       = "ø"
@@ -488,3 +499,5 @@ if !(getcwd() == $HOME)
   endif
   set runtimepath+=./.vim
 endif
+
+" vim:set tw=0 fdm=marker:
