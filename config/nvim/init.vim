@@ -131,6 +131,11 @@ Plug 'nelstrom/vim-markdown-folding'
 " Plug 'kassio/neoterm'
 " Plug 'janko-m/vim-test'
 
+
+" TODO: experiment with this: TLS support in vim + nvim
+" https://github.com/neoclide/coc.nvim
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+
 call plug#end()
 
 "}}}
