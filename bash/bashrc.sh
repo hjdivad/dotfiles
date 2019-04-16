@@ -39,6 +39,10 @@ if [ -d $HOME/Library/Android/sdk/platform-tools ]; then
   export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 fi
 
+if [ -d $HOME/Library/Python/3.7/bin ]; then
+  export PATH=$PATH:$HOME/Library/Python/3.7/bin
+fi
+
 if [ -d /opt/adt/sdk/tools ]; then
   export PATH=$PATH:/opt/adt/sdk/tools
 fi
