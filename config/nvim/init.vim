@@ -482,6 +482,13 @@ if has("digraphs")
 
   digraph is 7522   " ᵢ
 
+  " Builtin digraphs
+  "
+  " digraph -< 8592   " ←
+  " digraph -> 8594   " →
+  " digraph -! 8593   " ↑
+  " digraph -v 8595   " ↓
+
   digraph ** 9733   " ★
   digraph <3 9829   " ♥
   digraph sw 9876   " ⚔ 
