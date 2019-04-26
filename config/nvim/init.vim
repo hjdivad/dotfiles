@@ -489,6 +489,9 @@ if has("digraphs")
   " digraph -! 8593   " ↑
   " digraph -v 8595   " ↓
 
+  digraph iO 9432     " ⓘ
+  digraph wa 9888     " ⚠
+
   digraph ** 9733   " ★
   digraph <3 9829   " ♥
   digraph sw 9876   " ⚔ 
