@@ -68,6 +68,14 @@ elif [ -x /usr/bin/grep ]; then
   export GREP=/usr/bin/grep
 fi
 
+# Use gnu xargs if possible on osx; on other systems the local xargs will
+# already be a reasonable version
+if which gxargs > /dev/null 2>&1; then
+  export XARGS=$(which gxargs)
+elif [ -x /usr/bin/grep ]; then
+  export XARGS=/usr/bin/xargs
+fi
+
 export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
 export PATH=$HOME/local/bin:$PATH
@@ -198,7 +206,7 @@ fi
 
 alias t='tmux'
 alias ts='__ts'
-alias tw='tmux list-windows | fzf  | cut -d':' -f 1 | xargs -r tmux select-window -t'
+alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
 
 
 # vim
