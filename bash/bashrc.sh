@@ -208,12 +208,6 @@ alias t='tmux'
 alias ts='__ts'
 alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
 
-
-# vim
-# mvim has a terminal mode which seems to be a pretty good way of getting a
-# proper vim build on the terminal.
-which mvim > /dev/null 2>&1 && alias vim='mvim -v'
-
 alias 'debug-vim'='vim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 
 # yarn
@@ -303,8 +297,8 @@ fi
 
 
 
-if [[ -x "$(which mvim > /dev/null 2>&1)" ]]; then
-  export EDITOR='mvim -v'
+if [[ -x "$(which nvim > /dev/null 2>&1)" ]]; then
+  export EDITOR='nvim'
 fi
 
 
