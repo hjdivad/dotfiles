@@ -140,11 +140,9 @@ call plug#end()
 
 "}}}
 
+" Misc normal options {{{
 set background=dark
 colorscheme solarized
-
-" Simple snippets in mustache files
-let g:mustache_abbreviations = 1
 
 " Spaces vs tabs
 set tabstop=2
@@ -200,17 +198,27 @@ set lazyredraw
 " Switch modified buffers without being forced to save
 set hidden
 
-
 set spelllang=sv,en_gb,en_us
 set spellfile=.vimspell.utf8.add
 set spellfile+=~/.vim/spell/en.utf-8.add
 set spellfile+=~/.vim/spell/sv.utf-8.add
 
-
 set conceallevel=2
 " Don't use conceal characters for cursor line.  It causes many rendering
 " problems
 set concealcursor=
+
+hi CursorLine   cterm=NONE ctermbg=233
+" SignColumn should match background
+highlight clear SignColumn
+" Current line number row will have same background color in relative mode
+highlight clear LineNr
+"}}}
+
+" Language-specific syntax options {{{
+
+" Simple snippets in mustache files
+let g:mustache_abbreviations = 1
 
 let g:javascript_plugin_jsdoc=1
 let g:javascript_conceal=1
@@ -224,22 +232,6 @@ let g:javascript_conceal_prototype  = "¶"
 let g:javascript_conceal_static     = "•"
 let g:javascript_conceal_super      = "Ω"
 
-
-function! s:fzf_statusline()
-  " Override statusline as you like
-  highlight fzf1 ctermfg=161 ctermbg=251
-  highlight fzf2 ctermfg=23 ctermbg=251
-  highlight fzf3 ctermfg=237 ctermbg=251
-  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
-
-hi CursorLine   cterm=NONE ctermbg=233
-" SignColumn should match background
-highlight clear SignColumn
-" Current line number row will have same background color in relative mode
-highlight clear LineNr
-
 let javaScript_fold=1
 let perl_fold=1
 let php_folding=1
@@ -248,6 +240,17 @@ let ruby_fold=1
 let sh_fold_enabled=1
 let vimsyn_folding='af'
 let xml_syntax_folding=1
+"}}}
+
+" Plugin config {{{
+function! s:fzf_statusline()
+  " Override statusline as you like
+  highlight fzf1 ctermfg=161 ctermbg=251
+  highlight fzf2 ctermfg=23 ctermbg=251
+  highlight fzf3 ctermfg=237 ctermbg=251
+  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 let g:indent_guides_auto_colors=1
 
@@ -303,6 +306,10 @@ let g:fzf_layout = {
 
 " It's way more useful to see the diff against master than against the index
 let g:gitgutter_diff_base = 'origin/master'
+
+let g:gitgutter_map_keys = 0
+
+"}}}
 
 
 function! s:GetVisual() range
@@ -384,9 +391,15 @@ augroup EnterKeyManager
 augroup end
 call s:install_enter_hook()
 
-let g:gitgutter_map_keys = 0
+augroup Autoread
+  autocmd!
 
-" Keybindings
+  " Check for updates each time we switch to some buffer
+  autocmd FocusGained,BufEnter * :execute 'checktime ' . bufnr('%')
+augroup end
+
+" Keybindings {{{
+"
 " nmap <leader>r
 " nmap <leader>R
 nmap <leader>fg :GFiles<CR>
@@ -462,7 +475,9 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
+"}}}
 
+" Digraphs & Abbreviations {{{
 if has("digraphs")
   digraph .. 8230   " …
   digraph !? 8253   " ‽
@@ -506,7 +521,8 @@ endif
 abbreviate :beer: 🍺
 abbreviate :beers: 🍻
 abbreviate :hamster: 🐹
-
+"}}}
+"
 " TODO: https://github.com/hjdivad/vim-config/blob/master/vimrc.d/resize.vim
 " TODO: https://github.com/hjdivad/vim-config/blob/master/vimrc.d/keybindings.vim#L42-L48
 
