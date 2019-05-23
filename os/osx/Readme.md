@@ -4,11 +4,17 @@
 
 - install [homebrew][]
 - install [alacritty][] (@ master)
-- install bluejeans beta if needed
+- install rbenv
+- install volta
+- `gem install pws`
+- `brew install neovim`
+- `brew install tmux`
+- `brew install z`
 - log in to apple store
 - install from app store or wherever
   - divvy
   - dash
+  - spotify
   - alfred
   - discord
   - telegram
@@ -21,12 +27,19 @@
 Probably don't install but vaguely recall
   - skitch
 
-```
-# install brew packages
-brew install adns android-ndk android-sdk ant aom autoconf automake azure-cli cairo ccat chromedriver cmake coreutils cscope ffmpeg findutils fish flac fontconfig freetype frei0r fribidi fzf gcc gd gdbm gettext giflib glib gmp gnupg gnutls gradle graphite2 graphviz grep harfbuzz htop httpie hub icu4c isl jemalloc jpeg jq lame leptonica libass libassuan libbluray libevent libffi libgcrypt libgpg-error libksba libmpc libogg libpng libsamplerate libsndfile libsoxr libtasn1 libtermkey libtiff libtool libunistring libusb libuv libvorbis libvpx libvterm libyaml little-cms2 lsusb luajit macvim maven mpfr msgpack neovim nettle ninja node npth nspr nss oniguruma opencore-amr openjpeg openssl opus p11-kit pcre pcre2 phantomjs pinentry pixman pkg-config pstree python python3 r rbenv readline reattach-to-user-namespace rlwrap rtmpdump rubberband ruby-build rustup-init sdl2 snappy speex sqlite tesseract the_silver_searcher theora tmux typescript unbound unibilium watchman webp x264 x265 xvid xz yarn z
-```
-
 ## Configs
+
+- keyboard setup
+  - caps lock to ctrl
+  - swap ⌘ and option
+
+- system prefs
+  - spotlight add dirs to not index
+    - `.volta`
+    - `.rbenv`
+    - `docs`
+    - `src`
+    - `tmp`
 
 [disable animations][]:
 ```

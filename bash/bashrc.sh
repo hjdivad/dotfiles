@@ -1,3 +1,14 @@
+BASH="$HOME/.dotfiles/bash/Lib"
+
+source $BASH/git.aliases.sh
+source $BASH/git-completion.sh
+
+# Homebrew completion
+[ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
+
+# OPTIMISE: This is surprisingly slow
+source $BASH/colours.sh
+
 # Lang Libs + SDK{{{
 
 if [[ -n "$(which android > /dev/null 2>&1)" ]]; then
@@ -234,16 +245,6 @@ if [[ $(umask) = "0000" ]]; then
 fi
 
 
-which rvm-prompt > /dev/null 2>&1
-if [[ $? == 0 ]]; then
-  _prompt_rvm() {
-    local rvm_current=$(rvm-prompt)
-    echo "$orange${rvm_current#ruby-}$reset_color "
-  }
-else
-  _prompt_rvm() { echo ""; }
-fi
-
 # OPTIMISE: This is the slowest part of my prompt
 # 
 _prompt_git() {
@@ -280,7 +281,7 @@ _prompt_command_indicator() {
 }
 
 set_prompt() {
-  PS1="$(_prompt_host)$(_prompt_path)$(_prompt_git)$(_prompt_rvm)\n$(_prompt_command_indicator)"
+  PS1="$(_prompt_host)$(_prompt_path)$(_prompt_git)\n$(_prompt_command_indicator)"
 }
 
 
