@@ -215,9 +215,16 @@ fi
 
 }
 
+# tmux z and if successful rename the window to the current working directory;
+# generally nice when that dir is the name of a specific repo
+function __tz {
+  _z "$1" && tmux rename-window  "${PWD##*/}"
+}
+
 alias t='tmux'
 alias ts='__ts'
 alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
+alias gz='__tz'
 
 alias 'debug-vim'='vim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 
