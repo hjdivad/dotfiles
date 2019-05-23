@@ -1,12 +1,7 @@
+set -g default-command "safe-reattach-to-user-namespace -l $SHELL"
 
-# reset prefix
-# set -g prefix pgdn # bind caps lock to pgdn to make this reasonable
-
-set-option -g default-command "safe-reattach-to-user-namespace -l $SHELL"
-
-# keybindings
+# keybindings {{{
 setw -g mode-keys vi
-
 
 # split windows to create more panes
 bind v split-window -h
@@ -21,95 +16,78 @@ bind -r ">" resize-pane -R 1
 bind -r "<" resize-pane -L 1
 bind "_" resize-pane -y 9999
 bind "|" resize-pane -x 9999
+# }}}
 
-
+# misc {{{
 # speed up
-set-option -s escape-time 10
+set -s escape-time 10
 
 # Work around stupid os x bugs
 # see https://forums.developer.apple.com/thread/9753
 set -g status-interval 0
 
-# look good
 set -g default-terminal "screen-256color"
 
 # messages clear on input, so no reason to use the default 750ms
-set-option -g display-time 216000000
+set -g display-time 216000000
 
-# pretty
-# set-option -g status-utf8 on
-set-option -g status-bg green
-set-option -g status-fg colour8
-set-option -g set-titles on
-
-set-option -g status-left ' #[bold]❐ #S#[default] ⡇'
-set-option -g status-right '#[bold]#(whoami) ● #H#[default] '
-
-set-option -g status-right-length 60
-set-option -g status-left-length 60
-
-# set-window-option -g window-status-current-bg colour100
-# set-window-option -g window-status-current-fg colour10
-# set-window-option -g window-status-current-attr bold
-set-window-option -g window-status-current-format ' #I #W '
-
-set-option -g visual-activity off
-set-window-option -g monitor-activity off
-set-window-option -g automatic-rename off
-
-set-option -g set-titles on
-set-option -g set-titles-string '[#I] #W'
-set-window-option -g window-status-format ' #I #W '
-# set-window-option -g window-status-attr bold
-
-# starts windows at 1 not 0
-set-option -g base-index 1
+# start windows at 1 not 0
+set -g base-index 1
 set-window-option -g pane-base-index 1
 
-# set-option -g pane-active-border-fg green
-# set-option -g pane-border-fg white
+set -g visual-activity off
+# set-window-option -g automatic-rename off
+setw -g automatic-rename
+set -g set-titles on
+set -g set-titles-string '[#I] #W'
+
 
 # In version 2.1 "mouse" replaced the previous 4 mouse options
 if-shell -b '[ "$(echo "$TMUX_VERSION >= 2.1" | bc)" = 1 ]' \
   "set -g mouse on"
 
-setw -g automatic-rename
+setw -g  monitor-activity on
+# }}}
 
-# theme
+
+# visual {{{
+set -g status-left ' #[bold]❐ #[fg=colour178]#S#[default] ⡇ #[bold]#(whoami) @ #h #[default] ⡇'
+set -g status-right ''
+
+set -g status-right-length 60
+set -g status-left-length 60
+
+set-window-option -g window-status-current-format ' #I #W '
+set-window-option -g window-status-format ' #I #W '
+
+
 #### COLOUR (Solarized 256)
-
 # default statusbar colors
-set-option -g status-bg colour235 #base02
-set-option -g status-fg colour136 #yellow
-# set-option -g status-attr default
+set -g status-style bg=colour235,fg=colour136
 
 # default window title colors
-# set-window-option -g window-status-fg colour244 #base0
-# set-window-option -g window-status-bg default
-#set-window-option -g window-status-attr dim
+set -g window-status-style bg=default,fg=colour244,dim
 
-# active window title colors
-# set-window-option -g window-status-current-fg colour252 # white
-# set-window-option -g window-status-current-bg default
-#set-window-option -g window-status-current-attr bright
+# # active window title colors
+set -g window-status-current-style bg=default,fg=colour252,bright
 
-# windows with activity
-# set-window-option -g window-status-activity-attr none # don't highlight so much with reverse
-# set-window-option -g window-status-activity-fg colour166 #orange
+# # windows with activity
+set -g window-status-activity-style bg=default,fg=colour166
 
-# pane border
-# set-option -g pane-border-fg colour235 #base02
-# set-option -g pane-active-border-fg colour240 #base01
+# # pane border
+set -g pane-border-style fg=colour235
+set -g pane-active-border-style fg=colour240
 
-# message text
-# set-option -g message-bg colour235 #base02
-# set-option -g message-fg colour166 #orange
+# # message text
+set -g message-style bg=colour235,fg=colour166
 
-# pane number display
-set-option -g display-panes-active-colour colour33 #blue
-set-option -g display-panes-colour colour166 #orange
+# # pane number display
+set -g display-panes-active-colour colour33 #blue
+set -g display-panes-colour colour166 #orange
 
-# clock
-set-window-option -g clock-mode-colour colour64 #green
+# # clock
+set -g clock-mode-colour colour64 #green
+# }}}
 
-setw -g  monitor-activity on
+
+# # vim:fdm=marker
