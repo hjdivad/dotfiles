@@ -1,4 +1,0 @@
-[alias]
-  show-commit-message = show -s --format='%s%n%n%b'
-
-# vim:ft=gitconfig:

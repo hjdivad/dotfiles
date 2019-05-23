@@ -1,17 +1,5 @@
 [include]
-  path = .dotfiles/git/branch.git
-  path = .dotfiles/git/merge.git
-  path = .dotfiles/git/colour.git
-  path = .dotfiles/git/commit.git
-  path = .dotfiles/git/complete.git
-  path = .dotfiles/git/core.git
-  path = .dotfiles/git/diff.git
-  path = .dotfiles/git/github.git
-  path = .dotfiles/git/help.git
-  path = .dotfiles/git/log.git
-  path = .dotfiles/git/show.git
-  path = .dotfiles/git/refs.git
-  path = .dotfiles/git/remote.git
+  path = .dotfiles/git/config.git
 
 
 # vim:ft=gitconfig:

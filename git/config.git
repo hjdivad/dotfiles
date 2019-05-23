@@ -1,0 +1,133 @@
+[alias]
+  c = checkout
+  cp = checkout --patch
+  # checkout pull-request.  This assumes pull requests exist as refs under
+  # refs/pull/<n>
+  cpr = "!f() { git fetch origin +refs/pull/$1/head:refs/pull/$1 && git branch -f pr/$1 pull/$1 && git checkout pr/$1; }; f"
+
+  b = branch
+  br = branch -r
+  backup = "!f() { local name=`git name-rev HEAD | cut -d' ' -f 2`; git branch -D \"backup/$name\" 2> /dev/null; git branch \"backup/$name\"; }; f"
+
+  branch-current = "!f() { git branch --no-color | grep '*' | grep -v '(no branch)' | cut -c 3-; }; f"
+
+  wm = !sh -c 'git merge $0 && git branch -d $0'
+	ff = merge --ff-only
+
+  # Rebase remote (origin/master) interactive
+  rri = "!f() { git fetch origin && git rebase --autosquash --interactive origin/master \"$@\"; }; f"
+  # Rebase fork-point
+  rrf = "!f() { git rebase --autosquash --interactive `git fpm` \"$@\"; }; f"
+  rc = rebase --continue
+
+  # Depends on git-cleanup-my-branches
+	cu = cleanup-my-branches
+
+  select-branch = "!f() { git branch | cut -c 3- | fzf | xargs -r git checkout; }; f"
+  ca = "!f() { git add -A && git commit -a -v \"$@\"; }; f"
+  cam = "!f() { git add -A && git commit -a -v --amend \"$@\"; }; f"
+  cm = commit -v --amend
+  cmm = commit -v --amend -CHEAD
+  camm = "!f() { git add -A && git commit -a -v --amend -CHEAD \"$@\"; }; f"
+  h = help
+
+  pr = !hub pull-request
+  checkout-pr = "!f() { { [ -n \"$1\" -a -z \"$3\" ] &&\
+    git fetch origin refs/pull/$1/*:refs/remotes/origin/pull/$1/* &&\
+      git checkout -b pr/$1 refs/remotes/origin/pull/$1/head; } \
+    || { echo Usage: git checkout-pr PR_NUMBER; }\
+  }; f"
+  wc = whatchanged -p -w -B
+  wcw = whatchanged -p -w --color-words
+  wcwb = whatchanged -p -w --color-words origin/master..
+
+
+  lg = log --stat -i --decorate
+  ln = log --no-merges -r -i --name-status --decorate
+  lgb = log --no-merges --stat -i --decorate origin/master..
+  logb = log --decorate origin/master..
+
+  gl = log --decorate --cherry-mark --oneline --graph --boundary
+
+  head = show -w --color-words HEAD
+	count = shortlog -sn
+
+  tags = tag -l -n24601
+
+	st = status -sb -uall
+
+
+  ap = add --patch
+  # add --patch new file; take the next unstaged file, register with the index
+  # and then add --patch
+  apn = "!f() { local nf=$(git status --porcelain -uall | $GREP -P \"^\\?\" | cut -d' ' -f 2 | head -n 1); git add -N \"$nf\" 2> /dev/null; git add -p \"$nf\"; }; f"
+  au = add -u
+
+  dc = diff --cached
+  dcw = diff --cached --ignore-all-space --color-words
+  dw = diff --ignore-all-space --color-words
+  diff-rebase-mine = "!f() { local gitdir=`git rev-parse --show-toplevel`; local sha=`cat $gitdir/.git/rebase-apply/orig-head`; git diff $sha^..$sha $@; }; f"
+	name-of = name-rev --name-only
+  fo = fetch --prune origin
+  fa = fetch --prune --all
+
+  upstream = "!f() { local b=`git branch-current` && local r=`git config branch.$b.remote` && local m=`git config branch.$b.merge` && [ -n \"$r\" ] && [ -n \"$m\" ] && echo $r/${m#refs/heads/}  || echo 'master'; }; f"
+
+
+  # Finds least common ancestor.  Note this won't find the fork point if we've
+  # merged commits that have also been merged to master.
+  fpm = merge-base HEAD master
+	fpmn = "!f() { git name-of `git fpm`; }; f"
+  show-commit-message = show -s --format='%s%n%n%b'
+
+[push]
+  default = upstream
+  followTags = true
+
+
+[log]
+  follow = true
+
+# Depends on a git-completion that supports checking these configuration
+# options.
+[complete]
+  wm = branch
+  ca = commit
+  cam = commit
+
+[core]
+	editor = /usr/bin/vim
+  excludesfile = ~/.dotfiles/git/excludes
+[pager]
+  branch =  false
+
+[diff]
+  renames = true
+
+
+[branch]
+  # always rebase to tracked branches on pull, for branches created by
+  # `git branch` or `git checkout`, i.e. non-master.
+  autosetuprebase = always
+
+[mergetool]
+	keepBackup = false
+[rebase]
+	autosquash = true
+[merge]
+	tool = gvimdiff
+[rerere]
+	enabled = 1
+
+
+[color]
+	grep = true
+  branch = true
+  interactive = true
+  pager = true
+  showbranch = true
+  status = true
+  ui = true
+
+# vim:ft=gitconfig:
+
