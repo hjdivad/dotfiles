@@ -22,11 +22,6 @@ bind -r "<" resize-pane -L 1
 bind "_" resize-pane -y 9999
 bind "|" resize-pane -x 9999
 
-# Copy mode
-# bind -t vi-copy v begin-selection
-# bind -t vi-copy V rectangle-toggle
-# bind -t vi-copy y copy-selection
-
 
 # speed up
 set-option -s escape-time 10
@@ -53,9 +48,9 @@ set-option -g status-right '#[bold]#(whoami) ● #H#[default] '
 set-option -g status-right-length 60
 set-option -g status-left-length 60
 
-set-window-option -g window-status-current-bg colour100
-set-window-option -g window-status-current-fg colour10
-set-window-option -g window-status-current-attr bold
+# set-window-option -g window-status-current-bg colour100
+# set-window-option -g window-status-current-fg colour10
+# set-window-option -g window-status-current-attr bold
 set-window-option -g window-status-current-format ' #I #W '
 
 set-option -g visual-activity off
@@ -65,14 +60,14 @@ set-window-option -g automatic-rename off
 set-option -g set-titles on
 set-option -g set-titles-string '[#I] #W'
 set-window-option -g window-status-format ' #I #W '
-set-window-option -g window-status-attr bold
+# set-window-option -g window-status-attr bold
 
 # starts windows at 1 not 0
 set-option -g base-index 1
 set-window-option -g pane-base-index 1
 
-set-option -g pane-active-border-fg green
-set-option -g pane-border-fg white
+# set-option -g pane-active-border-fg green
+# set-option -g pane-border-fg white
 
 # In version 2.1 "mouse" replaced the previous 4 mouse options
 if-shell -b '[ "$(echo "$TMUX_VERSION >= 2.1" | bc)" = 1 ]' \
@@ -86,29 +81,29 @@ setw -g automatic-rename
 # default statusbar colors
 set-option -g status-bg colour235 #base02
 set-option -g status-fg colour136 #yellow
-set-option -g status-attr default
+# set-option -g status-attr default
 
 # default window title colors
-set-window-option -g window-status-fg colour244 #base0
-set-window-option -g window-status-bg default
+# set-window-option -g window-status-fg colour244 #base0
+# set-window-option -g window-status-bg default
 #set-window-option -g window-status-attr dim
 
 # active window title colors
-set-window-option -g window-status-current-fg colour252 # white
-set-window-option -g window-status-current-bg default
+# set-window-option -g window-status-current-fg colour252 # white
+# set-window-option -g window-status-current-bg default
 #set-window-option -g window-status-current-attr bright
 
 # windows with activity
-set-window-option -g window-status-activity-attr none # don't highlight so much with reverse
-set-window-option -g window-status-activity-fg colour166 #orange
+# set-window-option -g window-status-activity-attr none # don't highlight so much with reverse
+# set-window-option -g window-status-activity-fg colour166 #orange
 
 # pane border
-set-option -g pane-border-fg colour235 #base02
-set-option -g pane-active-border-fg colour240 #base01
+# set-option -g pane-border-fg colour235 #base02
+# set-option -g pane-active-border-fg colour240 #base01
 
 # message text
-set-option -g message-bg colour235 #base02
-set-option -g message-fg colour166 #orange
+# set-option -g message-bg colour235 #base02
+# set-option -g message-fg colour166 #orange
 
 # pane number display
 set-option -g display-panes-active-colour colour33 #blue
