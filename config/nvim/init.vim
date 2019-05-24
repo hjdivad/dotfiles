@@ -398,10 +398,33 @@ augroup Autoread
   autocmd FocusGained,BufEnter * :execute 'checktime ' . bufnr('%')
 augroup end
 
+function! s:chomp(string)
+  return substitute(a:string, '\n\+$', '', '')
+endfunction
+
+function s:tmux_select_previous_session()
+  " tmux calls this the "last" session, but it means the previously used one
+  silent exec "!tmux switch-client -l"
+endfunction
+
+function s:tmux_select_todos_session()
+  silent exec "!tmux switch-client -t todos"
+endfunction
+
+function s:tmux_toggle_todos_session()
+  let session = s:chomp(system('tmux display -p "#S"'))
+  if session == 'todos'
+    call s:tmux_select_previous_session()
+  else
+    call s:tmux_select_todos_session()
+  endif
+endfunction
+
 " Keybindings {{{
 "
 " nmap <leader>r
 " nmap <leader>R
+nmap <leader>tt :call <SID>tmux_toggle_todos_session()<CR>
 nmap <leader>fg :GFiles<CR>
 nmap <leader>ff :Files<CR>
 nmap <leader>fl :BLines<CR>
@@ -422,7 +445,6 @@ nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ln :ALENext<CR>
 nmap <leader>lf :ALEFix<CR>
-nmap <leader>tt :terminal<CR>
 " TODO: these don't work from  a new buffer for reasons that aren't clear to
 " me; it seems that nothing works after a wincmd; i'll have to debug later
 " with verbose
