@@ -215,6 +215,18 @@ fi
 
 }
 
+function __ts_todos {
+  t_current_session=$(tmux display -p '#S')
+  t_current_session=${t_current_session%\n}
+  if [[ "$t_current_session" == "todos" ]]; then
+    # switch to "last" (ie last used) session
+    tmux switch-client -l
+  else
+    # switch to the todos session
+    tmux switch-client -t todos
+  fi
+}
+
 # tmux z and if successful rename the window to the current working directory;
 # generally nice when that dir is the name of a specific repo
 function __tz {
@@ -223,6 +235,7 @@ function __tz {
 
 alias t='tmux'
 alias ts='__ts'
+alias tt='__ts_todos'
 alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
 alias gz='__tz'
 
