@@ -90,6 +90,7 @@ Plug 'bogado/file-line'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'fszymanski/fzf-quickfix'
 
 " Plug 'Valloric/YouCompleteMe'
 " Plug 'SirVer/ultisnips'
@@ -309,6 +310,10 @@ let g:gitgutter_diff_base = 'origin/master'
 
 let g:gitgutter_map_keys = 0
 
+" Quickfix to fzf over the location list, populated by ALE
+let g:fzf_quickfix_no_maps = 1
+let g:fzf_quickfix_use_loclist = 1
+
 "}}}
 
 
@@ -445,6 +450,7 @@ nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ln :ALENext<CR>
 nmap <leader>lf :ALEFix<CR>
+nmap <leader>ll :Quickfix<CR>
 " TODO: these don't work from  a new buffer for reasons that aren't clear to
 " me; it seems that nothing works after a wincmd; i'll have to debug later
 " with verbose
