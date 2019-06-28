@@ -1,5 +1,0 @@
-if [[ -x ./node_modules/.bin/eslint ]]; then
-  exec ./node_modules/.bin/eslint $@
-else
-  exec $(which -a eslint | tail -n 1) $@
-fi
