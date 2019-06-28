@@ -46,6 +46,7 @@
   ln = log --no-merges -r -i --name-status --decorate
   lgb = log --no-merges --stat -i --decorate origin/master..
   logb = log --decorate origin/master..
+  log-since-last-release = "!f() { git log \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f"
 
   gl = log --decorate --cherry-mark --oneline --graph --boundary
 
