@@ -69,7 +69,8 @@ Plug 'rizzatti/dash.vim'
 Plug 'ekalinin/Dockerfile.vim'
 
 " Visualiztion for undo tree (as opposed to undo stack)
-Plug 'sjl/gundo.vim'
+" seems to be broken
+" Plug 'sjl/gundo.vim'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -135,7 +136,8 @@ Plug 'nelstrom/vim-markdown-folding'
 
 " TODO: experiment with this: TLS support in vim + nvim
 " https://github.com/neoclide/coc.nvim
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+" CocConfig to open configuration
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
@@ -155,6 +157,9 @@ set autoindent
 
 set number
 set relativenumber
+
+" recommended by https://github.com/neoclide/coc.nvim
+set updatetime=300
 
 " Terminal mode output buffer
 set scrollback=1000
@@ -314,6 +319,26 @@ let g:gitgutter_map_keys = 0
 let g:fzf_quickfix_no_maps = 1
 let g:fzf_quickfix_use_loclist = 1
 
+
+
+" From https://github.com/neoclide/coc.nvim
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+
+" From https://github.com/neoclide/coc.nvim
+augroup coctls
+  autocmd!
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
 "}}}
 
 
@@ -429,6 +454,17 @@ endfunction
 "
 " nmap <leader>r
 " nmap <leader>R
+
+" use coc.vim for K doc lookup
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+nmap <leader>gd <Plug>(coc-definition)
+nmap <leader>gD <Plug>(coc-type-definition)
+nmap <leader>gi <Plug>(coc-implementation)
+nmap <leader>gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>ss :CocList symbols<CR>
+nmap <leader>sl :CocList outline<CR>
+
 nmap <leader>tt :call <SID>tmux_toggle_todos_session()<CR>
 nmap <leader>fg :GFiles<CR>
 nmap <leader>ff :Files<CR>
@@ -440,11 +476,10 @@ nmap <leader>fm :Marks<CR>
 nmap <leader>fc :BCommits!<CR>
 nmap <leader>fC :Commits!<CR>
 nmap <leader>fh :Helptags<CR>
-nmap <leader>gn :GitGutterNextHunk<CR>
-nmap <Leader>gp :GitGutterPrevHunk<CR>
-nmap <Leader>ga :GitGutterStageHunk<CR>
-nmap <Leader>gu :GitGutterUndoHunk<CR>
-nmap <Leader>gP :GitGutterPreviewHunk<CR>
+nmap <leader>hn :GitGutterNextHunk<CR>
+nmap <Leader>hp :GitGutterPrevHunk<CR>
+nmap <Leader>hu :GitGutterUndoHunk<CR>
+nmap <Leader>hP :GitGutterPreviewHunk<CR>
 nmap <leader>ne :edit .<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
