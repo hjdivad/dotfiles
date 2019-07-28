@@ -22,8 +22,8 @@ else
   " Check if we're in WSL
   let x=system('grep -q Microsoft /proc/version')
   if !v:shell_error
-    " | dos2unix here is very slow, but I don't really understand why since
-    " it's only about 150ms in the terminal
+    " TODO: dos2unix doesn't work here but should be able to change paste to a
+    " lambda that does the right thing
     let g:clipboard = {
       \   'name': 'wsl-1083',
       \   'copy': {
@@ -31,8 +31,8 @@ else
       \     '*': 'clip.exe'
       \   },
       \   'paste': {
-      \     '+': 'powershell.exe Get-Clipboard | dos2unix',
-      \     '*': 'powershell.exe Get-Clipboard | dos2unix'
+      \     '+': 'powershell.exe Get-Clipboard',
+      \     '*': 'powershell.exe Get-Clipboard'
       \   },
       \   'cache_enabled': 1
       \ }
