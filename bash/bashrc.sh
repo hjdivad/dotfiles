@@ -6,7 +6,6 @@ source $BASH/git-completion.sh
 # Homebrew completion
 [ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
 
-# OPTIMISE: This is surprisingly slow
 source $BASH/colours.sh
 
 # Lang Libs + SDK{{{
@@ -100,12 +99,6 @@ export PATH=$HOME/bin:$PATH
 # }}}
 
 # Version Mgmt {{{
-
-export NOTION_HOME=$HOME/.notion
-
-# Load nvm, if it is present.
-# export NVM_DIR=$HOME/.nvm
-# [[ -n "$(which brew > /dev/null 2>&1)" ]] && [[ -s "$(brew --prefix nvm)/nvm.sh" ]] && source "$(brew --prefix nvm)/nvm.sh"
 
 # initialize rbenv
 if [ -x /usr/local/bin/rbenv ]; then
@@ -316,7 +309,27 @@ fi
 
 #}}}
 
+# Windows Extra {{{
+if uname -a | grep -q Microsoft; then
+  alias pbcopy='clip.exe'
+  alias pbpaste='powershell.exe Get-Clipboard'
 
+  # Fix the way colors look by default
+  if [ -f "$HOME/src/seebi/dircolors-solarized/dircolors.256dark" ]; then
+    eval $(dircolors -b "$HOME/src/seebi/dircolors-solarized/dircolors.256dark")
+  fi
+
+
+  # autocomplete is not enabled by default in WSL
+  if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+      . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+      . /etc/bash_completion
+    fi
+  fi
+fi
+#}}}
 
 if [[ -x "$(which nvim > /dev/null 2>&1)" ]]; then
   export EDITOR='nvim'
