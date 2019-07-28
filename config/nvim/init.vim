@@ -22,6 +22,7 @@ else
   " Check if we're in WSL
   let x=system('grep -q Microsoft /proc/version')
   if !v:shell_error
+    " TODO: paste pipe results through dos2unix
     let g:clipboard = {
       \   'name': 'wsl-1083',
       \   'copy': {
