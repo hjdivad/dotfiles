@@ -331,8 +331,9 @@ if uname -a | grep -q Microsoft; then
 fi
 #}}}
 
-if [[ -x "$(which nvim > /dev/null 2>&1)" ]]; then
+if $(which nvim > /dev/null 2>&1); then
   export EDITOR='nvim'
+  export GIT_EDITOR='nvim'
 fi
 
 
