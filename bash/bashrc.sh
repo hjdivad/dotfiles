@@ -237,6 +237,9 @@ alias 'debug-vim'='vim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 # yarn
 alias y=yarn
 
+alias npm-release= 'release-it --github.release=true --git.tagName="v\${version}"'
+
+
 #}}}
 
 # Bash CLI {{{
