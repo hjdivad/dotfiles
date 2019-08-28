@@ -464,6 +464,8 @@ nmap <leader>gD <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
 nmap <leader>gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
+" Format using formatprg
+nmap <leader>rf gggqG<C-o><C-o>
 nmap <leader>ss :CocList symbols<CR>
 nmap <leader>sl :CocList outline<CR>
 

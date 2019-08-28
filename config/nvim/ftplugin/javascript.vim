@@ -1,1 +1,3 @@
-setlocal formatprg=prettier\ --stdin\ --single-quote\ --trailing-comma\ es5\ --print-width\ 120
+" rely on local prettierrc for decent options like single quote, print width
+" 120 &c.
+setlocal formatprg=prettier\ --stdin\ --parser\ babel
