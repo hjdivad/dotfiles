@@ -237,7 +237,7 @@ alias 'debug-vim'='vim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 # yarn
 alias y=yarn
 
-alias release-it-standard='release-it --github.release=true --git.tagName="v\${version}"'
+alias release-it-standard='release-it --github.release=true --git.tagName="v\${version}" --no-git.requireCleanWorkingDir'
 
 
 #}}}

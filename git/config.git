@@ -5,8 +5,8 @@
   # refs/pull/<n>
   cpr = "!f() { git fetch origin +refs/pull/$1/head:refs/pull/$1 && git branch -f pr/$1 pull/$1 && git checkout pr/$1; }; f"
 
-  b = branch
-  br = branch -r
+  b = branch --sort=committerdate
+  br = branch -r --sort=committerdate
   backup = "!f() { local name=`git name-rev HEAD | cut -d' ' -f 2`; git branch -D \"backup/$name\" 2> /dev/null; git branch \"backup/$name\"; }; f"
 
   branch-current = "!f() { git branch --no-color | grep '*' | grep -v '(no branch)' | cut -c 3-; }; f"
