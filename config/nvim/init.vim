@@ -127,6 +127,8 @@ Plug 'gutenye/json5.vim'
 
 
 Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+
 
 " This can be slow
 Plug 'nelstrom/vim-markdown-folding'
@@ -147,7 +149,8 @@ call plug#end()
 
 " Misc normal options {{{
 set background=dark
-colorscheme solarized
+" colorscheme solarized
+colorscheme gruvbox
 
 " Spaces vs tabs
 set tabstop=2
