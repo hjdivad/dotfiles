@@ -125,21 +125,17 @@ Plug 'pangloss/vim-javascript'
 Plug 'dag/vim-fish'
 Plug 'gutenye/json5.vim'
 
+" This can be slow
+Plug 'nelstrom/vim-markdown-folding'
+
 
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
-
-
-" This can be slow
-Plug 'nelstrom/vim-markdown-folding'
 
 " TODO: get this working
 " Plug 'kassio/neoterm'
 " Plug 'janko-m/vim-test'
 
-
-" TODO: experiment with this: TLS support in vim + nvim
-" https://github.com/neoclide/coc.nvim
 " CocConfig to open configuration
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
