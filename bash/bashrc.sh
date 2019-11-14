@@ -208,7 +208,7 @@ function __ts {
 t_session=$(tmux list-sessions | fzf  | cut -d':' -f 1)
 
 if [[ -n "$t_session" ]]; then
-  tmux $t_cmd -t $t_session
+  tmux $t_cmd -t "$t_session"
 fi
 
 }
