@@ -344,7 +344,5 @@ if $(which nvim > /dev/null 2>&1); then
   export GIT_EDITOR='nvim'
 fi
 
-
-
 # vim:set tw=0 fdm=marker:
 
