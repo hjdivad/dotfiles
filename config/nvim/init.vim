@@ -525,6 +525,12 @@ tnoremap <C-w>k <C-\><C-n><C-w>k
 tnoremap <C-w><C-k> <C-\><C-n><C-w>k
 tnoremap <C-w>l <C-\><C-n><C-w>l
 tnoremap <C-w><C-l> <C-\><C-n><C-w>l
+
+" Create new (terminal) window from terminal mode
+tnoremap <C-w>n <C-\><C-n><C-w>n:term<CR>
+tnoremap <C-w><C-n> <C-\><C-n><C-w>n:term<CR>
+
+" Use C-\ C-\ as terminal escape
 tnoremap <C-\><C-\> <C-\><C-n>
 
 " Move row-wise instead of line-wise
