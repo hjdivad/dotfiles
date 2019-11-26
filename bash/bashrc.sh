@@ -257,8 +257,11 @@ set -o vi
 # $COLUMNS correct.
 shopt -s checkwinsize
 
-# Skip over duplicates in bash history
-HISTCONTROL=ignoredups
+# see https://unix.stackexchange.com/questions/1288/preserve-bash-history-in-multiple-terminal-windows
+# Don't care about duplicates in history
+HISTCONTROL=ignoredups:erasedups
+# When shell exits, append to history instead of overwriting
+shopt -s histappend
 
 if [[ $(umask) = "0000" ]]; then
   # set a sane umask for wsl
@@ -301,12 +304,17 @@ _prompt_command_indicator() {
   echo "$blue\$$reset_color "
 }
 
+_prompt_history() {
+  echo "history -a; history -c; history -r"
+}
+
 set_prompt() {
   PS1="$(_prompt_host)$(_prompt_path)$(_prompt_git)\n$(_prompt_command_indicator)"
 }
 
-
 PROMPT_COMMAND=set_prompt
+# see https://unix.stackexchange.com/questions/1288/preserve-bash-history-in-multiple-terminal-windows
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
 # z jumparound; this must be sourced after $PROMPT_COMMAND is set
 if [ -f "$HOME/src/rupa/z/z.sh" ]; then
