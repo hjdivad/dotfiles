@@ -406,7 +406,10 @@ augroup TermExtra
   " ghosting to occur in certain terminal UIs (e.g. nested nvim, htop,
   " anything with ncurses)
   autocmd TermEnter * setlocal scrolloff=0
-  autocmd TermLeave * setlocal scrolloff=3
+  " TODO: instead when bufenter call fn; if not term setlocal scrolloff=3 doing
+  " this always on termleave gets you the issue when switching from one term
+  " buffer to another
+  " autocmd TermLeave * setlocal scrolloff=3
 
   autocmd WinLeave term://* :checktime
 augroup end
