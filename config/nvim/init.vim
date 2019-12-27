@@ -568,6 +568,13 @@ if has("digraphs")
   digraph .. 8230   " …
   digraph !? 8253   " ‽
 
+  digraph ua 228 " ä
+  digraph uA 196 " Ä
+  digraph uo 246 " ö
+  digraph uO 214 " Ö
+  digraph oa 229 " å
+  digraph oA 197 " Å
+
   digraph RN 8477   " ℝ 
   digraph PN 8473   " ℙ 
   digraph QN 8474   " ℚ 
