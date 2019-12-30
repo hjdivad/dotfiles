@@ -344,6 +344,14 @@ if uname -a | grep -q Microsoft; then
       . /etc/bash_completion
     fi
   fi
+
+  # If we don't have an ssh agent running, launch one if we're interactive and
+  # if we know how
+  if [[ ! -r "$SSH_AUTH_SOCK" && -r "$HOME/bin/ssh-agent-start" && $- =~ "i" ]]; then
+    source "$HOME/bin/ssh-agent-start"
+    echo "ssh agent started; adding default key\n"
+    ssh-add
+  fi
 fi
 #}}}
 
