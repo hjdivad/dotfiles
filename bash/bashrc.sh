@@ -347,9 +347,9 @@ if uname -a | grep -q Microsoft; then
 
   # If we don't have an ssh agent running, launch one if we're interactive and
   # if we know how
-  if [[ ! -r "$SSH_AUTH_SOCK" && -r "$HOME/bin/ssh-agent-start" && $- =~ "i" ]]; then
-    source "$HOME/bin/ssh-agent-start"
-    echo "ssh agent started; adding default key\n"
+  if [[ ! -r "$SSH_AUTH_SOCK" && $- =~ "i" ]]; then
+    eval $(ssh-agent -s)
+    echo "ssh agent started; adding default key"
     ssh-add
   fi
 fi
