@@ -132,6 +132,7 @@ Plug 'nelstrom/vim-markdown-folding'
 
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
+Plug 'junegunn/seoul256.vim'
 
 " TODO: get this working
 " Plug 'kassio/neoterm'
