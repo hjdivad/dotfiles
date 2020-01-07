@@ -276,7 +276,7 @@ _prompt_git() {
   if [ -n "$ref" ]; then
     # We have a git, ask him questions, unless it's disabled
     if  git config prompt.dontCheckStatus > /dev/null ||\
-      ! (git status -s --ignore-submodules | grep -qP .); then
+      ! (git status -s --ignore-submodules | $GREP -qP .); then
       # Clean
       local state_prefix=""
     else
