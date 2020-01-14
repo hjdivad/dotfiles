@@ -178,7 +178,9 @@ set foldenable
 " Resize windows with the mouse
 set mouse=a
 
-set cursorline
+" I'd prefer to turn cursorline on but it causes emoji rendering issues
+" https://github.com/hjdivad/dotfiles/issues/50
+set nocursorline
 
 set virtualedit=onemore
 
