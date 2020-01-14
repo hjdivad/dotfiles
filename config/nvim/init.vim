@@ -125,6 +125,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'dag/vim-fish'
 Plug 'gutenye/json5.vim'
 Plug 'jparise/vim-graphql'
+Plug 'cespare/vim-toml'
 
 " This can be slow
 Plug 'nelstrom/vim-markdown-folding'
