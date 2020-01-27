@@ -267,6 +267,9 @@ fi
 # https://starship.rs/
 eval "$(starship init bash)"
 
+# see https://unix.stackexchange.com/questions/1288/preserve-bash-history-in-multiple-terminal-windows
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+
 # z jumparound; this must be sourced after $PROMPT_COMMAND is set
 if [ -f "$HOME/src/rupa/z/z.sh" ]; then
   source "$HOME/src/rupa/z/z.sh"
