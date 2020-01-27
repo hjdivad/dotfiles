@@ -4,3 +4,8 @@ add_newline = true
 
 [time]
 disabled = false
+
+[git_status]
+# disabled only because it does so poorly with large gits
+# starship needs to learn something like [dontCheckStatus](https://github.com/hjdivad/dotfiles/blob/cff30d5d6af9a279a969aeb79f1562261a35d5fb/bash/bashrc.sh#L277-L281)
+disabled = true
