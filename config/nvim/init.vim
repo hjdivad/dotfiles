@@ -77,7 +77,6 @@ Plug 'ekalinin/Dockerfile.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-Plug 'terryma/vim-multiple-cursors'
 " I think airline supersedes powerline
 " Plug 'powerline/powerline'
 Plug 'vim-airline/vim-airline'
