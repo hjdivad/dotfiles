@@ -42,11 +42,6 @@ if [ -x /usr/local/bin/rbenv ]; then
   eval "$(rbenv init -)"
 fi
 
-if [ -d $HOME/.volta ]; then
-  export VOLTA_HOME=$HOME/.volta
-  source $VOLTA_HOME/load.sh
-fi
-
 # Load RVM, if it is present.
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
