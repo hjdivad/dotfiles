@@ -192,20 +192,17 @@ alias sudo='sudo '
 
 
 # tmux
-function __ts {
+
+function __tss {
   if [ "$TMUX" ]; then
     t_cmd='switch-client'
   else
     t_cmd='attach'
   fi
 
-# tmux list-sessions | fzf  | cut -d':' -f 1 | echo xargs tmux ${t_cmd} -t 
-t_session=$(tmux list-sessions | fzf  | cut -d':' -f 1)
-
-if [[ -n "$t_session" ]]; then
-  tmux $t_cmd -t "$t_session"
-fi
-
+  if [[ -n "$1" ]]; then
+    tmux $t_cmd -t "$1"
+  fi
 }
 
 function __ts_todos {
@@ -226,10 +223,37 @@ function __tz {
   _z $@ && tmux rename-window  "${PWD##*/}"
 }
 
+function __ts {
+  local sessions
+  if local result=$(tmux ls -F '#{session_name}' 2>&1); then
+    sessions=$result
+  else
+    echo $result
+    return 1
+  fi
+
+  local choices=''
+  local delim=' ' # non-breaking space, not a regular space!
+  for session in $sessions; do
+    local windows=$(tmux list-windows -t "$session" -F '#{window_name} #{window_id}')
+    for window in $windows; do
+      choices=$choices$session$delim$window$'\n'
+    done
+  done
+
+  if local selection=$(printf "$choices" | fzf); then
+    local selected_session=$(cut -d$delim -f 1 <<<$selection)
+    local selected_window=$(cut -d$delim -f 2 <<<$selection)
+    local selected_window_id=$(cut -d$delim -f 3 <<<$selection)
+    tmux select-window -t "$selected_session"':'"$selected_window_id"
+    __tss $selected_session
+  fi
+}
+
 alias t='tmux'
 alias ts='__ts'
 alias tt='__ts_todos'
-alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
+# alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
 alias gz='__tz'
 
 alias 'debug-vim'='vim -V12 --cmd "set verbosefile=/tmp/vim.log"'
