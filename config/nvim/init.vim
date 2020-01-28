@@ -622,6 +622,9 @@ if has("digraphs")
   digraph bh 9763   " ☣ 
   digraph ki 9812   " ♔ 
   digraph kn 9816   " ♘ 
+
+  " <C-k> space space to enter non-breaking space
+  digraph <20><20> 160  " non-breaking space;
 endif
 
 " emoji
