@@ -605,6 +605,7 @@ if has("digraphs")
 
   digraph iO 9432     " ⓘ
   digraph wa 9888     " ⚠
+  digraph er 9940     " ⛔
   digraph wc 9898     " ⚪
   digraph rc 128308   " 🔴
   digraph bc 128309   " 🔵
@@ -616,6 +617,8 @@ if has("digraphs")
   digraph rk 128640   " 🚀
   digraph tu 128077   " 👍
   digraph ti 129300   " 🤔
+  digraph ax 129683   " 🪓
+  digraph ey 128064   " 👀
 
   digraph ** 9733   " ★
   digraph <3 9829   " ♥
