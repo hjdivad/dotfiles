@@ -333,6 +333,12 @@ if uname -a | grep -q Microsoft; then
 fi
 #}}}
 
+# OSX Extra {{{
+
+# osx catalina cries about bash if you don't do this.
+export BASH_SILENCE_DEPRECATION_WARNING=1
+#}}}
+
 if $(which nvim > /dev/null 2>&1); then
   export EDITOR='nvim'
   export GIT_EDITOR='nvim'
