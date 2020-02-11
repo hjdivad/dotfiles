@@ -2,10 +2,23 @@
 
 add_newline = true
 
+# default scan timeout is 30 ms, however git_status is still slow
+# scan_timeout = 30
+
 [time]
 disabled = false
 
 [git_status]
 # disabled only because it does so poorly with large gits
 # starship needs to learn something like [dontCheckStatus](https://github.com/hjdivad/dotfiles/blob/cff30d5d6af9a279a969aeb79f1562261a35d5fb/bash/bashrc.sh#L277-L281)
+#
+# see https://github.com/starship/starship/issues/597
+#
+# the root issue seems to be upstream
+# [git2-rs](https://github.com/rust-lang/git2-rs) which itself apparently uses
+# [libgit2](https://github.com/libgit2/libgit2/issues/5038)
+#
+# Note that there's an alternative that is aimed at the specific issue of
+# status prompts at [gitstatus](https://github.com/romkatv/gitstatus); perhaps
+# this could be turned into a crate that starship could use?
 disabled = true
