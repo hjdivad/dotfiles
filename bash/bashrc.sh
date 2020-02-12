@@ -224,6 +224,8 @@ function __tz {
 }
 
 function __ts {
+  # set IFS to loop over sessions with spaces
+  IFS=$'\n'
   local sessions
   if local result=$(tmux ls -F '#{session_name}' 2>&1); then
     sessions=$result
