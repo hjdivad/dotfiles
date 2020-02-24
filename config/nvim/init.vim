@@ -160,6 +160,12 @@ endif
 set background=dark
 " colorscheme solarized
 colorscheme gruvbox
+" hack to make diagnostic preview window readable
+" these end up with CocDiagnosticError CocFloating
+" CocDiagnosticsError → GruvboxRed
+" CocFloating → NormalFloat → PMenu
+" this ends up with guifg=#fb4934 guibg=#504945 which has nowhere near enough contrast
+hi Pmenu guibg=#1d2021
 
 " Spaces vs tabs
 set tabstop=2
