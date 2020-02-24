@@ -1,0 +1,10 @@
+{
+  "coc.preferences.enableFloatHighlight": true,
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextPrefix": "💬  ",
+  "diagnostic.locationlist": true,
+  "diagnostic.messageTarget": "float",
+  "signature.preferShownAbove": true,
+  "suggest.enablePreview": true,
+  "suggest.floatEnable": true
+}
