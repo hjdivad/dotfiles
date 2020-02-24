@@ -501,6 +501,7 @@ nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>rf gggqG<C-o><C-o>
 nmap <leader>ss :CocList symbols<CR>
 nmap <leader>sl :CocList outline<CR>
+nmap <leader>df :call CocAction('showSignatureHelp')<CR>
 
 nmap <leader>tt :call <SID>tmux_toggle_todos_session()<CR>
 nmap <leader>fg :GFiles<CR>
@@ -520,8 +521,10 @@ nmap <Leader>hP :GitGutterPreviewHunk<CR>
 nmap <leader>ne :edit .<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
-nmap <leader>ln :ALENext<CR>
-nmap <leader>lf :ALEFix<CR>
+" nmap <leader>ln :ALENext<CR>
+" nmap <leader>lf :ALEFix<CR>
+nmap <leader>ln <Plug>(coc-diagnostic-next)<CR>
+nmap <leader>lf <Plug>(coc-fix-current)<CR>
 nmap <leader>ll :Quickfix<CR>
 " TODO: these don't work from  a new buffer for reasons that aren't clear to
 " me; it seems that nothing works after a wincmd; i'll have to debug later
