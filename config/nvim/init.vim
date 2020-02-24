@@ -144,6 +144,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
+Plug 'tpope/vim-scriptease'
+
 call plug#end()
 
 "}}}
