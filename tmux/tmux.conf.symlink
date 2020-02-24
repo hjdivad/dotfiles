@@ -26,7 +26,9 @@ set -s escape-time 10
 # see https://forums.developer.apple.com/thread/9753
 set -g status-interval 0
 
-set -g default-terminal "screen-256color"
+# set -g default-terminal "screen-256color"
+set -g default-terminal "tmux-256color"
+set -ga terminal-overrides ",*256col*:Tc"
 
 # messages clear on input, so no reason to use the default 750ms
 set -g display-time 216000000

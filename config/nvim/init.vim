@@ -151,6 +151,12 @@ call plug#end()
 "}}}
 
 " Misc normal options {{{
+
+" https://github.com/tmux/tmux/issues/1246
+if has("termguicolors")
+  set termguicolors
+endif
+
 set background=dark
 " colorscheme solarized
 colorscheme gruvbox
