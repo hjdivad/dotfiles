@@ -130,5 +130,15 @@
   status = true
   ui = true
 
+# override red colours; I'm not sure why I need to do this but it's possibly a
+# recently fixed bug in alacritty
+[color "status"]
+  changed = "#d54e53"
+  untracked = "#d54e53"
+  nobranch = "#ff3334"
+[color "diff"]
+  old = "#d54e53"
+
+
 # vim:ft=gitconfig:
 
