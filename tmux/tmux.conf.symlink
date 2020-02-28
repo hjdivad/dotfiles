@@ -29,6 +29,7 @@ set -g status-interval 0
 # set -g default-terminal "screen-256color"
 set -g default-terminal "tmux-256color"
 set -ga terminal-overrides ",*256col*:Tc"
+set-option -sa terminal-overrides ",alacritty:RGB"
 
 # messages clear on input, so no reason to use the default 750ms
 set -g display-time 216000000
