@@ -166,6 +166,9 @@ colorscheme gruvbox
 " CocFloating → NormalFloat → PMenu
 " this ends up with guifg=#fb4934 guibg=#504945 which has nowhere near enough contrast
 hi Pmenu guibg=#1d2021
+" gruvbox sets the terminal red colour to its s.gb.neutral_red colour, '#cc241d'
+" I find has too little contrast with the background and prefer to lighten it 10%
+let g:terminal_color_1='#d25855'
 
 " Spaces vs tabs
 set tabstop=2
