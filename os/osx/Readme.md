@@ -4,16 +4,17 @@
 
 - install [homebrew][]
 - install [alacritty][] (>= 0.4.2-rc3)
-- install rbenv
+- install rustup
 - install volta
-- `gem install pws`
+- `brew install bash`
 - `brew install neovim`
 - `brew install tmux`
 - `brew install z`
+- `brew install rbenv`
+- `gem install pws`
 - log in to apple store
 - install from app store or wherever
   - divvy
-  - dash
   - spotify
   - alfred
   - discord
@@ -23,6 +24,24 @@
   - use-together
   - keycastr
   - krisp.ai
+- install explicitly from outside apple store
+  - dash
+
+## home
+```sh
+cd $HOME
+ln -s tmp Downloads
+mkdir src
+```
+
+## etc
+
+```sh
+# hostname $NEW_MACHINE_HOSTNAME
+
+# cat '/usr/local/bin/bash' >> /etc/shells
+# chsh -s /usr/local/bin/bash
+```
 
 ## Configs
 
@@ -128,19 +147,6 @@ defaults write com.apple.finder DisableAllAnimations -bool true
 # sending messages and opening windows for replies
 defaults write com.apple.Mail DisableSendAnimations -bool true
 defaults write com.apple.Mail DisableReplyAnimations -bool true
-```
-
-## home
-```sh
-cd $HOME
-ln -s tmp Downloads
-mkdir src
-```
-
-## etc
-
-```sh
-# hostname $NEW_MACHINE_HOSTNAME
 ```
 
 [alacritty]: https://github.com/jwilm/alacritty/blob/master/INSTALL.md
