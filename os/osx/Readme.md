@@ -3,7 +3,7 @@
 ## Installation
 
 - install [homebrew][]
-- install [alacritty][] (@ master)
+- install [alacritty][] (>= 0.4.2-rc3)
 - install rbenv
 - install volta
 - `gem install pws`
