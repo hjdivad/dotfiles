@@ -103,8 +103,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" asynchronous linting
-Plug 'w0rp/ale'
 " Formatting
 Plug 'sbdchd/neoformat'
 
@@ -318,17 +316,6 @@ let g:markdown_fold_style = 'nested'
 
 let g:bclose_no_default_mapping=1
 
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'typescript': ['tslint'],
-\}
-let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\}
-
-" Have ale report the linter that is saying whatever it is that's being said
-let g:ale_echo_msg_format = '%linter%: %code: %%s'
-
 " Put the fzf window to the right to not interfere with terminals (which i
 " keep on the left)
 let g:fzf_layout = {
@@ -339,11 +326,6 @@ let g:fzf_layout = {
 let g:gitgutter_diff_base = 'origin/master'
 
 let g:gitgutter_map_keys = 0
-
-" Quickfix to fzf over the location list, populated by ALE
-let g:fzf_quickfix_no_maps = 1
-let g:fzf_quickfix_use_loclist = 1
-
 
 
 " From https://github.com/neoclide/coc.nvim
@@ -524,8 +506,6 @@ nmap <Leader>hP :GitGutterPreviewHunk<CR>
 nmap <leader>ne :edit .<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
-" nmap <leader>ln :ALENext<CR>
-" nmap <leader>lf :ALEFix<CR>
 nmap <leader>ln <Plug>(coc-diagnostic-next)<CR>
 nmap <leader>lf <Plug>(coc-fix-current)<CR>
 nmap <leader>ll :Quickfix<CR>
@@ -534,8 +514,6 @@ nmap <leader>ll :Quickfix<CR>
 " with verbose
 " nmap <leader>ts <C-w>v<CR> <Cmd>terminal bash -ic ts<CR>
 " nmap <leader>tw <C-w>v<CR> <Cmd>terminal bash -ic tw<CR>
-nmap <leader>fd :ALEGoToDefinition<CR>
-nmap <leader>fr :ALEFindReferences<CR>
 nmap <leader>d :Bclose!<CR>:enew<CR>
 if has('clipboard')
   " Yank file (to clipboard)
