@@ -1,3 +1,6 @@
+# By default, ignore project-specific vimrc
+/.vimrc
+
 # node
 /node_modules
 
