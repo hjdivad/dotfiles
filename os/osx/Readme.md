@@ -21,9 +21,8 @@
   - flux
   - signal
   - use-together
-
-Probably don't install but vaguely recall
-  - skitch
+  - keycastr
+  - krisp.ai
 
 ## Configs
 
