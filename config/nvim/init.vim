@@ -611,6 +611,7 @@ if has("digraphs")
   digraph wt 9200     " ⏰
   digraph tb 9203     " ⏳
   digraph OK 9989     " ✅
+  digraph NO 10060    " ❌
   digraph fe 128293   " 🔥
   digraph jo 128514   " 😂
   digraph bo 9889     " ⚡
