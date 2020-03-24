@@ -1,55 +1,66 @@
 BASH="$HOME/.dotfiles/bash/Lib"
+SRC="$HOME/src"
 
 source $BASH/git.aliases.sh
 source $BASH/git-completion.sh
 
 # Homebrew completion
 [ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
+[ -r "$SRC/alacritty/alacritty/extra/completions/alacritty.bash" ] && source "$SRC/alacritty/alacritty/extra/completions/alacritty.bash"
 
 source $BASH/colours.sh
 
 # Lang Libs + SDK{{{
 
-if [[ -n "$(which android > /dev/null 2>&1)" ]]; then
-  export ANDROID_HOME=$(dirname $(dirname $(which android)))
+if [[ -z "$DOTFILES_BASHRC_INIT" ]]; then
+  if [[ -n "$(which android > /dev/null 2>&1)" ]]; then
+    export ANDROID_HOME=$(dirname $(dirname $(which android)))
+  fi
+
+  if [[ -d $HOME/.go ]]; then
+    export GOPATH="$HOME/.go"
+    export PATH=$PATH:$GOPATH/bin
+  fi
+
+  if [ -d "$HOME/apps/google-cloud-sdk/" ]; then
+    # The next line updates PATH for the Google Cloud SDK.
+    source "$HOME/apps/google-cloud-sdk/path.bash.inc"
+
+    # The next line enables shell command completion for gcloud.
+    source "$HOME/apps/google-cloud-sdk/completion.bash.inc"
+  fi
+
+  if [[ -x /usr/libexec/java_home ]]; then
+    export JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
+  fi
+
+  export NODE_PATH=/usr/local/lib/jsctags/:$NODE_PATH
 fi
-
-if [[ -d $HOME/.go ]]; then
-  export GOPATH="$HOME/.go"
-  export PATH=$PATH:$GOPATH/bin
-fi
-
-if [ -d "$HOME/apps/google-cloud-sdk/" ]; then
-  # The next line updates PATH for the Google Cloud SDK.
-  source "$HOME/apps/google-cloud-sdk/path.bash.inc"
-
-  # The next line enables shell command completion for gcloud.
-  source "$HOME/apps/google-cloud-sdk/completion.bash.inc"
-fi
-
-if [[ -x /usr/libexec/java_home ]]; then
-  export JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
-fi
-
-export NODE_PATH=/usr/local/lib/jsctags/:$NODE_PATH
 
 #}}}
 
 # Version Mgmt {{{
 
 # initialize rbenv
-if [ -x /usr/local/bin/rbenv ]; then
+if [[ -z "$DOTFILES_BASHRC_INIT" && -x /usr/local/bin/rbenv ]]; then
+  echo "rbenv"
   eval "$(rbenv init -)"
 fi
 
+# initialize volta
+if [[ -z "$DOTFILES_BASHRC_INIT" && -d "$HOME/.volta" ]]; then
+  export VOLTA_HOME="$HOME/.volta"
+  export PATH="$VOLTA_HOME/bin:$PATH"
+fi
+
 # Load RVM, if it is present.
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+[[ -z "$DOTFILES_BASHRC_INIT" && -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 #}}}
 
 # Path {{{
 
-if [[ -z "$BASH_PATH_SET_UP" ]]; then
+if [[ -z "$DOTFILES_BASHRC_INIT" ]]; then
   # Android SDK
   if [ -d $HOME/Library/Android/sdk/platform-tools ]; then
     export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
@@ -98,9 +109,6 @@ if [[ -z "$BASH_PATH_SET_UP" ]]; then
   export PATH=$HOME/.cargo/bin:$PATH
   export PATH=$HOME/.dotfiles/bin:$PATH
   export PATH=$HOME/bin:$PATH
-
-  export BASH_PATH_SET_UP=1
-
 fi
 
 # }}}
@@ -140,28 +148,8 @@ alias jsc='rlwrap --always-readline --ansi-colour-aware --remember --complete-fi
 
 # grep
 
-# Sensible defaults for grep (recursive, case-insensitive)
-alias gi='grep -r -i --color'
-
-# Add line numbers.
-alias gin='grep -r -i -n --color'
-
-# Grep with perl regex.
-which ggrep > /dev/null 2>&1 &&\
-  alias gp='ggrep -r -P --color' ||\
-  alias gp='grep -r -P --color'
-
 # Grep git repo.
 alias gg='git grep --untracked'
-
-
-# ls
-
-# List in reverse last-modified, to see the newest files at the bottom of the
-# output.
-alias llr='ls -lhart'
-alias ll='ls -lh'
-
 
 # lsof
 alias lsof-tcp='lsof -iTCP'
@@ -171,17 +159,15 @@ alias lsof-tcp-listen='lsof -iTCP -sTCP:LISTEN -P'
 alias mkdir='mkdir -p'
 
 
-
 # Ruby stream editor; a simple, primitive ruby analog to sed.
 alias rsed="ruby -p -e '%w(rubygems active_support).each{|l| require l}' \
             -e 'def s *args; \$_.gsub! *args; end'"
 alias chomp="rsed -e '\$_.chomp!'"
 alias b="bundle exec"
 
-
 # ssh
 alias ssh-no-agent-forwarding='ssh -o "ForwardAgent no"'
-alias copy-ssh-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
+alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 
 
 # Trailing space to tell bash to check next word for alias as well
@@ -255,13 +241,10 @@ alias tt='__ts_todos'
 # alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
 alias gz='__tz'
 
-alias 'debug-vim'='vim -V12 --cmd "set verbosefile=/tmp/vim.log"'
+alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 
 # yarn
 alias y=yarn
-
-alias release-it-standard='release-it --github.release=true --git.tagName="v\${version}" --no-git.requireCleanWorkingDir'
-
 
 #}}}
 
@@ -297,8 +280,8 @@ eval "$(starship init bash)"
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
 # z jumparound; this must be sourced after $PROMPT_COMMAND is set
-if [ -f "$HOME/src/rupa/z/z.sh" ]; then
-  source "$HOME/src/rupa/z/z.sh"
+if [ -f "$SRC/rupa/z/z.sh" ]; then
+  source "$SRC/rupa/z/z.sh"
 elif [ -f /usr/local/Cellar/z/1.9/etc/profile.d/z.sh ]; then
   source /usr/local/Cellar/z/1.9/etc/profile.d/z.sh
 fi
@@ -311,8 +294,8 @@ if uname -a | grep -q Microsoft; then
   alias pbpaste='powershell.exe Get-Clipboard'
 
   # Fix the way colors look by default
-  if [ -f "$HOME/src/seebi/dircolors-solarized/dircolors.256dark" ]; then
-    eval $(dircolors -b "$HOME/src/seebi/dircolors-solarized/dircolors.256dark")
+  if [ -f "$SRC/seebi/dircolors-solarized/dircolors.256dark" ]; then
+    eval $(dircolors -b "$SRC/seebi/dircolors-solarized/dircolors.256dark")
   fi
 
 
@@ -345,6 +328,9 @@ if $(which nvim > /dev/null 2>&1); then
   export EDITOR='nvim'
   export GIT_EDITOR='nvim'
 fi
+
+# Some things here we only want to do once (eg PATH setup)
+export DOTFILES_BASHRC_INIT=1
 
 # vim:set tw=0 fdm=marker:
 
