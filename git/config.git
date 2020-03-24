@@ -42,10 +42,10 @@
   wcwb = whatchanged -p -w --color-words origin/master..
 
 
-  lg = log --stat -i --decorate
-  ln = log --no-merges -r -i --name-status --decorate
-  lgb = log --no-merges --stat -i --decorate origin/master..
-  logb = log --decorate origin/master..
+  log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!dependabot-preview)'"
+  lgs = log-sans-bot
+  lg = log-sans-bot --stat
+  lgb = log-sans-bot --no-merges --stat origin/master..
   log-since-last-release = "!f() { git log \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot-preview)'"
 
   gl = log --decorate --cherry-mark --oneline --graph --boundary
@@ -83,11 +83,12 @@
 
 [push]
   default = upstream
-  followTags = true
 
 
 [log]
   follow = true
+  # decorate by default
+  decorate = true
 
 # Depends on a git-completion that supports checking these configuration
 # options.
@@ -130,14 +131,16 @@
   status = true
   ui = true
 
-# override red colours; I'm not sure why I need to do this but it's possibly a
-# recently fixed bug in alacritty
+# override red colours as the gruvbox terminal defaults don't look good in dark
+# mode
 [color "status"]
   changed = "#d54e53"
   untracked = "#d54e53"
   nobranch = "#ff3334"
 [color "diff"]
   old = "#d54e53"
+[color "decorate"]
+  tag = "#83a598"
 
 
 # vim:ft=gitconfig:
