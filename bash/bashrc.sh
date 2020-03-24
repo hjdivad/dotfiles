@@ -280,6 +280,9 @@ shopt -s checkwinsize
 HISTCONTROL=ignoredups:erasedups
 # When shell exits, append to history instead of overwriting
 shopt -s histappend
+# bash seems to default to 500 histsize
+HISTSIZE=50000
+HISTFILESIZE=50000
 
 if [[ $(umask) = "0000" ]]; then
   # set a sane umask for wsl
