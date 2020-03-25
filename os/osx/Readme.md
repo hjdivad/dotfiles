@@ -23,6 +23,7 @@
   - signal
   - use-together
   - keycastr
+  - soundsource
   - krisp.ai
 - install explicitly from outside apple store
   - dash
@@ -147,6 +148,12 @@ defaults write com.apple.finder DisableAllAnimations -bool true
 # sending messages and opening windows for replies
 defaults write com.apple.Mail DisableSendAnimations -bool true
 defaults write com.apple.Mail DisableReplyAnimations -bool true
+```
+
+disable dock bounce
+```
+defaults write com.apple.dock no-bouncing -bool TRUE
+killall Dock
 ```
 
 [alacritty]: https://github.com/jwilm/alacritty/blob/master/INSTALL.md
