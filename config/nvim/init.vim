@@ -144,7 +144,11 @@ Plug 'junegunn/limelight.vim'
 
 Plug 'tpope/vim-scriptease'
 
-Plug 'dhruvasagar/vim-table-mode'
+" Disabled for now; it configures conflicting keymaps which I should be able to
+" disable with g:table_mode_disable_mappings but that config does not seem to
+" be working
+" Plug 'dhruvasagar/vim-table-mode'
+" let g:table_mode_disable_mappings = 1
 
 call plug#end()
 
@@ -343,7 +347,6 @@ let g:fzf_layout = {
 let g:gitgutter_diff_base = 'origin/master'
 
 let g:gitgutter_map_keys = 0
-
 
 " From https://github.com/neoclide/coc.nvim
 function! s:show_documentation()
