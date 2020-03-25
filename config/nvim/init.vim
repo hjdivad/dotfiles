@@ -144,6 +144,8 @@ Plug 'junegunn/limelight.vim'
 
 Plug 'tpope/vim-scriptease'
 
+Plug 'dhruvasagar/vim-table-mode'
+
 call plug#end()
 
 "}}}
