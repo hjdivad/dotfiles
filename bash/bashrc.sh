@@ -43,7 +43,6 @@ fi
 
 # initialize rbenv
 if [[ -z "$DOTFILES_BASHRC_INIT" && -x /usr/local/bin/rbenv ]]; then
-  echo "rbenv"
   eval "$(rbenv init -)"
 fi
 
