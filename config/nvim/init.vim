@@ -244,6 +244,21 @@ highlight clear SignColumn
 highlight clear LineNr
 "}}}
 
+" script util{{{
+function! s:chomp(string)
+  return substitute(a:string, '\n\+$', '', '')
+endfunction
+"}}}
+
+" misc autocmd {{{
+augroup Autoread
+  autocmd!
+
+  " Check for updates each time we switch to some buffer
+  autocmd FocusGained,BufEnter * :execute 'checktime ' . bufnr('%')
+augroup end
+"}}}
+
 " Language-specific syntax options {{{
 
 " Simple snippets in mustache files
@@ -348,7 +363,7 @@ augroup end
 autocmd CursorHold * silent call CocActionAsync('highlight')
 "}}}
 
-
+" Terminal Setup {{{
 function! s:GetVisual() range
   let reg_save = getreg('"')
   let regtype_save = getregtype('"')
@@ -418,40 +433,18 @@ augroup TermExtra
 
   autocmd WinLeave term://* :checktime
 augroup end
+"}}}
 
+" window management {{{
 augroup WindowManagement
   autocmd!
 
   " re-arrange windows on resize
   autocmd VimResized * wincmd =
 augroup end
+"}}}
 
-
-" Use <CR> to clear text search, but unmap it when in the command window as
-" <CR> there is used to run command
-function s:install_enter_hook()
-  nnoremap <CR> :nohl<CR>
-endfunction
-
-augroup EnterKeyManager
-  autocmd!
-
-  autocmd CmdwinEnter * nunmap <CR>
-  autocmd CmdwinLeave * call s:install_enter_hook() 
-augroup end
-call s:install_enter_hook()
-
-augroup Autoread
-  autocmd!
-
-  " Check for updates each time we switch to some buffer
-  autocmd FocusGained,BufEnter * :execute 'checktime ' . bufnr('%')
-augroup end
-
-function! s:chomp(string)
-  return substitute(a:string, '\n\+$', '', '')
-endfunction
-
+" tmux {{{
 function s:tmux_select_previous_session()
   " tmux calls this the "last" session, but it means the previously used one
   silent exec "!tmux switch-client -l"
@@ -469,11 +462,23 @@ function s:tmux_toggle_todos_session()
     call s:tmux_select_todos_session()
   endif
 endfunction
+"}}}
 
 " Keybindings {{{
 "
-" nmap <leader>r
-" nmap <leader>R
+" Use <CR> to clear text search, but unmap it when in the command window as
+" <CR> there is used to run command
+function s:install_enter_hook()
+  nnoremap <CR> :nohl<CR>
+endfunction
+
+augroup EnterKeyManager
+  autocmd!
+
+  autocmd CmdwinEnter * nunmap <CR>
+  autocmd CmdwinLeave * call s:install_enter_hook() 
+augroup end
+call s:install_enter_hook()
 
 " use coc.vim for K doc lookup
 nnoremap <silent> K :call <SID>show_documentation()<CR>
