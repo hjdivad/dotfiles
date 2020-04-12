@@ -158,6 +158,12 @@ alias gg='git grep --untracked'
 alias lsof-tcp='lsof -iTCP'
 alias lsof-tcp-listen='lsof -iTCP -sTCP:LISTEN -P'
 
+# use exa if it exists
+# https://github.com/ogham/exa
+if $(which exa > /dev/null 2>&1); then
+  alias ls='exa'
+fi
+
 # always create paths when using mkdir.
 alias mkdir='mkdir -p'
 
