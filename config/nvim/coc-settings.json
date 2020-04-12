@@ -1,9 +1,14 @@
 {
   "coc.preferences.enableFloatHighlight": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "typescript"
+  ],
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextPrefix": "💬  ",
   "diagnostic.locationlist": true,
   "diagnostic.messageTarget": "float",
+  "eslint.autoFixOnSave": true,
   "signature.preferShownAbove": true,
   "suggest.enablePreview": true,
   "suggest.floatEnable": true
