@@ -6,7 +6,7 @@ augroup end
 
 fun! s:InitializeWorkspace()
   if !(&ft =~ 'gitcommit' || &ft =~ 'gitrebase' || expand('%') == '.git/PULLREQ_EDITMSG')
-    wincmd v | exec "term" | wincmd n | exec "term"
+    wincmd v | exec "term"
   endif
 endfunction
 
