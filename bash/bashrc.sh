@@ -1,9 +1,6 @@
 BASH="$HOME/.dotfiles/bash/Lib"
 SRC="$HOME/src"
 
-source $BASH/git.aliases.sh
-source $BASH/git-completion.sh
-
 # Homebrew completion
 [ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
 [ -r "$SRC/alacritty/alacritty/extra/completions/alacritty.bash" ] && source "$SRC/alacritty/alacritty/extra/completions/alacritty.bash"
