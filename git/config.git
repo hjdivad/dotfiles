@@ -116,7 +116,6 @@
   recurseSubmodules = on-demand
 
 [rebase]
-  autosquash = true
   abbreviateCommands = true
 
 [rerere]
