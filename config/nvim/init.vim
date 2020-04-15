@@ -351,6 +351,23 @@ let g:gitgutter_diff_base = 'origin/master'
 
 let g:gitgutter_map_keys = 0
 
+let g:coc_global_extensions = [
+  \ 'coc-css',
+  \ 'coc-eslint',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-java',
+  \ 'coc-json',
+  \ 'coc-prettier',
+  \ 'coc-r-lsp',
+  \ 'coc-rls',
+  \ 'coc-rust-analyzer',
+  \ 'coc-snippets',
+  \ 'coc-svg',
+  \ 'coc-tsserver',
+  \ 'coc-vimlsp',
+\ ]
+
 " From https://github.com/neoclide/coc.nvim
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -544,6 +561,10 @@ else
   " Yank file (to clipboard)
   nmap <leader>yf :let @"=expand('%')<CR>
 endif
+
+" select the omnicomplete snippet
+" use <c-j> <c-k> to jump between snippet variables (the default keybindings)
+imap <c-l> <Plug>(coc-snippets-expand)
 
 " Window-motion out of terminals
 tnoremap <C-w>h <C-\><C-n><C-w>h
