@@ -1,9 +1,14 @@
 BASH="$HOME/.dotfiles/bash/Lib"
 SRC="$HOME/src"
 
-# Homebrew completion
+# Homebrew bash completion
 [ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
+
+# Homebrew bash completion@2
+export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
+# Completion from alacritty src
 [ -r "$SRC/alacritty/alacritty/extra/completions/alacritty.bash" ] && source "$SRC/alacritty/alacritty/extra/completions/alacritty.bash"
 
 source $BASH/colours.sh
