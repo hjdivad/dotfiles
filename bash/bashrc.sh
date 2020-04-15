@@ -3,6 +3,7 @@ SRC="$HOME/src"
 
 # Homebrew completion
 [ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 [ -r "$SRC/alacritty/alacritty/extra/completions/alacritty.bash" ] && source "$SRC/alacritty/alacritty/extra/completions/alacritty.bash"
 
 source $BASH/colours.sh
@@ -112,8 +113,6 @@ if [[ -z "$DOTFILES_BASHRC_INIT" ]]; then
 fi
 
 # }}}
-
-
 
 # Apps + Aliases {{{
 
