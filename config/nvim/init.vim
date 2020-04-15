@@ -142,6 +142,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
+" neovim in browser
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+
 Plug 'tpope/vim-scriptease'
 
 " Disabled for now; it configures conflicting keymaps which I should be able to
@@ -366,6 +369,15 @@ augroup coctls
 augroup end
 
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" I don't quite have this working yet; will have to take a trip through
+" TROUBLESHOOTING
+let g:firenvim_config = {
+  \ 'globalSettings': {
+    \ 'server': 'persistent'
+  \ },
+\ }
+" let fc = g:firenvim_config['localSettings']
 "}}}
 
 " Terminal Setup {{{
