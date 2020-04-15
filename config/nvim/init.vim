@@ -146,6 +146,7 @@ Plug 'junegunn/limelight.vim'
 Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 
 Plug 'tpope/vim-scriptease'
+Plug 'wesQ3/vim-windowswap'
 
 " Disabled for now; it configures conflicting keymaps which I should be able to
 " disable with g:table_mode_disable_mappings but that config does not seem to
