@@ -3,6 +3,7 @@
 ## Installation
 
 - install [homebrew][]
+- install [inconsolata for powerline][]
 - install [alacritty][] (>= 0.4.2-rc3)
 - install rustup
 - install volta
@@ -157,5 +158,6 @@ killall Dock
 ```
 
 [alacritty]: https://github.com/jwilm/alacritty/blob/master/INSTALL.md
+[inconsolata for powerline]: https://github.com/powerline/fonts/tree/master/Inconsolata
 [homebrew]: https://brew.sh/
 [disable animations]: https://apple.stackexchange.com/questions/14001/how-to-turn-off-all-animations-on-os-x
