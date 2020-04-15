@@ -89,7 +89,7 @@
   untracked = "#d54e53"
   nobranch = "#ff3334"
 [color "diff"]
-  old = "#d54e53"
+  meta = "#83a598"
 [color "decorate"]
   tag = "#83a598"
 
