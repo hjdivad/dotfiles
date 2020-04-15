@@ -696,4 +696,7 @@ if !(getcwd() == $HOME)
   set runtimepath+=./.vim
 endif
 
+" inform terminals that they are within an nvim
+let $NVIM_WRAPPER = 1
+
 " vim:set tw=0 fdm=marker:

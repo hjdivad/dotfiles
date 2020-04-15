@@ -1,11 +1,7 @@
-augroup ExtraTypes
-  autocmd!
-
-  autocmd BufRead,BufNewFile *-test.js set ft+=.qunit
-augroup end
+let s:wrapped = ($NVIM_WRAPPER =~ "1")
 
 fun! s:InitializeWorkspace()
-  if !(&ft =~ 'gitcommit' || &ft =~ 'gitrebase' || expand('%') == '.git/PULLREQ_EDITMSG')
+  if !s:wrapped
     wincmd v | exec "term"
   endif
 endfunction
