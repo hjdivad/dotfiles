@@ -196,6 +196,8 @@ set updatetime=300
 set scrollback=1000
 
 set iskeyword+=-
+" Abbreviate some messages
+set shm+=sAI
 
 set foldlevelstart=0
 set foldnestmax=5
