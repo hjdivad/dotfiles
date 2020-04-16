@@ -100,7 +100,7 @@ Plug 'fszymanski/fzf-quickfix'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Formatting
@@ -517,6 +517,24 @@ augroup EnterKeyManager
 augroup end
 call s:install_enter_hook()
 
+function s:OpenNERDTree()
+  let isFile = (&buftype == "") && (bufname() != "")
+
+  if isFile
+    let findCmd = "NERDTreeFind " . expand('%')
+  endif
+
+  " open a NERDTree in this window
+  edit .
+
+  " make this the implicit NERDTree buffer
+  let t:NERDTreeBufName=bufname()
+
+  if isFile
+    exe findCmd
+  endif
+endfunction
+
 " use coc.vim for K doc lookup
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <leader>gd <Plug>(coc-definition)
@@ -545,7 +563,7 @@ nmap <leader>hn :GitGutterNextHunk<CR>
 nmap <Leader>hp :GitGutterPrevHunk<CR>
 nmap <Leader>hu :GitGutterUndoHunk<CR>
 nmap <Leader>hP :GitGutterPreviewHunk<CR>
-nmap <leader>ne :edit .<CR>
+nmap <leader>ne :call <SID>OpenNERDTree()<CR>
 nmap <leader>nt :NERDTreeFocus<CR>
 nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ln <Plug>(coc-diagnostic-next)<CR>
