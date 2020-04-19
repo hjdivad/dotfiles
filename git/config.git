@@ -34,7 +34,7 @@
   # amend leave message alone
   cmm = commit --amend -CHEAD
 
-  pu = push -u --force-with-lease
+  pu = push --force-with-lease
 
   h = help
 
