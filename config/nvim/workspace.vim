@@ -2,7 +2,7 @@ let s:wrapped = ($NVIM_WRAPPER =~ "1")
 
 fun! s:InitializeWorkspace()
   if !s:wrapped
-    wincmd v | exec "term"
+    wincmd v | exec "Topen"
   endif
 endfunction
 

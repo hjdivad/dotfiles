@@ -148,6 +148,9 @@ Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'tpope/vim-scriptease'
 Plug 'wesQ3/vim-windowswap'
 
+Plug 'kassio/neoterm'
+Plug 'janko/vim-test'
+
 " Disabled for now; it configures conflicting keymaps which I should be able to
 " disable with g:table_mode_disable_mappings but that config does not seem to
 " be working
@@ -398,43 +401,11 @@ let g:firenvim_config = {
   \ },
 \ }
 " let fc = g:firenvim_config['localSettings']
+
+let test#strategy = 'neoterm'
 "}}}
 
 " Terminal Setup {{{
-function! s:GetVisual() range
-  let reg_save = getreg('"')
-  let regtype_save = getregtype('"')
-  let cb_save = &clipboard
-  set clipboard&
-  normal! ""gvy
-  let selection = getreg('"')
-  call setreg('"', reg_save, regtype_save)
-  let &clipboard = cb_save
-  return selection
-endfunction
-
-function! s:TerminalRun(mapping)
-  let l:job_var = 'g:terminal_run_' . a:mapping . '_job'
-  let l:job_cmd_var = 'g:terminal_run_' . a:mapping . '_cmd'
-
-  if !exists(l:job_cmd_var)
-    echom 'termianl command for ' . mapping . ' has not been set up yet'
-    return
-  endif
-
-  call jobsend({l:job_var}, {l:job_cmd_var})
-endfunction
-
-function! s:SetupTerminalRun(mapping) range
-  let l:job_var = 'g:terminal_run_' . a:mapping . '_job'
-  let l:job_cmd_var = 'g:terminal_run_' . a:mapping . '_cmd'
-  let l:selection = <SID>GetVisual()
-  let l:terminal_cmd = [l:selection, '']
-
-  let {l:job_var} = b:terminal_job_id
-  let {l:job_cmd_var} = l:terminal_cmd
-endfunction
-
 function s:setup_terminal()
   setlocal winfixwidth nonumber norelativenumber
   vertical resize 100
@@ -547,6 +518,9 @@ nmap <leader>rf gggqG<C-o><C-o>
 nmap <leader>ss :CocList symbols<CR>
 nmap <leader>sl :CocList outline<CR>
 nmap <leader>df :call CocAction('showSignatureHelp')<CR>
+
+nmap <leader>rr :TestFile<CR>
+nmap <leader>rt :TestNearest<CR>
 
 nmap <leader>tt :call <SID>tmux_toggle_todos_session()<CR>
 nmap <leader>fg :GFiles<CR>
