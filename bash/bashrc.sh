@@ -163,6 +163,7 @@ alias lsof-tcp-listen='lsof -iTCP -sTCP:LISTEN -P'
 # https://github.com/ogham/exa
 if $(which exa > /dev/null 2>&1); then
   alias ls='exa'
+  alias ll='exa -snew -l'
 fi
 
 # always create paths when using mkdir.
