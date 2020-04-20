@@ -409,15 +409,7 @@ let test#strategy = 'neoterm'
 function s:setup_terminal()
   setlocal winfixwidth nonumber norelativenumber
   vertical resize 100
-
-  vmap <buffer> <leader>rr :call <SID>SetupTerminalRun('rr')<CR>
-  vmap <buffer> <leader>rd :call <SID>SetupTerminalRun('rd')<CR>
-  vmap <buffer> <leader>rt :call <SID>SetupTerminalRun('rt')<CR>
 endfunction
-
-nmap <leader>rr :call <SID>TerminalRun('rr')<CR>
-nmap <leader>rd :call <SID>TerminalRun('rd')<CR>
-nmap <leader>rt :call <SID>TerminalRun('rt')<CR>
 
 augroup TermExtra
   autocmd!
