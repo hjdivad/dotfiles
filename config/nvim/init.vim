@@ -565,6 +565,12 @@ tnoremap <C-w><C-k> <C-\><C-n><C-w>k
 tnoremap <C-w>l <C-\><C-n><C-w>l
 tnoremap <C-w><C-l> <C-\><C-n><C-w>l
 
+" <C-W>b → bottom left
+nnoremap <C-W>b :let t:winp=winnr() \| wincmd t \| wincmd j \| wincmd j \| startinsert<CR>
+" <C-W>p after having gone bottom left
+let t:winp = 0
+tmap <C-W>p <C-\><C-N>:exe t:winp . "wincmd w"<CR>
+
 " Create new (terminal) window from terminal mode
 " TODO: Tnew?
 tnoremap <C-w>n <C-\><C-n><C-w>n:term<CR>
