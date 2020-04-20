@@ -10,6 +10,7 @@
   "diagnostic.messageTarget": "float",
   "eslint.autoFixOnSave": true,
   "signature.preferShownAbove": true,
+  "snippets.loadFromExtensions": true,
   "suggest.enablePreview": true,
   "suggest.floatEnable": true
 }
