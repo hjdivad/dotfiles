@@ -403,6 +403,7 @@ let g:firenvim_config = {
 " let fc = g:firenvim_config['localSettings']
 
 let test#strategy = 'neoterm'
+let g:neoterm_automap_keys='<leader><leader>STUPIDPLUGINDONOTAUTOMAP'
 "}}}
 
 " Terminal Setup {{{
