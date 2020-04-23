@@ -517,7 +517,8 @@ nmap <leader>sf :call CocAction('showSignatureHelp')<CR>
 nmap <leader>rr :TestFile<CR>
 nmap <leader>rt :TestNearest<CR>
 
-nmap <leader>tt :call <SID>tmux_toggle_todos_session()<CR>
+nmap <leader>tt :call <SID>tmux_select_previous_session()<CR>
+nmap <leader>td :call <SID>tmux_toggle_todos_session()<CR>
 nmap <leader>fg :GFiles<CR>
 nmap <leader>ff :Files<CR>
 nmap <leader>fl :BLines<CR>

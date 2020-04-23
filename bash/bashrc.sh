@@ -248,7 +248,8 @@ function __ts {
 
 alias t='tmux'
 alias ts='__ts'
-alias tt='__ts_todos'
+alias td='__ts_todos'
+alias tt='tmux switch-client -l'
 # alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
 alias gz='__tz'
 
