@@ -402,14 +402,81 @@ let g:firenvim_config = {
 \ }
 " let fc = g:firenvim_config['localSettings']
 
-let test#strategy = 'neoterm'
-let g:neoterm_automap_keys='<leader><leader>STUPIDPLUGINDONOTAUTOMAP'
+let g:neoterm_automap_keys='<leader><leader>STUPID_PLUGIN_DO_NOT_AUTOMAP'
+
+" vim-test
+function! s:neoterm_strategy_fixed(cmd)
+  " Get the bottom-left neoterm id if it exists, else make a new neoterm and
+  " grab its id
+  let starting_bufnr = bufnr()
+  100wincmd h
+  100wincmd j
+  stopinsert
+  let bottom_left_winnr = winnr()
+  let bottom_left_bufnr = winbufnr(bottom_left_winnr)
+
+  let target_neoterm_id=0
+  for term_id in keys(g:neoterm.instances)
+    if g:neoterm.instances[term_id].buffer_id == bottom_left_bufnr
+      let target_neoterm_id = term_id
+      break
+    endif
+  endfor
+
+  if target_neoterm_id == 0
+    vertical topleft Tnew
+    let target_neoterm_id = g:neoterm.last_id
+  endif
+
+  " end up at the window we started in
+  exe bufwinnr(starting_bufnr) . 'wincmd w'
+
+
+  " modify command for debug mode, extra environment variables
+  let cmd = a:cmd
+  let env_extra = []
+  if exists('t:test_debugging') && t:test_debugging == 1
+    if !(cmd =~ 'node')
+      echom 'neoterm_strategy_fixed:' "don't know how to debug command:" cmd
+      return
+    endif
+
+    if cmd =~ 'node'
+      call add(env_extra, 'NODE_OPTIONS="--inspect-brk"')
+    endif
+
+    if cmd =~ 'jest'
+      let parts = split(cmd, "\ --\ ")
+      let cmd = join(parts[:-2] + ["--testTimeout=0 --runInBand"] + parts[-1:])
+    endif
+  endif
+
+  if exists('t:env_extra') && len(t:env_extra) > 0
+    let env_extra += t:env_extra
+  endif
+
+  if len(env_extra) > 0
+    let cmd = 'env ' . join(env_extra) . ' ' . cmd
+  endif
+
+  call neoterm#do({ 'cmd': cmd, 'target': target_neoterm_id })
+endfunction
+
+let g:test#custom_strategies = { 'neotermx': function('<SID>neoterm_strategy_fixed') }
+let g:test#strategy = 'neotermx'
+
+augroup REPL
+  au!
+  au BufWritePre .repl.* exe 'TREPLSendFile'
+augroup END
 "}}}
 
 " Terminal Setup {{{
 function s:setup_terminal()
   setlocal winfixwidth nonumber norelativenumber
   vertical resize 100
+  " start! happens only when a function or script ends so it can be very
+  " trollish to do it in TermOpen
 endfunction
 
 augroup TermExtra
@@ -417,7 +484,7 @@ augroup TermExtra
   " When switching to a term window, go to insert mode by default (this is
   " only pleasant when you also have window motions in terminal mode)
   autocmd BufEnter term://* start!
-  autocmd TermOpen * call <SID>setup_terminal() | start!
+  autocmd TermOpen * call <SID>setup_terminal()
   autocmd TermClose * setlocal nowinfixwidth
 
   " from https://github.com/rwjblue/dotvim/commit/6c05d8573451a4ca45868c53f650dce44d3ab408
@@ -516,6 +583,7 @@ nmap <leader>sf :call CocAction('showSignatureHelp')<CR>
 
 nmap <leader>rr :TestFile<CR>
 nmap <leader>rt :TestNearest<CR>
+nmap <leader>rd :call h#DebugNearest()<CR>
 
 nmap <leader>tt :call <SID>tmux_select_previous_session()<CR>
 nmap <leader>td :call <SID>tmux_toggle_todos_session()<CR>
@@ -681,15 +749,18 @@ abbreviate :beer: 🍺
 abbreviate :beers: 🍻
 abbreviate :hamster: 🐹
 "}}}
-"
-" TODO: https://github.com/hjdivad/vim-config/blob/master/vimrc.d/resize.vim
-" TODO: https://github.com/hjdivad/vim-config/blob/master/vimrc.d/keybindings.vim#L42-L48
 
 
 " Project-specific .vimrc and .vim
 if !(getcwd() == $HOME)
-  if filereadable(".vimrc")
+  if filereadable('.vimrc')
     source .vimrc
+  elseif isdirectory('.git')
+    let project_vimrc_blueprint = expand("$HOME/.config/nvim/blueprints/project.vimrc")
+    if filereadable(project_vimrc_blueprint)
+      call system('cp ' . project_vimrc_blueprint . ' .vimrc')
+      source .vimrc
+    endif
   endif
   set runtimepath+=./.vim
 endif
