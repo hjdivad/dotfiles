@@ -19,6 +19,12 @@ it('${1:does something}', function() {
 });
 endsnippet
 
+snippet t "jest test"
+test('${1:something probably happens}', function() {
+	${2:expect('implemented').toEqual('true');}
+});
+endsnippet
+
 # A valid snippet should starts with:
 #
 #		snippet trigger_word [ "description" [ options ] ]
