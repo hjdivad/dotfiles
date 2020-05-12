@@ -54,7 +54,7 @@ setw -g  monitor-activity on
 
 
 # visual {{{
-set -g status-left ' #[bold]❐ #[fg=colour178]#S#[default] ⡇ #[bold]#(whoami) @ #h #[default] ⡇'
+set -g status-left ' #[bold]❐ #[fg=colour186]#S#[default] ⡇ #[bold]#(whoami) @ #h #[default] ⡇'
 set -g status-right ''
 
 set -g status-right-length 60
