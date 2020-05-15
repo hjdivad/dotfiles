@@ -151,6 +151,8 @@ Plug 'wesQ3/vim-windowswap'
 Plug 'kassio/neoterm'
 Plug 'janko/vim-test'
 
+Plug 'hjdivad/vim-pdl'
+
 " Disabled for now; it configures conflicting keymaps which I should be able to
 " disable with g:table_mode_disable_mappings but that config does not seem to
 " be working
