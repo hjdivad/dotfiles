@@ -1,5 +1,9 @@
 snippet im "import statement"
-import ${2:symbol} from '${1:path}';
+import ${0:symbol} from '${1:path}';
+endsnippet
+
+snippet imm "import (named) statement"
+import { ${0:symbol} } from '${1:path}';
 endsnippet
 
 snippet el "eslint disable"
@@ -9,19 +13,37 @@ endsnippet
 # jest snippets
 snippet d "jest describe"
 describe('${1:something}', function() {
-	${2}
+	${0}
 });
 endsnippet
 
 snippet it "jest it"
 it('${1:does something}', function() {
-	${2:expect('implemented').toEqual('true');}
+	${0:expect('implemented').toEqual('true');}
 });
 endsnippet
 
 snippet t "jest test"
 test('${1:something probably happens}', function() {
-	${2:expect('implemented').toEqual('true');}
+	${0:expect('implemented').toEqual('true');}
+});
+endsnippet
+
+snippet qbe "qunit beforeEach"
+beforeEach(${1:async }function(${2:assert}) {
+	${0}
+});
+endsnippet
+
+snippet qm "qunit module"
+module('${1:module}', function(hooks) {
+	${0}
+});
+endsnippet
+
+snippet qt "qunit test"
+test('${1:something probably happens}', ${2:async }function(assert) {
+	${0:assert.equal('implemented', true)}
 });
 endsnippet
 
