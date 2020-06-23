@@ -116,6 +116,8 @@
 
 [rebase]
   abbreviateCommands = true
+  # use explicit drop rather than deleting lines for dropping commits from a rebase
+  missingCommitsCheck = error
 
 [rerere]
   enabled = true
