@@ -17,10 +17,7 @@
   rr = !sh -c 'git rebase -i $(git merge-base HEAD origin/master)'
   rc = rebase --continue
 
-  ap = add --patch
-  # add --patch new file; take the next unstaged file, register with the index
-  # and then add --patch
-  apn = "!f() { local nf=$(git status --porcelain -uall | $GREP -P \"^\\?\" | cut -d' ' -f 2 | head -n 1); git add -N \"$nf\" 2> /dev/null; git add -p \"$nf\"; }; f"
+  ap = add --patch -N
 
   # commit all
   ca = "!f() { git add -A && git commit -a \"$@\"; }; f"
@@ -46,7 +43,9 @@
   log-since-last-release = "!f() { git log \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot-preview)'"
   lg = log-sans-bot --stat
   logb = log-sans-bot origin/master..
+  logr = log-sans-bot ..origin/master
   lgb = log-sans-bot --no-merges --stat origin/master..
+  lgr = log-sans-bot --no-merges --stat ..origin/master
 
   dc = diff --cached
   dcw = diff --cached --ignore-all-space --color-words
