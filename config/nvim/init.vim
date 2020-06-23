@@ -604,8 +604,10 @@ nmap <Leader>hp :GitGutterPrevHunk<CR>
 nmap <Leader>hu :GitGutterUndoHunk<CR>
 nmap <Leader>hP :GitGutterPreviewHunk<CR>
 nmap <leader>ne :call <SID>OpenNERDTree()<CR>
-nmap <leader>nt :NERDTreeFocus<CR>
-nmap <leader>nf :NERDTreeFind<CR>
+" I don't want to fat finger these b/c nerd tree messes up the size of the left
+" window when it has winfixwidth
+" nmap <leader>nt :NERDTreeFocus<CR>
+" nmap <leader>nf :NERDTreeFind<CR>
 nmap <leader>ln <Plug>(coc-diagnostic-next)<CR>
 nmap <leader>lf <Plug>(coc-fix-current)<CR>
 nmap <leader>ll :Quickfix<CR>
