@@ -161,6 +161,9 @@ alias gg='git grep --untracked'
 alias lsof-tcp='lsof -iTCP'
 alias lsof-tcp-listen='lsof -iTCP -sTCP:LISTEN -P'
 
+# ifconfig
+alias ifconfig-active="ifconfig | pcregrep -M  -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
+
 # use exa if it exists
 # https://github.com/ogham/exa
 if $(which exa > /dev/null 2>&1); then
