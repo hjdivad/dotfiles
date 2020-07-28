@@ -2,7 +2,8 @@
   "coc.preferences.enableFloatHighlight": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
-    "typescript"
+    "typescript",
+    "rust"
   ],
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextPrefix": "💬  ",
