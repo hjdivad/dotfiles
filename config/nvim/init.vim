@@ -640,10 +640,14 @@ tnoremap <C-w>l <C-\><C-n><C-w>l
 tnoremap <C-w><C-l> <C-\><C-n><C-w>l
 
 " <C-W>b → bottom left
-nnoremap <C-W>b :let t:winp=winnr() \| wincmd t \| wincmd j \| wincmd j \| startinsert<CR>
+nnoremap <C-w>b :let t:winp=winnr() \| wincmd t \| wincmd j \| wincmd j \| startinsert<CR>
+" This is also desirable but it conflicts with <C-b> as tmux escape
+" nnoremap <C-w><C-b> :let t:winp=winnr() \| wincmd t \| wincmd j \| wincmd j \| startinsert<CR>
+"
 " <C-W>p after having gone bottom left
 let t:winp = 0
-tmap <C-W>p <C-\><C-N>:exe t:winp . "wincmd w"<CR>
+tmap <C-w>p <C-\><C-n>:exe t:winp . "wincmd w"<CR>
+tmap <C-w><C-p> <C-\><C-n>:exe t:winp . "wincmd w"<CR>
 
 " Create new (terminal) window from terminal mode
 " TODO: Tnew?
