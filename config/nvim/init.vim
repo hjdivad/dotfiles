@@ -127,6 +127,7 @@ Plug 'cespare/vim-toml'
 " This can be slow
 Plug 'nelstrom/vim-markdown-folding'
 
+Plug 'powerman/vim-plugin-AnsiEsc'
 
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
