@@ -309,6 +309,9 @@ elif [ -f /usr/local/Cellar/z/1.9/etc/profile.d/z.sh ]; then
   source /usr/local/Cellar/z/1.9/etc/profile.d/z.sh
 fi
 
+export FZF_CTRL_T_COMMAND='git branch | cut -c 3-'
+export FZF_CTRL_T_OPTS='--preview="git log --decorate=full --color --abbrev-commit origin/master..{}"'
+
 #}}}
 
 # Windows Extra {{{
