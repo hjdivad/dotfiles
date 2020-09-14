@@ -16,7 +16,7 @@
   rr = !sh -c 'git rebase -i $(git merge-base HEAD origin/master)'
   rc = rebase --continue
 
-  ap = add --patch -N
+  ap = add --patch
 
   # commit all
   ca = "!f() { git add -A && git commit -a \"$@\"; }; f"
