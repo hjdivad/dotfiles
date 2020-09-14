@@ -265,6 +265,12 @@ alias y=yarn
 
 #}}}
 
+# Useful Env {{{
+
+export NODE_BIGMEM="--max-old-space-size=8192"
+
+#}}}
+
 # Bash CLI {{{
 
 # Use vi-mode (escape to go into “normal” mode and j,k to scroll through
