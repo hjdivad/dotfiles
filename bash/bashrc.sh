@@ -219,7 +219,10 @@ function __ts_todos {
 # tmux z and if successful rename the window to the current working directory;
 # generally nice when that dir is the name of a specific repo
 function __tz {
-  _z $@ && tmux rename-window  "${PWD##*/}"
+  local selection
+  selection=$(z -l | fzf)
+  path=$(cut <<< "$selection" -d' ' -f 2-)
+  _z "$path" && tmux rename-window  "${PWD##*/}"
 }
 
 function __ts {
