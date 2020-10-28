@@ -2,10 +2,30 @@ snippet im "import statement"
 import ${2:symbol} from '${1:path}';
 endsnippet
 
-snippet t "qunit test"
+snippet d "jest describe"
+describe('${1:something}', function() {
+	${0}
+});
+endsnippet
+
+snippet it "jest it"
+it('${1:does something}', function() {
+	${0:expect('implemented').toEqual('true');}
+});
+endsnippet
+
+snippet qt "qunit test"
 test('${1:something probably happens}', function(assert) {
 	assert.equal('implemented', true, 'test is implemented')
 });
+endsnippet
+
+snippet el "eslint disable"
+// eslint-disable-next-line ${1:rule}
+endsnippet
+
+snippet @p "jsdoc @param"
+@param {${1:type}} ${2:paramName ([optionalName], [optional=defaultValue])} - ${0:description}
 endsnippet
 
 # A valid snippet should starts with:
