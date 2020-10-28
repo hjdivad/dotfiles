@@ -222,6 +222,7 @@ function __ts_todos {
 # generally nice when that dir is the name of a specific repo
 function __tz {
   local selection
+  # TODO: fzf --query "$@" except that bash quoting with command substitution is terrible
   selection=$(z -l | fzf)
   path=$(cut <<< "$selection" -d' ' -f 2-)
   _z "$path" && tmux rename-window  "${PWD##*/}"
@@ -267,6 +268,8 @@ alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 
 # yarn
 alias y=yarn
+
+alias we=watchexec
 
 #}}}
 
