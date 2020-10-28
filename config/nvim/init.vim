@@ -133,10 +133,6 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
 Plug 'junegunn/seoul256.vim'
 
-" TODO: get this working
-" Plug 'kassio/neoterm'
-" Plug 'janko-m/vim-test'
-
 " CocConfig to open configuration
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -328,17 +324,18 @@ let NERDTreeRespectWildIgnore=1
 " This makes the tabline a buffer list when there is only one tab
 let g:airline#extensions#tabline#enabled = 1
 
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✗",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "y",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ "Unknown"   : "?"
-    \ }
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+  \ 'Modified'  :'✹',
+  \ 'Staged'    :'✚',
+  \ 'Untracked' :'✭',
+  \ 'Renamed'   :'➜',
+  \ 'Unmerged'  :'═',
+  \ 'Deleted'   :'✖',
+  \ 'Dirty'     :'✗',
+  \ 'Ignored'   :'☒',
+  \ 'Clean'     :'✔︎',
+  \ 'Unknown'   :'?',
+  \ }
 
 let g:neoformat_try_formatprg = 1
 let g:neoformat_basic_format_retab = 1
@@ -360,6 +357,9 @@ let g:gitgutter_diff_base = 'origin/master'
 
 let g:gitgutter_map_keys = 0
 
+
+" coc-graphql would be nice to add here except it does not gracefully fail in a
+" non-graphql repo
 let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-eslint',
@@ -434,7 +434,6 @@ function! s:neoterm_strategy_fixed(cmd)
   " end up at the window we started in
   exe bufwinnr(starting_bufnr) . 'wincmd w'
 
-
   " modify command for debug mode, extra environment variables
   let cmd = a:cmd
   let env_extra = []
@@ -462,6 +461,9 @@ function! s:neoterm_strategy_fixed(cmd)
     let cmd = 'env ' . join(env_extra) . ' ' . cmd
   endif
 
+  " let cmd = " \<c-c>" . cmd
+
+  call neoterm#do({ 'cmd': " \<c-c>", 'target': target_neoterm_id })
   call neoterm#do({ 'cmd': cmd, 'target': target_neoterm_id })
 endfunction
 
@@ -477,7 +479,7 @@ augroup END
 " Terminal Setup {{{
 function s:setup_terminal()
   setlocal winfixwidth nonumber norelativenumber
-  vertical resize 100
+  vertical resize 120
   " start! happens only when a function or script ends so it can be very
   " trollish to do it in TermOpen
 endfunction
@@ -575,11 +577,10 @@ nmap <leader>gd <Plug>(coc-definition)
 nmap <leader>gD <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
 nmap <leader>gr <Plug>(coc-references)
-nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>rn <Plug>(coc-rename)<C-f>
+nmap <leader>rj <Plug>(coc-codeaction-selected)<CR>
 
 nmap <leader>cc :CocCommand<CR>
-" Format using formatprg
-nmap <leader>rf gggqG<C-o><C-o>
 nmap <leader>ss :CocList symbols<CR>
 nmap <leader>sl :CocList outline<CR>
 nmap <leader>sf :call CocAction('showSignatureHelp')<CR>
@@ -719,8 +720,9 @@ if has("digraphs")
   " digraph -! 8593   " ↑
   " digraph -v 8595   " ↓
 
-  digraph iO 9432     " ⓘ
-  digraph wa 9888     " ⚠
+  digraph iO 8505     " ℹ️
+  " ⚠️ will render in terminal and is different from 9888 somehow (check ga)
+  digraph wa 9888     " ⚠ 
   digraph er 9940     " ⛔
   digraph wc 9898     " ⚪
   digraph rc 128308   " 🔴
@@ -730,7 +732,7 @@ if has("digraphs")
   digraph tb 9203     " ⏳
   digraph OK 9989     " ✅
   digraph NO 10060    " ❌
-  digraph fe 128293   " 🔥
+  digraph fi 128293   " 🔥
   digraph jo 128514   " 😂
   digraph bo 9889     " ⚡
   digraph rk 128640   " 🚀

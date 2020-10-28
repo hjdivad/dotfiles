@@ -3,6 +3,7 @@
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "typescript",
+    "graphql",
     "rust"
   ],
   "diagnostic.virtualText": true,
