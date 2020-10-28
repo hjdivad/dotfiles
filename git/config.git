@@ -3,8 +3,9 @@
   backup = "!f() { local name=`git name-rev HEAD | cut -d' ' -f 2`; git branch -D \"backup/$name\" 2> /dev/null; git branch \"backup/$name\"; }; f"
 	ff = merge --ff-only
 
-  b = branch --sort=committerdate
+  b = branch -vv --sort=committerdate
   br = "!f() { git branch -r --sort=committerdate -l 'origin/*' --format='%(refname:lstrip=3)' | grep -v dependabot/; }; f"
+  ba = branch -vv -a --sort=committerdate
 
   branch-current = "!f() { git branch --no-color | grep '*' | grep -v '(no branch)' | cut -c 3-; }; f"
 
