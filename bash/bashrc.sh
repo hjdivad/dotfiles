@@ -185,6 +185,8 @@ alias b="bundle exec"
 alias ssh-no-agent-forwarding='ssh -o "ForwardAgent no"'
 alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 
+alias copy='tr -d "\n" | pbcopy'
+
 
 # Trailing space to tell bash to check next word for alias as well
 alias sudo='sudo '
