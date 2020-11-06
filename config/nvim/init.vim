@@ -358,6 +358,8 @@ let g:gitgutter_diff_base = 'origin/master'
 let g:gitgutter_map_keys = 0
 
 
+" TODO: https://github.com/neoclide/coc.nvim/wiki/Language-servers#graphql
+"  instead of coc-graphql
 " coc-graphql would be nice to add here except it does not gracefully fail in a
 " non-graphql repo
 let g:coc_global_extensions = [
