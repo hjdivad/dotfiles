@@ -134,7 +134,7 @@ Plug 'morhetz/gruvbox'
 Plug 'junegunn/seoul256.vim'
 
 " CocConfig to open configuration
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim'
 
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
