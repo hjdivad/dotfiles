@@ -11,6 +11,9 @@ export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 # Completion from alacritty src
 [ -r "$SRC/alacritty/alacritty/extra/completions/alacritty.bash" ] && source "$SRC/alacritty/alacritty/extra/completions/alacritty.bash"
 
+# If gh exists, add a wrapper that also completes aliases
+which gh > /dev/null 2>&1 && source "$BASH/gh_completion.sh"
+
 source $BASH/colours.sh
 
 # Lang Libs + SDK{{{
