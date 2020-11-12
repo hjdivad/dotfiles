@@ -134,7 +134,7 @@ Plug 'morhetz/gruvbox'
 Plug 'junegunn/seoul256.vim'
 
 " CocConfig to open configuration
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'master'}
 
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
@@ -727,6 +727,7 @@ if has("digraphs")
   digraph wa 9888     " ⚠ 
   digraph er 9940     " ⛔
   digraph wc 9898     " ⚪
+  digraph oc 128992   " 🟠
   digraph rc 128308   " 🔴
   digraph bc 128309   " 🔵
   digraph ok 127823   " 🍏
