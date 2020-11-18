@@ -103,9 +103,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Formatting
-Plug 'sbdchd/neoformat'
-
 " rails.vim for node
 Plug 'moll/vim-node'
 
@@ -275,8 +272,7 @@ augroup end
 
 " Language-specific syntax options {{{
 
-" Simple snippets in mustache files
-let g:mustache_abbreviations = 1
+let g:mustache_abbreviations = 0
 
 let g:javascript_plugin_jsdoc=1
 let g:javascript_conceal=1
@@ -336,10 +332,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
   \ 'Clean'     :'✔︎',
   \ 'Unknown'   :'?',
   \ }
-
-let g:neoformat_try_formatprg = 1
-let g:neoformat_basic_format_retab = 1
-let g:neoformat_basic_format_trim = 1
 
 let g:markdown_fenced_languages = ['javascript', 'js=javascript', 'sh']
 let g:markdown_fold_style = 'nested'
