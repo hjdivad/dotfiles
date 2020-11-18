@@ -202,7 +202,7 @@ set iskeyword+=-
 set shm+=sAIc
 
 set foldlevelstart=0
-set foldnestmax=5
+set foldnestmax=10
 set foldmethod=syntax
 set foldenable
 
