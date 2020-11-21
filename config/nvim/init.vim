@@ -571,7 +571,7 @@ nmap <leader>gd <Plug>(coc-definition)
 nmap <leader>gD <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
 nmap <leader>gr <Plug>(coc-references)
-nmap <leader>rn <Plug>(coc-rename)<C-f>
+nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>rj <Plug>(coc-codeaction-selected)<CR>
 
 nmap <leader>cc :CocCommand<CR>
