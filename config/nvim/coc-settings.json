@@ -11,6 +11,7 @@
   "diagnostic.locationlist": true,
   "diagnostic.messageTarget": "float",
   "eslint.autoFixOnSave": true,
+  "prettier.disableSuccessMessage": true,
   "signature.preferShownAbove": true,
   "snippets.loadFromExtensions": true,
   "suggest.enablePreview": true,
