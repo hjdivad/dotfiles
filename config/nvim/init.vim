@@ -165,7 +165,6 @@ if has("termguicolors")
 endif
 
 set background=dark
-" colorscheme solarized
 colorscheme gruvbox
 " hack to make diagnostic preview window readable
 " these end up with CocDiagnosticError CocFloating
