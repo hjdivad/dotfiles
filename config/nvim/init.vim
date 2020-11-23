@@ -198,7 +198,7 @@ set iskeyword+=-
 " Abbreviate some messages
 set shm+=sAIc
 
-set foldlevelstart=0
+set foldlevelstart=99
 set foldnestmax=10
 set foldmethod=syntax
 set foldenable
