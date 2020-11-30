@@ -651,6 +651,8 @@ tnoremap <C-w><C-n> <C-\><C-n><C-w>n:term<CR>
 
 " Use C-\ C-\ as terminal escape
 tnoremap <C-\><C-\> <C-\><C-n>
+" alternate escape for moonlander
+tnoremap <C-g><C-g> <C-\><C-n>
 
 " Move row-wise instead of line-wise
 nnoremap j gj
