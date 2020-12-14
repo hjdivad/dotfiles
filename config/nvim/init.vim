@@ -719,6 +719,7 @@ if has("digraphs")
   " ⚠️ will render in terminal and is different from 9888 somehow (check ga)
   digraph wa 9888     " ⚠ 
   digraph er 9940     " ⛔
+  digraph bl 9940     " ⛔
   digraph wc 9898     " ⚪
   digraph oc 128992   " 🟠
   digraph rc 128308   " 🔴
