@@ -591,6 +591,7 @@ nmap <leader>td :call <SID>tmux_toggle_todos_session()<CR>
 
 nmap <leader>fg :GFiles<CR>
 nmap <leader>ff :Files<CR>
+nmap <leader>fr :Rg<CR>
 nmap <leader>fl :BLines<CR>
 nmap <leader>fL :Lines<CR>
 nmap <leader>fs :GFiles?<CR>
