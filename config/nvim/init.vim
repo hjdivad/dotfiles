@@ -740,6 +740,7 @@ if has("digraphs")
   digraph fi 128293   " 🔥
   digraph jo 128514   " 😂
   digraph bo 9889     " ⚡
+  digraph sh 128674   " 🚢
   digraph rk 128640   " 🚀
   digraph tu 128077   " 👍
   digraph ti 129300   " 🤔
