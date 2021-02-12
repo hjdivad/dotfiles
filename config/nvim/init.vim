@@ -570,6 +570,8 @@ nmap <leader>gd <Plug>(coc-definition)
 nmap <leader>gD <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
 nmap <leader>gr <Plug>(coc-references)
+
+" refactor
 nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>rj <Plug>(coc-codeaction-selected)<CR>
 
@@ -578,12 +580,15 @@ nmap <leader>ss :CocList symbols<CR>
 nmap <leader>sl :CocList outline<CR>
 nmap <leader>sf :call CocAction('showSignatureHelp')<CR>
 
+" run
 nmap <leader>rr :TestFile<CR>
 nmap <leader>rt :TestNearest<CR>
 nmap <leader>rd :call h#DebugNearest()<CR>
 
+" tmux (session)
 nmap <leader>tt :call <SID>tmux_select_previous_session()<CR>
 nmap <leader>td :call <SID>tmux_toggle_todos_session()<CR>
+
 nmap <leader>fg :GFiles<CR>
 nmap <leader>ff :Files<CR>
 nmap <leader>fl :BLines<CR>
@@ -594,10 +599,12 @@ nmap <leader>fm :Marks<CR>
 nmap <leader>fc :BCommits!<CR>
 nmap <leader>fC :Commits!<CR>
 nmap <leader>fh :Helptags<CR>
+
 nmap <leader>hn :GitGutterNextHunk<CR>
 nmap <Leader>hp :GitGutterPrevHunk<CR>
 nmap <Leader>hu :GitGutterUndoHunk<CR>
 nmap <Leader>hP :GitGutterPreviewHunk<CR>
+
 nmap <leader>ne :call <SID>OpenNERDTree()<CR>
 " I don't want to fat finger these b/c nerd tree messes up the size of the left
 " window when it has winfixwidth
