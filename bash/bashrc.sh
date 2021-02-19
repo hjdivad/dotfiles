@@ -189,6 +189,10 @@ alias ssh-no-agent-forwarding='ssh -o "ForwardAgent no"'
 alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 
 alias copy='tr -d "\n" | pbcopy'
+# my-command | copy-url
+# TODO: improve this with socat so we don't ruin stdout (e.g. b/c my-command
+# doesn't realize it should output terminal escapes)
+alias copy-url="tee /dev/tty | rg -o 'https?://(?:[\S]+)[\s]?' | copy"
 
 
 # Trailing space to tell bash to check next word for alias as well
