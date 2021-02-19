@@ -747,6 +747,7 @@ if has("digraphs")
   digraph ax 129683   " 🪓
   digraph ey 128064   " 👀
   digraph ch 128172   " 💬
+  digraph th 128173   " 💭
 
   digraph ** 9733   " ★
   digraph <3 9829   " ♥
