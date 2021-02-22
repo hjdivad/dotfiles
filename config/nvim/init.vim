@@ -472,7 +472,12 @@ augroup END
 " Terminal Setup {{{
 function s:setup_terminal()
   setlocal winfixwidth nonumber norelativenumber
-  vertical resize 120
+  let twidth = 70 "laptop
+  if &columns > 200
+    let twidth = 120 "workstation meeting mode
+  endif
+
+  execute 'vertical resize ' . twidth
   " start! happens only when a function or script ends so it can be very
   " trollish to do it in TermOpen
 endfunction
