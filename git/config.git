@@ -47,6 +47,8 @@
   lgb = log-sans-bot --no-merges --stat origin/master..
   lgr = log-sans-bot --no-merges --stat ..origin/master
 
+  todo = diff origin/master -G'TO\\s?DO\\s*:' --no-prefix
+
   dc = diff --cached
   dcw = diff --cached --ignore-all-space --color-words
   dw = diff --ignore-all-space --color-words
@@ -56,7 +58,8 @@
   gl = log --decorate --cherry-mark --oneline --graph --boundary
 
   head = show -w --color-words HEAD
-  count = shortlog -sn
+  # show list of all committers, with commit counts + email
+  count = shortlog -sne
   name-of = name-rev --name-only
   commit-show-message = show -s --format='%s%n%n%b'
 
