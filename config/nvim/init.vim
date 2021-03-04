@@ -147,6 +147,10 @@ Plug 'janko/vim-test'
 
 Plug 'hjdivad/vim-pdl'
 
+" Run interactive jq in vim :Jqplay
+" This plugin does not support neovim https://github.com/bfrg/vim-jqplay/issues/5
+" Plug 'bfrg/vim-jqplay'
+
 " Disabled for now; it configures conflicting keymaps which I should be able to
 " disable with g:table_mode_disable_mappings but that config does not seem to
 " be working
