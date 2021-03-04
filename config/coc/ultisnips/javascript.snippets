@@ -20,6 +20,12 @@ test('${1:something probably happens}', function(assert) {
 });
 endsnippet
 
+snippet qm "qunit module"
+module('${1:something to test}', function(hooks) {
+	${0}
+});
+endsnippet
+
 snippet el "eslint disable"
 // eslint-disable-next-line ${1:rule}
 endsnippet
