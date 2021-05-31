@@ -337,7 +337,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
   \ 'Unknown'   :'?',
   \ }
 
-let g:markdown_fenced_languages = ['javascript', 'js=javascript', 'sh']
+let g:markdown_fenced_languages = ['javascript', 'js=javascript', 'sh', 'typescript', 'ts=typescript']
 let g:markdown_fold_style = 'nested'
 
 let g:bclose_no_default_mapping=1
