@@ -320,6 +320,7 @@ let NERDTreeAutoDeleteBuffer=1
 " Don't show files hidden by wildignore
 let NERDTreeRespectWildIgnore=1
 
+let g:airline_extensions = ['coc', 'fugitiveline', 'netrw', 'quickfix', 'tabline', 'term', 'windowswap', 'wordcount']
 " This makes the tabline a buffer list when there is only one tab
 let g:airline#extensions#tabline#enabled = 1
 
