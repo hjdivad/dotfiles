@@ -755,6 +755,9 @@ if has("digraphs")
   digraph tu 128077   " 👍
   digraph ti 129300   " 🤔
   digraph ax 129683   " 🪓
+  digraph hx 129683   " 🪓
+  " TODO: unclear how to make a digraph for ⚙️  i.e. a multi-codepoint character
+
   digraph ey 128064   " 👀
   digraph ch 128172   " 💬
   digraph th 128173   " 💭
