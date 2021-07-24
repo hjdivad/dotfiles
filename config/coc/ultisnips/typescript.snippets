@@ -29,6 +29,12 @@ test('${1:something probably happens}', function() {
 });
 endsnippet
 
+snippet t "jest test"
+test('${1:something probably happens}', function() {
+	${0:expect('implemented').toEqual('true');}
+});
+endsnippet
+
 snippet qbe "qunit beforeEach"
 beforeEach(${1:async }function(${2:assert}) {
 	${0}
