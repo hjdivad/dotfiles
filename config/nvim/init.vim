@@ -396,11 +396,13 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " I don't quite have this working yet; will have to take a trip through
 " TROUBLESHOOTING
-let g:firenvim_config = {
-  \ 'globalSettings': {
-    \ 'server': 'persistent'
-  \ },
-\ }
+" https://github.com/glacambre/firenvim#configuring-firenvim
+" let g:firenvim_config = {
+"   \ 'globalSettings': {
+"   \ },
+"   \ 'localSettings': {
+"   \ },
+" \ }
 " let fc = g:firenvim_config['localSettings']
 
 let g:neoterm_automap_keys='<leader><leader>STUPID_PLUGIN_DO_NOT_AUTOMAP'
