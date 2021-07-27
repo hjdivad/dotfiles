@@ -474,6 +474,18 @@ augroup REPL
   au!
   au BufWritePre .repl.* exe 'TREPLSendFile'
 augroup END
+
+if exists('g:started_by_firenvim')
+  " Configuration for firenvim frames
+  set guifont=Fire\ Code:h12
+
+  " This appears to be too early; I probably need to do this at some event.
+  " if &lines < 10
+  "   set lines=10
+  " endif
+
+  nnoremap <C-f><C-f> :call firenvim#focus_page()<CR>
+endif
 "}}}
 
 " Terminal Setup {{{
