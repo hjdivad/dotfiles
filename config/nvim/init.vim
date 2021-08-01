@@ -370,6 +370,9 @@ let g:coc_global_extensions = [
   \ 'coc-vimlsp',
 \ ]
 
+let g:coc_snippet_prev='<C-j>'
+let g:coc_snippet_next='<C-k>'
+
 " From https://github.com/neoclide/coc.nvim
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
