@@ -40,7 +40,8 @@
   wcw = whatchanged -p -w --color-words
   wcwb = whatchanged -p -w --color-words origin/master..
 
-  log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!dependabot-preview)'"
+  log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!dependabot)'"
+  log-sans-botm =  "!f() { git log --no-merges \"$@\"; }; f -P --author='^(?!dependabot)'"
   log-since-last-release = "!f() { git log \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot-preview)'"
   lg = log-sans-bot --stat
   logb = log-sans-bot origin/master..
