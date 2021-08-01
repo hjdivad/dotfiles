@@ -788,9 +788,17 @@ if has("digraphs")
 endif
 
 " emoji
+abbreviate :sun: ☀️ 
+abbreviate :today: ☀️ 
+abbreviate :coin: 🪙
+abbreviate :week: 🪙
+abbreviate :gear: ⚙️  
 abbreviate :beer: 🍺
 abbreviate :beers: 🍻
 abbreviate :hamster: 🐹
+
+" snippety things
+abbreviate :td: <C-R>=strftime('%d %B %Y (%A)')<CR>
 "}}}
 
 
