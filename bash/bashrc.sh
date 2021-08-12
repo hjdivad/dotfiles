@@ -200,6 +200,8 @@ alias copy='tr -d "\n" | pbcopy'
 # doesn't realize it should output terminal escapes)
 alias copy-url="tee /dev/tty | rg -o 'https?://(?:[\S]+)[\s]?' | copy"
 
+alias js='node -e '"'"'global.js = require(`${process.env.HOME}/.volta/tools/image/packages/jstat/lib/node_modules/jstat`)'"'"' -i'
+
 
 # Trailing space to tell bash to check next word for alias as well
 alias sudo='sudo '
@@ -279,8 +281,8 @@ alias gz='__tz'
 
 alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 
-# yarn
 alias y=yarn
+alias nr='npm run'
 
 alias we=watchexec
 
