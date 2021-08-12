@@ -255,7 +255,9 @@ augroup Autoread
   autocmd!
 
   " Check for updates each time we switch to some buffer
-  autocmd FocusGained,BufEnter * :execute 'checktime ' . bufnr('%')
+  " TODO: re-enable without causing issues
+  "   it looks like a race between updating the buffer name & checking bufname
+  " autocmd FocusGained,BufEnter * if bufname('%') != '[Command Line]' | checktime | endif
 augroup end
 "}}}
 
