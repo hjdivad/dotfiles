@@ -681,6 +681,8 @@ tnoremap <C-g><C-g> <C-\><C-n>
 nnoremap j gj
 nnoremap k gk
 
+nnoremap zV zMzv
+
 " 'x is much easier to hit than `x and has more useful semantics: ie switching
 " to the column of the mark as well as the row
 nnoremap ' `
