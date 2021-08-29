@@ -795,6 +795,7 @@ abbreviate :beers: 🍻
 abbreviate :hamster: 🐹
 
 " snippety things
+abbreviate :tt: *[<C-R>=strftime('%H:%M')<CR>]*
 abbreviate :td: <C-R>=strftime('%d %B %Y (%A)')<CR>
 "}}}
 
