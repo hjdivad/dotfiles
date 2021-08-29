@@ -226,10 +226,8 @@ function __ts_todos {
 
   t_current_session=$(tmux display -p '#S')
   t_current_session=${t_current_session%\n}
-  if [[ "$t_current_session" == "todos" ]]; then
+  if [[ "$t_current_session" != "todos" ]]; then
     # switch to "last" (ie last used) session
-    tmux switch-client -l
-  else
     # switch to the todos session
     tmux switch-client -t todos
   fi
@@ -240,10 +238,8 @@ function __ts_journal {
 
   t_current_session=$(tmux display -p '#S')
   t_current_session=${t_current_session%\n}
-  if [[ "$t_current_session" == "todos" ]]; then
+  if [[ "$t_current_session" != "todos" ]]; then
     # switch to "last" (ie last used) session
-    tmux switch-client -l
-  else
     # switch to the todos session
     tmux switch-client -t todos
   fi
