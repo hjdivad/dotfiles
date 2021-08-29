@@ -742,28 +742,29 @@ if has("digraphs")
 
   digraph iO 8505     " ℹ️
   " ⚠️ will render in terminal and is different from 9888 somehow (check ga)
-  digraph wa 9888     " ⚠ 
-  digraph er 9940     " ⛔
-  digraph bl 9940     " ⛔
-  digraph wc 9898     " ⚪
-  digraph oc 128992   " 🟠
-  digraph rc 128308   " 🔴
-  digraph bc 128309   " 🔵
-  digraph ok 127823   " 🍏
-  digraph wt 9200     " ⏰
-  digraph tb 9203     " ⏳
-  digraph OK 9989     " ✅
-  digraph NO 10060    " ❌
-  digraph fi 128293   " 🔥
-  digraph jo 128514   " 😂
-  digraph bo 9889     " ⚡
-  digraph sh 128674   " 🚢
-  digraph wi 128297   " 🔩
-  digraph rk 128640   " 🚀
-  digraph tu 128077   " 👍
-  digraph ti 129300   " 🤔
-  digraph ax 129683   " 🪓
-  digraph hx 129683   " 🪓
+  digraph wa 9888     " ⚠  warning
+  digraph er 9940     " ⛔ error
+  digraph bl 9940     " ⛔ blocked
+  digraph wc 9898     " ⚪ white circle
+  digraph td 128307   " 🔳 todo
+  digraph oc 128992   " 🟠 orange circle
+  digraph rc 128308   " 🔴 red circle
+  digraph bc 128309   " 🔵 blue circle
+  digraph ok 127823   " 🍏 okay
+  digraph wt 9200     " ⏰ waiting
+  digraph tb 9203     " ⏳ timebox 
+  digraph OK 9989     " ✅ good/done
+  digraph NO 10060    " ❌ bad/failed
+  digraph fi 128293   " 🔥 fire
+  digraph jo 128514   " 😂 joy
+  digraph bo 9889     " ⚡ bolt
+  digraph sh 128674   " 🚢 ship
+  digraph wi 128297   " 🔩 work in progress
+  digraph rk 128640   " 🚀 rocket
+  digraph tu 128077   " 👍 thumbs up
+  digraph ti 129300   " 🤔 thinking
+  digraph ax 129683   " 🪓 axe
+  digraph hx 129683   " 🪓 hacking
   " TODO: unclear how to make a digraph for ⚙️  i.e. a multi-codepoint character
 
   digraph ey 128064   " 👀
