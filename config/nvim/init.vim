@@ -531,18 +531,11 @@ function s:tmux_select_previous_session()
   silent exec "!tmux switch-client -l"
 endfunction
 
-function s:tmux_select_todos_session()
+function s:tmux_select_todos_session(window_name)
+  silent exec "!tmux select-window -t todos:" . a:window_name
   silent exec "!tmux switch-client -t todos"
 endfunction
 
-function s:tmux_toggle_todos_session()
-  let session = s:chomp(system('tmux display -p "#S"'))
-  if session == 'todos'
-    call s:tmux_select_previous_session()
-  else
-    call s:tmux_select_todos_session()
-  endif
-endfunction
 "}}}
 
 " Keybindings {{{
@@ -602,7 +595,8 @@ nmap <leader>rd :call h#DebugNearest()<CR>
 
 " tmux (session)
 nmap <leader>tt :call <SID>tmux_select_previous_session()<CR>
-nmap <leader>td :call <SID>tmux_toggle_todos_session()<CR>
+nmap <leader>td :call <SID>tmux_select_todos_session("todos")<CR>
+nmap <leader>tj :call <SID>tmux_select_todos_session("journal")<CR>
 
 nmap <leader>fg :GFiles<CR>
 nmap <leader>ff :Files<CR>
