@@ -222,6 +222,22 @@ function __tss {
 }
 
 function __ts_todos {
+  tmux select-window -t "todos:todos"
+
+  t_current_session=$(tmux display -p '#S')
+  t_current_session=${t_current_session%\n}
+  if [[ "$t_current_session" == "todos" ]]; then
+    # switch to "last" (ie last used) session
+    tmux switch-client -l
+  else
+    # switch to the todos session
+    tmux switch-client -t todos
+  fi
+}
+
+function __ts_journal {
+  tmux select-window -t "todos:journal"
+
   t_current_session=$(tmux display -p '#S')
   t_current_session=${t_current_session%\n}
   if [[ "$t_current_session" == "todos" ]]; then
@@ -275,6 +291,7 @@ function __ts {
 alias t='tmux'
 alias ts='__ts'
 alias td='__ts_todos'
+alias tj='__ts_journal'
 alias tt='tmux switch-client -l'
 # alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
 alias gz='__tz'
