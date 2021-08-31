@@ -133,6 +133,11 @@ Plug 'junegunn/seoul256.vim'
 " CocConfig to open configuration
 Plug 'neoclide/coc.nvim'
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'nvim-treesitter/nvim-treesitter-refactor'
+
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
@@ -810,5 +815,39 @@ endif
 
 " inform terminals that they are within an nvim
 let $NVIM_WRAPPER = 1
+
+
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" or list of languages
+  highlight = {
+    enable = true
+  },
+  playground = {
+    enable = true
+  },
+  query_linter = {
+    enable = true
+  },
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["ab"] = "@block.outer",
+        -- I'm not quite able to get this to work
+        -- What I want is for ib to select the block, not including { and }
+        -- ["ib"] = {
+        --   typescript = "(statement_block) @block.inner"
+        -- },
+        ["ap"] = "@parameter.outer",
+        ["ip"] = "@parameter.inner"
+
+      }
+    }
+  }
+}
+EOF
 
 " vim:set tw=0 fdm=marker:
