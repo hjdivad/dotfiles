@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+# set -e
+
+# launchctl stop com.crashplan.engine
+# launchctl unload /Library/LaunchDaemons/com.crashplan.engine.plist
+
+# sudo
+# launchctl stop com.code42.service
+# launchctl unload /Library/LaunchDaemons/com.code42.service.plist
+
+
+# # uid dhamilto
+# launchctl stop com.code42.menubar
+# launchctl unload ~/Library/LaunchAgents/com.bluejeans.app.detector.plist
+# launchctl unload /Users/dhamilto/Library/LaunchAgents/com.bluejeansnet.BlueJeansHelper.plist
+# launchctl unload /Users/dhamilto/Library/LaunchAgents/com.bluejeansnet.BlueJeansMenu.plist
+
+# echo -e "Don't forget to start verdaccio\ncd $HOME/.verdaccio && verdaccio"
+
+
+tmux ls 2> /dev/null | grep -q 'todos'
+has_todos=$?
+
+# TODO: make this work across machines
+#
+# todo_home="/volumes/NYKEL/vadnu"
+# reference_home="/volumes/NYKEL/vadnu/ref/linkedin"
+# journal_home="/volumes/NYKEL/vadnu/j"
+#
+todo_home="$HOME/docs/vadnu"
+reference_home="/volumes/NYKEL/vadnu/ref/"
+journal_home="/volumes/NYKEL/vadnu/j"
+
+
+if [ $has_todos != "0" ]; then
+  echo 'creating todos session'
+  tmux new-session -s 'todos' -n 'todos' -d
+  tmux send-keys -t 'todos:todos' "cd $todo_home && nvim" Enter
+fi
+
+tmux list-windows -t todos | grep -q ': reference'
+has_reference=$?
+
+tmux list-windows -t todos | grep -q ': journal'
+has_journal=$?
+
+tmux list-windows -t todos | grep -q ': verdaccio'
+has_verdaccio=$?
+
+
+
+if [ $has_reference != "0" ]; then
+  echo 'creating reference window'
+  tmux new-window -t 'todos:2' -n 'reference'
+  tmux send-keys -t 'todos:reference' "cd $reference_home && nvim" Enter
+fi
+
+if [ $has_journal != "0" ]; then
+  echo 'creating journal window'
+  tmux new-window -t 'todos:3' -n 'journal'
+  tmux send-keys -t 'todos:journal' "cd $journal_home && nvim" Enter
+fi
+
+if [[ $has_verdaccio != "0" && $(which verdaccio) != "" ]]; then
+  echo 'creating verdaccio window'
+  tmux new-window -t 'todos:4' -n 'verdaccio'
+  tmux send-keys -t 'todos:verdaccio' 'cd ~/.verdaccio && verdaccio' Enter
+fi
+
+tmux select-window -t 'todos:todos'
+
+
+tmux ls 2> /dev/null | grep -q 'scratch-misc'
+has_misc=$?
+if [ $has_misc != "0" ]; then
+  echo 'creating scratch-misc session'
+  tmux new-session -s 'scratch-misc' -n 'nyx' -d
+  tmux send-keys -t 'scratch-misc:nyx' 'cd ~/src/malleatus/nyx.js && nvim' Enter
+fi
+
+if [ "$TMUX" = "" ]; then
+  tmux attach -t todos
+fi
+
