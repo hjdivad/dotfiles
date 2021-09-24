@@ -754,6 +754,7 @@ if has("digraphs")
   digraph ok 127823   " 🍏 okay
   digraph wt 9200     " ⏰ waiting
   digraph tb 9203     " ⏳ timebox 
+  digraph ?? 10067    " ❓ question?
   digraph OK 9989     " ✅ good/done
   digraph NO 10060    " ❌ bad/failed
   digraph fi 128293   " 🔥 fire
