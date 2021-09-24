@@ -478,18 +478,6 @@ augroup REPL
   au!
   au BufWritePre .repl.* exe 'TREPLSendFile'
 augroup END
-
-if exists('g:started_by_firenvim')
-  " Configuration for firenvim frames
-  set guifont=Fire\ Code:h12
-
-  " This appears to be too early; I probably need to do this at some event.
-  " if &lines < 10
-  "   set lines=10
-  " endif
-
-  nnoremap <C-f><C-f> :call firenvim#focus_page()<CR>
-endif
 "}}}
 
 " Terminal Setup {{{
@@ -714,6 +702,54 @@ noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 "}}}
+
+" Post-keymap plugin config {{{
+if exists('g:started_by_firenvim')
+  " Configuration for firenvim frames
+  set guifont=Fire\ Code:h12
+
+  " This appears to be too early; I probably need to do this at some event.
+  " if &lines < 10
+  "   set lines=10
+  " endif
+
+  nnoremap <C-g><C-g> :call firenvim#focus_page()<CR>
+  inoremap <C-g><C-g> :call firenvim#focus_page()<CR>
+endif
+
+function! s:IsFirenvimActive(event) abort
+  if !exists('*nvim_get_chan_info')
+    return 0
+  endif
+  let l:ui = nvim_get_chan_info(a:event.chan)
+  return has_key(l:ui, 'client') && has_key(l:ui.client, 'name') &&
+      \ l:ui.client.name =~? 'Firenvim'
+endfunction
+
+function! s:expand_firenvim_win()
+  if &lines < 10
+    set lines=10
+  endif
+
+  if &columns < 80
+    set columns=80
+  endif
+endfunction
+
+function! s:on_ui_enter(event) abort
+  if s:IsFirenvimActive(a:event)
+    set showtabline=0 laststatus=0
+    echo 'uienterhai'
+
+    augroup FireNVim
+      au!
+      au BufEnter *.txt call s:expand_firenvim_win()
+    augroup END
+  endif
+endfunction
+autocmd UIEnter * call s:on_ui_enter(deepcopy(v:event))
+"}}}
+
 
 " Digraphs & Abbreviations {{{
 if has("digraphs")
