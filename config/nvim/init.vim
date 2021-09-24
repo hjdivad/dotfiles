@@ -621,7 +621,8 @@ nmap <Leader>hp :GitGutterPrevHunk<CR>
 nmap <Leader>hu :GitGutterUndoHunk<CR>
 nmap <Leader>hP :GitGutterPreviewHunk<CR>
 
-nmap <leader>ne :call <SID>OpenNERDTree()<CR>
+nmap <leader>ne :edit %:h<CR>
+nmap <leader>nE :call <SID>OpenNERDTree()<CR>
 " I don't want to fat finger these b/c nerd tree messes up the size of the left
 " window when it has winfixwidth
 " nmap <leader>nt :NERDTreeFocus<CR>
