@@ -245,6 +245,18 @@ function __ts_journal {
   fi
 }
 
+function __ts_reference {
+  tmux select-window -t "todos:reference"
+
+  t_current_session=$(tmux display -p '#S')
+  t_current_session=${t_current_session%\n}
+  if [[ "$t_current_session" != "todos" ]]; then
+    # switch to "last" (ie last used) session
+    # switch to the todos session
+    tmux switch-client -t todos
+  fi
+}
+
 # tmux z and if successful rename the window to the current working directory;
 # generally nice when that dir is the name of a specific repo
 function __tz {
@@ -287,6 +299,9 @@ function __ts {
 alias t='tmux'
 alias ts='__ts'
 alias td='__ts_todos'
+# doesn't work because tr is a gnu util
+# in any case I'd rather have an alfred workflow for switching
+# alias tr='__ts_reference'
 alias tj='__ts_journal'
 alias tt='tmux switch-client -l'
 # alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"

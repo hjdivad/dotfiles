@@ -601,6 +601,7 @@ nmap <leader>rd :call h#DebugNearest()<CR>
 " tmux (session)
 nmap <leader>tt :call <SID>tmux_select_previous_session()<CR>
 nmap <leader>td :call <SID>tmux_select_todos_session("todos")<CR>
+nmap <leader>tr :call <SID>tmux_select_todos_session("reference")<CR>
 nmap <leader>tj :call <SID>tmux_select_todos_session("journal")<CR>
 
 nmap <leader>fg :GFiles<CR>
