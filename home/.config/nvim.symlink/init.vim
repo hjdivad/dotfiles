@@ -87,6 +87,9 @@ Plug 'vim-airline/vim-airline-themes'
 " e some_file:123  open some_file at line 123
 Plug 'bogado/file-line'
 
+" a colour picker :
+Plug 'KabbAmine/vCoolor.vim'
+
 " This is nice but it conflicts with conceallevel in javascript at least
 " Plug 'Yggdroot/indentLine'
 
@@ -306,6 +309,8 @@ endfunction
 autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 let g:indent_guides_auto_colors=1
+
+let g:vcoolor_disable_mappings=1
 
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
