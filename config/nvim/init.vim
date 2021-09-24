@@ -487,9 +487,9 @@ endif
 " Terminal Setup {{{
 function s:setup_terminal()
   setlocal winfixwidth nonumber norelativenumber
-  let twidth = 70 "laptop
-  if &columns > 200
-    let twidth = 120 "workstation meeting mode
+  let twidth = 120 "workstation meeting mode
+  if &columns <= 200
+    let twidth = 70 "laptop
   endif
 
   execute 'vertical resize ' . twidth
