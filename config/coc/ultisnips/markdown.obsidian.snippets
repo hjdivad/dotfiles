@@ -3,7 +3,8 @@
 #		snippet trigger_word [ "description" [ options ] ]
 #
 # and end with:
-# endsnippet
+#
+#		endsnippet
 #
 # Snippet options:
 #
@@ -23,22 +24,47 @@
 #
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
 
-snippet table
-| ${1:Column} | ${2:Centered-Column} | ${3:Right-Aligned-Column} |
-| ------- | :-------------: | -------------------: |
-| ${4:r1c1}    |      ${5:r1c2}       |                 ${6:r1c3} |
+snippet memo
+**Action Items**:
+
+**Decisions**:
+
+**Discussion**:
 endsnippet
 
-
-snippet link-ref
-[${1}][]${0}
+snippet agenda
+agenda:*@${1:hjdivad}*:
+- 🔳 ${0}
 endsnippet
 
-snippet link-inline
-[${1}](${2})${0}
+snippet meeting
+# Mtg: ${1:Meeting Description}
+
+### next 
+${1}
+
+**Attendees**:
+${0}
+
+**Action Items**:
+
+**Decisions**:
+
+**Discussion**:
+
+## Log
+## ARCHIVE
 endsnippet
 
-snippet ref
-[${1}]: ${0}
-endsnippet
+snippet project
+# ${1:Project Name}
+NA: 🔳 
 
+Tasks:
+
+### next 
+${0}
+
+## Log
+## ARCHIVE
+endsnippet
