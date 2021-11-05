@@ -58,6 +58,9 @@ end
 
 "}}}
 
+" This needs to happen before pluggin loading to affect very early setup like ftdetect
+set runtimepath+=./.vim
+
 " Plugins {{{
 
 " Using https://github.com/junegunn/vim-plug
@@ -813,7 +816,6 @@ if !(getcwd() == $HOME)
       source .vimrc
     endif
   endif
-  set runtimepath+=./.vim
 endif
 
 " inform terminals that they are within an nvim
