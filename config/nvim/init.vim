@@ -755,6 +755,7 @@ if has("digraphs")
   digraph rc 128308   " 🔴 red circle
   digraph bc 128309   " 🔵 blue circle
   digraph ok 127823   " 🍏 okay
+  digraph ro 128257   " roll-over 🔁
   digraph wt 9200     " ⏰ waiting
   digraph tb 9203     " ⏳ timebox 
   digraph ?? 10067    " ❓ question?
