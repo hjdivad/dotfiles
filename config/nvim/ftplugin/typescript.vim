@@ -2,3 +2,5 @@
 " 120 &c.
 setlocal formatprg=prettier\ --stdin\ --parser\ typescript
 setlocal foldlevel=0
+
+setlocal suffixesadd+=.d.ts
