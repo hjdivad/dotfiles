@@ -42,7 +42,7 @@
 
   log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!dependabot)'"
   log-sans-botm =  "!f() { git log --no-merges \"$@\"; }; f -P --author='^(?!dependabot)'"
-  log-since-last-release = "!f() { git log \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot-preview)'"
+  log-since-last-release = "!f() { git log \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot)'"
   lg = log-sans-bot --stat
   logb = log-sans-bot origin/master..
   logr = log-sans-bot ..origin/master
@@ -62,6 +62,7 @@
   head = show -w --color-words HEAD
   # show list of all committers, with commit counts + email
   count = shortlog -sne
+  who-commits = shortlog -sne
   name-of = name-rev --name-only
   commit-show-message = show -s --format='%s%n%n%b'
 
