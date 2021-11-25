@@ -1,0 +1,9 @@
+# Standard bashrc early escape when not running interactively.
+if [ -z "$PS1" ]; then return; fi
+
+DOTFILES=$HOME/.dotfiles
+
+source $DOTFILES/bashrc.bash
+
+
+# vim:ft=sh:

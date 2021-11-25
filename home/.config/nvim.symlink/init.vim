@@ -750,7 +750,9 @@ if has("digraphs")
   digraph er 9940     " ⛔ error
   digraph bl 9940     " ⛔ blocked
   digraph wc 9898     " ⚪ white circle
+  digraph al 128680   " 🚨 alert
   digraph td 128307   " 🔳 todo
+  digraph TD 10004    " ✔ toDONE
   digraph oc 128992   " 🟠 orange circle
   digraph rc 128308   " 🔴 red circle
   digraph bc 128309   " 🔵 blue circle

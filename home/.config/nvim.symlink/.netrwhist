@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =1
+let g:netrw_dirhist_1='/Users/dhamilto/docs/linkedin/2021'
+let g:netrw_dirhist_0='/Users/dhamilto/src/rwjblue/validate-peer-dependencies'
+let g:netrw_dirhist_9='/Users/dhamilto/src/linkedin/pemberly-sandbox-api/bin'
+let g:netrw_dirhist_8='/Users/dhamilto/src/linkedin/pemberly-api'
+let g:netrw_dirhist_7='/Users/dhamilto/src/linkedin/pemberly-sandbox-api'
+let g:netrw_dirhist_6='/Users/dhamilto/src/linkedin/pemberly-sandbox-api/pemberly-sandbox-api-frontend'
+let g:netrw_dirhist_5='/Users/dhamilto/docs'
+let g:netrw_dirhist_4='/Users/dhamilto/src/hjdivad/ember-m3/.github/workflows'
+let g:netrw_dirhist_3='/Users/dhamilto/src/emberjs/data'
+let g:netrw_dirhist_2='/Users/dhamilto/src/hjdivad/ember-m3/config'

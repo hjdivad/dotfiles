@@ -93,4 +93,4 @@ set -g clock-mode-colour colour64 #green
 # }}}
 
 
-# # vim:fdm=marker
+# # vim:fdm=marker ft=tmux
