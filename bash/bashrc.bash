@@ -5,7 +5,7 @@ SRC="$HOME/src"
 [ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
 
 # Homebrew bash completion@2
-export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+[[ -d "/usr/local/etc/bash_completion.d" ]] && export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
 # Completion from alacritty src
