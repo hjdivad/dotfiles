@@ -28,9 +28,9 @@ has_todos=$?
 # reference_home="/volumes/NYKEL/vadnu/ref/linkedin"
 # journal_home="/volumes/NYKEL/vadnu/j"
 #
-todo_home="$HOME/docs/vadnu"
-reference_home="/volumes/NYKEL/vadnu/ref/"
-journal_home="/volumes/NYKEL/vadnu/j"
+todo_home="$HOME/docs/vadnu/home/"
+reference_home="$HOME/docs/vadnu/home/ref"
+journal_home="$HOME/docs/vadnu/home/journal"
 
 
 if [ $has_todos != "0" ]; then
