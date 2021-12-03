@@ -580,10 +580,11 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <leader>gd <Plug>(coc-definition)
 nmap <leader>gD <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
-nmap <leader>gr <Plug>(coc-references)
+nmap <leader>gr <Plug>(coc-references-used)
 
 " refactor
 nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>rf <Plug>(coc-refactor)
 nmap <leader>rj <Plug>(coc-codeaction-selected)<CR>
 
 nmap <leader>cc :CocCommand<CR>
@@ -642,9 +643,14 @@ else
   nmap <leader>yf :let @"=expand('%')<CR>
 endif
 
+
+" manually trigger completion
+inoremap <silent><expr> <c-space> coc#refresh()
+
 " select the omnicomplete snippet
 " use <c-j> <c-k> to jump between snippet variables (the default keybindings)
-imap <c-l> <Plug>(coc-snippets-expand)
+"
+inoremap <expr> <c-l> coc#_select_confirm() \| <Plug>(coc-snippets-expand)
 
 " Window-motion out of terminals
 tnoremap <C-w>h <C-\><C-n><C-w>h
@@ -779,6 +785,7 @@ if has("digraphs")
   digraph bs 9003   " ⌫  
 
   digraph is 7522   " ᵢ
+  digraph fu 119891 " 𝑓
 
   " Builtin digraphs
   "
@@ -818,8 +825,17 @@ if has("digraphs")
   digraph hx 129683   " 🪓 hacking
   " TODO: unclear how to make a digraph for ⚙️  i.e. a multi-codepoint character
 
+
   digraph ey 128064   " 👀
   digraph ch 128172   " 💬
+  " 📈
+  " 📊
+  " 🎯 
+  " 💥
+  " 👂
+  " 📅
+  digraph fu 10548    " ⤴️  follow-up
+  
   digraph th 128173   " 💭
 
   digraph ** 9733   " ★
@@ -848,6 +864,7 @@ abbreviate :hamster: 🐹
 " snippety things
 abbreviate :tt: *[<C-R>=strftime('%H:%M')<CR>]*
 abbreviate :td: <C-R>=strftime('%d %B %Y (%A)')<CR>
+abbreviate :sd: <C-R>=strftime('%d %b %Y')<CR>
 "}}}
 
 
