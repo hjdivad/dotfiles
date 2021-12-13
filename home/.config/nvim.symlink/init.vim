@@ -575,6 +575,9 @@ function s:OpenNERDTree()
   endif
 endfunction
 
+" neovim 0.6.0 maps Y to "$ by default (see default-mappings)
+unmap Y
+
 " use coc.vim for K doc lookup
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <leader>gd <Plug>(coc-definition)
