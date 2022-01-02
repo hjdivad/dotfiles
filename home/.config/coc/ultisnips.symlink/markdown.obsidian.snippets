@@ -65,6 +65,7 @@ snippet project
 ### next 
 ${0}
 
+## Ref
 ## Log
 ## ARCHIVE
 endsnippet
@@ -74,6 +75,34 @@ snippet daily
 **Ticklers**:
 ${0}
 
-**Habit**:
+endsnippet
+snippet dailies
+
+**dailies**: ${1:today}
+	- [ ] 🔘 Check ticklers
+	- [ ] 🔘 [calendar](https://calendar.google.com/calendar/u/0/r/month)
+	- [ ] 🔘 [email](https://mail.google.com/mail/u/0/#inbox)
+	- [ ] 🔘 [[ongoing/exercise.md]]
+	- [ ] 🔘 Anki
+	- [ ] 🔘 Morning 1+ chapter
+	- [ ] 🔘 Evening 1+ chapter
+
+endsnippet
+
+snippet log-entry-daily
+### ${0:date}
+
+- [ ] 🔘 [calendar](https://calendar.google.com/calendar/u/0/r/month)
+- [ ] 🔘 [email](https://mail.google.com/mail/u/0/#inbox)
+- [ ] 🔘 [[ongoing/exercise]]
+- [ ] 🔘 Anki
+- [ ] 🔘 Book 1+ chapter
+endsnippet
+
+snippet log-entry-monthly
+### ${0:month}
+
+- [ ] 🔘 expense phone + internet
+- [ ] 🔘 snapshot savings
 
 endsnippet
