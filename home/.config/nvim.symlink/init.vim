@@ -495,6 +495,22 @@ function s:setup_terminal()
   " trollish to do it in TermOpen
 endfunction
 
+function Resize()
+  let twidth = 120 "workstation meeting mode
+  if &columns <= 200
+    let twidth = 70 "laptop
+  endif
+
+  execute 'vertical resize ' . twidth
+  for term_id in keys(g:neoterm.instances)
+    let buf_id = g:neoterm.instances[term_id].buffer_id
+    let win_id = bufwinid(buf_id)
+    if win_id != -1
+      call win_execute(win_id, 'vertical resize ' . twidth)
+    endif
+  endfor
+endfunction
+
 augroup TermExtra
   autocmd!
   " When switching to a term window, go to insert mode by default (this is
