@@ -883,7 +883,8 @@ abbreviate :hamster: 🐹
 " snippety things
 abbreviate :tt: *[<C-R>=strftime('%a %H:%M')<CR>]*
 abbreviate :td: <C-R>=strftime('%d %B %Y (%A)')<CR>
-abbreviate :sd: <C-R>=strftime('%d %b %Y')<CR>
+abbreviate :tm: <C-R>=strftime('%B %Y')<CR>
+abbreviate :sd: *<C-R>=strftime('%d %b %Y')<CR>*
 "}}}
 
 
