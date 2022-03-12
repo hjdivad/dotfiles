@@ -1,0 +1,93 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+# endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+# https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L511
+# https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L821
+
+snippet table
+| ${1:Column} | ${2:Centered-Column} | ${3:Right-Aligned-Column} |
+| ------- | :-------------: | -------------------: |
+| ${4:r1c1}    |      ${5:r1c2}       |                 ${6:r1c3} |
+endsnippet
+
+snippet link:ref
+[${1}][]${0}
+endsnippet
+
+snippet link:inline
+[${1}](${2})${0}
+endsnippet
+
+snippet ref
+[${1}]: ${0}
+endsnippet
+
+
+# emoji aliases
+snippet ::blocked-⛔::
+⛔${0}
+endsnippet
+snippet ::error-⛔::
+⛔${0}
+endsnippet
+snippet ::follow-up-⤴️::
+⤴️ ${0}
+endsnippet
+snippet ::okay-🍏::
+🍏${0}
+endsnippet
+snippet ::waiting-⏰::
+⏰${0}
+endsnippet
+snippet ::timebox-⏳::
+⏳${0}
+endsnippet
+snippet ::done-✅::
+✅${0}
+endsnippet
+snippet ::progress-🍏::
+🍏${0}
+endsnippet
+snippet ::wip-🔩::
+🔩${0}
+endsnippet
+snippet ::failed-❌::
+❌${0}
+endsnippet
+snippet ::alert-🚨::
+🚨${0}
+endsnippet
+
+snippet ::tt-date-time::
+*`date +'%a %H:%M'`*
+endsnippet
+snippet ::td-date-today-long::
+*`date +'%d %B %Y (%A)'`*
+endsnippet
+snippet ::td-date-today-short::
+*`date +'%d %b %Y'`*
+endsnippet
+snippet ::td-date-month::
+*`date +'%B %Y'`*
+endsnippet

@@ -1,10 +1,10 @@
+
 # A valid snippet should starts with:
 #
 #		snippet trigger_word [ "description" [ options ] ]
 #
 # and end with:
-#
-#		endsnippet
+# endsnippet
 #
 # Snippet options:
 #
@@ -23,6 +23,28 @@
 #		endsnippet
 #
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+# https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L511
+# https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L821
+
+snippet todo
+- [ ] 🔘 ${0}
+endsnippet
+
+snippet todo:done
+- [x] ✅ ${0}
+endsnippet
+
+snippet todo:morning
+- [ ] 🌅 ${0}
+endsnippet
+
+snippet todo:afternoon
+- [ ] ☀️ ${0}
+endsnippet
+
+snippet todo:evening
+- [ ] 🌗 ${0}
+endsnippet
 
 snippet memo
 **Action Items**:
@@ -69,6 +91,7 @@ ${0}
 ## Log
 ## ARCHIVE
 endsnippet
+
 snippet daily
 ### ${1:day}
 
@@ -86,6 +109,7 @@ ${0}
 - [ ] 🔘 [[ongoing/annual]]
 
 endsnippet
+
 snippet dailies
 
 **dailies**: ${1:today}
@@ -99,7 +123,7 @@ snippet dailies
 
 endsnippet
 
-snippet log-entry-daily
+snippet log:daily
 ### ${0:date}
 
 - [ ] 🔘 [calendar](https://calendar.google.com/calendar/u/0/r/month)
@@ -109,7 +133,7 @@ snippet log-entry-daily
 - [ ] 🔘 Book 1+ chapter
 endsnippet
 
-snippet log-entry-weekly
+snippet log:weekly
 ### ${0:week}
 
 - [ ] 🔘 Erik to Lundberg x1
@@ -117,13 +141,14 @@ snippet log-entry-weekly
 - [ ] 🔘 Erik to Josh&Beth
 endsnippet
 
-snippet log-entry-monthly
+snippet log:monthly
 ### ${0:month}
 
 - [ ] 🔘 expense phone + internet
 - [ ] 🔘 snapshot savings
 
 endsnippet
+
 snippet feedback
 _BLUF (bottom line up front)_
 

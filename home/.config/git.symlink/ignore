@@ -1,5 +1,7 @@
 # By default, ignore project-specific vimrc
 /.vimrc
+/.vimrc.lua
+/.vim
 
 # node
 /node_modules

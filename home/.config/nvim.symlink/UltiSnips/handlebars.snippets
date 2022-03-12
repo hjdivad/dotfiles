@@ -23,3 +23,16 @@
 #		endsnippet
 #
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+snippet if
+{{#if ${1:true}}}
+	${0}
+{{/if}}
+endsnippet
+
+snippet each
+{{#each ${1:list} as |${2:local}|}}
+	${0}
+{{/each}}
+endsnippet
+

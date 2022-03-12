@@ -122,8 +122,13 @@ if [[ -z "$DOTFILES_BASHRC_INIT" ]]; then
   export PATH=/usr/local/share/npm/bin:$PATH
   export PATH=$HOME/local/bin:$PATH
   export PATH=$HOME/.cargo/bin:$PATH
+  # TODO: relative to this file
   export PATH=$HOME/.dotfiles/bin:$PATH
-  export PATH=$HOME/bin:$PATH
+  # TODO: delete these;
+  # prefer XDG path for local bins, i.e. $HOME/.local/bin
+  # export PATH=$HOME/local/bin:$PATH
+  # export PATH=$HOME/bin:$PATH
+  export PATH=$HOME/.local/bin:$PATH
 fi
 
 # }}}
@@ -178,6 +183,12 @@ alias ifconfig-active="ifconfig | pcregrep -M  -o '^[^\t:]+:([^\n]|\n\t)*status:
 if $(which exa > /dev/null 2>&1); then
   alias ls='exa'
   alias ll='exa -snew -l'
+fi
+
+# use fd if it exists
+# https://github.com/sharkdp/fd
+if $(which fd > /dev/null 2>&1); then
+  alias find='fd'
 fi
 
 # always create paths when using mkdir.
@@ -267,44 +278,9 @@ function __tz {
   _z "$path" && tmux rename-window  "${PWD##*/}"
 }
 
-function __ts {
-  # set IFS to loop over sessions with spaces
-  IFS=$'\n'
-  local sessions
-  if local result=$(tmux ls -F '#{session_name}' 2>&1); then
-    sessions=$result
-  else
-    echo $result
-    return 1
-  fi
-
-  local choices=''
-  local delim=' ' # non-breaking space, not a regular space!
-  for session in $sessions; do
-    local windows=$(tmux list-windows -t "$session" -F '#{window_name} #{window_id}')
-    for window in $windows; do
-      choices=$choices$session$delim$window$'\n'
-    done
-  done
-
-  if local selection=$(printf "$choices" | fzf); then
-    local selected_session=$(cut -d$delim -f 1 <<<$selection)
-    local selected_window=$(cut -d$delim -f 2 <<<$selection)
-    local selected_window_id=$(cut -d$delim -f 3 <<<$selection)
-    tmux select-window -t "$selected_session"':'"$selected_window_id"
-    __tss $selected_session
-  fi
-}
-
 alias t='tmux'
-alias ts='__ts'
-alias td='__ts_todos'
-# doesn't work because tr is a gnu util
-# in any case I'd rather have an alfred workflow for switching
-# alias tr='__ts_reference'
-alias tj='__ts_journal'
-alias tt='tmux switch-client -l'
-# alias tw='tmux list-windows | fzf  | cut -d':" -f 1 | $XARGS -r tmux select-window -t"
+alias ts='tmux display-popup -E -w 80% -h 80% nvim -c ":Telescope tmux windows quit_on_select=true"'
+# TODO: telescope this
 alias gz='__tz'
 
 alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'

@@ -2,6 +2,7 @@
 
 - bash
 - gnu grep, either as `grep` or `ggrep`
+- <https://github.com/savq/paq-nvim#installation>
 
 ## Installation
 
