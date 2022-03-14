@@ -1,4 +1,6 @@
 local telescope_utils = require('telescope.utils')
+local Job = require'plenary.job'
+
 ---Global access; used for user-accessible API from ex mode and as entry
 ---points from autocommands
 hi = {}
@@ -97,6 +99,13 @@ function File.readable(path)
   else
     return false
   end
+end
+
+function File.cp_r(path, dest)
+  Job:new({
+    command = 'cp',
+    args = { '-r', path, dest },
+  }):sync()
 end
 
 ---Returns `true` if `path` is a directory, `false` otherwise.

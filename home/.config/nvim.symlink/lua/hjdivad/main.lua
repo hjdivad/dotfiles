@@ -221,6 +221,6 @@ return {
   unmap = unmap,
   setup_vimtest = testing.setup_vimtest,
   setup_repls = setup_repls,
-  setup_exrc = exrc.setup_exrc,
+  run_exrc = exrc.run_exrc,
   setup_terminal = terminal.setup_terminal,
 }
