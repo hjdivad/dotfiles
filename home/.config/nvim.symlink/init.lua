@@ -247,6 +247,7 @@ local function setup_mappings()
   ---vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl('yarn repl', 'ts')]]<cr>')
   ---```
   nmap('<leader>re', '<cmd>lua ha.edit_generic_repl()<cr>')
+  map('v', '<leader>re', ':TREPLSendSelecdtion<cr>', {})
   nmap('<leader>rr', '<cmd>TestFile<cr>')
   nmap('<leader>rt', '<cmd>TestNearest<cr>')
   nmap('<leader>rd', '<cmd>lua ha.debug_nearest()<cr>')
@@ -295,10 +296,8 @@ end
 
 
 local function setup_lsp_mappings()
-
-  -- TODO: these should probably be buffer-specific
-
   map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { noremap = true})
+  map('n', '<c-h>', [[<cmd>lua vim.lsp.buf.signature_help()<cr>]], { silent = true})
 
   ---telescope variant
   -- maptb('n', '<leader>gd', 'lsp_definitions()') -- go to definition
@@ -312,6 +311,8 @@ local function setup_lsp_mappings()
   nmap('<leader>gi', '<cmd>Trouble lsp_implementation<cr>') -- go to implementation
   nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
   nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
+  -- useful for exploring multiple results e.g. multiple references
+  nmap('<leader>gt', '<cmd>TroubleToggle') -- toggle trouble window
   nmap('<leader>gci', '<cmd>lua vim.lsp.buf.incoming_calls()<cr>') -- who calls this function?
   nmap('<leader>gco', '<cmd>lua vim.lsp.buf.outgoing_calls()<cr>') -- who does this function call?
 
@@ -344,8 +345,11 @@ local function setup_language_servers()
     -- use LSP for formatxpr
     vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
-    -- format on save
-    vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
+    -- TODO: see :he vim.lsp.buf.range_formatting()
+    if vim.fn['exists']('b:formatter_loaded') == 0 then
+      vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
+      vim.api.nvim_buf_set_var(0, 'formatter_loaded', true)
+    end
 
     -- for plugins with `on_attach` call them here
   end
@@ -446,6 +450,7 @@ local function setup_language_servers()
     typescript = "prettier",
   }
 
+  -- see <https://github.com/iamcco/diagnostic-languageserver>
   lsp.diagnosticls.setup {
     filetypes = vim.tbl_keys(filetypes),
     init_options = {

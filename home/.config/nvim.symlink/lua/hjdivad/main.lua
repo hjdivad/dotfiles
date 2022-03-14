@@ -45,8 +45,9 @@ end
 
 function ha.toggle_nvim_tree()
   -- TODO: make this work better when opening a file outside of <cwd>, as well as opening a file within <cwd> after nvimtree has cd-d outside
+  --  i.e. NVIMTreeOpen dirname (file) or cwd + findfile
+  -- TODO: make this work for NEW buffers (i.e buffers never saved)
   local buffer_name = vim.fn['bufname']()
-  -- local cwd = vim.fn['getcwd']()
 
   if buffer_name == '' then
     vim.cmd('NvimTreeOpen')
