@@ -10,6 +10,24 @@ ha = {}
 
 local startswith = vim.startswith
 local endswith = vim.endswith
+local env = vim.env
+
+---Sets the object used to read environment veriables within this package
+---Only intended for testing
+---
+---@param new_env any
+local function __set_env(new_env)
+  env = new_env
+end
+
+---Reset any mutations done via `__set_env`
+local function __reset()
+  env = vim.env
+end
+
+local function os_tmpdir()
+  return os.getenv('TMPDIR') and os.getenv('TMPDIR') or os.getenv('TEMP')
+end
 
 ---Prints messages in `...`
 ---
@@ -90,6 +108,10 @@ function Path.dirname(path)
   return path:sub(1, idx)
 end
 
+function Path.isabsolute(path)
+  return path:sub(1, 1) == Path.Sep
+end
+
 local File = {}
 function File.readable(path)
   local file = io.open(path, 'r')
@@ -119,14 +141,24 @@ end
 
 local function xdg_data_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
-  local xdg_dir = vim.env.XDG_DATA_HOME or (vim.env.HOME .. '/.local/share')
-  return Path.join(xdg_dir, relpath)
+  local xdg_dir =
+    (env.XDG_DATA_HOME
+      and Path.isabsolute(env.XDG_DATA_HOME)
+      and env.XDG_DATA_HOME)
+    or (env.HOME and
+      Path.join(env.HOME, '.local', 'share'))
+  return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
 
 local function xdg_config_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
-  local xdg_dir = vim.env.XDG_CONFIG_HOME or (vim.env.HOME .. '/.config')
-  return Path.join(xdg_dir, relpath)
+  local xdg_dir =
+    (env.XDG_CONFIG_HOME
+      and Path.isabsolute(env.XDG_CONFIG_HOME)
+      and env.XDG_CONFIG_HOME)
+    or (env.HOME and
+      Path.join(env.HOME, '.config'))
+  return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
 
 return {
@@ -138,6 +170,11 @@ return {
   File = File,
   xdg_data_path = xdg_data_path,
   xdg_config_path = xdg_config_path,
+  ---@param cmd table { command, [arg...] }
+  ---@param cwd string
   get_os_command_output = telescope_utils.get_os_command_output,
+  os_tmpdir = os_tmpdir,
+  __set_env = __set_env,
+  __reset = __reset,
 }
 
