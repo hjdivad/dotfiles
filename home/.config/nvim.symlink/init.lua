@@ -318,6 +318,7 @@ local function setup_lsp_mappings()
 
   maptb('n', '<leader>ss', 'lsp_document_symbols()') -- list document symbols
   maptb('n', '<leader>sS', 'lsp_dynamic_workspace_symbols()') -- list workspace symbols
+  maptb('n', '<leader>SS', 'lsp_dynamic_workspace_symbols()') -- list workspace symbols
   maptb('n', '<leader>sf', [[lsp_document_symbols({ symbols={'function'} })]]) -- list document symbols
   maptb('n', '<leader>so', [[lsp_document_symbols({ symbols={'class', 'function'} })]]) -- list document symbols
   maptb('n', '<leader>ca', 'lsp_code_actions()') -- list code actions (under cursor)
