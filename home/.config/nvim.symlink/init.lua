@@ -527,8 +527,6 @@ local function setup_plugins()
       { name = 'path' }, -- trigger via `/`
       { name = 'cmdline' },
       { name = 'calc' },
-      -- TODO: add a custom source for emoji aliases
-      -- c.f. gh 'hrsh7th/cmp-emoji'
       { name = 'emoji' }, -- trigger via `:` in insert mode
     }),
   }

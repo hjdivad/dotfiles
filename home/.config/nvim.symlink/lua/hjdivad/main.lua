@@ -64,12 +64,14 @@ end
 ---@param repl_cmd string a command to start a REPL in a neoterm instance
 ---@param repl_extension string the name of the file to use for input commands to the REPL
 function ha.edit_repl(repl_cmd, repl_extension)
+  -- TODO: make a toggle_repl that closes the repl windows if they're open
   local repl_file = '.repl.' .. repl_extension
   if not vim.g.neoterm.repl or not vim.g.neoterm.repl.instance_id then
     local starting_window = vim.api.nvim_get_current_win()
     -- create the REPL buffer
     local open_terminals = ha.get_neoterm_window_ids()
     if #open_terminals > 0 then
+      -- TODO: open the terminal if it's not visible
       -- if we have a terminal open on the left, create the REPL buffer in the topleft
       vim.cmd([[
         " Create a new neoterm window in the top-left
