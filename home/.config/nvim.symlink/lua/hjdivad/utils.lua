@@ -1,5 +1,5 @@
 local telescope_utils = require('telescope.utils')
-local Job = require'plenary.job'
+local Job = require 'plenary.job'
 
 ---Global access; used for user-accessible API from ex mode and as entry
 ---points from autocommands
@@ -16,24 +16,18 @@ local env = vim.env
 ---Only intended for testing
 ---
 ---@param new_env any
-local function __set_env(new_env)
-  env = new_env
-end
+local function __set_env(new_env) env = new_env end
 
 ---Reset any mutations done via `__set_env`
-local function __reset()
-  env = vim.env
-end
+local function __reset() env = vim.env end
 
-local function os_tmpdir()
-  return os.getenv('TMPDIR') and os.getenv('TMPDIR') or os.getenv('TEMP')
-end
+local function os_tmpdir() return os.getenv('TMPDIR') and os.getenv('TMPDIR') or os.getenv('TEMP') end
 
 ---Prints messages in `...`
 ---
 ---intended for simple printf debugging. For anthing advanced see vim.notify()
 local function echo(...)
-  local args = { n = select('#', ...), ...}
+  local args = {n = select('#', ...), ...}
   local messages = {}
   for i = 1, args.n do
     local msg = args[i]
@@ -45,9 +39,7 @@ end
 
 -- TODO: vim.tbl_extend
 local function assign(target, source)
-  for k,v in ipairs(source or {}) do
-    target[k] = v
-  end
+  for k, v in ipairs(source or {}) do target[k] = v end
 
   return target
 end
@@ -92,25 +84,19 @@ function Path.dirname(path)
   local idx = nil
   local next_sep_idx = 1
 
-  if not path:find(Path.Sep) then
-    return '.'
-  end
+  if not path:find(Path.Sep) then return '.' end
 
   repeat
     idx = next_sep_idx - 1
     next_sep_idx = path:find(Path.Sep, next_sep_idx + 1, true)
   until not next_sep_idx or next_sep_idx == #path
 
-  if idx == 0 then
-    return '/'
-  end
+  if idx == 0 then return '/' end
 
   return path:sub(1, idx)
 end
 
-function Path.isabsolute(path)
-  return path:sub(1, 1) == Path.Sep
-end
+function Path.isabsolute(path) return path:sub(1, 1) == Path.Sep end
 
 local File = {}
 function File.readable(path)
@@ -123,41 +109,27 @@ function File.readable(path)
   end
 end
 
-function File.cp_r(path, dest)
-  Job:new({
-    command = 'cp',
-    args = { '-r', path, dest },
-  }):sync()
-end
+function File.cp_r(path, dest) Job:new({command = 'cp', args = {'-r', path, dest}}):sync() end
 
 ---Returns `true` if `path` is a directory, `false` otherwise.
 ---@see `:help isdirectory()`
 ---
 ---@param path string
 ---@return boolean
-function File.isdirectory(path)
-  return vim.fn['isdirectory'](path) == 1
-end
+function File.isdirectory(path) return vim.fn['isdirectory'](path) == 1 end
 
 local function xdg_data_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
   local xdg_dir =
-    (env.XDG_DATA_HOME
-      and Path.isabsolute(env.XDG_DATA_HOME)
-      and env.XDG_DATA_HOME)
-    or (env.HOME and
-      Path.join(env.HOME, '.local', 'share'))
+    (env.XDG_DATA_HOME and Path.isabsolute(env.XDG_DATA_HOME) and env.XDG_DATA_HOME) or
+      (env.HOME and Path.join(env.HOME, '.local', 'share'))
   return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
 
 local function xdg_config_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
-  local xdg_dir =
-    (env.XDG_CONFIG_HOME
-      and Path.isabsolute(env.XDG_CONFIG_HOME)
-      and env.XDG_CONFIG_HOME)
-    or (env.HOME and
-      Path.join(env.HOME, '.config'))
+  local xdg_dir = (env.XDG_CONFIG_HOME and Path.isabsolute(env.XDG_CONFIG_HOME) and
+                    env.XDG_CONFIG_HOME) or (env.HOME and Path.join(env.HOME, '.config'))
   return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
 
@@ -175,6 +147,6 @@ return {
   get_os_command_output = telescope_utils.get_os_command_output,
   os_tmpdir = os_tmpdir,
   __set_env = __set_env,
-  __reset = __reset,
+  __reset = __reset
 }
 

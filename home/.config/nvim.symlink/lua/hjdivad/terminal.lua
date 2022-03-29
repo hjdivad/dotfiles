@@ -2,7 +2,6 @@ local utils = require('hjdivad.utils')
 local hi = utils.hjdivad_init
 local ha = utils.hjdivad_auto
 
-
 local function get_terminal_expected_width()
   local is_reasonable_screen = vim.o.columns >= 220
 
@@ -12,7 +11,6 @@ local function get_terminal_expected_width()
     return 79
   end
 end
-
 
 ---Set up window local options when its buffer is a terminal.
 --- * disable editor gutter marks like line numbers
@@ -24,13 +22,13 @@ function ha.terminal_onopen()
   vim.wo.relativenumber = false
   vim.opt_local.spell = false
   vim.cmd([[vertical resize]] .. get_terminal_expected_width())
-  vim.api.nvim_buf_set_keymap(0 --[[current buffer]], 'n', '<c-w>n', '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
-  vim.api.nvim_buf_set_keymap(0 --[[current buffer]], 'n', '<c-w><c-n>', '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
+  vim.api.nvim_buf_set_keymap(0 --[[current buffer]] , 'n', '<c-w>n',
+                              '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
+  vim.api.nvim_buf_set_keymap(0 --[[current buffer]] , 'n', '<c-w><c-n>',
+                              '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
 end
 
-function ha.terminal_onclose()
-  vim.wo.winfixwidth = false
-end
+function ha.terminal_onclose() vim.wo.winfixwidth = false end
 
 ---When entering a terminal window, automatically enter insert mode
 ---if the prompt line (i.e. the last line of the buffer) is visible.
@@ -41,9 +39,7 @@ function ha.terminal_onbufenter()
   local last_line_visible = vim.fn['line']('w$')
   local line_count = vim.api.nvim_buf_line_count(0)
   local is_prompt_visible = last_line_visible >= line_count
-  if is_prompt_visible then
-    vim.cmd('start!')
-  end
+  if is_prompt_visible then vim.cmd('start!') end
 end
 
 local function setup_terminal()
@@ -78,9 +74,7 @@ function ha.get_neoterm_window_ids()
   for _, term in pairs(vim.g.neoterm.instances) do
     local buf_id = term.buffer_id
     local win_id = vim.fn['bufwinid'](buf_id)
-    if win_id and win_id > -1 then
-      table.insert(result, win_id)
-    end
+    if win_id and win_id > -1 then table.insert(result, win_id) end
   end
   return result
 end
@@ -93,8 +87,5 @@ function hi.resize()
   end
 end
 
-
-return {
-  setup_terminal = setup_terminal,
-}
+return {setup_terminal = setup_terminal}
 

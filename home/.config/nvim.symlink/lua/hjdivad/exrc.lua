@@ -3,11 +3,9 @@ local Path = utils.Path
 local File = utils.File
 local hi = utils.hjdivad_init
 
-local exrc_entry_sep =  ' ⊱ '
+local exrc_entry_sep = ' ⊱ '
 
-local function get_data_path()
-  return utils.xdg_data_path('nvim/hjdivad-init/exrc_dir_choices')
-end
+local function get_data_path() return utils.xdg_data_path('nvim/hjdivad-init/exrc_dir_choices') end
 
 local function exrc(vimrc, vim_rtp)
   if vimrc then
@@ -20,9 +18,7 @@ local function exrc(vimrc, vim_rtp)
     end
   end
 
-  if vim_rtp then
-    vim.opt.runtimepath:append(vim_rtp)
-  end
+  if vim_rtp then vim.opt.runtimepath:append(vim_rtp) end
 end
 
 local function update_exrc_choices(data_file, path, allow)
@@ -32,9 +28,7 @@ local function update_exrc_choices(data_file, path, allow)
     file = io.open(data_file, 'a')
   end
 
-  if not file then
-    error('Unable to write to "' .. data_file .. '"')
-  end
+  if not file then error('Unable to write to "' .. data_file .. '"') end
 
   file:write(path)
   file:write(exrc_entry_sep)
@@ -45,16 +39,13 @@ end
 
 local function iterate_exrc_choices()
   local exrc_dir_choices = io.open(get_data_path(), 'r')
-  if not exrc_dir_choices then
-    return function ()
-    end
-  end
+  if not exrc_dir_choices then return function() end end
 
   local next_line = exrc_dir_choices:lines()
-  return function ()
+  return function()
     local entry_line = next_line()
     if entry_line then
-      local entry = vim.split(entry_line, exrc_entry_sep, { plain=true })
+      local entry = vim.split(entry_line, exrc_entry_sep, {plain = true})
       return entry[1], entry[2], exrc_dir_choices, entry_line
     else
       exrc_dir_choices:close()
@@ -84,9 +75,7 @@ local function run_exrc()
   end
 
   local rtp = nil
-  if File.isdirectory(Path.join(cwd, '.vim')) then
-    rtp = Path.join(cwd, '.vim')
-  end
+  if File.isdirectory(Path.join(cwd, '.vim')) then rtp = Path.join(cwd, '.vim') end
 
   if vimrc == nil and rtp == nil then
     -- early exit, there is no .vimrc or .vim/
@@ -106,37 +95,36 @@ local function run_exrc()
   -- found vimrc or .vim/ and no previously saved choice
 
   local saved_choice = nil
-  vim.ui.select(
-    {
-      --[[1]] 'Yes: run .vimrc and add .vim to runtimepath (remember choice)',
-      --[[2]] 'Yes (once): run .vimrc and add .vim to runtimepath (this time)',
-      --[[3]] 'No: do not run .vimrc or add .vim to runtimepath (remember choice)',
-      --[[4]] 'No (once): do not run .vimrc or add .vim to runtimepath (this time)',
-    },
-    {
-      prompt = '.vimrc or .vim detected.\nRun automatically?\nOnly do this if you trust the contents of "' .. cwd .. '"\n' .. [[see :help 'exrc' for details.]] .. '\n'
-    },
-    function(_, idx)
-      if idx == 1 then
-        exrc(vimrc, rtp)
-        saved_choice = true
-      elseif idx == 2 then
-        exrc(vimrc, rtp)
-        return
-      elseif idx == 3 then
-        saved_choice = false
-      elseif idx == 4 then
-        -- NOP user explicitly said no + don't save
-        return
-      else
-        --- NOP user canceled via q or blank selection
-      end
+  vim.ui.select({
+    --[[1]]
+    'Yes: run .vimrc and add .vim to runtimepath (remember choice)',
+    --[[2]]
+    'Yes (once): run .vimrc and add .vim to runtimepath (this time)',
+    --[[3]]
+    'No: do not run .vimrc or add .vim to runtimepath (remember choice)',
+    --[[4]]
+    'No (once): do not run .vimrc or add .vim to runtimepath (this time)'
+  }, {
+    prompt = '.vimrc or .vim detected.\nRun automatically?\nOnly do this if you trust the contents of "' ..
+      cwd .. '"\n' .. [[see :help 'exrc' for details.]] .. '\n'
+  }, function(_, idx)
+    if idx == 1 then
+      exrc(vimrc, rtp)
+      saved_choice = true
+    elseif idx == 2 then
+      exrc(vimrc, rtp)
+      return
+    elseif idx == 3 then
+      saved_choice = false
+    elseif idx == 4 then
+      -- NOP user explicitly said no + don't save
+      return
+    else
+      --- NOP user canceled via q or blank selection
     end
-  )
+  end)
 
-  if saved_choice ~= nil then
-    update_exrc_choices(get_data_path(), cwd, saved_choice)
-  end
+  if saved_choice ~= nil then update_exrc_choices(get_data_path(), cwd, saved_choice) end
 end
 
 hi.exrc = {}
@@ -147,10 +135,7 @@ hi.exrc = {}
 function hi.exrc.init()
   local blueprints = vim.api.nvim_get_runtime_file('blueprints/project', false)
   local cwd = vim.fn['getcwd']()
-  if #blueprints == 0 then
-    error('Unable to find blueprints/project anywhere in &runtimepath')
-  end
-
+  if #blueprints == 0 then error('Unable to find blueprints/project anywhere in &runtimepath') end
 
   local blueprint = blueprints[1]
   File.cp_r(blueprint .. '/', cwd)
@@ -168,9 +153,7 @@ function hi.exrc.ls()
   local data_path = get_data_path()
   local exrc_dir_choices = io.open(data_path, 'r')
   if exrc_dir_choices then
-    for entry_line in exrc_dir_choices:lines() do
-      print(entry_line)
-    end
+    for entry_line in exrc_dir_choices:lines() do print(entry_line) end
     exrc_dir_choices:close()
   else
     print('<none>: no exrc choices saved to "' .. data_path .. '"')
@@ -192,7 +175,7 @@ function hi.exrc.rm()
     if entry_path ~= path then
       table.insert(updated_choices, entry_line)
     else
-      found=true
+      found = true
     end
   end
 
@@ -206,6 +189,4 @@ function hi.exrc.rm()
   end
 end
 
-return {
-  run_exrc = run_exrc
-}
+return {run_exrc = run_exrc}

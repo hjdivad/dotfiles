@@ -7,20 +7,17 @@ local hi = utils.hjdivad_init
 local ha = utils.hjdivad_auto
 local assign = utils.assign
 
-
 function ha.get_tmux_panes()
   local result = {}
-  local tmux_panes = utils.get_os_command_output({'tmux', 'list-panes', '-a', '-F', '#{pane_id}⊱#{window_name}⊱#{session_name}'})
+  local tmux_panes = utils.get_os_command_output({
+    'tmux', 'list-panes', '-a', '-F', '#{pane_id}⊱#{window_name}⊱#{session_name}'
+  })
   for _, entry in ipairs(tmux_panes) do
     local partsIter = entry:gmatch('([^⊱]+)[⊱]?')
     local pane_id = partsIter()
     local window_name = partsIter()
     local session_name = partsIter()
-    table.insert(result, {
-      pane_id = pane_id,
-      window_name = window_name,
-      session_name = session_name,
-    })
+    table.insert(result, {pane_id = pane_id, window_name = window_name, session_name = session_name})
   end
   return result
 end
@@ -37,7 +34,7 @@ function ha.goto_tmux_session(session_name, window_name)
   end
 
   if matching_pane then
-   vim.api.nvim_command([[silent !tmux switch-client -t \\]] .. matching_pane.pane_id)
+    vim.api.nvim_command([[silent !tmux switch-client -t \\]] .. matching_pane.pane_id)
   else
     vim.api.nvim_err_writeln('Cannot find tmux pane "' .. session_name .. ':' .. window_name .. '"')
   end
@@ -108,32 +105,25 @@ function ha.edit_generic_repl()
   local repl_cmd = nil
   local repl_extension = nil
 
-  vim.ui.input({
-    prompt = 'REPL command (e.g. node) > ',
-    default = 'node',
-  }, function (input)
-    repl_cmd = input
-  end)
+  vim.ui.input({prompt = 'REPL command (e.g. node) > ', default = 'node'},
+               function(input) repl_cmd = input end)
 
-  vim.ui.input({
-    prompt = 'REPL input file extension (e.g. js) > ',
-    default = 'js',
-  }, function (input)
-    repl_extension = input
-  end)
+  vim.ui.input({prompt = 'REPL input file extension (e.g. js) > ', default = 'js'},
+               function(input) repl_extension = input end)
 
-  if not repl_cmd then
-    error('No REPL command given. Please specify a commnad to start the REPL.')
-  end
+  if not repl_cmd then error('No REPL command given. Please specify a commnad to start the REPL.') end
 
   if not repl_extension then
-    error('No extension given. Please specify an extension (to trigger filetype) for your REPL input buffer')
+    error(
+      'No extension given. Please specify an extension (to trigger filetype) for your REPL input buffer')
   end
 
   ha.edit_repl(repl_cmd, repl_extension)
 
-  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl(']] .. repl_cmd .. [[', ']] .. repl_extension .. [[')]] .. ']]' .. [[<cr>']]
-  vim.notify([[To skip inputs next time, consider adding `]] .. suggested_keymap .. [[` to .vimrc.lua]], vim.log.levels.INFO, {})
+  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl(']] ..
+                             repl_cmd .. [[', ']] .. repl_extension .. [[')]] .. ']]' .. [[<cr>']]
+  vim.notify([[To skip inputs next time, consider adding `]] .. suggested_keymap ..
+               [[` to .vimrc.lua]], vim.log.levels.INFO, {})
 end
 
 local function setup_repls()
@@ -144,7 +134,6 @@ local function setup_repls()
     augroup end
   ]])
 end
-
 
 ---Create a keystroke mapping, i.e. keyboard shortcuts
 ---
@@ -161,50 +150,32 @@ end
 ---@param opts table    any options to pass to `nvim_set_keymap`
 ---@return nil
 local function map(mode, lhs, rhs, opts)
-  local options = { noremap = true }
+  local options = {noremap = true}
 
-  if opts then
-    options = vim.tbl_extend('force', options, opts)
-  end
+  if opts then options = vim.tbl_extend('force', options, opts) end
 
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-local function nmap(lhs, rhs, opts)
-  map('n', lhs, rhs, opts)
-end
+local function nmap(lhs, rhs, opts) map('n', lhs, rhs, opts) end
 
-local function nnoremap(lhs, rhs, opts)
-  map('n', lhs, rhs, assign({ noremap = true }, opts))
-end
+local function nnoremap(lhs, rhs, opts) map('n', lhs, rhs, assign({noremap = true}, opts)) end
 
-local function imap(lhs, rhs, opts)
-  map('i', lhs, rhs, opts)
-end
+local function imap(lhs, rhs, opts) map('i', lhs, rhs, opts) end
 
-local function tmap(lhs, rhs, opts)
-  map('t', lhs, rhs, opts)
-end
+local function tmap(lhs, rhs, opts) map('t', lhs, rhs, opts) end
 
-local function tnoremap(lhs, rhs, opts)
-  map('t', lhs, rhs, assign({ noremap = true }, opts))
-end
+local function tnoremap(lhs, rhs, opts) map('t', lhs, rhs, assign({noremap = true}, opts)) end
 
-local function unmap(mode, lhs)
-  vim.api.nvim_del_keymap(mode, lhs)
-end
+local function unmap(mode, lhs) vim.api.nvim_del_keymap(mode, lhs) end
 
 local function maptb(mode, lhs, rhs)
-  map(mode, lhs, [[<Cmd>lua require('telescope.builtin').]] .. rhs .. '<CR>', { silent = true })
+  map(mode, lhs, [[<Cmd>lua require('telescope.builtin').]] .. rhs .. '<CR>', {silent = true})
 end
 
-local function nmaptb(lhs, rhs)
-  maptb('n', lhs, rhs)
-end
+local function nmaptb(lhs, rhs) maptb('n', lhs, rhs) end
 
-local function imaptb(lhs, rhs)
-  maptb('i', lhs, rhs)
-end
+local function imaptb(lhs, rhs) maptb('i', lhs, rhs) end
 
 -- inform terminals that they are within an nvim instance
 vim.env.NVIM_WRAPPER = 1
@@ -224,5 +195,5 @@ return {
   setup_vimtest = testing.setup_vimtest,
   setup_repls = setup_repls,
   run_exrc = exrc.run_exrc,
-  setup_terminal = terminal.setup_terminal,
+  setup_terminal = terminal.setup_terminal
 }

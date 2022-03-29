@@ -20,14 +20,11 @@ else
   tmpdir = os_tmpdir .. Path.Sep .. 'hjdivad-init-test-tmp'
 end
 
-
 -- see <https://github.com/nvim-lua/plenary.nvim/blob/master/TESTS_README.md>
 -- see <http://olivinelabs.com/busted/#asserts>
 
-describe('Path', function ()
-  it('.Sep exists', function ()
-    assert.equals('/', Path.Sep)
-  end)
+describe('Path', function()
+  it('.Sep exists', function() assert.equals('/', Path.Sep) end)
 
   it('.join creates valid paths', function()
     assert.equals('/', Path.join('/', ''))
@@ -66,9 +63,7 @@ describe('File', function()
       os.execute('mkdir "' .. tmpdir .. '"')
     end)
 
-    after_each(function()
-      os.execute('rm -rf "' .. tmpdir .. '"')
-    end)
+    after_each(function() os.execute('rm -rf "' .. tmpdir .. '"') end)
 
     it('.cp_r copies files recursively', function()
       assert.equals(false, File.isdirectory(tmpdir .. '/foo'))
@@ -84,16 +79,13 @@ describe('File', function()
       assert.equals(true, File.readable(tmpdir .. '/foo/bar/dfile'))
     end)
   else
-    it('cannot test everything', function()
-      error('cannot determine os.tmpdir, unable to test file writing')
-    end)
+    it('cannot test everything',
+       function() error('cannot determine os.tmpdir, unable to test file writing') end)
   end
 end)
 
 describe('XDG helpers', function()
-  after_each(function()
-    __reset()
-  end)
+  after_each(function() __reset() end)
 
   it('xdg_data_path computes the xdg data path', function()
     -- no $XDG_DATA_HOME or $HOME
@@ -101,23 +93,23 @@ describe('XDG helpers', function()
     assert.equals(nil, xdg_data_path())
 
     -- no XDG_DATA_HOME, but we have HOME
-    __set_env({ HOME = '/home/user' })
+    __set_env({HOME = '/home/user'})
     assert.equals('/home/user/.local/share', xdg_data_path())
 
     -- XDG_DATA_HOME
-    __set_env({ XDG_DATA_HOME = '/some/absolute/path' })
+    __set_env({XDG_DATA_HOME = '/some/absolute/path'})
     assert.equals('/some/absolute/path', xdg_data_path())
 
     -- invalid XDG_DATA_HOME ignored
-    __set_env({ XDG_DATA_HOME = 'relative/path' })
+    __set_env({XDG_DATA_HOME = 'relative/path'})
     assert.equals(nil, xdg_data_path())
 
     -- XDG_DATA_HOME takes precedence over HOME
-    __set_env({ XDG_DATA_HOME = '/some/absolute/path', HOME = '/home/user' })
+    __set_env({XDG_DATA_HOME = '/some/absolute/path', HOME = '/home/user'})
     assert.equals('/some/absolute/path', xdg_data_path())
 
     -- invalid XDG_DATA_HOME ignored
-    __set_env({ XDG_DATA_HOME = 'relative/path', HOME = '/home/user' })
+    __set_env({XDG_DATA_HOME = 'relative/path', HOME = '/home/user'})
     assert.equals('/home/user/.local/share', xdg_data_path())
   end)
 
@@ -127,23 +119,23 @@ describe('XDG helpers', function()
     assert.equals(nil, xdg_config_path())
 
     -- no XDG_CONFIG_HOME, but we have HOME
-    __set_env({ HOME = '/home/user' })
+    __set_env({HOME = '/home/user'})
     assert.equals('/home/user/.config', xdg_config_path())
 
     -- XDG_CONFIG_HOME
-    __set_env({ XDG_CONFIG_HOME = '/some/absolute/path' })
+    __set_env({XDG_CONFIG_HOME = '/some/absolute/path'})
     assert.equals('/some/absolute/path', xdg_config_path())
 
     -- invalid XDG_CONFIG_HOME ignored
-    __set_env({ XDG_CONFIG_HOME = 'relative/path' })
+    __set_env({XDG_CONFIG_HOME = 'relative/path'})
     assert.equals(nil, xdg_config_path())
 
     -- XDG_CONFIG_HOME takes precedence over HOME
-    __set_env({ XDG_CONFIG_HOME = '/some/absolute/path', HOME = '/home/user' })
+    __set_env({XDG_CONFIG_HOME = '/some/absolute/path', HOME = '/home/user'})
     assert.equals('/some/absolute/path', xdg_config_path())
 
     -- invalid XDG_CONFIG_HOME ignored
-    __set_env({ XDG_CONFIG_HOME = 'relative/path', HOME = '/home/user' })
+    __set_env({XDG_CONFIG_HOME = 'relative/path', HOME = '/home/user'})
     assert.equals('/home/user/.config', xdg_config_path())
   end)
 end)
