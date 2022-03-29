@@ -418,10 +418,6 @@ local function setup_language_servers()
     on_attach = on_lsp_attach,
   }
 
-  local filetypes = {
-    typescript = 'eslint',
-    javascript = 'eslint',
-  }
   local linters = {
     eslint = {
       sourceName = 'eslint',
@@ -444,18 +440,23 @@ local function setup_language_servers()
   }
 
   local formatters = {
-    prettier = { command = "prettier", args = {"--stdin-filepath", "%filepath"}}
+    prettier = { command = "prettier", args = {"--stdin-filepath", "%filepath"}},
+    lua_format = { command = "lua-format", args = "%filepath" }
   }
 
   local formatFiletypes = {
     typescript = "prettier",
+    lua = "lua_format",
   }
 
   -- see <https://github.com/iamcco/diagnostic-languageserver>
   lsp.diagnosticls.setup {
-    filetypes = vim.tbl_keys(filetypes),
+    filetypes = { 'typescript', 'javascript', 'lua' },
     init_options = {
-      filetypes = filetypes,
+      filetypes = {
+        typescript = 'eslint',
+        javascript = 'eslint',
+      },
       linters = linters,
       formatters = formatters,
       formatFiletypes = formatFiletypes
@@ -474,8 +475,7 @@ local function setup_plugins()
 
   vim.g.nvim_tree_highlight_opened_files = 1 -- highlight open files + folders
   vim.g.nvim_tree_group_empty = 1 -- compact folders that contain only another folder
-  require'nvim-tree'.setup {
-    auto_close = true, -- close vim when NVIMTree is the last window standing
+  require('nvim-tree').setup {
     update_focused_file = {
       enable = true, -- highlight focused file in NVIMTree
       update_cwd = false,
@@ -744,7 +744,9 @@ function hi.plugins()
     -- 'mustache/vim-mustache-handlebars'; -- .hbs support
   }
 
-  paq.install()
+  paq.clean() -- :he paq.clean
+  paq.update() -- :he paq.update
+  paq.install() -- :he paq.install
 end
 
 setup_plugins()
