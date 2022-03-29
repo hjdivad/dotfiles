@@ -22,6 +22,7 @@ function ha.terminal_onopen()
   vim.wo.winfixwidth = true
   vim.wo.number = false
   vim.wo.relativenumber = false
+  vim.opt_local.spell = false
   vim.cmd([[vertical resize]] .. get_terminal_expected_width())
   vim.api.nvim_buf_set_keymap(0 --[[current buffer]], 'n', '<c-w>n', '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
   vim.api.nvim_buf_set_keymap(0 --[[current buffer]], 'n', '<c-w><c-n>', '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
