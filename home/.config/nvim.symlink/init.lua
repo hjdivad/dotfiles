@@ -401,8 +401,9 @@ local function setup_language_servers()
   }
 
   local formatters = {
-    prettier = {command = "prettier", args = {"--stdin-filepath", "%filepath"}},
-    lua_format = {command = "lua-format", args = {"%filepath"}}
+    prettier = {command = "prettier", args = {"--stdin-filepath", "%filepath"}}
+    -- TODO: this formats with the buffer contents *before* save
+    -- lua_format = {command = "lua-format", args = {"%filepath"}}
   }
 
   local formatFiletypes = {typescript = "prettier", lua = "lua_format"}
@@ -466,6 +467,7 @@ local function setup_plugins()
     mapping = {['<c-l>'] = cmp.mapping.confirm({select = true})},
     sources = cmp.config.sources({
       {name = 'nvim_lsp'}, {name = 'nvim_lsp_signature_help'}, {name = 'nvim_lua'}, -- lua nvim api completion (vim.lsp.* &c.)
+      -- TODO: doesn't expand @param within /** */
       {name = 'ultisnips'}, -- UltiSnipsEdit + UltiSnipsAddFileTypes
       {name = 'buffer'}, {name = 'path'}, -- trigger via `/`
       {name = 'cmdline'}, {name = 'calc'}, {name = 'emoji'} -- trigger via `:` in insert mode
