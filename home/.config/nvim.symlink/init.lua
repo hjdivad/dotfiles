@@ -284,7 +284,7 @@ local function setup_lsp_mappings()
   nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
   nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
   -- useful for exploring multiple results e.g. multiple references
-  nmap('<leader>gt', '<cmd>TroubleToggle') -- toggle trouble window
+  nmap('<leader>gt', '<cmd>TroubleToggle<cr>') -- toggle trouble window
   nmap('<leader>gci', '<cmd>lua vim.lsp.buf.incoming_calls()<cr>') -- who calls this function?
   nmap('<leader>gco', '<cmd>lua vim.lsp.buf.outgoing_calls()<cr>') -- who does this function call?
 
