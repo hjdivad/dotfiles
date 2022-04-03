@@ -3,7 +3,8 @@
 #		snippet trigger_word [ "description" [ options ] ]
 #
 # and end with:
-# endsnippet
+#
+#		endsnippet
 #
 # Snippet options:
 #
@@ -22,42 +23,12 @@
 #		endsnippet
 #
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
-# https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L511
-# https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L821
 
-snippet ::succeeds-under-relation-⊱::
-⊱
+
+snippet @param "jsdoc @param"
+@param {${1:type}} ${2:paramName ([optionalName], [optional=defaultValue])} - ${0:description}
 endsnippet
 
-snippet ::middle-dot-·:: "· Middle Dot"
-·
-endsnippet
-
-snippet ::real-numbers-ℝ::
-ℝ
-endsnippet
-
-snippet ::function-𝑓::
-𝑓
-endsnippet
-
-
-snippet ::command-⌘::
-⌘
-endsnippet
-
-snippet ::option-⌥::
-⌥
-endsnippet
-
-snippet ::shift-⇧::
-⇧
-endsnippet
-
-snippet ::return-⏎::
-⏎
-endsnippet
-
-snippet ::backspace-⌫::
-⌫
+snippet @return "jsdoc @return"
+@return {${1:type}} - ${0:description}
 endsnippet

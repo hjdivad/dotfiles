@@ -24,57 +24,61 @@
 #
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
 
-snippet "import default" "import statement"
+# ⚠️ WARNING ⚠️
+# UltiSnipsEdit will open this file even if there's a nested filetype as detected by TreeSitter (e.g. jsdoc)
+# Check :TSPlaygroundToggle ; I (show language) if snippets aren't appearing
+
+snippet import:default "import statement"
 import ${0:symbol} from '${1:path}';
 endsnippet
 
-snippet "import named" "import (named) statement"
+snippet import:named "import (named) statement"
 import { ${0:symbol} } from '${1:path}';
 endsnippet
 
-snippet "eslint disable next line" "eslint disable"
+snippet eslint:disable:next-line "eslint disable"
 // eslint-disable-next-line ${1:rule}
 endsnippet
 
 
-snippet "test jest describe" "jest describe"
+snippet test:jest:describe "jest describe"
 describe('${1:something}', function() {
 	${0}
 });
 endsnippet
 
-snippet "test jest it" "jest it"
+snippet test:jest:it "jest it"
 it('${1:does something}', function() {
 	${0:expect('implemented').toEqual('true');}
 });
 endsnippet
 
-snippet "test jest test" "jest test"
+snippet test:jest:test "jest test"
 test('${1:something probably happens}', function() {
 	${0:expect('implemented').toEqual('true');}
 });
 endsnippet
 
 
-snippet "test qunit beforeEach" "qunit beforeEach"
+snippet test:qunit:beforeEach "qunit beforeEach"
 beforeEach(${1:async }function(${2:assert}) {
 	${0}
 });
 endsnippet
 
-snippet "test qunit afterEach" "qunit afterEach"
+snippet test:qunit:afterEach "qunit afterEach"
 afterEach(${1:async }function(${2:assert}) {
 	${0}
 });
 endsnippet
 
-snippet "test qunit module" "qunit module"
+snippet test:qunit:module "qunit module"
 module('${1:module}', function(hooks) {
 	${0}
 });
 endsnippet
 
-snippet "test qunit test" "qunit test"
+snippet test:qunit:test "qunit test"
 test('${1:something probably happens}', ${2:async }function(assert) {
 	${0:assert.equal('implemented', true)}
 });
@@ -82,17 +86,10 @@ endsnippet
 
 
 # TODO: fix this up to check params &c.
-snippet "/**" "function documentation"
+snippet /** "function documentation"
 /**
  * ${0}
  */
 endsnippet
 
-snippet "@param" "jsdoc @param"
-@param {${1:type}} ${2:paramName ([optionalName], [optional=defaultValue])} - ${0:description}
-endsnippet
-
-snippet doc-return "jsdoc @return"
-@return {${1:type}} - ${0:description}
-endsnippet
 
