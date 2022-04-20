@@ -459,22 +459,20 @@ local function setup_plugins()
   vim.g.bclose_no_default_mapping = true
 
   local cmp = require 'cmp'
-  -- TODO: get nonicons working in completion
-  -- see <https://github.com/hrsh7th/nvim-cmp/issues/750>
-  -- see cmp-config.formatting.format
   cmp.setup {
     snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},
     mapping = {['<c-l>'] = cmp.mapping.confirm({select = true})},
     sources = cmp.config.sources({
-      {name = 'nvim_lsp'}, {name = 'nvim_lsp_signature_help'}, {name = 'nvim_lua'}, -- lua nvim api completion (vim.lsp.* &c.)
-      -- TODO: doesn't expand @param within /** */
+      {name = 'nvim_lsp'}, -- complete symbols (via LSP)
+      {name = 'nvim_lsp_signature_help'}, -- signature completion
+      {name = 'nvim_lua'}, -- lua nvim api completion (vim.lsp.* &c.)
       {name = 'ultisnips'}, -- UltiSnipsEdit + UltiSnipsAddFileTypes
       {name = 'buffer'}, {name = 'path'}, -- trigger via `/`
       {name = 'cmdline'}, {name = 'calc'}, {name = 'emoji'} -- trigger via `:` in insert mode
     })
   }
 
-  -- configure /@ search for this buffer's document symbols
+  -- -- configure /@ search for this buffer's document symbols
   cmp.setup.cmdline('/', {
     sources = cmp.config.sources({{name = 'nvim_lsp_document_symbol'}}, {{name = 'buffer'}})
   })
@@ -599,8 +597,12 @@ function hi.plugins()
     ---diagnostics
     'folke/lsp-colors.nvim', 'folke/trouble.nvim', -- pretty diagnostics
     ---completion
-    'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline',
-    'quangnguyen30192/cmp-nvim-ultisnips', 'hrsh7th/cmp-nvim-lsp-signature-help',
+    'hrsh7th/cmp-nvim-lsp', -- complete by lsp symbols
+    'hrsh7th/cmp-buffer', -- complete by keywords in buffer
+    'hrsh7th/cmp-path', -- complete file paths
+    'hrsh7th/cmp-cmdline', -- /@ searches this buffer's document symbols
+    'quangnguyen30192/cmp-nvim-ultisnips', -- complete by UltiSnips snippets
+    'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-emoji', 'hrsh7th/cmp-nvim-lua', 'hrsh7th/cmp-calc', -- *very* simple calculations
     'hrsh7th/cmp-nvim-lsp-document-symbol', -- /@ search buffer for LSP document symbols
     'hrsh7th/nvim-cmp', -- TODO: try https://github.com/hrsh7th/cmp-copilot
@@ -663,3 +665,4 @@ setup_mappings()
 hjdivad.setup_terminal()
 setup_window_management()
 hjdivad.run_exrc()
+
