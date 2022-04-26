@@ -175,8 +175,8 @@ local function setup_mappings()
   nmap('k', 'gk') -- move row-wise instead of line-wise
   nmap('<leader><leader>', '<cmd>nohl | checktime<cr>') -- use ,, to clear highlights after a search
 
-  nmap('<leader>ne', '<cmd>lua ha.toggle_nvim_tree()<cr>')
-  nmap('<leader>nt', '<cmd>lua ha.toggle_terminal()<cr>')
+  nmap('<leader>nf', '<cmd>lua ha.toggle_nvim_tree()<cr>') -- "now files"
+  nmap('<leader>nt', '<cmd>lua ha.toggle_terminal()<cr>') -- "now terminal"
 
   nnoremap([[']], '`') -- 'x is much easier to hit than `x and has more useful semantics: ie switching
   -- to the column of the mark as well as the row
