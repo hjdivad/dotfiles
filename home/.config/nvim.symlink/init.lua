@@ -468,7 +468,11 @@ local function setup_plugins()
   local cmp = require 'cmp'
   cmp.setup {
     snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},
-    mapping = {['<c-l>'] = cmp.mapping.confirm({select = true})},
+    mapping = {
+      ['<c-l>'] = cmp.mapping.confirm({select = true}),
+      ['<c-j>'] = cmp.mapping.select_next_item(),
+      ['<c-k>'] = cmp.mapping.select_prev_item(),
+    },
     sources = cmp.config.sources({
       {name = 'nvim_lsp'}, -- complete symbols (via LSP)
       {name = 'nvim_lsp_signature_help'}, -- signature completion
