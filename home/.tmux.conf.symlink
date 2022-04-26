@@ -44,6 +44,9 @@ setw -g automatic-rename
 set -g set-titles on
 set -g set-titles-string '[#I] #W'
 
+# set focus-events to help &autoread in neovim, per :checkhealth
+set -g focus-events on
+
 
 # In version 2.1 "mouse" replaced the previous 4 mouse options
 if-shell -b '[ "$(echo "$TMUX_VERSION >= 2.1" | bc)" = 1 ]' \
