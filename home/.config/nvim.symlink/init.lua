@@ -138,12 +138,17 @@ local function setup_colours()
 
   vim.cmd 'silent! colorscheme onedark'
   -- onedark doesn't specify undercurls
+  -- TODO: change the coloring to nvim_create_autocmd for ColorScheme
   vim.cmd([[
     hi DiagnosticUnderlineError gui=undercurl
     hi DiagnosticUnderlineHint gui=undercurl
     hi DiagnosticUnderlineInfo gui=undercurl
     hi DiagnosticUnderlineWarn gui=undercurl
+
     hi SpellBad gui=undercurl
+
+    hi markdownTSStrong guifg=#E5C07B cterm=bold gui=bold       " guifg=Type
+    hi markdownTSEmphasis guifg=#C678DD cterm=italic gui=italic " guifg=Question
     " TODO: add highlights for cmp-highlight
   ]])
 end
