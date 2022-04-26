@@ -348,6 +348,7 @@ local function setup_language_servers()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
+  -- list of configurations at <https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md>
   local lsp = require 'lspconfig'
 
   lsp.sumneko_lua.setup {
