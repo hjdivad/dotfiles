@@ -283,7 +283,9 @@ local function setup_lsp_mappings()
   -- maptb('n', '<leader>gr', 'lsp_references()') -- go to reference(s)
 
   ---trouble variant
-  nmap('<leader>gd', '<cmd>Trouble lsp_definitions<cr>') -- go to definition
+  --- see <https://github.com/folke/trouble.nvim/issues/153>
+  -- nmap('<leader>gd', '<cmd>Trouble lsp_definitions<cr>') -- go to definition
+  maptb('n', '<leader>gd', 'lsp_definitions()') -- list document symbols
   nmap('<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>') -- go to type definition
   nmap('<leader>gi', '<cmd>Trouble lsp_implementation<cr>') -- go to implementation
   nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
