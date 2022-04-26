@@ -1,3 +1,5 @@
+-- TODO: bootstrap check + provide bootstrap.lua for new boxes
+
 local hjdivad = require 'hjdivad/main'
 -- the global namespace, for adding userland hooks like `plugins`
 -- as well as entry points for autocommands
