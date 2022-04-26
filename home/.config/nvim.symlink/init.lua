@@ -525,9 +525,17 @@ local function setup_plugins()
   telescope.load_extension('ultisnips') -- :Telescope ultisnips snippets search
   telescope.load_extension('fzf') -- use fzf over fzy to get operators
 
+  -- see <https://github.com/nvim-treesitter/nvim-treesitter#modules>
   require'nvim-treesitter.configs'.setup {
-    ensure_installed = 'maintained',
-    highlight = {enable = true}
+    ensure_installed = 'all',
+    highlight = {
+      enable = true,
+
+      disable = {
+        'lua', -- TS errors in <init.lua>
+        'vim', -- more TS errors for e.g. </Users/hjdivad/.local/share/nvim/site/pack/paqs/start/onedark.vim/colors/onedark.vim>
+      }
+    }
     -- TODO: set up textobjects
     -- see <https://github.com/hjdivad/dotfiles/blob/a22557c32bfb69e574114f6c39b832f7b34da132/home/.config/nvim.symlink/init.vim#L921-L936>
   }
