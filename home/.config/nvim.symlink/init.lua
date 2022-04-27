@@ -201,6 +201,8 @@ local function setup_mappings()
 
   nmap('<leader>ll', '<cmd>Trouble document_diagnostics<cr>') -- lint list
   nmap('<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>') -- lint list (more)
+
+  -- TODO: these two (ln, lp) seem to be broken in nvim 0.7.0
   nmap('<leader>ln', [[<cmd>lua require('trouble').next({ skip_groups = true, jump = true })<cr>]]) -- lint next
   nmap('<leader>lp',
        [[<cmd>lua require('trouble').previous({ skip_groups = true, jump = true })<cr>]]) -- lint prev
@@ -285,15 +287,15 @@ local function setup_lsp_mappings()
   -- maptb('n', '<leader>gr', 'lsp_references()') -- go to reference(s)
 
   ---trouble variant
-  --- see <https://github.com/folke/trouble.nvim/issues/153>
+  -- see <https://github.com/folke/trouble.nvim/issues/153>
   -- nmap('<leader>gd', '<cmd>Trouble lsp_definitions<cr>') -- go to definition
   maptb('n', '<leader>gd', 'lsp_definitions()') -- list document symbols
   nmap('<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>') -- go to type definition
   nmap('<leader>gi', '<cmd>Trouble lsp_implementation<cr>') -- go to implementation
   nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
-  nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
   -- useful for exploring multiple results e.g. multiple references
   nmap('<leader>gt', '<cmd>TroubleToggle<cr>') -- toggle trouble window
+
   nmap('<leader>gci', '<cmd>lua vim.lsp.buf.incoming_calls()<cr>') -- who calls this function?
   nmap('<leader>gco', '<cmd>lua vim.lsp.buf.outgoing_calls()<cr>') -- who does this function call?
 
