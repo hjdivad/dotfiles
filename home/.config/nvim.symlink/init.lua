@@ -668,8 +668,7 @@ function hi.plugins()
     'hjdivad/vim-pdl', -- extremely primitive PDL support
     'gutenye/json5.vim', -- syntax highlighting for json5
     'jparise/vim-graphql', -- syntax highlighting for graphql
-    -- disabled for now in favour of TreeSitter
-    -- 'preservim/vim-markdown', -- better markdown (folds, syntax &c.)
+    'preservim/vim-markdown', -- better markdown (folds, syntax &c.)
     {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'} -- preview rendered markdown in browser
     -- TODO: this one doesn't seem great; look for treesitter alternative
     -- 'mustache/vim-mustache-handlebars'; -- .hbs support
