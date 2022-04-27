@@ -25,7 +25,7 @@
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
 
 # ⚠️ WARNING ⚠️
-# UltiSnipsEdit will open this file even if there's a nested filetype as detected by TreeSitter (e.g. jsdoc)
+# UltiSnipsEdit will open this file even if there's a nested filetype as detected by TreeSitter (e.g. jsdoc); but the snippets that will actually expand will be those of the nested filetype
 # Check :TSPlaygroundToggle ; I (show language) if snippets aren't appearing
 
 snippet import:default "import statement"
@@ -35,6 +35,28 @@ endsnippet
 snippet import:named "import (named) statement"
 import { ${0:symbol} } from '${1:path}';
 endsnippet
+
+# TODO: fix this up to check params &c.
+snippet /** "function documentation"
+/**
+ * ${0}
+ */
+endsnippet
+
+snippet try:catch "try/catch block"
+try {
+	${1}
+} catch (err) {
+	${0}
+}
+endsnippet
+
+snippet if:then "if block"
+if (${1}) {
+	${0}
+}
+endsnippet
+
 
 snippet eslint:disable:next-line "eslint disable"
 // eslint-disable-next-line ${1:rule}
@@ -85,11 +107,5 @@ test('${1:something probably happens}', ${2:async }function(assert) {
 endsnippet
 
 
-# TODO: fix this up to check params &c.
-snippet /** "function documentation"
-/**
- * ${0}
- */
-endsnippet
 
 
