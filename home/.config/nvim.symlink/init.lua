@@ -336,18 +336,6 @@ local function setup_language_servers()
     -- for plugins with `on_attach` call them here
   end
 
-  -- setup lua
-  local sumneko_root = ''
-  local sumneko_binary = ''
-
-  if vim.fn.has('mac') then
-    sumneko_root = '/Users/' .. User .. '/src/sumneko/lua-language-server'
-    sumneko_binary = sumneko_root .. '/bin/lua-language-server'
-  elseif vim.fn.has('unix') then
-    sumneko_root = '/home/' .. User .. '/src/sumneko/lua-language-server'
-    sumneko_binary = sumneko_root .. '/bin/lua-language-server'
-  end
-
   -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
@@ -357,7 +345,7 @@ local function setup_language_servers()
 
   lsp.sumneko_lua.setup {
     capabilities = capabilities,
-    cmd = {sumneko_binary},
+    cmd = { 'lua-language-server' },
     settings = {
       Lua = {
         runtime = {
