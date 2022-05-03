@@ -56,7 +56,7 @@ endsnippet
 
 snippet agenda
 agenda:*@${1:hjdivad}*:
-- [ ] 🔘 ${0}
+- [ ] ${0}
 endsnippet
 
 snippet action:items
@@ -80,8 +80,8 @@ endsnippet
 snippet meeting:ad-hoc
 # Mtg: ${1:Meeting Description}
 
-### next 
-${1}
+### ${1:date} 
+${2}
 
 **Attendees**:
 ${0}
@@ -105,8 +105,11 @@ snippet project
 ${0}
 
 ## Ref
+
 ## Log
+
 ## ARCHIVE
+
 endsnippet
 
 snippet daily
@@ -153,9 +156,6 @@ endsnippet
 snippet log:weekly
 ### ${0:week}
 
-- [ ] 🔘 Erik to Lundberg x1
-- [ ] 🔘 Erik to Lundberg x2
-- [ ] 🔘 Erik to Josh&Beth
 endsnippet
 
 snippet log:monthly
