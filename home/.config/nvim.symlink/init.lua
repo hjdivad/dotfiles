@@ -471,7 +471,9 @@ local function setup_plugins()
       { name = 'nvim_lsp_signature_help' }, -- signature completion
       { name = 'nvim_lua' }, -- lua nvim api completion (vim.lsp.* &c.)
       { name = 'ultisnips' }, -- UltiSnipsEdit + UltiSnipsAddFileTypes
-      { name = 'buffer' }, { name = 'path' }, -- trigger via `/`
+      -- This is useful when there is no LSP, but with an LSP + snippets it's mostly noise
+      -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
+      { name = 'path' }, -- trigger via `/`
       { name = 'cmdline' }, { name = 'calc' }, { name = 'emoji' } -- trigger via `:` in insert mode
     })
   }
