@@ -99,25 +99,28 @@ local function run_exrc()
     --[[1]]
     'Yes: run .vimrc and add .vim to runtimepath (remember choice)',
     --[[2]]
-    'Yes (once): run .vimrc and add .vim to runtimepath (this time)',
-    --[[3]]
     'No: do not run .vimrc or add .vim to runtimepath (remember choice)',
+    --[[3]]
+    'Yes (once): run .vimrc and add .vim to runtimepath (this time)',
     --[[4]]
     'No (once): do not run .vimrc or add .vim to runtimepath (this time)'
   }, {
     prompt = '.vimrc or .vim detected.\nRun automatically?\nOnly do this if you trust the contents of "' ..
-      cwd .. '"\n' .. [[see :help 'exrc' for details.]] .. '\n'
+        cwd .. '"\n' .. [[see :help 'exrc' for details.]] .. '\n'
   }, function(_, idx)
     if idx == 1 then
+      -- run & save
       exrc(vimrc, rtp)
       saved_choice = true
     elseif idx == 2 then
+      -- ignore & save
+      saved_choice = false
+    elseif idx == 3 then
+      -- run this time
       exrc(vimrc, rtp)
       return
-    elseif idx == 3 then
-      saved_choice = false
     elseif idx == 4 then
-      -- NOP user explicitly said no + don't save
+      -- skip this time
       return
     else
       --- NOP user canceled via q or blank selection
