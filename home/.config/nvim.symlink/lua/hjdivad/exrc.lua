@@ -45,7 +45,7 @@ local function iterate_exrc_choices()
   return function()
     local entry_line = next_line()
     if entry_line then
-      local entry = vim.split(entry_line, exrc_entry_sep, {plain = true})
+      local entry = vim.split(entry_line, exrc_entry_sep, { plain = true })
       return entry[1], entry[2], exrc_dir_choices, entry_line
     else
       exrc_dir_choices:close()
@@ -189,4 +189,4 @@ function hi.exrc.rm()
   end
 end
 
-return {run_exrc = run_exrc}
+return { run_exrc = run_exrc }
