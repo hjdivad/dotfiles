@@ -15,7 +15,7 @@
   fo = fetch --prune origin
   fa = fetch --prune --all
 
-  rr = !sh -c 'git rebase -i $(git merge-base HEAD origin/master)'
+  rr = !sh -c 'git rebase -i $(git merge-base HEAD origin/HEAD)'
   rc = rebase --continue
 
   ap = add --patch
@@ -38,18 +38,18 @@
 
   wc = whatchanged -p -w -B
   wcw = whatchanged -p -w --color-words
-  wcwb = whatchanged -p -w --color-words origin/master..
+  wcwb = whatchanged -p -w --color-words origin/HEAD..
 
   log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!dependabot)'"
   log-sans-botm =  "!f() { git log --no-merges \"$@\"; }; f -P --author='^(?!dependabot)'"
   log-since-last-release = "!f() { git log \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot)'"
   lg = log-sans-bot --stat
-  logb = log-sans-bot origin/master..
-  logr = log-sans-bot ..origin/master
-  lgb = log-sans-bot --no-merges --stat origin/master..
-  lgr = log-sans-bot --no-merges --stat ..origin/master
+  logb = log-sans-bot origin/HEAD..
+  logr = log-sans-bot ..origin/HEAD
+  lgb = log-sans-bot --no-merges --stat origin/HEAD..
+  lgr = log-sans-bot --no-merges --stat ..origin/HEAD
 
-  todo = diff origin/master -G'TO\\s?DO\\s*:' --no-prefix
+  todo = diff origin/HEAD -G'TO\\s?DO\\s*:' --no-prefix
 
   dc = diff --cached
   dcw = diff --cached --ignore-all-space --color-words
