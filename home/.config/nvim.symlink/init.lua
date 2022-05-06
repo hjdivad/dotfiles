@@ -190,7 +190,7 @@ local function setup_mappings()
   nmaptb('<leader>fm', 'marks()') -- find marks
   nmaptb('<leader>fb', 'buffers()') -- find opened files (in buffers)
   -- TODO: use rg + fuzzy matching instead of builtin live grep
-  nmaptb('<leader>fr', 'live_grep()') -- grep from pwd
+  nmaptb('<leader>fr', [[grep_string({ search='' })]]) -- fuzzy search against ~ rg .
   -- TODO: nice to add a (current_class_fuzzy_find, current_method_fuzzy_find &c.) using treesitter
   -- or perhaps using text objects? fuzzy_find_lines_in_text_objects <af> a function
   nmaptb('<leader>fi', 'current_buffer_fuzzy_find()') -- find (fuzzy) in current buffer
