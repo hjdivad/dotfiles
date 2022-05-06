@@ -1,6 +1,7 @@
 -- TODO: bootstrap check + provide bootstrap.lua for new boxes
 
-local hjdivad = require 'hjdivad/main'
+local hjdivad = require('hjdivad/main')
+
 -- the global namespace, for adding userland hooks like `plugins`
 -- as well as entry points for autocommands
 local hi = hjdivad.hjdivad_init
@@ -432,11 +433,68 @@ local function setup_plugins()
   vim.g.nvim_tree_highlight_opened_files = 1 -- highlight open files + folders
   vim.g.nvim_tree_group_empty = 1 -- compact folders that contain only another folder
   require('nvim-tree').setup {
+    view = {
+      mappings ={
+        custom_only=true,
+        list = {
+          --- default mappings
+          -- copied from :nvim-tree-mappings
+          -- custom mappings seem to only work with custom_only=true
+          { key = {"<CR>", "o", "<2-LeftMouse>"}, action = "edit" },
+          { key = "<C-e>",                        action = "edit_in_place" },
+          { key = {"O"},                          action = "edit_no_picker" },
+          { key = {"<2-RightMouse>", "<C-]>"},    action = "cd" },
+          { key = "<C-v>",                        action = "vsplit" },
+          { key = "<C-x>",                        action = "split" },
+          { key = "<C-t>",                        action = "tabnew" },
+          { key = "<",                            action = "prev_sibling" },
+          { key = ">",                            action = "next_sibling" },
+          { key = "P",                            action = "parent_node" },
+          { key = "<BS>",                         action = "close_node" },
+          { key = "<Tab>",                        action = "preview" },
+          { key = "K",                            action = "first_sibling" },
+          { key = "J",                            action = "last_sibling" },
+          { key = "I",                            action = "toggle_git_ignored" },
+          { key = "H",                            action = "toggle_dotfiles" },
+          { key = "R",                            action = "refresh" },
+          { key = "a",                            action = "create" },
+          { key = "d",                            action = "remove" },
+          { key = "D",                            action = "trash" },
+          { key = "r",                            action = "rename" },
+          { key = "<C-r>",                        action = "full_rename" },
+          { key = "x",                            action = "cut" },
+          { key = "c",                            action = "copy" },
+          { key = "p",                            action = "paste" },
+          { key = "y",                            action = "copy_name" },
+          { key = "Y",                            action = "copy_path" },
+          { key = "gy",                           action = "copy_absolute_path" },
+          { key = "[c",                           action = "prev_git_item" },
+          { key = "]c",                           action = "next_git_item" },
+          { key = "-",                            action = "dir_up" },
+          { key = "s",                            action = "system_open" },
+          { key = "q",                            action = "close" },
+          { key = "g?",                           action = "toggle_help" },
+          { key = 'W',                            action = "collapse_all" },
+          { key = "S",                            action = "search_node" },
+          { key = ".",                            action = "run_file_command" },
+          { key = "<C-k>",                        action = "toggle_file_info" },
+          { key = "U",                            action = "toggle_custom" },
+          --- custom mappings
+          {
+            key = '<leader>fr',
+            action = '',
+            action_cb = function (node)
+              require('telescope.builtin').grep_string({ search='', search_dirs={ node.absolute_path } })
+            end
+          },
+        }
+      },
+    },
+    diagnostics = { enable = true, show_on_dirs = true },
     update_focused_file = {
       enable = true, -- highlight focused file in NVIMTree
       update_cwd = false
     },
-    diagnostics = { enable = true, show_on_dirs = true },
     -- :h nvinm-tree.filters for additional file hiding
     actions = {
       open_file = {
