@@ -310,6 +310,17 @@ local function setup_lsp_mappings()
   nmap('<leader>rn', [[<cmd>lua vim.buf.rename()<cr>]], { silent = true }) -- rename
 
   imap('<c-h>', [[<cmd>lua vim.lsp.buf.signature_help()<cr>]], { silent = true })
+
+
+  vim.keymap.set('v', '<leader>rf', function()
+    local vis_start = vim.api.nvim_buf_get_mark(0, '<')
+    local vis_end = vim.api.nvim_buf_get_mark(0, '>')
+    vim.lsp.buf.range_formatting({}, vis_start, vis_end)
+    -- it would be nice to exit visual mode here. The following works:
+    --  :lua vim.cmd('stopinsert')
+    -- so it's not obvious to me why it wouldn't work in a callback
+    -- vim.cmd('stopinsert')
+  end)
 end
 
 local function setup_language_servers()
