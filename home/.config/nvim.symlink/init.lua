@@ -389,6 +389,10 @@ local function setup_language_servers()
 
   lsp.jsonls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
+  lsp.html.setup { capabilities = capabilities, on_attach = on_lsp_attach }
+
+  lsp.cssls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
+
   lsp.bashls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
   local linters = {
@@ -414,20 +418,16 @@ local function setup_language_servers()
 
   local formatters = {
     prettier = { command = "prettier", args = { "--stdin-filepath", "%filepath" } }
-    -- TODO: this formats with the buffer contents *before* save
-    -- lua_format = {command = "lua-format", args = {"%filepath"}}
   }
-
-  local formatFiletypes = { typescript = "prettier", lua = "lua_format" }
 
   -- see <https://github.com/iamcco/diagnostic-languageserver>
   lsp.diagnosticls.setup {
-    filetypes = { 'typescript', 'javascript', 'lua' },
+    filetypes = { 'typescript', 'javascript' },
     init_options = {
-      filetypes = { typescript = 'eslint', javascript = 'eslint' },
       linters = linters,
+      filetypes = { typescript = 'eslint', javascript = 'eslint' },
       formatters = formatters,
-      formatFiletypes = formatFiletypes
+      formatFiletypes = { typescript = 'prettier' }
     }
   }
 end
