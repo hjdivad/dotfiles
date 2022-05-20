@@ -404,9 +404,22 @@ local function setup_language_servers()
 
   lsp.jsonls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
+
   lsp.html.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
   lsp.cssls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
+
+  lsp.yamlls.setup {
+    capabilities = capabilities,
+    on_attach = on_lsp_attach,
+    schemas = {
+      -- per-file modelines look like
+      -- # yaml-language-server: $schema=<urlToTheSchema|relativeFilePath|absoluteFilePath}>
+      --
+      -- Otherwise patterns can be added here
+      ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+    }
+  }
 
   lsp.bashls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
