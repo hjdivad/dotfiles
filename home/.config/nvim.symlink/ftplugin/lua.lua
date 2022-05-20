@@ -3,3 +3,6 @@
 -- with ---, see e.g. the docs generated at
 -- <https://github.com/sumneko/lua-language-server/blob/master/meta/template/string.lua>
 vim.opt_local.comments:prepend(':---')
+
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
