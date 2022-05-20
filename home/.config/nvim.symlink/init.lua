@@ -288,6 +288,9 @@ local function setup_mappings()
   nmap('<leader>8', '8gt') -- go to tab 8
   nmap('<leader>9', '9gt') -- go to tab 9
   nmap('<leader>0', '10gt') -- go to tab 10
+
+  -- yank GitHub permalink to clipboard
+  vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true })
 end
 
 local function setup_lsp_mappings()
