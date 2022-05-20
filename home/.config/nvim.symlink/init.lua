@@ -6,50 +6,50 @@ local hjdivad = require('hjdivad/main')
 -- as well as entry points for autocommands
 local hi = hjdivad.hjdivad_init
 
-local map = hjdivad.map
-local nmap = hjdivad.nmap
+local map      = hjdivad.map
+local nmap     = hjdivad.nmap
 local nnoremap = hjdivad.nnoremap
-local imap = hjdivad.imap
+local imap     = hjdivad.imap
 local tnoremap = hjdivad.tnoremap
-local nmaptb = hjdivad.nmaptb
-local unmap = hjdivad.unmap
-local maptb = hjdivad.maptb
+local nmaptb   = hjdivad.nmaptb
+local unmap    = hjdivad.unmap
+local maptb    = hjdivad.maptb
 
 ---use comma as <leader> (default \)
-vim.g.mapleader = ','
+vim.g.mapleader      = ','
 vim.g.maplocalleader = ','
 
-vim.o.compatible = false -- compatible with what? vi? come on
-vim.o.hidden = true -- allow buffer switching without saving
-vim.o.history = 10000 -- we can afford a larger history (default 20)
-vim.o.updatetime = 100 -- ensure GitGutter and other plugins
-vim.o.timeout = true
-vim.o.timeoutlen = 1000
+vim.o.compatible  = false -- compatible with what? vi? come on
+vim.o.hidden      = true -- allow buffer switching without saving
+vim.o.history     = 10000 -- we can afford a larger history (default 20)
+vim.o.updatetime  = 100 -- ensure GitGutter and other plugins
+vim.o.timeout     = true
+vim.o.timeoutlen  = 1000
 vim.o.ttimeoutlen = 50
-vim.o.swapfile = false -- don't write swap files
-vim.o.mouse = 'a' -- allow resizing windows via the mouse
-vim.o.undofile = true -- preserve undo history across sessions
-vim.o.lazyredraw = true -- don't redraw during macros
-vim.o.shm = 'filnxtToOFsAIc' -- disable some vim messages
+vim.o.swapfile    = false -- don't write swap files
+vim.o.mouse       = 'a' -- allow resizing windows via the mouse
+vim.o.undofile    = true -- preserve undo history across sessions
+vim.o.lazyredraw  = true -- don't redraw during macros
+vim.o.shm         = 'filnxtToOFsAIc' -- disable some vim messages
 
 ---whitespace
-vim.o.wrap = true -- wrap lines
+vim.o.wrap          = true -- wrap lines
 vim.o.sidescrolloff = 8 -- left-right context when wrap=false
 -- no effect when wrap=true
-vim.o.tabstop = 2 -- tab at two spaces
-vim.o.shiftwidth = 2 -- autoindent at 2, i.e. match the tabstop
-vim.o.smartindent = true -- insert indents automatically
-vim.o.expandtab = true -- always use spaces not tabs
-vim.o.autoindent = true -- indent in insert mode
-vim.o.joinspaces = false -- don't add two spaces after . on join
-vim.o.shiftround = true -- always indent to a multiple of shiftwidth
+vim.o.tabstop       = 2 -- tab at two spaces
+vim.o.shiftwidth    = 2 -- autoindent at 2, i.e. match the tabstop
+vim.o.smartindent   = true -- insert indents automatically
+vim.o.expandtab     = true -- always use spaces not tabs
+vim.o.autoindent    = true -- indent in insert mode
+vim.o.joinspaces    = false -- don't add two spaces after . on join
+vim.o.shiftround    = true -- always indent to a multiple of shiftwidth
 
 ---gutters
-vim.o.signcolumn = 'yes' -- always show the sign column
-vim.o.number = true -- show line numbers
+vim.o.signcolumn     = 'yes' -- always show the sign column
+vim.o.number         = true -- show line numbers
 vim.o.relativenumber = true -- line numbers relative to cursor
-vim.o.numberwidth = 3
-vim.o.ruler = true -- show line and column number
+vim.o.numberwidth    = 3
+vim.o.ruler          = true -- show line and column number
 
 ---windows
 vim.o.splitbelow = true -- always split below current window
@@ -434,57 +434,57 @@ local function setup_plugins()
   vim.g.nvim_tree_group_empty = 1 -- compact folders that contain only another folder
   require('nvim-tree').setup {
     view = {
-      mappings ={
-        custom_only=true,
+      mappings = {
+        custom_only = true,
         list = {
           --- default mappings
           -- copied from :nvim-tree-mappings
           -- custom mappings seem to only work with custom_only=true
-          { key = {"<CR>", "o", "<2-LeftMouse>"}, action = "edit" },
-          { key = "<C-e>",                        action = "edit_in_place" },
-          { key = {"O"},                          action = "edit_no_picker" },
-          { key = {"<2-RightMouse>", "<C-]>"},    action = "cd" },
-          { key = "<C-v>",                        action = "vsplit" },
-          { key = "<C-x>",                        action = "split" },
-          { key = "<C-t>",                        action = "tabnew" },
-          { key = "<",                            action = "prev_sibling" },
-          { key = ">",                            action = "next_sibling" },
-          { key = "P",                            action = "parent_node" },
-          { key = "<BS>",                         action = "close_node" },
-          { key = "<Tab>",                        action = "preview" },
-          { key = "K",                            action = "first_sibling" },
-          { key = "J",                            action = "last_sibling" },
-          { key = "I",                            action = "toggle_git_ignored" },
-          { key = "H",                            action = "toggle_dotfiles" },
-          { key = "R",                            action = "refresh" },
-          { key = "a",                            action = "create" },
-          { key = "d",                            action = "remove" },
-          { key = "D",                            action = "trash" },
-          { key = "r",                            action = "rename" },
-          { key = "<C-r>",                        action = "full_rename" },
-          { key = "x",                            action = "cut" },
-          { key = "c",                            action = "copy" },
-          { key = "p",                            action = "paste" },
-          { key = "y",                            action = "copy_name" },
-          { key = "Y",                            action = "copy_path" },
-          { key = "gy",                           action = "copy_absolute_path" },
-          { key = "[c",                           action = "prev_git_item" },
-          { key = "]c",                           action = "next_git_item" },
-          { key = "-",                            action = "dir_up" },
-          { key = "s",                            action = "system_open" },
-          { key = "q",                            action = "close" },
-          { key = "g?",                           action = "toggle_help" },
-          { key = 'W',                            action = "collapse_all" },
-          { key = "S",                            action = "search_node" },
-          { key = ".",                            action = "run_file_command" },
-          { key = "<C-k>",                        action = "toggle_file_info" },
-          { key = "U",                            action = "toggle_custom" },
+          { key = { "<CR>", "o", "<2-LeftMouse>" }, action = "edit" },
+          { key = "<C-e>", action = "edit_in_place" },
+          { key = { "O" }, action = "edit_no_picker" },
+          { key = { "<2-RightMouse>", "<C-]>" }, action = "cd" },
+          { key = "<C-v>", action = "vsplit" },
+          { key = "<C-x>", action = "split" },
+          { key = "<C-t>", action = "tabnew" },
+          { key = "<", action = "prev_sibling" },
+          { key = ">", action = "next_sibling" },
+          { key = "P", action = "parent_node" },
+          { key = "<BS>", action = "close_node" },
+          { key = "<Tab>", action = "preview" },
+          { key = "K", action = "first_sibling" },
+          { key = "J", action = "last_sibling" },
+          { key = "I", action = "toggle_git_ignored" },
+          { key = "H", action = "toggle_dotfiles" },
+          { key = "R", action = "refresh" },
+          { key = "a", action = "create" },
+          { key = "d", action = "remove" },
+          { key = "D", action = "trash" },
+          { key = "r", action = "rename" },
+          { key = "<C-r>", action = "full_rename" },
+          { key = "x", action = "cut" },
+          { key = "c", action = "copy" },
+          { key = "p", action = "paste" },
+          { key = "y", action = "copy_name" },
+          { key = "Y", action = "copy_path" },
+          { key = "gy", action = "copy_absolute_path" },
+          { key = "[c", action = "prev_git_item" },
+          { key = "]c", action = "next_git_item" },
+          { key = "-", action = "dir_up" },
+          { key = "s", action = "system_open" },
+          { key = "q", action = "close" },
+          { key = "g?", action = "toggle_help" },
+          { key = 'W', action = "collapse_all" },
+          { key = "S", action = "search_node" },
+          { key = ".", action = "run_file_command" },
+          { key = "<C-k>", action = "toggle_file_info" },
+          { key = "U", action = "toggle_custom" },
           --- custom mappings
           {
             key = '<leader>fr',
             action = '',
-            action_cb = function (node)
-              require('telescope.builtin').grep_string({ search='', search_dirs={ node.absolute_path } })
+            action_cb = function(node)
+              require('telescope.builtin').grep_string({ search = '', search_dirs = { node.absolute_path } })
             end
           },
         }
