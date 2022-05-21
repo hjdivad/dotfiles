@@ -16,6 +16,7 @@ brew install lua-language-server
 volta install typescript-language-server
 volta install vim-language-server
 volta install diagnostic-languageserver
+volta install yaml-language-server
 ```
 
 ## Installation
