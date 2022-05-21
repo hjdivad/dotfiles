@@ -6,3 +6,8 @@ vim.opt_local.comments:prepend(':---')
 
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+
+local expand = vim.fn['expand']
+if expand('%:p'):find('/.vim/') or expand('%:t') == '.vimrc.lua' then
+  vim.fn['UltiSnips#AddFiletypes']('nvim')
+end
