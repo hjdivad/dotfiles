@@ -2,6 +2,8 @@ local utils = require('hjdivad.utils')
 local Path = utils.Path
 local File = utils.File
 local hi = utils.hjdivad_init
+-- Save nvim's vim.ui.select as our prompt causes a race with telescope-ui-select
+local select = vim.ui.select
 
 local exrc_entry_sep = ' ⊱ '
 
@@ -90,23 +92,28 @@ local function run_exrc()
     return
   end
 
-  utils.echo('cwd:', cwd, 'vimrc:', vimrc, 'rtp:', rtp)
-
   -- found vimrc or .vim/ and no previously saved choice
 
   local saved_choice = nil
-  vim.ui.select({
+  local prompt_start = nil
+  if vimrc and rtp then
+    prompt_start = vimrc .. ' and .vim detected. Source and add to runtimepath?'
+  elseif vimrc then
+    prompt_start = vimrc .. ' detected. Source?'
+  else
+    prompt_start = '.vim detected. Add to runtimepath?'
+  end
+  select({
     --[[1]]
-    'Yes: run .vimrc and add .vim to runtimepath (remember choice)',
+    'Yes: trust       ' .. cwd .. ' (remember choice)',
     --[[2]]
-    'No: do not run .vimrc or add .vim to runtimepath (remember choice)',
+    'No: do not trust ' .. cwd .. ' (remember choice)',
     --[[3]]
-    'Yes (once): run .vimrc and add .vim to runtimepath (this time)',
+    'Yes: but only this time',
     --[[4]]
-    'No (once): do not run .vimrc or add .vim to runtimepath (this time)'
+    'No:  but only this time',
   }, {
-    prompt = '.vimrc or .vim detected.\nRun automatically?\nOnly do this if you trust the contents of "' ..
-        cwd .. '"\n' .. [[see :help 'exrc' for details.]] .. '\n'
+    prompt = prompt_start .. ' Only do this if you trust the contents at ' .. cwd
   }, function(_, idx)
     if idx == 1 then
       -- run & save
