@@ -13,20 +13,6 @@ endif
 CWD := $(shell pwd)
 NvimDir = "$(CWD)/home/.config/nvim.symlink"
 
-
-install: # install dotfiles into $HOME
-	./install.bash
-
-test:
-	@cd $(NvimDir)
-	@pwd
-	nvim --headless --noplugin -u tests/runner_init.vim -c "PlenaryBustedDirectory tests/hjdivad/ {minimal_init = 'tests/test_init.vim'}"
-
-.PHONY: install help test
-
-
-
-.DEFAULT_GOAL := help
 # check https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
 NC = \033[0m
 ERR = \033[31;1m
@@ -44,6 +30,33 @@ grey300 := $(shell tput setaf 240)
 bold := $(shell tput bold)
 underline := $(shell tput smul)
 reset := $(shell tput sgr0)
+
+
+install: # install dotfiles into $HOME
+	./install.bash
+
+test.nvim: # Run plenary tests
+	@cd $(NvimDir)
+	@pwd
+	nvim --headless --noplugin -u tests/runner_init.vim -c "PlenaryBustedDirectory tests/hjdivad/ {minimal_init = 'tests/test_init.vim'}"
+
+TmpOut := "./tmp/test.out"
+
+test.bootstrap:
+	@rm -f $(TmpOut)
+	XDG_DATA_HOME=/tmp/no/place/like/home/ nvim --headless -u ./home/.config/nvim.symlink/init.lua +quit 2>&1 | \
+		grep -C 100 Error && \
+		{
+			printf " $(red)\n\ninit.lua errored ungracefully when bootstrapping.${reset} See output above."
+		} || true
+
+test: test.nvim test.bootstrap # Run all tests
+
+.PHONY: install help test test.nvim tes.bootstrap
+
+
+
+.DEFAULT_GOAL := help
 
 help:
 	@printf '\n'
