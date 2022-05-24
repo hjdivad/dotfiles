@@ -47,10 +47,6 @@ end
 local function setup_colours()
   vim.o.termguicolors = true
 
-  -- see https://github.com/morhetz/gruvbox/wiki/Terminal-specific#1-italics-is-disabled
-  -- vim.g.gruvbox_italic = 1
-  -- vim.cmd 'silent! colorscheme gruvbox'
-
   vim.cmd 'silent! colorscheme onedark'
   -- onedark doesn't specify undercurls
   -- TODO: change the coloring to nvim_create_autocmd for ColorScheme
@@ -177,19 +173,19 @@ local function setup_mappings()
   tnoremap('<c-w><c-n>', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]])
 
   --- tab navigation
-  nmap('<leader>1', '1gt') -- go to tab 1
-  nmap('<leader>2', '2gt') -- go to tab 2
-  nmap('<leader>3', '3gt') -- go to tab 3
-  nmap('<leader>4', '4gt') -- go to tab 4
-  nmap('<leader>5', '5gt') -- go to tab 5
-  nmap('<leader>6', '6gt') -- go to tab 6
-  nmap('<leader>7', '7gt') -- go to tab 7
-  nmap('<leader>8', '8gt') -- go to tab 8
-  nmap('<leader>9', '9gt') -- go to tab 9
-  nmap('<leader>0', '10gt') -- go to tab 10
+  vim.keymap.set('n', '<leader>1', '1gt', { desc = 'go to tab 1', })
+  vim.keymap.set('n', '<leader>2', '2gt', { desc = 'go to tab 2', })
+  vim.keymap.set('n', '<leader>3', '3gt', { desc = 'go to tab 3', })
+  vim.keymap.set('n', '<leader>4', '4gt', { desc = 'go to tab 4', })
+  vim.keymap.set('n', '<leader>5', '5gt', { desc = 'go to tab 5', })
+  vim.keymap.set('n', '<leader>6', '6gt', { desc = 'go to tab 6', })
+  vim.keymap.set('n', '<leader>7', '7gt', { desc = 'go to tab 7', })
+  vim.keymap.set('n', '<leader>8', '8gt', { desc = 'go to tab 8', })
+  vim.keymap.set('n', '<leader>9', '9gt', { desc = 'go to tab 9', })
+  vim.keymap.set('n', '<leader>0', '10gt', { desc = 'go to tab 10', })
 
   -- yank GitHub permalink to clipboard
-  vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true })
+  vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 end
 
 local function setup_lsp_mappings()
@@ -220,7 +216,7 @@ local function setup_lsp_mappings()
   maptb('n', '<leader>SS', 'lsp_dynamic_workspace_symbols()') -- list workspace symbols
   maptb('n', '<leader>sf', [[lsp_document_symbols({ symbols={'function'} })]]) -- list document symbols
   maptb('n', '<leader>so', [[lsp_document_symbols({ symbols={'class', 'function'} })]]) -- list document symbols
-  maptb('n', '<leader>ca', 'lsp_code_actions()') -- list code actions (under cursor)
+  vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'list code actions under cursor' })
   -- TODO: this gets a stacktrace; try again in nvim >= 0.6.2
   -- maptb('v', '<leader>ca', 'lsp_range_code_actions()') -- list code actions (selected)
 
