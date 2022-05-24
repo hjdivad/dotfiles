@@ -516,10 +516,20 @@ local function setup_plugins()
         },
         n = { ['<c-t>'] = trouble_provider_telescope.open_with_trouble }
       }
-    }
+    },
+
+    extensions = {
+      ['ui-select'] = {
+        require('telescope.themes').get_cursor {}
+      }
+    },
   }
   telescope.load_extension('ultisnips') -- :Telescope ultisnips snippets search
   telescope.load_extension('fzf') -- use fzf over fzy to get operators
+  -- see
+  -- <https://github.com/nvim-telescope/telescope-ui-select.nvim#telescope-setup-and-configuration>
+  -- for configuring new prompts
+  telescope.load_extension('ui-select') -- use telescope for selecting prompt choices
 
   -- see <https://github.com/nvim-treesitter/nvim-treesitter#modules>
   require 'nvim-treesitter.configs'.setup {
@@ -577,7 +587,6 @@ function hi.plugins()
 
   local paq = require('paq')
 
-  -- TODO: try out https://github.com/nathom/filetype.nvim
   -- c.f https://github.com/tweekmonster/startuptime.vim
   paq {
     'savq/paq-nvim', -- let paq manage itself
@@ -587,6 +596,7 @@ function hi.plugins()
     'tpope/vim-sensible', -- additional defaults beyond nocompatible
     'editorconfig/editorconfig-vim', -- support for editrconfig shared configs beyond vim
     'tpope/vim-fugitive', -- tpope's git integration (blame, navigation &c.)
+    'tpope/vim-rhubarb', -- make fugitive's GBrowse work
     'tpope/vim-git', -- git syntax &c.
     'tpope/vim-surround', -- edit inner/outer surroundings (e.g. di" to delete text between quotes)
     'tpope/vim-unimpaired', -- more mappings
@@ -630,6 +640,7 @@ function hi.plugins()
     { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     -- TODO: this work but i prefer cmp-emoji
     -- 'nvim-telescope/telescope-symbols.nvim'; -- telescope emoji search
+    'nvim-telescope/telescope-ui-select.nvim', -- use telescope to select choices
     'fhill2/telescope-ultisnips.nvim', -- telescope snippets search
     'camgraff/telescope-tmux.nvim', -- telescope tmux search
     -- TODO: try https://github.com/pwntester/octo.nvim
@@ -660,7 +671,7 @@ function hi.plugins()
     'hjdivad/vim-pdl', -- extremely primitive PDL support
     'gutenye/json5.vim', -- syntax highlighting for json5
     'jparise/vim-graphql', -- syntax highlighting for graphql
-    'preservim/vim-markdown', -- better markdown (folds, syntax &c.)
+    'preservim/vim-markdown', -- i use this for folding only
     { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' } -- preview rendered markdown in browser
     -- TODO: this one doesn't seem great; look for treesitter alternative
     -- 'mustache/vim-mustache-handlebars'; -- .hbs support
@@ -675,13 +686,17 @@ local function setup_local_linking()
   vim.opt_global.runtimepath:prepend(vim.env['HOME'] .. '/src/malleatus/common.nvim')
 end
 
-setup_local_linking()
-setup_plugins()
-setup_local_config()
-setup_clipboard()
-setup_colours()
-setup_statusline()
-setup_mappings()
-hjdivad.setup_terminal()
-setup_window_management()
-hjdivad.run_exrc()
+local function main()
+  setup_local_linking()
+  setup_plugins()
+  setup_local_config()
+  setup_clipboard()
+  setup_colours()
+  setup_statusline()
+  setup_mappings()
+  hjdivad.setup_terminal()
+  setup_window_management()
+  hjdivad.run_exrc()
+end
+
+main()
