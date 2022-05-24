@@ -1,0 +1,22 @@
+snippet ci:simple "a basic .github/workflows/ci.yaml template"
+# https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: CI
+
+on:
+	pull_request:
+	push:
+		branches:
+			- master
+		tags:
+			- '*'
+
+jobs:
+
+	test:
+		name: test
+		runs-on: ubuntu-latest
+		steps:
+			- uses: actions/checkout@v2
+			- name: test
+				run: ${0:test command}
+endsnippet
