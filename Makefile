@@ -1,17 +1,6 @@
-SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
-.ONESHELL:
-.DELETE_ON_ERROR:
-MAKEFLAGS += --warn-undefined-variables
-MAKEFLAGS += --no-builtin-rules
+include Makefile.ci
 
-ifeq ($(origin .RECIPEPREFIX), undefined)
-  $(error This Make does not support .RECIPEPREFIX. Please use GNU Make 4.0 or later. Perhaps you meant gmake?)
-endif
-# .RECIPEPREFIX = >
-
-CWD := $(shell pwd)
-NvimDir = "$(CWD)/home/.config/nvim.symlink"
+MAKEFILE_HELP_GREP := 'Makefile.ci'
 
 # check https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
 NC = \033[0m
@@ -52,17 +41,14 @@ test.bootstrap:
 
 test: test.nvim test.bootstrap # Run all tests
 
-.PHONY: install help test test.nvim tes.bootstrap
-
-
-
+.PHONY: help
 .DEFAULT_GOAL := help
 
 help:
 	@printf '\n'
 	@printf '    $(underline)$(grey500)Available make commands:$(reset)\n\n'
 	@# Print non-check commands with comments
-	@grep -E '^([a-zA-Z0-9_-]+\.?)+:.+#.+$$' $(MAKEFILE_LIST) \
+	@grep -E '^([a-zA-Z0-9_-]+\.?)+:.+#.+$$' $(MAKEFILE_HELP_GREP) \
 		| grep -v '^check-' \
 		| grep -v '^env-' \
 		| grep -v '^arg-' \
@@ -70,13 +56,13 @@ help:
 		| awk 'BEGIN {FS = "[: ]+#[ ]+"}; \
 		{printf " $(grey300)   make $(reset)$(cyan80)$(bold)$(TAB) $(reset)$(grey300)# %s$(reset)\n", \
 			$$1, $$2}'
-	@grep -E '^([a-zA-Z0-9_-]+\.?)+:( +\w+-\w+)*$$' $(MAKEFILE_LIST) \
+	@grep -E '^([a-zA-Z0-9_-]+\.?)+:( +\w+-\w+)*$$' $(MAKEFILE_HELP_GREP) \
 		| grep -v help \
 		| awk 'BEGIN {FS = ":"}; \
 		{printf " $(grey300)   make $(reset)$(cyan80)$(bold)$(TAB)$(reset)\n", \
 			$$1}'
 	@echo -e "\n    $(underline)$(grey500)Helper/Checks$(reset)\n"
-	@grep -E '^([a-zA-Z0-9_-]+\.?)+:.+#.+$$' $(MAKEFILE_LIST) \
+	@grep -E '^([a-zA-Z0-9_-]+\.?)+:.+#.+$$' $(MAKEFILE_HELP_GREP) \
 		| grep -E '^(check|arg|env)-' \
 		| awk 'BEGIN {FS = "[: ]+#[ ]+"}; \
 		{printf " $(grey300)   make $(reset)$(grey500)$(TAB) $(reset)$(grey300)# %s$(reset)\n", \
