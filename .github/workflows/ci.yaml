@@ -27,7 +27,7 @@ jobs:
 
       - name: Install Plugins
         run: |
-          nvim --headless -u ./home/.config/nvim.symlink/init.lua +'lua require("hjdivad/plugins").update_plugins()' +quit
+          nvim --headless -u ./home/.config/nvim.symlink/bootstrap.lua  +quit
 
       - name: test
         run: |
