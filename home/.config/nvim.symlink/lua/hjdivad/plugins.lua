@@ -82,7 +82,7 @@ local function update_plugins()
     -- TODO: try https://github.com/sudormrfbin/cheatsheet.nvim
     'nvim-treesitter/nvim-treesitter', -- incremental parsing
     'nvim-treesitter/playground', -- show treesitter parse tree in a buffer
-    'nvim-treesitter/nvim-treesitter-textobjects', 'nvim-treesitter/nvim-treesitter-refactor',
+    'nvim-treesitter/nvim-treesitter-textobjects', -- create user-textobjects using treesitter
 
     -- TODO: configure vim-test
     --  see <https://github.com/vim-test/vim-test>
