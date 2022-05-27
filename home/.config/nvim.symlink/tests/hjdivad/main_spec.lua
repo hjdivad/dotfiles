@@ -1,6 +1,20 @@
 local main = require('hjdivad/main')
+local init = require('hjdivad_init')
 local ptest = require('plenary/async/tests')
 local async_util = require('plenary/async/util')
+local say = require('say')
+local level = vim.fn.getenv('DEBUG')
+-- TODO: extract these utilities to a test util
+if level == vim.NIL then
+  level = 'info'
+end
+local log = require('plenary.log').new {
+  plugin = 'hjdivad_init',
+  level = level,
+  -- TODO: this does write to $HOME/.cache/nvim/hjdivad_init.log
+  -- but does not seem to write to the console at all
+  use_console = 'sync',
+}
 local a = {
   describe = ptest.describe,
   it = ptest.it,
@@ -17,6 +31,18 @@ local function wait()
   assert.equals(nil, err, 'vim.schedule callback without error')
 end
 
+local function matches(_, args)
+  local pattern = args[1]
+  local string = args[2]
+  return string:find(pattern) ~= nil
+end
+
+-- these get formatted in a bad way, probably due to
+-- https://github.com/Olivine-Labs/luassert/blob/e2ab0d218d7a63bbaa2fdebfa861c24a48451e9d/src/assert.lua#L17
+say:set('assertion.matches.positive', 'Expected pattern %s to match string %s')
+say:set('assertion.matches.negative', 'Expected pattern %s to not match string %s')
+assert:register('assertion', 'matches', matches, 'assertion.matches.positive', 'assertion.matches.negative')
+
 local function find_winnr_with_buffer_name(search_bufname)
   local wins = vim.api.nvim_list_wins()
   for _, winnr in ipairs(wins) do
@@ -32,6 +58,7 @@ end
 
 local function find_bufnr_with_buffer_name(search_bufname)
   local buffers = vim.api.nvim_list_bufs()
+  log.trace('find_bufnr: search', search_bufname)
   for _, bufnr in ipairs(buffers) do
     local bufname = vim.fn.bufname(bufnr)
     if search_bufname == bufname then
@@ -43,6 +70,10 @@ local function find_bufnr_with_buffer_name(search_bufname)
 end
 
 a.describe('main.toggle_nvim_tree', function()
+  -- TODO: this is overkill just for loading nvim-tree
+  -- maybe expose _setup_plugins for testing
+  init.main()
+
   a.after_each(function()
     vim.cmd('NvimTreeClose')
   end)
@@ -59,19 +90,18 @@ a.describe('main.toggle_nvim_tree', function()
   end)
 
   a.it("Searches for the buffer's file in the tree", function()
-    vim.cmd('edit home/.config/nvim.symlink/tests/hjdivad/main_spec.lua')
+    vim.cmd('edit tests/hjdivad/main_spec.lua')
     main.toggle_nvim_tree()
-
     wait()
 
     local nvim_tree_bufnr = find_bufnr_with_buffer_name('NvimTree_1')
 
-    assert.equals(true, nvim_tree_bufnr ~= nil, 'nvim tree is open')
+    assert.is_not.Nil(nvim_tree_bufnr, 'nvim tree is open')
 
     local linenr = vim.fn.getcursorcharpos()[2]
     local line = vim.fn.getbufline(nvim_tree_bufnr, linenr)[1]
 
-    assert.is_not.Nil(line and line:find('.*%smain_spec%.lua'), 'nvim tree is open at the buffer')
+    assert.matches('.*%smain_spec%.lua', line, 'nvim tree is open at the buffer')
   end)
 
 end)
