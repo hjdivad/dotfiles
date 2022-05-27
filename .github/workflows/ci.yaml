@@ -19,17 +19,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: Download Neovim
         run: |
-          {
-            mkdir -p build
-            wget https://github.com/neovim/neovim/releases/download/v0.7.0/nvim.appimage
-            chmod +x nvim.appimage
-            mv nvim.appimage ./build/nvim
-          }
+          mkdir -p build
+          wget https://github.com/neovim/neovim/releases/download/v0.7.0/nvim.appimage
+          chmod +x nvim.appimage
+          mv nvim.appimage ./build/nvim
       - name: Install Plugins
         run: |
-          {
-            nvim --headless +'lua require("hjdivad_init").update_plugins()' +quit
-          }
+          export PATH="${PWD}/build/:${PATH}"
+          nvim --headless +'lua require("hjdivad_init").update_plugins()' +quit
 
       - name: test
         run: |
