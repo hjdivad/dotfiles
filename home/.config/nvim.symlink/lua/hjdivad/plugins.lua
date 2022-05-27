@@ -54,6 +54,7 @@ local function update_plugins()
     ---diagnostics
     'folke/lsp-colors.nvim', 'folke/trouble.nvim', -- pretty diagnostics
     ---completion
+    'hrsh7th/nvim-cmp', -- TODO: try https://github.com/hrsh7th/cmp-copilot
     'hrsh7th/cmp-nvim-lsp', -- complete by lsp symbols
     'hrsh7th/cmp-buffer', -- complete by keywords in buffer
     'hrsh7th/cmp-path', -- complete file paths
@@ -62,7 +63,6 @@ local function update_plugins()
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-emoji', 'hrsh7th/cmp-nvim-lua', 'hrsh7th/cmp-calc', -- *very* simple calculations
     'hrsh7th/cmp-nvim-lsp-document-symbol', -- /@ search buffer for LSP document symbols
-    'hrsh7th/nvim-cmp', -- TODO: try https://github.com/hrsh7th/cmp-copilot
     --- telescope deps
     'nvim-lua/popup.nvim', -- create floating windows over other windows
     'nvim-lua/plenary.nvim', -- lots of lua utilities
