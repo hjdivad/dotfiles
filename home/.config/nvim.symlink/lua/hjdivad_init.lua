@@ -686,6 +686,10 @@ local function update_plugins()
   paq.install() -- :he paq.install
 end
 
+local function create_user_commands()
+  vim.api.nvim_create_user_command('HiUpdatePlugins', update_plugins, { desc = 'Update or install plugins' })
+end
+
 local function setup_local_linking()
   vim.opt_global.runtimepath:prepend(vim.env['HOME'] .. '/src/malleatus/common.nvim')
 end
@@ -706,6 +710,7 @@ local function main()
   hjdivad.setup_terminal()
   setup_window_management()
   hjdivad.run_exrc()
+  create_user_commands()
 end
 
 return {
