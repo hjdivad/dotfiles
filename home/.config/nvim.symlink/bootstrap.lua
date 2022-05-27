@@ -4,5 +4,5 @@ require('hjdivad/plugins').update_plugins()
 
 require 'nvim-treesitter.configs'.setup {
   ensure_installed = 'all',
+  sync_install = true,
 }
-vim.cmd('TSInstallSync all')
