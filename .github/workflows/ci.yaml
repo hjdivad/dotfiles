@@ -27,7 +27,7 @@ jobs:
 
       - name: Install Plugins
         run: |
-          nvim --headless -u ./home/.config/nvim.symlink/bootstrap.lua  +quit
+          nvim --headless -u ./home/.config/nvim.symlink/bootstrap.lua  --cmd 'set rtp+=./home/.config/nvim.symlink' +quit
 
       - name: test
         run: |
