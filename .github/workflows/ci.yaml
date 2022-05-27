@@ -36,7 +36,9 @@ jobs:
           nvim --headless -u ./home/.config/nvim.symlink/bootstrap.lua  --cmd 'set rtp+=./home/.config/nvim.symlink' +quit
 
       - name: Setup upterm session
-        if: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
+        env:
+          DEBUG_SSH: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
+        if: ${{ env.DEBUG_SSH == "true" }}
         uses: lhotari/action-upterm@v1
         with:
           ## limits ssh access and adds the ssh public key for the user which triggered the workflow
