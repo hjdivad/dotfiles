@@ -586,7 +586,7 @@ local function check_or_install_paq()
 end
 
 --- Installs missing plugins and updates existing plugins
-function hi.plugins()
+local function update_plugins()
   check_or_install_paq()
 
   local paq = require('paq')
@@ -710,5 +710,6 @@ end
 
 return {
   main = main,
+  update_plugins = update_plugins,
   create_debug_functions = create_debug_functions,
 }
