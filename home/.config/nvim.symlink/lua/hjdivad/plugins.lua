@@ -11,7 +11,8 @@ local function check_or_install_paq()
     error('Failed to install paq to "' .. paq_install_path .. '"')
   end
 
-  print(vim.o.packpath)
+  print('paq_install_path:', paq_install_path)
+  print('packagepath: ', vim.o.packpath)
 end
 
 --- Installs missing plugins and updates existing plugins
