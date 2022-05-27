@@ -1,7 +1,7 @@
-local utils = require('hjdivad.utils')
-local terminal = require('hjdivad.terminal')
-local exrc = require('hjdivad.exrc')
-local testing = require('hjdivad.testing')
+local utils = require('hjdivad/utils')
+local terminal = require('hjdivad/terminal')
+local exrc = require('hjdivad/exrc')
+local testing = require('hjdivad/testing')
 
 local hi = utils.hjdivad_init
 local ha = utils.hjdivad_auto
@@ -17,7 +17,7 @@ function ha.get_tmux_panes()
     local pane_id = partsIter()
     local window_name = partsIter()
     local session_name = partsIter()
-    table.insert(result, {pane_id = pane_id, window_name = window_name, session_name = session_name})
+    table.insert(result, { pane_id = pane_id, window_name = window_name, session_name = session_name })
   end
   return result
 end
@@ -40,7 +40,14 @@ function ha.goto_tmux_session(session_name, window_name)
   end
 end
 
-function ha.toggle_nvim_tree()
+---Show the nvim-tree
+---
+---If the tree is not open, open it, otherwise switch to the tree's window.
+---
+---If the current buffer has a name, also find it in the tree.
+---
+---*note* finding files works poorly for those outside of `$CWD`
+local function toggle_nvim_tree()
   -- TODO: make this work better when opening a file outside of <cwd>, as well as opening a file within <cwd> after nvimtree has cd-d outside
   --  i.e. NVIMTreeOpen dirname (file) or cwd + findfile
   -- TODO: make this work for NEW buffers (i.e buffers never saved)
@@ -105,11 +112,11 @@ function ha.edit_generic_repl()
   local repl_cmd = nil
   local repl_extension = nil
 
-  vim.ui.input({prompt = 'REPL command (e.g. node) > ', default = 'node'},
-               function(input) repl_cmd = input end)
+  vim.ui.input({ prompt = 'REPL command (e.g. node) > ', default = 'node' },
+    function(input) repl_cmd = input end)
 
-  vim.ui.input({prompt = 'REPL input file extension (e.g. js) > ', default = 'js'},
-               function(input) repl_extension = input end)
+  vim.ui.input({ prompt = 'REPL input file extension (e.g. js) > ', default = 'js' },
+    function(input) repl_extension = input end)
 
   if not repl_cmd then error('No REPL command given. Please specify a commnad to start the REPL.') end
 
@@ -121,9 +128,9 @@ function ha.edit_generic_repl()
   ha.edit_repl(repl_cmd, repl_extension)
 
   local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl(']] ..
-                             repl_cmd .. [[', ']] .. repl_extension .. [[')]] .. ']]' .. [[<cr>']]
+      repl_cmd .. [[', ']] .. repl_extension .. [[')]] .. ']]' .. [[<cr>']]
   vim.notify([[To skip inputs next time, consider adding `]] .. suggested_keymap ..
-               [[` to .vimrc.lua]], vim.log.levels.INFO, {})
+    [[` to .vimrc.lua]], vim.log.levels.INFO, {})
 end
 
 local function setup_repls()
@@ -150,7 +157,7 @@ end
 ---@param opts table    any options to pass to `nvim_set_keymap`
 ---@return nil
 local function map(mode, lhs, rhs, opts)
-  local options = {noremap = true}
+  local options = { noremap = true }
 
   if opts then options = vim.tbl_extend('force', options, opts) end
 
@@ -159,18 +166,18 @@ end
 
 local function nmap(lhs, rhs, opts) map('n', lhs, rhs, opts) end
 
-local function nnoremap(lhs, rhs, opts) map('n', lhs, rhs, assign({noremap = true}, opts)) end
+local function nnoremap(lhs, rhs, opts) map('n', lhs, rhs, assign({ noremap = true }, opts)) end
 
 local function imap(lhs, rhs, opts) map('i', lhs, rhs, opts) end
 
 local function tmap(lhs, rhs, opts) map('t', lhs, rhs, opts) end
 
-local function tnoremap(lhs, rhs, opts) map('t', lhs, rhs, assign({noremap = true}, opts)) end
+local function tnoremap(lhs, rhs, opts) map('t', lhs, rhs, assign({ noremap = true }, opts)) end
 
 local function unmap(mode, lhs) vim.api.nvim_del_keymap(mode, lhs) end
 
 local function maptb(mode, lhs, rhs)
-  map(mode, lhs, [[<Cmd>lua require('telescope.builtin').]] .. rhs .. '<CR>', {silent = true})
+  map(mode, lhs, [[<Cmd>lua require('telescope.builtin').]] .. rhs .. '<CR>', { silent = true })
 end
 
 local function nmaptb(lhs, rhs) maptb('n', lhs, rhs) end
@@ -195,5 +202,11 @@ return {
   setup_vimtest = testing.setup_vimtest,
   setup_repls = setup_repls,
   run_exrc = exrc.run_exrc,
-  setup_terminal = terminal.setup_terminal
+  setup_terminal = terminal.setup_terminal,
+
+
+  -- TODO: move any of this to common.nvim?
+  -- new exports
+  toggle_nvim_tree = toggle_nvim_tree,
+  toggle_terminal = terminal.toggle_terminal,
 }

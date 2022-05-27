@@ -22,10 +22,10 @@ function ha.terminal_onopen()
   vim.wo.relativenumber = false
   vim.opt_local.spell = false
   vim.cmd([[vertical resize]] .. get_terminal_expected_width())
-  vim.api.nvim_buf_set_keymap(0 --[[current buffer]] , 'n', '<c-w>n',
-                              '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
-  vim.api.nvim_buf_set_keymap(0 --[[current buffer]] , 'n', '<c-w><c-n>',
-                              '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
+  vim.api.nvim_buf_set_keymap(0--[[current buffer]] , 'n', '<c-w>n',
+    '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
+  vim.api.nvim_buf_set_keymap(0--[[current buffer]] , 'n', '<c-w><c-n>',
+    '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
 end
 
 function ha.terminal_onclose() vim.wo.winfixwidth = false end
@@ -55,21 +55,7 @@ local function setup_terminal()
   ]])
 end
 
-function ha.toggle_terminal()
-  local open_terminals = ha.get_neoterm_window_ids()
-  if #open_terminals > 0 then
-    -- TODO: handle the case of a terminal being on a different tab
-
-    -- arbitrarily pick the first terminal to focus
-    vim.fn['win_gotoid'](open_terminals[1])
-  else
-    vim.cmd([[vertical topleft Ttoggle]])
-    -- Ttoggle for an existing terminal with no window doesn't trigger TermOpen
-    ha.terminal_onopen()
-  end
-end
-
-function ha.get_neoterm_window_ids()
+local function get_neoterm_window_ids()
   local result = {}
   for _, term in pairs(vim.g.neoterm.instances) do
     local buf_id = term.buffer_id
@@ -77,6 +63,27 @@ function ha.get_neoterm_window_ids()
     if win_id and win_id > -1 then table.insert(result, win_id) end
   end
   return result
+end
+
+---Focus the window with the neoterm terminal
+---
+---If there are no visible terminals, toggle the first open one (i.e. show it
+---in a window). If there are no terminals at all, create one in a window at
+---the top left.
+---
+---If there are multiple open terminals, open the first one.
+local function toggle_terminal()
+  local open_terminals = get_neoterm_window_ids()
+  if #open_terminals > 0 then
+    -- TODO: handle the case of a terminal being on a different tab
+
+    -- arbitrarily pick the first terminal to focus
+    vim.fn.win_gotoid(open_terminals[1])
+  else
+    vim.cmd([[vertical topleft Ttoggle]])
+    -- Ttoggle for an existing terminal with no window doesn't trigger TermOpen
+    ha.terminal_onopen()
+  end
 end
 
 function hi.resize()
@@ -87,5 +94,4 @@ function hi.resize()
   end
 end
 
-return {setup_terminal = setup_terminal}
-
+return { setup_terminal = setup_terminal, toggle_terminal = toggle_terminal }
