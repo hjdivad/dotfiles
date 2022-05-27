@@ -5,14 +5,13 @@ local function check_or_install_paq()
     print(vim.fn.system({
       'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', paq_install_path
     }))
-  end
 
-  if vim.fn.empty(vim.fn.glob(paq_install_path)) > 0 then
-    error('Failed to install paq to "' .. paq_install_path .. '"')
-  end
+    if vim.fn.empty(vim.fn.glob(paq_install_path)) > 0 then
+      error('Failed to install paq to "' .. paq_install_path .. '"')
+    end
 
-  print('paq_install_path:', paq_install_path)
-  print('packagepath: ', vim.o.packpath)
+    vim.cmd('packadd paq-nvim')
+  end
 end
 
 --- Installs missing plugins and updates existing plugins
