@@ -70,9 +70,7 @@ local function find_bufnr_with_buffer_name(search_bufname)
 end
 
 a.describe('main.toggle_nvim_tree', function()
-  -- TODO: this is overkill just for loading nvim-tree
-  -- maybe expose _setup_plugins for testing
-  init.main()
+  init.main { plugins = { 'nvim-tree' } }
 
   a.after_each(function()
     vim.cmd('NvimTreeClose')

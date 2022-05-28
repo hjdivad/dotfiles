@@ -80,7 +80,7 @@ local function setup_statusline()
   }
 end
 
-local function setup_mappings()
+local function setup_key_mappings()
   -- TODO: could make this idempotent?
   vim.keymap.del('n', 'Y') -- neovim 0.6.0 maps Y to "$ by default (see default-mappings)
 
@@ -365,206 +365,238 @@ local function setup_language_servers()
   }
 end
 
-local function setup_plugins()
-  -- TODO: if pluggins missing, abort and tell the user to run lua hi.plugins()
-
+local function setup_plugins(config)
   require('malleatus').setup {}
 
-  vim.g.neoterm_autoinsert = 1
-
-  -- TODO: this can be made more robust (handle origin/main + maybe toggle against upstreams)
-  vim.g.gitgutter_diff_base = 'origin/master'
-  vim.g.gitgutter_map_keys = 0
-
-  vim.g.nvim_tree_highlight_opened_files = 1 -- highlight open files + folders
-  vim.g.nvim_tree_group_empty = 1 -- compact folders that contain only another folder
-  require('nvim-tree').setup {
-    view = {
-      mappings = {
-        custom_only = true,
-        list = {
-          --- default mappings
-          -- copied from :nvim-tree-mappings
-          -- custom mappings seem to only work with custom_only=true
-          { key = { "<CR>", "o", "<2-LeftMouse>" }, action = "edit" },
-          { key = "<C-e>", action = "edit_in_place" },
-          { key = { "O" }, action = "edit_no_picker" },
-          { key = { "<2-RightMouse>", "<C-]>" }, action = "cd" },
-          { key = "<C-v>", action = "vsplit" },
-          { key = "<C-x>", action = "split" },
-          { key = "<C-t>", action = "tabnew" },
-          { key = "<", action = "prev_sibling" },
-          { key = ">", action = "next_sibling" },
-          { key = "P", action = "parent_node" },
-          { key = "<BS>", action = "close_node" },
-          { key = "<Tab>", action = "preview" },
-          { key = "K", action = "first_sibling" },
-          { key = "J", action = "last_sibling" },
-          { key = "I", action = "toggle_git_ignored" },
-          { key = "H", action = "toggle_dotfiles" },
-          { key = "R", action = "refresh" },
-          { key = "a", action = "create" },
-          { key = "d", action = "remove" },
-          { key = "D", action = "trash" },
-          { key = "r", action = "rename" },
-          { key = "<C-r>", action = "full_rename" },
-          { key = "x", action = "cut" },
-          { key = "c", action = "copy" },
-          { key = "p", action = "paste" },
-          { key = "y", action = "copy_name" },
-          { key = "Y", action = "copy_path" },
-          { key = "gy", action = "copy_absolute_path" },
-          { key = "[c", action = "prev_git_item" },
-          { key = "]c", action = "next_git_item" },
-          { key = "-", action = "dir_up" },
-          { key = "s", action = "system_open" },
-          { key = "q", action = "close" },
-          { key = "g?", action = "toggle_help" },
-          { key = 'W', action = "collapse_all" },
-          { key = "S", action = "search_node" },
-          { key = ".", action = "run_file_command" },
-          { key = "<C-k>", action = "toggle_file_info" },
-          { key = "U", action = "toggle_custom" },
-          --- custom mappings
-          {
-            key = '<leader>fr',
-            action = '',
-            action_cb = function(node)
-              require('telescope.builtin').grep_string({ search = '', search_dirs = { node.absolute_path } })
-            end
-          },
-        }
-      },
-    },
-    diagnostics = { enable = true, show_on_dirs = true },
-    update_focused_file = {
-      enable = true, -- highlight focused file in NVIMTree
-      update_cwd = false
-    },
-    -- :h nvinm-tree.filters for additional file hiding
-    actions = {
-      open_file = {
-        quit_on_open = true, -- close tree when opening a file
-        window_picker = {
-          enable = false -- open files in last focused window
-        }
-      }
-    }
-  }
-
-  -- reverse the default ultisnip movement triggers
-  vim.g.UltiSnipsJumpForwardTrigger = '<c-k>'
-  vim.g.UltiSnipsJumpBackwardTrigger = '<c-j>'
-
-  -- disable automapping from neoterm
-  vim.g.neoterm_automap_keys = '😡😡STUPID_PLUGIN_DO_NOT_AUTOMAP'
-
-  -- disable default mappings
-  vim.g.bclose_no_default_mapping = true
-
-  local cmp = require 'cmp'
-  cmp.setup {
-    snippet = { expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end },
-    mapping = {
-      ['<c-l>'] = cmp.mapping.confirm({ select = true }),
-      ['<c-j>'] = cmp.mapping.select_next_item(),
-      ['<c-k>'] = cmp.mapping.select_prev_item(),
-    },
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' }, -- complete symbols (via LSP)
-      { name = 'nvim_lsp_signature_help' }, -- signature completion
-      { name = 'nvim_lua' }, -- lua nvim api completion (vim.lsp.* &c.)
-      { name = 'ultisnips' }, -- UltiSnipsEdit + UltiSnipsAddFileTypes
-      -- This is useful when there is no LSP, but with an LSP + snippets it's mostly noise
-      -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
-      { name = 'path' }, -- trigger via `/`
-      { name = 'cmdline' }, { name = 'calc' }, { name = 'emoji' } -- trigger via `:` in insert mode
-    })
-  }
-
-  -- -- configure /@ search for this buffer's document symbols
-  cmp.setup.cmdline('/', {
-    sources = cmp.config.sources({ { name = 'nvim_lsp_document_symbol' } }, { { name = 'buffer' } })
-  })
-
-  -- see <https://github.com/hrsh7th/nvim-cmp#setup>
-  --  can setup per filetype
-  --    cmp.setup.filetype('myfiletype', {})
-  --  can setup per custom LSP
-
-  local icons = require "nvim-nonicons"
-
-  icons.get("file")
-
-  setup_language_servers()
-
-  -- kick off trouble :: pretty diagnostics
-  require 'trouble'.setup {}
-  local trouble_provider_telescope = require("trouble.providers.telescope")
-
-  -- see <https://github.com/folke/trouble.nvim/issues/52#issuecomment-863885779>
-  -- and <https://github.com/folke/trouble.nvim/issues/52#issuecomment-988874117>
-  -- for making trouble work properly with nvim 0.6.x
-  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  local function check(plugin)
+    return config == 'all' or vim.tbl_contains(config, plugin)
   end
 
-  local telescope = require 'telescope'
-  telescope.setup {
-    defaults = {
-      mappings = {
-        i = {
-          ['<C-k>'] = 'move_selection_previous',
-          ['<C-j>'] = 'move_selection_next',
-          ['<C-h>'] = 'which_key',
-          ['<c-t>'] = trouble_provider_telescope.open_with_trouble
+  if check('neoterm') then
+    vim.g.neoterm_autoinsert = 1
+
+    -- disable automapping from neoterm
+    vim.g.neoterm_automap_keys = '😡😡STUPID_PLUGIN_DO_NOT_AUTOMAP'
+
+    hjdivad.setup_repls()
+  end
+
+  if check('gitgutter') then
+    -- TODO: this can be made more robust (handle origin/main + maybe toggle against upstreams)
+    vim.g.gitgutter_diff_base = 'origin/master'
+    vim.g.gitgutter_map_keys = 0
+  end
+
+
+  if check('nvim-tree') then
+    vim.g.nvim_tree_highlight_opened_files = 1 -- highlight open files + folders
+    vim.g.nvim_tree_group_empty = 1 -- compact folders that contain only another folder
+    require('nvim-tree').setup {
+      view = {
+        mappings = {
+          custom_only = true,
+          list = {
+            --- default mappings
+            -- copied from :nvim-tree-mappings
+            -- custom mappings seem to only work with custom_only=true
+            { key = { "<CR>", "o", "<2-LeftMouse>" }, action = "edit" },
+            { key = "<C-e>", action = "edit_in_place" },
+            { key = { "O" }, action = "edit_no_picker" },
+            { key = { "<2-RightMouse>", "<C-]>" }, action = "cd" },
+            { key = "<C-v>", action = "vsplit" },
+            { key = "<C-x>", action = "split" },
+            { key = "<C-t>", action = "tabnew" },
+            { key = "<", action = "prev_sibling" },
+            { key = ">", action = "next_sibling" },
+            { key = "P", action = "parent_node" },
+            { key = "<BS>", action = "close_node" },
+            { key = "<Tab>", action = "preview" },
+            { key = "K", action = "first_sibling" },
+            { key = "J", action = "last_sibling" },
+            { key = "I", action = "toggle_git_ignored" },
+            { key = "H", action = "toggle_dotfiles" },
+            { key = "R", action = "refresh" },
+            { key = "a", action = "create" },
+            { key = "d", action = "remove" },
+            { key = "D", action = "trash" },
+            { key = "r", action = "rename" },
+            { key = "<C-r>", action = "full_rename" },
+            { key = "x", action = "cut" },
+            { key = "c", action = "copy" },
+            { key = "p", action = "paste" },
+            { key = "y", action = "copy_name" },
+            { key = "Y", action = "copy_path" },
+            { key = "gy", action = "copy_absolute_path" },
+            { key = "[c", action = "prev_git_item" },
+            { key = "]c", action = "next_git_item" },
+            { key = "-", action = "dir_up" },
+            { key = "s", action = "system_open" },
+            { key = "q", action = "close" },
+            { key = "g?", action = "toggle_help" },
+            { key = 'W', action = "collapse_all" },
+            { key = "S", action = "search_node" },
+            { key = ".", action = "run_file_command" },
+            { key = "<C-k>", action = "toggle_file_info" },
+            { key = "U", action = "toggle_custom" },
+            --- custom mappings
+            {
+              key = '<leader>fr',
+              action = '',
+              action_cb = function(node)
+                require('telescope.builtin').grep_string({ search = '', search_dirs = { node.absolute_path } })
+              end
+            },
+          }
         },
-        n = { ['<c-t>'] = trouble_provider_telescope.open_with_trouble }
-      }
-    },
-
-    extensions = {
-      ['ui-select'] = {
-        require('telescope.themes').get_cursor {}
-      }
-    },
-  }
-  telescope.load_extension('ultisnips') -- :Telescope ultisnips snippets search
-  telescope.load_extension('fzf') -- use fzf over fzy to get operators
-  -- see
-  -- <https://github.com/nvim-telescope/telescope-ui-select.nvim#telescope-setup-and-configuration>
-  -- for configuring new prompts
-  telescope.load_extension('ui-select') -- use telescope for selecting prompt choices
-
-  -- see <https://github.com/nvim-treesitter/nvim-treesitter#modules>
-  require 'nvim-treesitter.configs'.setup {
-    ensure_installed = 'all',
-    highlight = {
-      enable = true,
-
-      disable = {
-        'lua', -- TS errors in <init.lua>
-        'vim', -- more TS errors for e.g. </Users/hjdivad/.local/share/nvim/site/pack/paqs/start/onedark.vim/colors/onedark.vim>
+      },
+      diagnostics = { enable = true, show_on_dirs = true },
+      update_focused_file = {
+        enable = true, -- highlight focused file in NVIMTree
+        update_cwd = false
+      },
+      -- :h nvinm-tree.filters for additional file hiding
+      actions = {
+        open_file = {
+          quit_on_open = true, -- close tree when opening a file
+          window_picker = {
+            enable = false -- open files in last focused window
+          }
+        }
       }
     }
-    -- TODO: set up textobjects
-    -- see <https://github.com/hjdivad/dotfiles/blob/a22557c32bfb69e574114f6c39b832f7b34da132/home/.config/nvim.symlink/init.vim#L921-L936>
-  }
+  end
 
-  -- add more aliases here for syntax highlighted code fenced blocks
-  vim.g.markdown_fenced_languages = { 'js=javascript', 'ts=typescript' }
 
-  vim.g.vim_markdown_no_extensions_in_markdown = 1 -- assume links like foo mean foo.md
-  vim.g.vim_markdown_follow_anchor = 1 -- follow anchors in links like foo.md#wat
-  vim.g.vim_markdown_frontmatter = 1 -- highlight YAML frontmatter
-  vim.g.vim_markdown_strikethrough = 1 -- add highlighting for ~~strikethrough~~
-  vim.g.markdown_auto_insert_bullets = 0 -- don't insert bullets in insert mode; I prefer to use snippets
-  vim.g.vim_markdown_new_list_item_indent = 0 -- don't insert bullets in insert mode; I prefer to use snippets
+  if check('ultisnips') then
+    -- reverse the default ultisnip movement triggers
+    vim.g.UltiSnipsJumpForwardTrigger = '<c-k>'
+    vim.g.UltiSnipsJumpBackwardTrigger = '<c-j>'
+  end
 
-  hjdivad.setup_repls()
-  hjdivad.setup_vimtest()
+  if check('bclose') then
+    -- disable default mappings
+    vim.g.bclose_no_default_mapping = true
+  end
+
+  if check('cmp') then
+    local cmp = require 'cmp'
+    cmp.setup {
+      snippet = { expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end },
+      mapping = {
+        ['<c-l>'] = cmp.mapping.confirm({ select = true }),
+        ['<c-n>'] = cmp.mapping.select_next_item(),
+        ['<c-p>'] = cmp.mapping.select_prev_item(),
+      },
+      sources = cmp.config.sources({
+        { name = 'nvim_lsp' }, -- complete symbols (via LSP)
+        { name = 'nvim_lsp_signature_help' }, -- signature completion
+        { name = 'nvim_lua' }, -- lua nvim api completion (vim.lsp.* &c.)
+        { name = 'ultisnips' }, -- UltiSnipsEdit + UltiSnipsAddFileTypes
+        -- This is useful when there is no LSP, but with an LSP + snippets it's mostly noise
+        -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
+        { name = 'path' }, -- trigger via `/`
+        { name = 'cmdline' }, { name = 'calc' }, { name = 'emoji' } -- trigger via `:` in insert mode
+      })
+    }
+
+    -- -- configure /@ search for this buffer's document symbols
+    cmp.setup.cmdline('/', {
+      sources = cmp.config.sources({ { name = 'nvim_lsp_document_symbol' } }, { { name = 'buffer' } })
+    })
+
+    -- see <https://github.com/hrsh7th/nvim-cmp#setup>
+    --  can setup per filetype
+    --    cmp.setup.filetype('myfiletype', {})
+    --  can setup per custom LSP
+
+  end
+
+  if check('nvim-nonicons') then
+    local icons = require('nvim-nonicons')
+
+    icons.get('file')
+  end
+
+  if check('lspconfig') then
+    setup_language_servers()
+  end
+
+  if check('telescope') then
+    -- kick off trouble :: pretty diagnostics
+    require 'trouble'.setup {}
+    local trouble_provider_telescope = require("trouble.providers.telescope")
+
+    -- see <https://github.com/folke/trouble.nvim/issues/52#issuecomment-863885779>
+    -- and <https://github.com/folke/trouble.nvim/issues/52#issuecomment-988874117>
+    -- for making trouble work properly with nvim 0.6.x
+    local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+    for type, icon in pairs(signs) do
+      local hl = "DiagnosticSign" .. type
+      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+    end
+
+    local telescope = require 'telescope'
+    telescope.setup {
+      defaults = {
+        mappings = {
+          i = {
+            ['<C-k>'] = 'move_selection_previous',
+            ['<C-j>'] = 'move_selection_next',
+            ['<C-h>'] = 'which_key',
+            ['<c-t>'] = trouble_provider_telescope.open_with_trouble
+          },
+          n = { ['<c-t>'] = trouble_provider_telescope.open_with_trouble }
+        }
+      },
+
+      extensions = {
+        ['ui-select'] = {
+          require('telescope.themes').get_cursor {}
+        }
+      },
+    }
+    telescope.load_extension('ultisnips') -- :Telescope ultisnips snippets search
+    telescope.load_extension('fzf') -- use fzf over fzy to get operators
+    -- see
+    -- <https://github.com/nvim-telescope/telescope-ui-select.nvim#telescope-setup-and-configuration>
+    -- for configuring new prompts
+    telescope.load_extension('ui-select') -- use telescope for selecting prompt choices
+  end
+
+  if check('nvim-treesitter') then
+
+    require 'nvim-treesitter.configs'.setup {
+      ensure_installed = 'all',
+      highlight = {
+        enable = true,
+
+        disable = {
+          'lua', -- TS errors in <init.lua>
+          'vim', -- more TS errors for e.g. </Users/hjdivad/.local/share/nvim/site/pack/paqs/start/onedark.vim/colors/onedark.vim>
+        }
+      }
+      -- TODO: set up textobjects
+      -- see <https://github.com/hjdivad/dotfiles/blob/a22557c32bfb69e574114f6c39b832f7b34da132/home/.config/nvim.symlink/init.vim#L921-L936>
+    }
+
+    -- see <https://github.com/nvim-treesitter/nvim-treesitter#modules>
+  end
+
+  if check('vim-markdown') then
+    -- add more aliases here for syntax highlighted code fenced blocks
+    vim.g.markdown_fenced_languages = { 'js=javascript', 'ts=typescript' }
+
+    vim.g.vim_markdown_no_extensions_in_markdown = 1 -- assume links like foo mean foo.md
+    vim.g.vim_markdown_follow_anchor = 1 -- follow anchors in links like foo.md#wat
+    vim.g.vim_markdown_frontmatter = 1 -- highlight YAML frontmatter
+    vim.g.vim_markdown_strikethrough = 1 -- add highlighting for ~~strikethrough~~
+    vim.g.markdown_auto_insert_bullets = 0 -- don't insert bullets in insert mode; I prefer to use snippets
+    vim.g.vim_markdown_new_list_item_indent = 0 -- don't insert bullets in insert mode; I prefer to use snippets
+  end
+
+  if check('vim-test') then
+    hjdivad.setup_vimtest()
+  end
 end
 
 local function setup_window_management()
@@ -591,14 +623,32 @@ local function create_debug_functions()
   pp = vim.pretty_print
 end
 
-local function main()
+---@class MainConfig
+---@field plugins string|table
+---@field mappings boolean
+
+--- Configure neovim.
+---
+---@param config MainConfig Configuration options.
+--- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
+--- * *mappings* Whether to create keymappings. Defaults to `false`.
+local function main(config)
+  local opts = vim.tbl_deep_extend('force', {
+    plugins = {},
+    mappings = false,
+  }, config)
+
+  --TODO: bootstrap here
+
   setup_local_linking()
-  setup_plugins()
+  setup_plugins(opts.plugins)
   setup_local_config()
   setup_clipboard()
   setup_colours()
   setup_statusline()
-  setup_mappings()
+  if opts.mappings then
+    setup_key_mappings()
+  end
   hjdivad.setup_terminal()
   setup_window_management()
   hjdivad.run_exrc()
