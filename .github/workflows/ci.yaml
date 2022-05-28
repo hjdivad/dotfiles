@@ -17,6 +17,11 @@ jobs:
     timeout-minutes: 5
     steps:
 
+      - name: Environment information
+        run: |
+          uname
+          uname -a
+
       - uses: actions/checkout@v2
 
       - name: Install fzf
