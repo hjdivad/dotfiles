@@ -45,8 +45,9 @@ test.bootstrap:
 			printf " $(red)\n\ninit.lua errored ungracefully when bootstrapping.${reset} See output above."
 		} || true
 
-test: test.nvim test.bootstrap # Run all tests
+# test: test.nvim test.bootstrap # Run all tests
+test: test.nvim # Run all tests
 
-.PHONY: install test test.nvim tes.bootstrap
+.PHONY: install test test.nvim test.bootstrap
 
 .DEFAULT_GOAL := test

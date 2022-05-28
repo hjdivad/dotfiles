@@ -21,26 +21,6 @@ underline := $(shell tput smul)
 reset := $(shell tput sgr0)
 
 
-install: # install dotfiles into $HOME
-	./install.bash
-
-test.nvim: # Run plenary tests
-	@cd $(NvimDir)
-	@pwd
-	nvim --headless --noplugin -u tests/runner_init.vim -c "PlenaryBustedDirectory tests/hjdivad/ {minimal_init = 'tests/test_init.vim'}"
-
-TmpOut := "./tmp/test.out"
-
-test.bootstrap:
-	@rm -f $(TmpOut)
-	XDG_DATA_HOME=/tmp/no/place/like/home/ nvim --headless -u ./home/.config/nvim.symlink/init.lua +quit 2>&1 | \
-		grep -C 100 Error && \
-		{
-			printf " $(red)\n\ninit.lua errored ungracefully when bootstrapping.${reset} See output above."
-		} || true
-
-test: test.nvim test.bootstrap # Run all tests
-
 .PHONY: help
 .DEFAULT_GOAL := help
 
