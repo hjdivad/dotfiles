@@ -227,7 +227,7 @@ local function setup_lsp_mappings()
   -- TODO: this gets a stacktrace; try again in nvim >= 0.6.2
   -- maptb('v', '<leader>ca', 'lsp_range_code_actions()') -- list code actions (selected)
 
-  nmap('<leader>rn', [[<cmd>lua vim.buf.rename()<cr>]], { silent = true }) -- rename
+  nmap('<leader>rn', [[<cmd>lua vim.lsp.buf.rename()<cr>]], { silent = true }) -- rename
 
   imap('<c-h>', [[<cmd>lua vim.lsp.buf.signature_help()<cr>]], { silent = true })
 
