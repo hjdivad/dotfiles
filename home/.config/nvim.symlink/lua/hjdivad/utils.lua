@@ -21,17 +21,19 @@ local function __set_env(new_env) env = new_env end
 ---Reset any mutations done via `__set_env`
 local function __reset() env = vim.env end
 
-local function os_tmpdir() return os.getenv('TMPDIR') and os.getenv('TMPDIR') or os.getenv('TEMP') end
+local function os_tmpdir()
+  return os.getenv('TMPDIR') and os.getenv('TMPDIR') or os.getenv('TEMP') or '/tmp'
+end
 
 ---Prints messages in `...`
 ---
 ---intended for simple printf debugging. For anthing advanced see vim.notify()
 local function echo(...)
-  local args = {n = select('#', ...), ...}
+  local args = { n = select('#', ...), ... }
   local messages = {}
   for i = 1, args.n do
     local msg = args[i]
-    table.insert(messages, {' ' .. tostring(msg)})
+    table.insert(messages, { ' ' .. tostring(msg) })
   end
 
   vim.api.nvim_echo(messages, true, {})
@@ -49,7 +51,7 @@ Path.Sep = '/'
 
 function Path.join(root, ...)
   local result = root
-  for _, next_path in ipairs({...}) do
+  for _, next_path in ipairs({ ... }) do
     if endswith(result, Path.Sep) then
       if startswith(next_path, Path.Sep) then
         result = result .. next_path:sub(2)
@@ -109,7 +111,7 @@ function File.readable(path)
   end
 end
 
-function File.cp_r(path, dest) Job:new({command = 'cp', args = {'-r', path, dest}}):sync() end
+function File.cp_r(path, dest) Job:new({ command = 'cp', args = { '-r', path, dest } }):sync() end
 
 ---Returns `true` if `path` is a directory, `false` otherwise.
 ---@see `:help isdirectory()`
@@ -121,7 +123,7 @@ function File.isdirectory(path) return vim.fn['isdirectory'](path) == 1 end
 local function xdg_data_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
   local xdg_dir =
-    (env.XDG_DATA_HOME and Path.isabsolute(env.XDG_DATA_HOME) and env.XDG_DATA_HOME) or
+  (env.XDG_DATA_HOME and Path.isabsolute(env.XDG_DATA_HOME) and env.XDG_DATA_HOME) or
       (env.HOME and Path.join(env.HOME, '.local', 'share'))
   return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
@@ -129,7 +131,7 @@ end
 local function xdg_config_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
   local xdg_dir = (env.XDG_CONFIG_HOME and Path.isabsolute(env.XDG_CONFIG_HOME) and
-                    env.XDG_CONFIG_HOME) or (env.HOME and Path.join(env.HOME, '.config'))
+      env.XDG_CONFIG_HOME) or (env.HOME and Path.join(env.HOME, '.config'))
   return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
 
@@ -149,4 +151,3 @@ return {
   __set_env = __set_env,
   __reset = __reset
 }
-
