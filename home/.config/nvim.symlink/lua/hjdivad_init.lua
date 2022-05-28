@@ -618,6 +618,9 @@ local function setup_local_linking()
   vim.opt_global.runtimepath:prepend(vim.env['HOME'] .. '/src/malleatus/common.nvim')
 end
 
+---Creates some functions in the global scope.  Nothing depends on these, they are for user convenience.
+---
+---* *pp* A synonym for `vim.pretty_print`
 local function create_debug_functions()
   ---@diagnostic disable-next-line: lowercase-global
   pp = vim.pretty_print
