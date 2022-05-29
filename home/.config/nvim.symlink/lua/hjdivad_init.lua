@@ -150,8 +150,11 @@ local function setup_key_mappings()
   ---```lua
   ---vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl('yarn repl', 'ts')]]<cr>')
   ---```
-  nmap('<leader>re', '<cmd>lua ha.edit_generic_repl()<cr>')
-  map('v', '<leader>re', ':TREPLSendSelection<cr>', {})
+  vim.keymap.set('n', '<leader>re', function()
+    require('hjdivad/index').edit_generic_repl()
+  end, { desc = 'Open a REPL in a terminal and a linked REPL input buffer', })
+  vim.keymap.set('v', '<leader>re', ':TREPLSendSelection', { desc = 'Send selection to the REPL', })
+
   nmap('<leader>rr', '<cmd>TestFile<cr>')
   nmap('<leader>rt', '<cmd>TestNearest<cr>')
   nmap('<leader>rd', '<cmd>lua ha.debug_nearest()<cr>')

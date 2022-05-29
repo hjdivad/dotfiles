@@ -94,4 +94,8 @@ function hi.resize()
   end
 end
 
-return { setup_terminal = setup_terminal, toggle_terminal = toggle_terminal }
+return {
+  setup_terminal = setup_terminal,
+  toggle_terminal = toggle_terminal,
+  get_neoterm_window_ids = get_neoterm_window_ids,
+}

@@ -36,13 +36,14 @@ end
 ---@see setup_vimtest()
 ---@param repl_cmd string a command to start a REPL in a neoterm instance
 ---@param repl_extension string the name of the file to use for input commands to the REPL
-function ha.edit_repl(repl_cmd, repl_extension)
+local function edit_repl(repl_cmd, repl_extension)
+  local get_neoterm_window_ids = require('hjdivad/index').get_neoterm_window_ids
   -- TODO: make a toggle_repl that closes the repl windows if they're open
   local repl_file = '.repl.' .. repl_extension
   if not vim.g.neoterm.repl or not vim.g.neoterm.repl.instance_id then
     local starting_window = vim.api.nvim_get_current_win()
     -- create the REPL buffer
-    local open_terminals = ha.get_neoterm_window_ids()
+    local open_terminals = get_neoterm_window_ids()
     if #open_terminals > 0 then
       -- TODO: open the terminal if it's not visible
       -- if we have a terminal open on the left, create the REPL buffer in the topleft
@@ -77,7 +78,7 @@ function ha.edit_repl(repl_cmd, repl_extension)
   vim.cmd('stopinsert')
 end
 
-function ha.edit_generic_repl()
+local function edit_generic_repl()
   local repl_cmd = nil
   local repl_extension = nil
 
@@ -94,10 +95,9 @@ function ha.edit_generic_repl()
       'No extension given. Please specify an extension (to trigger filetype) for your REPL input buffer')
   end
 
-  ha.edit_repl(repl_cmd, repl_extension)
+  edit_repl(repl_cmd, repl_extension)
 
-  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl(']] ..
-      repl_cmd .. [[', ']] .. repl_extension .. [[')]] .. ']]' .. [[<cr>']]
+  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad/index').edit_repl(']] .. repl_cmd .. [[', ']] .. repl_extension .. [[') end]]
   vim.notify([[To skip inputs next time, consider adding `]] .. suggested_keymap ..
     [[` to .vimrc.lua]], vim.log.levels.INFO, {})
 end
@@ -179,4 +179,6 @@ return {
   toggle_nvim_tree = toggle_nvim_tree,
   toggle_terminal = terminal.toggle_terminal,
   goto_tmux_session = tmux.goto_tmux_session,
+  edit_repl = edit_repl,
+  edit_generic_repl = edit_generic_repl,
 }
