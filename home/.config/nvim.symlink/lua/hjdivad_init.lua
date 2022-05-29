@@ -23,6 +23,7 @@ local function setup_clipboard()
 
   local env = vim.env
 
+  -- TODO: detect this in setup and output a log that explains what to do if it's missing
   if env.SSH_TTY ~= nil or env.SSH_CLIENT ~= nil then
     -- remote terminal, yank to client clipboard
     -- this requires:
@@ -58,6 +59,7 @@ local function setup_colours()
   ]])
 end
 
+--TODO: try heirline see if it's nicer & faster than airline
 local function setup_statusline()
   -- see <https://github.com/vim-airline/vim-airline>
   -- see :h airline-configuration
