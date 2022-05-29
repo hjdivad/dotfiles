@@ -14,13 +14,13 @@ function ha.vimtest_debug_transform(raw_cmd)
     end
 
     if cmd:find('jest', 1, true) then
-      local cmd_parts = vim.split(cmd, ' -- ', {plain = true})
+      local cmd_parts = vim.split(cmd, ' -- ', { plain = true })
       cmd = cmd_parts[#cmd_parts - 1] .. '--testTimeout=0 --runInBand' .. cmd_parts[#cmd_parts]
     end
 
     if not debugging then
       error([[Don't know how to debug cmd: "]] .. cmd .. '"\n' ..
-              [[Expecting cmd to contain 'node']])
+        [[Expecting cmd to contain 'node']])
     end
   end
 
@@ -30,12 +30,14 @@ function ha.vimtest_debug_transform(raw_cmd)
   return cmd
 end
 
-function ha.debug_nearest()
+local function debug_nearest()
   vim.t.test_debugging = true
   vim.cmd('TestNearest')
   vim.t.test_debugging = false
 end
 
+--TODO: how to pure lua this?
+--test against nyx
 local function setup_vimtest()
   vim.g['test#strategy'] = 'neoterm'
   vim.cmd([[
@@ -47,4 +49,7 @@ local function setup_vimtest()
   vim.g['test#transformation'] = 'debug'
 end
 
-return {setup_vimtest = setup_vimtest}
+return {
+  setup_vimtest = setup_vimtest,
+  debug_nearest = debug_nearest,
+}

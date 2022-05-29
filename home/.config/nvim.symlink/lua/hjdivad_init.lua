@@ -155,9 +155,11 @@ local function setup_key_mappings()
   end, { desc = 'Open a REPL in a terminal and a linked REPL input buffer', })
   vim.keymap.set('v', '<leader>re', ':TREPLSendSelection', { desc = 'Send selection to the REPL', })
 
-  nmap('<leader>rr', '<cmd>TestFile<cr>')
-  nmap('<leader>rt', '<cmd>TestNearest<cr>')
-  nmap('<leader>rd', '<cmd>lua ha.debug_nearest()<cr>')
+  vim.keymap.set('n', '<leader>rr', '<cmd>TestFile<cr>', { desc = 'Run Test File (vim-test)', })
+  vim.keymap.set('n', '<leader>rt', '<cmd>TestNearest<cr>', { desc = 'Run Nearest Test (vim-test)', })
+  vim.keymap.set('n', '<leader>rd', function()
+    require('hjdivad/index').debug_nearest()
+  end, { desc = 'Debug Nearest Test (vim-test + hjdivad debug transform)', })
 
   --- yank file [path] to clipboard, using the best register we have available
   if vim.fn['has']('clipboard') then

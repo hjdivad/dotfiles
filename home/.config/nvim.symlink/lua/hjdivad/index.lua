@@ -168,7 +168,6 @@ return {
   nmaptb = nmaptb,
   imaptb = imaptb,
   unmap = unmap,
-  setup_vimtest = testing.setup_vimtest,
   setup_repls = setup_repls,
   run_exrc = exrc.run_exrc,
   setup_terminal = terminal.setup_terminal,
@@ -177,9 +176,15 @@ return {
   -- TODO: move any of this to common.nvim?
   -- new exports
   toggle_nvim_tree = toggle_nvim_tree,
+
   toggle_terminal = terminal.toggle_terminal,
   resize_with_terminal = terminal.resize_with_terminal,
+
   goto_tmux_session = tmux.goto_tmux_session,
+
   edit_repl = edit_repl,
   edit_generic_repl = edit_generic_repl,
+
+  debug_nearest = testing.debug_nearest,
+  setup_vimtest = testing.setup_vimtest,
 }
