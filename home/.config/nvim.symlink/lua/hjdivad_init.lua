@@ -645,7 +645,10 @@ local function main(config)
 
   --TODO: bootstrap here
 
-  setup_local_linking()
+  -- TODO: delete this once any reasonable common.nvim is merged
+  -- then do local linking in the common repo with nvim --cmd 'set rtp^=.'
+  vim.opt_global.runtimepath:prepend(vim.env['HOME'] .. '/src/malleatus/common.nvim')
+
   setup_plugins(opts.plugins)
   setup_local_config()
   setup_clipboard()
