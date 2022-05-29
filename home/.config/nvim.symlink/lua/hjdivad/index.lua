@@ -178,6 +178,7 @@ return {
   -- new exports
   toggle_nvim_tree = toggle_nvim_tree,
   toggle_terminal = terminal.toggle_terminal,
+  resize_with_terminal = terminal.resize_with_terminal,
   goto_tmux_session = tmux.goto_tmux_session,
   edit_repl = edit_repl,
   edit_generic_repl = edit_generic_repl,
