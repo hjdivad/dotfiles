@@ -1,20 +1,12 @@
--- TODO: bootstrap check + provide bootstrap.lua for new boxes
-
-local h = require('hjdivad/main')
-local plugins = require('hjdivad/plugins')
+-- TODO: move this to malleatus?
+local h = require('hjdivad/index')
 local hjdivad = h
 
--- the global namespace, for adding userland hooks like `plugins`
--- as well as entry points for autocommands
-local hi = hjdivad.hjdivad_init
 
 local map      = hjdivad.map
 local nmap     = hjdivad.nmap
-local nnoremap = hjdivad.nnoremap
 local imap     = hjdivad.imap
 local tnoremap = hjdivad.tnoremap
-local nmaptb   = hjdivad.nmaptb
-local unmap    = hjdivad.unmap
 local maptb    = hjdivad.maptb
 
 local function setup_local_config()
