@@ -75,64 +75,74 @@ local function setup_statusline()
 end
 
 local function setup_key_mappings()
-  -- TODO: could make this idempotent?
   vim.keymap.del('n', 'Y') -- neovim 0.6.0 maps Y to "$ by default (see default-mappings)
 
   vim.keymap.set('n', 'Q', '', { desc = 'disable Ex mode from Q (unhelpful fat-finger trap)', })
   vim.keymap.set('n', 'j', 'gj', { desc = 'move (visual) row-wise instead of line-wise', })
   vim.keymap.set('n', 'k', 'gk', { desc = 'move (visual) row-wise instead of line-wise', })
+  vim.keymap.set('n', "'", '`', { desc = "`x is more useful, but 'x is easier to type", })
 
 
   vim.keymap.set('n', '<leader><leader>', '<cmd>nohl | checktime<cr>', { desc = 'use ,, to clear highlights', })
 
-  vim.keymap.set('n', '<leader>nf', h.toggle_nvim_tree, { desc = 'now files (toggle nvim-tree)', })
-  vim.keymap.set('n', '<leader>nt', h.toggle_terminal, { desc = 'now terminal (intelligent neoterm toggling)', })
+  vim.keymap.set('n', '<leader>nf', function()
+    require('hjdivad/index').toggle_nvim_tree()
+  end, { desc = 'now files (toggle nvim-tree)', })
+  vim.keymap.set('n', '<leader>nt', function()
+    require('hjdivad/index').toggle_terminal()
+  end, { desc = 'now terminal (intelligent neoterm toggling)', })
 
-  nnoremap([[']], '`') -- 'x is much easier to hit than `x and has more useful semantics: ie switching
-  -- to the column of the mark as well as the row
-
-  nmaptb('<leader>ff', 'find_files()') -- find files relative to cwd
-  nmaptb('<leader>fF', 'find_files({ hidden=true, no_ignore=true })') -- find (more) files
-  nmaptb('<leader>fg', 'git_files()') -- find files in git
+  vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end, { desc = 'find files relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fF', function() require('telescope.builtin').find_files({ hidden = true, no_ignore = true }) end, { desc = 'find files harder (--hidden --no-ignore)', })
+  vim.keymap.set('n', '<leader>fg', function() require('telescope.builtin').git_files() end, { desc = 'find files in git', })
   -- TODO: improve this; get files from git diff <upstream>
-  nmaptb('<leader>fs', 'git_status()') -- find files mentioned by git status
-  nmaptb('<leader>fc', 'git_commits()') -- find (git) commit
-  nmaptb('<leader>fm', 'marks()') -- find marks
-  nmaptb('<leader>fb', 'buffers()') -- find opened files (in buffers)
-  -- TODO: use rg + fuzzy matching instead of builtin live grep
-  nmaptb('<leader>fr', [[grep_string({ search='' })]]) -- fuzzy search against ~ rg .
-  nmaptb('<leader>fR', [[grep_string({ search='', additional_args=function() return { '--hidden' } end, })]]) -- fuzzy search against ~ rg .
-  nmaptb('<leader>FR', [[grep_string({ search='', additional_args=function() return { '--no-ignore', '--hidden' } end, })]]) -- fuzzy search against ~ rg .
+  vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').git_status() end, { desc = 'find files mentioned by git status', })
+  vim.keymap.set('n', '<leader>fc', function() require('telescope.builtin').git_commits() end, { desc = 'find git commits', })
+  vim.keymap.set('n', '<leader>fm', function() require('telescope.builtin').marks() end, { desc = 'find marks', })
+  vim.keymap.set('n', '<leader>fb', function() require('telescope.builtin').buffers() end, { desc = 'find buffers', })
+  vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').grep_string({ search = '' }) end, { desc = 'ripgrep relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fR', function()
+    require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden' } end })
+  end, { desc = 'ripgrep harder (--hidden) relative to `cwd`', })
+  vim.keymap.set('n', '<leader>FR', function()
+    require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden', '--no-ignore' } end })
+  end, { desc = 'ripgrep harderest (--hidden --no-ignore) relative to `cwd`', })
   -- TODO: nice to add a (current_class_fuzzy_find, current_method_fuzzy_find &c.) using treesitter
   -- or perhaps using text objects? fuzzy_find_lines_in_text_objects <af> a function
-  nmaptb('<leader>fi', 'current_buffer_fuzzy_find()') -- find (fuzzy) in current buffer
-  nmap('<leader>fa', '<cmd>Telescope<cr>', { silent = true }) -- find anything (pick a picker)
-  nmaptb('<leader>fh', 'help_tags()') -- find vim help
+  vim.keymap.set('n', '<leader>fi', function() require('telescope.builtin').current_buffer_fuzzy_find() end, { desc = 'fuzzy find lines in buffer', })
+  vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { silent = true, desc = 'find anything by first finding a telescope finder', })
+  vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end, { desc = 'find (vim) help tags', })
 
-  nmap('<leader>ll', '<cmd>Trouble document_diagnostics<cr>') -- lint list
-  nmap('<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>') -- lint list (more)
-
+  vim.keymap.set('n', '<leader>ll', '<cmd>Trouble document_diagnostics<cr>', { desc = 'lint list buffer', })
+  vim.keymap.set('n', '<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>', { desc = 'lint list workspace', })
   -- TODO: these two (ln, lp) seem to be broken in nvim 0.7.0
-  nmap('<leader>ln', [[<cmd>lua require('trouble').next({ skip_groups = true, jump = true })<cr>]]) -- lint next
-  nmap('<leader>lp',
-    [[<cmd>lua require('trouble').previous({ skip_groups = true, jump = true })<cr>]]) -- lint prev
+  vim.keymap.set('n', '<leader>ln', function()
+    require('trouble').next({ skip_groups = true, jump = true })
+  end, { desc = 'lint next item', })
+  vim.keymap.set('n', '<leader>lp', function()
+    require('trouble').previous({ skip_groups = true, jump = true })
+  end, { desc = 'lint previous item', })
 
-  -- see https://github.com/nvim-telescope/telescope-symbols.nvim#symbol-source-format
-  -- for custom symbols / symbol names
-  imap('<C-f>', [[<Cmd>lua require('cmp').complete()<cr>]], { silent = true }) -- manually trigger completion
 
-  nmap('<leader>bd', '<cmd>Bclose<cr><cmd>enew<cr>')
+  vim.keymap.set('i', '<C-f>', function() require('cmp').complete() end, { desc = 'Manually [re-]trigger completion', })
+  vim.keymap.set('n', '<leader>bd', '<cmd>Bclose!<cr><cmd>enew<cr>', { desc = 'buffer delete (but retain window, unlike bwipeout!)', })
 
-  nmap('<leader>hn', '<cmd>GitGutterNextHunk<cr>')
-  nmap('<leader>hp', '<cmd>GitGutterPrevHunk<cr>')
-  nmap('<leader>hP', '<cmd>GitGutterPreviewHunk<cr>')
-  nmap('<leader>hu', '<cmd>GitGutterUndoHunk<cr>')
+  vim.keymap.set('n', '<leader>hn', '<cmd>GitGutterNextHunk<cr>', { desc = 'git hunk: next', })
+  vim.keymap.set('n', '<leader>hp', '<cmd>GitGutterPrevHunk<cr>', { desc = 'git hunk: previous', })
+  vim.keymap.set('n', '<leader>hP', '<cmd>GitGutterPreviewHunk<cr>', { desc = 'git hunk: preview diff', })
+  vim.keymap.set('n', '<leader>hu', '<cmd>GitGutterUndoHunk<cr>', { desc = 'git hunk: undo', })
 
-  nmap('<leader>ts', [[<Cmd>Telescope tmux windows<cr>]])
-  nmap('<leader>tt', [[<Cmd>silent !tmux switch-client -l<cr>]])
-  nmap('<leader>td', [[<Cmd>lua ha.goto_tmux_session('todos', 'todos')<cr>]])
-  nmap('<leader>tr', [[<Cmd>lua ha.goto_tmux_session('todos', 'reference')<cr>]])
-  nmap('<leader>tj', [[<Cmd>lua ha.goto_tmux_session('todos', 'journal')<cr>]])
+  vim.keymap.set('n', '<leader>ts', '<Cmd>Telescope tmux windows<cr>', { desc = 'tmux: select window', })
+  vim.keymap.set('n', '<leader>tt', '<Cmd>silent !tmux switch-client -l<cr>', { desc = 'tmux: toggle previous window', })
+  vim.keymap.set('n', '<leader>td', function()
+    require('hjdivad/index').goto_tmux_session('todos', 'todos')
+  end, { desc = 'tmux: todos', })
+  vim.keymap.set('n', '<leader>tr', function()
+    require('hjdivad/index').goto_tmux_session('todos', 'reference')
+  end, { desc = 'tmux: reference', })
+  vim.keymap.set('n', '<leader>tj', function()
+    require('hjdivad/index').goto_tmux_session('todos', 'journal')
+  end, { desc = 'tmux: journal', })
 
   ---Mapping for opening up a generic REPL buffer + terminal pair.
   ---In general it's recommended to overwrite this mapping per-project with a
@@ -605,11 +615,9 @@ local function setup_window_management()
 end
 
 local function create_user_commands()
-  vim.api.nvim_create_user_command('HiUpdatePlugins', plugins.update_plugins, { desc = 'Update or install plugins' })
-end
-
-local function setup_local_linking()
-  vim.opt_global.runtimepath:prepend(vim.env['HOME'] .. '/src/malleatus/common.nvim')
+  vim.api.nvim_create_user_command('HiUpdatePlugins', function()
+    require('hjdivad/plugins').update_plugins()
+  end, { desc = 'Update or install plugins' })
 end
 
 ---Creates some functions in the global scope.  Nothing depends on these, they are for user convenience.
@@ -654,6 +662,5 @@ end
 
 return {
   main = main,
-  update_plugins = plugins.update_plugins,
   create_debug_functions = create_debug_functions,
 }
