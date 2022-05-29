@@ -169,6 +169,8 @@ local function setup_key_mappings()
     nmap('<leader>yf', [[<cmd>let @"=expand('%')<cr>]]) -- yank path to clipboard
     nmap('<leader>yF', [[<cmd>let @"=expand('%:p')<cr>]]) -- yank absolute path to clipboard
   end
+  -- yank GitHub permalink to clipboard
+  vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 
   tnoremap('<c-g><c-g>', [[<c-\><c-n>]]) -- better terminal escape to normal mapping
 
@@ -199,9 +201,6 @@ local function setup_key_mappings()
   vim.keymap.set('n', '<leader>8', '8gt', { desc = 'go to tab 8', })
   vim.keymap.set('n', '<leader>9', '9gt', { desc = 'go to tab 9', })
   vim.keymap.set('n', '<leader>0', '10gt', { desc = 'go to tab 10', })
-
-  -- yank GitHub permalink to clipboard
-  vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 end
 
 local function setup_lsp_mappings()
