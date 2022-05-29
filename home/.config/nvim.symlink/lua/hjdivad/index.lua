@@ -2,43 +2,12 @@ local utils = require('hjdivad/utils')
 local terminal = require('hjdivad/terminal')
 local exrc = require('hjdivad/exrc')
 local testing = require('hjdivad/testing')
+local tmux = require('hjdivad/tmux')
 
 local hi = utils.hjdivad_init
 local ha = utils.hjdivad_auto
 local assign = utils.assign
 
-function ha.get_tmux_panes()
-  local result = {}
-  local tmux_panes = utils.get_os_command_output({
-    'tmux', 'list-panes', '-a', '-F', '#{pane_id}⊱#{window_name}⊱#{session_name}'
-  })
-  for _, entry in ipairs(tmux_panes) do
-    local partsIter = entry:gmatch('([^⊱]+)[⊱]?')
-    local pane_id = partsIter()
-    local window_name = partsIter()
-    local session_name = partsIter()
-    table.insert(result, { pane_id = pane_id, window_name = window_name, session_name = session_name })
-  end
-  return result
-end
-
-function ha.goto_tmux_session(session_name, window_name)
-  local matching_pane = nil
-  for _, pane in ipairs(ha.get_tmux_panes()) do
-    if session_name == pane.session_name then
-      if window_name == pane.window_name then
-        matching_pane = pane
-        break
-      end
-    end
-  end
-
-  if matching_pane then
-    vim.api.nvim_command([[silent !tmux switch-client -t \\]] .. matching_pane.pane_id)
-  else
-    vim.api.nvim_err_writeln('Cannot find tmux pane "' .. session_name .. ':' .. window_name .. '"')
-  end
-end
 
 ---Show the nvim-tree
 ---
@@ -209,4 +178,5 @@ return {
   -- new exports
   toggle_nvim_tree = toggle_nvim_tree,
   toggle_terminal = terminal.toggle_terminal,
+  goto_tmux_session = tmux.goto_tmux_session,
 }
