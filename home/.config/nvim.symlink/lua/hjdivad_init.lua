@@ -1,7 +1,3 @@
--- TODO: move this to malleatus?
-local h = require('hjdivad/index')
-local hjdivad = h
-
 local function setup_local_config()
   ---spelling
   vim.opt.spelllang = { 'sv', 'en_gb', 'en_us' }
@@ -360,6 +356,8 @@ local function setup_language_servers()
 end
 
 local function setup_plugins(config)
+  local hjdivad = require('hjdivad/index')
+
   require('malleatus').setup {}
 
   local function check(plugin)
@@ -632,6 +630,7 @@ end
 --- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
 --- * *mappings* Whether to create keymappings. Defaults to `false`.
 local function main(config)
+  local hjdivad = require('hjdivad/index')
   local opts = vim.tbl_deep_extend('force', {
     plugins = {},
     mappings = false,
@@ -648,13 +647,14 @@ local function main(config)
   setup_clipboard()
   setup_colours()
   setup_statusline()
+  hjdivad.setup_terminal()
+  setup_window_management()
+  create_user_commands()
+  hjdivad.run_exrc()
+
   if opts.mappings then
     setup_key_mappings()
   end
-  hjdivad.setup_terminal()
-  setup_window_management()
-  hjdivad.run_exrc()
-  create_user_commands()
 end
 
 return {
