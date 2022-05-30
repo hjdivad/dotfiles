@@ -37,7 +37,7 @@ jobs:
 
       - name: Install Plugins
         run: |
-          nvim --headless -u ./home/.config/nvim.symlink/bootstrap.lua  --cmd 'set rtp+=./home/.config/nvim.symlink' +quit
+          nvim --headless -u ./home/.config/nvim.symlink/bootstrap.lua  --cmd 'set rtp+=./home/.config/nvim.symlink'
 
       - name: Setup upterm session
         env:
