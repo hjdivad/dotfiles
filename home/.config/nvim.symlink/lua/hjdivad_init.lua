@@ -2,13 +2,6 @@
 local h = require('hjdivad/index')
 local hjdivad = h
 
-
-local map      = hjdivad.map
-local nmap     = hjdivad.nmap
-local imap     = hjdivad.imap
-local tnoremap = hjdivad.tnoremap
-local maptb    = hjdivad.maptb
-
 local function setup_local_config()
   ---spelling
   vim.opt.spelllang = { 'sv', 'en_gb', 'en_us' }
@@ -162,33 +155,33 @@ local function setup_key_mappings()
   end, { desc = 'Debug Nearest Test (vim-test + hjdivad debug transform)', })
 
   --- yank file [path] to clipboard, using the best register we have available
-  if vim.fn['has']('clipboard') then
-    nmap('<leader>yf', [[<cmd>let @+=expand('%')<cr>]]) -- yank path to clipboard
-    nmap('<leader>yF', [[<cmd>let @+=expand('%:p')<cr>]]) -- yank absolute path to clipboard
-  else
-    nmap('<leader>yf', [[<cmd>let @"=expand('%')<cr>]]) -- yank path to clipboard
-    nmap('<leader>yF', [[<cmd>let @"=expand('%:p')<cr>]]) -- yank absolute path to clipboard
-  end
+  local clipboard_reg
+  if vim.fn.has('clipboard') then clipboard_reg = '+' else clipboard_reg = '"' end
+
+  vim.keymap.set('n', '<leader>yf', function()
+    vim.fn.setreg(clipboard_reg, vim.fn.expand('%'))
+  end, { desc = 'yank path to buffer to clipboard', })
+  vim.keymap.set('n', '<leader>yF', function()
+    vim.fn.setreg(clipboard_reg, vim.fn.expand('%:p'))
+  end, { desc = 'yank absolute path to buffer to clipboard', })
   -- yank GitHub permalink to clipboard
   vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 
-  tnoremap('<c-g><c-g>', [[<c-\><c-n>]]) -- better terminal escape to normal mapping
-
-  ---terminal window motions
-  tnoremap('<c-w>h', [[<c-\><c-n><c-w>h]])
-  tnoremap('<c-w><c-h>', [[<c-\><c-n><c-w>h]])
-  tnoremap('<c-w>j', [[<c-\><c-n><c-w>j]])
-  tnoremap('<c-w><c-j>', [[<c-\><c-n><c-w>j]])
-  tnoremap('<c-w>k', [[<c-\><c-n><c-w>k]])
-  tnoremap('<c-w><c-k>', [[<c-\><c-n><c-w>k]])
-  tnoremap('<c-w>l', [[<c-\><c-n><c-w>l]])
-  tnoremap('<c-w><c-l>', [[<c-\><c-n><c-w>l]])
-  tnoremap('<c-w>c', [[<c-\><c-n><c-w>c]])
-  tnoremap('<c-w><c-c>', [[<c-\><c-n><c-w>c]])
-
+  ---terminal window mappings & motions
+  vim.keymap.set('t', '<c-g><c-g>', [[<c-\><c-n>]], { desc = 'Escape terminal with better keymap', })
+  vim.keymap.set('t', '<c-w>h', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-h>', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
+  vim.keymap.set('t', '<c-w>j', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-j>', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
+  vim.keymap.set('t', '<c-w>k', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-k>', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
+  vim.keymap.set('t', '<c-w>l', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-l>', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
+  vim.keymap.set('t', '<c-w>c', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-c>', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
   -- escape and re-enter insert mode to prevent issue with cursor not appearing in new terminal window
-  tnoremap('<c-w>n', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]])
-  tnoremap('<c-w><c-n>', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]])
+  vim.keymap.set('t', '<c-w>n', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-n>', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
 
   --- tab navigation
   vim.keymap.set('n', '<leader>1', '1gt', { desc = 'go to tab 1', })
@@ -204,51 +197,44 @@ local function setup_key_mappings()
 end
 
 local function setup_lsp_mappings()
-  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { noremap = true })
-  map('n', '<c-h>', [[<cmd>lua vim.lsp.buf.signature_help()<cr>]], { silent = true })
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show LSP hover (fn docs, help &c.)', })
+  vim.keymap.set('n', '<c-h>', vim.lsp.buf.signature_help, { desc = 'Show LSP signature help', })
 
-  ---telescope variant
-  -- maptb('n', '<leader>gd', 'lsp_definitions()') -- go to definition
-  -- maptb('n', '<leader>gD', 'lsp_type_definitions()') -- go to type definition
-  -- maptb('n', '<leader>gi', 'lsp_implementation()') -- go to implementation
-  -- maptb('n', '<leader>gr', 'lsp_references()') -- go to reference(s)
+  -- Trouble's goto definition not working with neovim 0.7.0
+  -- vim.keymap.set('n', '<leader>gd', '<cmd>Trouble lsp_definitions<cr>', { desc='go to definition',  })
+  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end, { desc = 'go to definition', })
+  vim.keymap.set('n', '<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>', { desc = 'go to type definition', })
+  vim.keymap.set('n', '<leader>gi', '<cmd>Trouble lsp_implementation<cr>', { desc = 'go to implementations', })
+  vim.keymap.set('n', '<leader>gr', '<cmd>Trouble lsp_references<cr>', { desc = 'go to references', })
+  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>', { desc = 'go to/from trouble (i.e. toggle trouble window)', })
+  vim.keymap.set('n', '<leader>gci', vim.lsp.buf.incoming_calls, { desc = 'go to calls (inbound) -- who calls me?', })
+  vim.keymap.set('n', '<leader>gco', vim.lsp.buf.outgoing_calls, { desc = 'go to calls (outbound) -- who do i call?', })
 
-  ---trouble variant
-  -- see <https://github.com/folke/trouble.nvim/issues/153>
-  -- nmap('<leader>gd', '<cmd>Trouble lsp_definitions<cr>') -- go to definition
-  maptb('n', '<leader>gd', 'lsp_definitions()') -- list document symbols
-  nmap('<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>') -- go to type definition
-  nmap('<leader>gi', '<cmd>Trouble lsp_implementation<cr>') -- go to implementation
-  nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
-  -- useful for exploring multiple results e.g. multiple references
-  nmap('<leader>gt', '<cmd>TroubleToggle<cr>') -- toggle trouble window
+  vim.keymap.set('n', '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end, { desc = 'show document symbols', })
+  vim.keymap.set('n', '<leader>sS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>SS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>sf', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function' } }) end, { desc = 'show functions', })
+  vim.keymap.set('n', '<leader>so', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end, { desc = 'show outline', })
 
-  nmap('<leader>gci', '<cmd>lua vim.lsp.buf.incoming_calls()<cr>') -- who calls this function?
-  nmap('<leader>gco', '<cmd>lua vim.lsp.buf.outgoing_calls()<cr>') -- who does this function call?
-
-  maptb('n', '<leader>ss', 'lsp_document_symbols()') -- list document symbols
-  maptb('n', '<leader>sS', 'lsp_dynamic_workspace_symbols()') -- list workspace symbols
-  maptb('n', '<leader>SS', 'lsp_dynamic_workspace_symbols()') -- list workspace symbols
-  maptb('n', '<leader>sf', [[lsp_document_symbols({ symbols={'function'} })]]) -- list document symbols
-  maptb('n', '<leader>so', [[lsp_document_symbols({ symbols={'class', 'function'} })]]) -- list document symbols
   vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'list code actions under cursor' })
-  -- TODO: this gets a stacktrace; try again in nvim >= 0.6.2
-  -- maptb('v', '<leader>ca', 'lsp_range_code_actions()') -- list code actions (selected)
+  vim.keymap.set('v', '<leader>ca', vim.lsp.buf.range_code_action, { desc = 'list code actions in range' })
 
-  nmap('<leader>rn', [[<cmd>lua vim.lsp.buf.rename()<cr>]], { silent = true }) -- rename
+  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'rename symbol under cursor' })
 
-  imap('<c-h>', [[<cmd>lua vim.lsp.buf.signature_help()<cr>]], { silent = true })
+  vim.keymap.set('i', '<c-h>', vim.lsp.buf.signature_help, { desc = 'show signature help' })
 
-
+  -- TODO: this works but we don't have control over the specific server used
+  -- This is particularly unfortunate as TypeScript claims it can format, but
+  -- we want diagnosticls to actually do so
   vim.keymap.set('v', '<leader>rf', function()
     local vis_start = vim.api.nvim_buf_get_mark(0, '<')
     local vis_end = vim.api.nvim_buf_get_mark(0, '>')
+    vim.pretty_print('range fmt', vis_start, vis_end)
     vim.lsp.buf.range_formatting({}, vis_start, vis_end)
-    -- it would be nice to exit visual mode here. The following works:
-    --  :lua vim.cmd('stopinsert')
-    -- so it's not obvious to me why it wouldn't work in a callback
-    -- vim.cmd('stopinsert')
-  end)
+    -- send <esc> to exit visual mode after formatting
+    local escape = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
+    vim.api.nvim_feedkeys(escape, 'n', false)
+  end, { desc = 'Format selected range' })
 end
 
 local function setup_language_servers()
