@@ -634,23 +634,25 @@ end
 --- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
 --- * *mappings* Whether to create keymappings. Defaults to `false`.
 local function main(config)
+  --TODO: bootstrap here
+
   local hjdivad = require('hjdivad/index')
   local opts = vim.tbl_deep_extend('force', {
     plugins = {},
     mappings = false,
   }, config)
 
-  --TODO: bootstrap here
-
-  setup_plugins(opts.plugins)
   setup_local_config()
-  setup_clipboard()
   setup_colours()
+
+  -- TODO: move these to malleatus?
+  setup_plugins(opts.plugins)
+  setup_clipboard()
+  setup_window_management()
   setup_statusline()
   hjdivad.setup_terminal()
-  setup_window_management()
-  create_user_commands()
   hjdivad.run_exrc()
+  create_user_commands()
 
   if opts.mappings then
     setup_key_mappings()

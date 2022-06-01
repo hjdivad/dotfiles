@@ -5,8 +5,6 @@ local testing = require('hjdivad/testing')
 local tmux = require('hjdivad/tmux')
 
 local hi = utils.hjdivad_init
-local ha = utils.hjdivad_auto
-local assign = utils.assign
 
 
 ---Show the nvim-tree
@@ -111,63 +109,11 @@ local function setup_repls()
   ]])
 end
 
----Create a keystroke mapping, i.e. keyboard shortcuts
----
----For example:
----```lua
---- local map = require'hjdivad/main'.map
----
---- map('n', '<leader>ff', [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], { silent = true })
----```
----
----@param mode string   the mode to apply the mapping (see `nvim_set_keymap`)
----@param lhs string    the keyboard shortcut
----@param rhs string    the replacement (usually a function call)
----@param opts table    any options to pass to `nvim_set_keymap`
----@return nil
-local function map(mode, lhs, rhs, opts)
-  local options = { noremap = true }
-
-  if opts then options = vim.tbl_extend('force', options, opts) end
-
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
-end
-
-local function nmap(lhs, rhs, opts) map('n', lhs, rhs, opts) end
-
-local function nnoremap(lhs, rhs, opts) map('n', lhs, rhs, assign({ noremap = true }, opts)) end
-
-local function imap(lhs, rhs, opts) map('i', lhs, rhs, opts) end
-
-local function tmap(lhs, rhs, opts) map('t', lhs, rhs, opts) end
-
-local function tnoremap(lhs, rhs, opts) map('t', lhs, rhs, assign({ noremap = true }, opts)) end
-
-local function unmap(mode, lhs) vim.api.nvim_del_keymap(mode, lhs) end
-
-local function maptb(mode, lhs, rhs)
-  map(mode, lhs, [[<Cmd>lua require('telescope.builtin').]] .. rhs .. '<CR>', { silent = true })
-end
-
-local function nmaptb(lhs, rhs) maptb('n', lhs, rhs) end
-
-local function imaptb(lhs, rhs) maptb('i', lhs, rhs) end
-
 -- inform terminals that they are within an nvim instance
 vim.env.NVIM_WRAPPER = 1
 
 return {
   hjdivad_init = hi,
-  map = map,
-  nmap = nmap,
-  nnoremap = nnoremap,
-  imap = imap,
-  tmap = tmap,
-  tnoremap = tnoremap,
-  maptb = maptb,
-  nmaptb = nmaptb,
-  imaptb = imaptb,
-  unmap = unmap,
   setup_repls = setup_repls,
   run_exrc = exrc.run_exrc,
   setup_terminal = terminal.setup_terminal,
