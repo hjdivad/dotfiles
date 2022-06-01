@@ -642,10 +642,6 @@ local function main(config)
 
   --TODO: bootstrap here
 
-  -- TODO: delete this once any reasonable common.nvim is merged
-  -- then do local linking in the common repo with nvim --cmd 'set rtp^=.'hjini
-  vim.opt_global.runtimepath:prepend(vim.env['HOME'] .. '/src/malleatus/common.nvim')
-
   setup_plugins(opts.plugins)
   setup_local_config()
   setup_clipboard()
