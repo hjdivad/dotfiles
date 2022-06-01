@@ -157,6 +157,9 @@ if [[ -r $HOME/.ssh/ssh_auth_sock ]]; then
   export SSH_AUTH_SOCK=$HOME/.ssh/ssh_auth_sock
 fi
 
+# see <https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT>
+export GPG_TTY=$(tty)
+
 #}}}
 
 # Aliases {{{
