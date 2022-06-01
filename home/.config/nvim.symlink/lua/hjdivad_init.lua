@@ -610,6 +610,10 @@ local function create_user_commands()
   vim.api.nvim_create_user_command('HiResize', function()
     require('hjdivad/index').resize_with_terminal()
   end, { desc = 'Resize windows, ensuring a fixed-width terminal has appropriate width' })
+
+  vim.api.nvim_create_user_command('HiDisableMarkdownFolding', function()
+    vim.g.vim_markdown_folding_disabled = true
+  end, { desc = "Disable Markdown Folding as vim-markdown + treesitter don't get along" })
 end
 
 ---Creates some functions in the global scope.  Nothing depends on these, they are for user convenience.
