@@ -1,22 +1,3 @@
--- TODO: bootstrap check + provide bootstrap.lua for new boxes
-
-local h = require('hjdivad/main')
-local plugins = require('hjdivad/plugins')
-local hjdivad = h
-
--- the global namespace, for adding userland hooks like `plugins`
--- as well as entry points for autocommands
-local hi = hjdivad.hjdivad_init
-
-local map      = hjdivad.map
-local nmap     = hjdivad.nmap
-local nnoremap = hjdivad.nnoremap
-local imap     = hjdivad.imap
-local tnoremap = hjdivad.tnoremap
-local nmaptb   = hjdivad.nmaptb
-local unmap    = hjdivad.unmap
-local maptb    = hjdivad.maptb
-
 local function setup_local_config()
   ---spelling
   vim.opt.spelllang = { 'sv', 'en_gb', 'en_us' }
@@ -31,6 +12,7 @@ local function setup_clipboard()
 
   local env = vim.env
 
+  -- TODO: detect this in setup and output a log that explains what to do if it's missing
   if env.SSH_TTY ~= nil or env.SSH_CLIENT ~= nil then
     -- remote terminal, yank to client clipboard
     -- this requires:
@@ -66,6 +48,7 @@ local function setup_colours()
   ]])
 end
 
+--TODO: try heirline see if it's nicer & faster than airline
 local function setup_statusline()
   -- see <https://github.com/vim-airline/vim-airline>
   -- see :h airline-configuration
@@ -81,64 +64,74 @@ local function setup_statusline()
 end
 
 local function setup_key_mappings()
-  -- TODO: could make this idempotent?
   vim.keymap.del('n', 'Y') -- neovim 0.6.0 maps Y to "$ by default (see default-mappings)
 
   vim.keymap.set('n', 'Q', '', { desc = 'disable Ex mode from Q (unhelpful fat-finger trap)', })
   vim.keymap.set('n', 'j', 'gj', { desc = 'move (visual) row-wise instead of line-wise', })
   vim.keymap.set('n', 'k', 'gk', { desc = 'move (visual) row-wise instead of line-wise', })
+  vim.keymap.set('n', "'", '`', { desc = "`x is more useful, but 'x is easier to type", })
 
 
   vim.keymap.set('n', '<leader><leader>', '<cmd>nohl | checktime<cr>', { desc = 'use ,, to clear highlights', })
 
-  vim.keymap.set('n', '<leader>nf', h.toggle_nvim_tree, { desc = 'now files (toggle nvim-tree)', })
-  vim.keymap.set('n', '<leader>nt', h.toggle_terminal, { desc = 'now terminal (intelligent neoterm toggling)', })
+  vim.keymap.set('n', '<leader>nf', function()
+    require('hjdivad/index').toggle_nvim_tree()
+  end, { desc = 'now files (toggle nvim-tree)', })
+  vim.keymap.set('n', '<leader>nt', function()
+    require('hjdivad/index').toggle_terminal()
+  end, { desc = 'now terminal (intelligent neoterm toggling)', })
 
-  nnoremap([[']], '`') -- 'x is much easier to hit than `x and has more useful semantics: ie switching
-  -- to the column of the mark as well as the row
-
-  nmaptb('<leader>ff', 'find_files()') -- find files relative to cwd
-  nmaptb('<leader>fF', 'find_files({ hidden=true, no_ignore=true })') -- find (more) files
-  nmaptb('<leader>fg', 'git_files()') -- find files in git
+  vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end, { desc = 'find files relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fF', function() require('telescope.builtin').find_files({ hidden = true, no_ignore = true }) end, { desc = 'find files harder (--hidden --no-ignore)', })
+  vim.keymap.set('n', '<leader>fg', function() require('telescope.builtin').git_files() end, { desc = 'find files in git', })
   -- TODO: improve this; get files from git diff <upstream>
-  nmaptb('<leader>fs', 'git_status()') -- find files mentioned by git status
-  nmaptb('<leader>fc', 'git_commits()') -- find (git) commit
-  nmaptb('<leader>fm', 'marks()') -- find marks
-  nmaptb('<leader>fb', 'buffers()') -- find opened files (in buffers)
-  -- TODO: use rg + fuzzy matching instead of builtin live grep
-  nmaptb('<leader>fr', [[grep_string({ search='' })]]) -- fuzzy search against ~ rg .
-  nmaptb('<leader>fR', [[grep_string({ search='', additional_args=function() return { '--hidden' } end, })]]) -- fuzzy search against ~ rg .
-  nmaptb('<leader>FR', [[grep_string({ search='', additional_args=function() return { '--no-ignore', '--hidden' } end, })]]) -- fuzzy search against ~ rg .
+  vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').git_status() end, { desc = 'find files mentioned by git status', })
+  vim.keymap.set('n', '<leader>fc', function() require('telescope.builtin').git_commits() end, { desc = 'find git commits', })
+  vim.keymap.set('n', '<leader>fm', function() require('telescope.builtin').marks() end, { desc = 'find marks', })
+  vim.keymap.set('n', '<leader>fb', function() require('telescope.builtin').buffers() end, { desc = 'find buffers', })
+  vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').grep_string({ search = '' }) end, { desc = 'ripgrep relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fR', function()
+    require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden' } end })
+  end, { desc = 'ripgrep harder (--hidden) relative to `cwd`', })
+  vim.keymap.set('n', '<leader>FR', function()
+    require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden', '--no-ignore' } end })
+  end, { desc = 'ripgrep harderest (--hidden --no-ignore) relative to `cwd`', })
   -- TODO: nice to add a (current_class_fuzzy_find, current_method_fuzzy_find &c.) using treesitter
   -- or perhaps using text objects? fuzzy_find_lines_in_text_objects <af> a function
-  nmaptb('<leader>fi', 'current_buffer_fuzzy_find()') -- find (fuzzy) in current buffer
-  nmap('<leader>fa', '<cmd>Telescope<cr>', { silent = true }) -- find anything (pick a picker)
-  nmaptb('<leader>fh', 'help_tags()') -- find vim help
+  vim.keymap.set('n', '<leader>fi', function() require('telescope.builtin').current_buffer_fuzzy_find() end, { desc = 'fuzzy find lines in buffer', })
+  vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { silent = true, desc = 'find anything by first finding a telescope finder', })
+  vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end, { desc = 'find (vim) help tags', })
 
-  nmap('<leader>ll', '<cmd>Trouble document_diagnostics<cr>') -- lint list
-  nmap('<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>') -- lint list (more)
-
+  vim.keymap.set('n', '<leader>ll', '<cmd>Trouble document_diagnostics<cr>', { desc = 'lint list buffer', })
+  vim.keymap.set('n', '<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>', { desc = 'lint list workspace', })
   -- TODO: these two (ln, lp) seem to be broken in nvim 0.7.0
-  nmap('<leader>ln', [[<cmd>lua require('trouble').next({ skip_groups = true, jump = true })<cr>]]) -- lint next
-  nmap('<leader>lp',
-    [[<cmd>lua require('trouble').previous({ skip_groups = true, jump = true })<cr>]]) -- lint prev
+  vim.keymap.set('n', '<leader>ln', function()
+    require('trouble').next({ skip_groups = true, jump = true })
+  end, { desc = 'lint next item', })
+  vim.keymap.set('n', '<leader>lp', function()
+    require('trouble').previous({ skip_groups = true, jump = true })
+  end, { desc = 'lint previous item', })
 
-  -- see https://github.com/nvim-telescope/telescope-symbols.nvim#symbol-source-format
-  -- for custom symbols / symbol names
-  imap('<C-f>', [[<Cmd>lua require('cmp').complete()<cr>]], { silent = true }) -- manually trigger completion
 
-  nmap('<leader>bd', '<cmd>Bclose<cr><cmd>enew<cr>')
+  vim.keymap.set('i', '<C-f>', function() require('cmp').complete() end, { desc = 'Manually [re-]trigger completion', })
+  vim.keymap.set('n', '<leader>bd', '<cmd>Bclose!<cr><cmd>enew<cr>', { desc = 'buffer delete (but retain window, unlike bwipeout!)', })
 
-  nmap('<leader>hn', '<cmd>GitGutterNextHunk<cr>')
-  nmap('<leader>hp', '<cmd>GitGutterPrevHunk<cr>')
-  nmap('<leader>hP', '<cmd>GitGutterPreviewHunk<cr>')
-  nmap('<leader>hu', '<cmd>GitGutterUndoHunk<cr>')
+  vim.keymap.set('n', '<leader>hn', '<cmd>GitGutterNextHunk<cr>', { desc = 'git hunk: next', })
+  vim.keymap.set('n', '<leader>hp', '<cmd>GitGutterPrevHunk<cr>', { desc = 'git hunk: previous', })
+  vim.keymap.set('n', '<leader>hP', '<cmd>GitGutterPreviewHunk<cr>', { desc = 'git hunk: preview diff', })
+  vim.keymap.set('n', '<leader>hu', '<cmd>GitGutterUndoHunk<cr>', { desc = 'git hunk: undo', })
 
-  nmap('<leader>ts', [[<Cmd>Telescope tmux windows<cr>]])
-  nmap('<leader>tt', [[<Cmd>silent !tmux switch-client -l<cr>]])
-  nmap('<leader>td', [[<Cmd>lua ha.goto_tmux_session('todos', 'todos')<cr>]])
-  nmap('<leader>tr', [[<Cmd>lua ha.goto_tmux_session('todos', 'reference')<cr>]])
-  nmap('<leader>tj', [[<Cmd>lua ha.goto_tmux_session('todos', 'journal')<cr>]])
+  vim.keymap.set('n', '<leader>ts', '<Cmd>Telescope tmux windows<cr>', { desc = 'tmux: select window', })
+  vim.keymap.set('n', '<leader>tt', '<Cmd>silent !tmux switch-client -l<cr>', { desc = 'tmux: toggle previous window', })
+  vim.keymap.set('n', '<leader>td', function()
+    require('hjdivad/index').goto_tmux_session('todos', 'todos')
+  end, { desc = 'tmux: todos', })
+  vim.keymap.set('n', '<leader>tr', function()
+    require('hjdivad/index').goto_tmux_session('todos', 'reference')
+  end, { desc = 'tmux: reference', })
+  vim.keymap.set('n', '<leader>tj', function()
+    require('hjdivad/index').goto_tmux_session('todos', 'journal')
+  end, { desc = 'tmux: journal', })
 
   ---Mapping for opening up a generic REPL buffer + terminal pair.
   ---In general it's recommended to overwrite this mapping per-project with a
@@ -146,38 +139,45 @@ local function setup_key_mappings()
   ---```lua
   ---vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl('yarn repl', 'ts')]]<cr>')
   ---```
-  nmap('<leader>re', '<cmd>lua ha.edit_generic_repl()<cr>')
-  map('v', '<leader>re', ':TREPLSendSelection<cr>', {})
-  nmap('<leader>rr', '<cmd>TestFile<cr>')
-  nmap('<leader>rt', '<cmd>TestNearest<cr>')
-  nmap('<leader>rd', '<cmd>lua ha.debug_nearest()<cr>')
+  vim.keymap.set('n', '<leader>re', function()
+    require('hjdivad/index').edit_generic_repl()
+  end, { desc = 'Open a REPL in a terminal and a linked REPL input buffer', })
+  vim.keymap.set('v', '<leader>re', ':TREPLSendSelection', { desc = 'Send selection to the REPL', })
+
+  vim.keymap.set('n', '<leader>rr', '<cmd>TestFile<cr>', { desc = 'Run Test File (vim-test)', })
+  vim.keymap.set('n', '<leader>rt', '<cmd>TestNearest<cr>', { desc = 'Run Nearest Test (vim-test)', })
+  vim.keymap.set('n', '<leader>rd', function()
+    require('hjdivad/index').debug_nearest()
+  end, { desc = 'Debug Nearest Test (vim-test + hjdivad debug transform)', })
 
   --- yank file [path] to clipboard, using the best register we have available
-  if vim.fn['has']('clipboard') then
-    nmap('<leader>yf', [[<cmd>let @+=expand('%')<cr>]]) -- yank path to clipboard
-    nmap('<leader>yF', [[<cmd>let @+=expand('%:p')<cr>]]) -- yank absolute path to clipboard
-  else
-    nmap('<leader>yf', [[<cmd>let @"=expand('%')<cr>]]) -- yank path to clipboard
-    nmap('<leader>yF', [[<cmd>let @"=expand('%:p')<cr>]]) -- yank absolute path to clipboard
-  end
+  local clipboard_reg
+  if vim.fn.has('clipboard') then clipboard_reg = '+' else clipboard_reg = '"' end
 
-  tnoremap('<c-g><c-g>', [[<c-\><c-n>]]) -- better terminal escape to normal mapping
+  vim.keymap.set('n', '<leader>yf', function()
+    vim.fn.setreg(clipboard_reg, vim.fn.expand('%'))
+  end, { desc = 'yank path to buffer to clipboard', })
+  vim.keymap.set('n', '<leader>yF', function()
+    vim.fn.setreg(clipboard_reg, vim.fn.expand('%:p'))
+  end, { desc = 'yank absolute path to buffer to clipboard', })
+  -- yank GitHub permalink to clipboard
+  vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 
-  ---terminal window motions
-  tnoremap('<c-w>h', [[<c-\><c-n><c-w>h]])
-  tnoremap('<c-w><c-h>', [[<c-\><c-n><c-w>h]])
-  tnoremap('<c-w>j', [[<c-\><c-n><c-w>j]])
-  tnoremap('<c-w><c-j>', [[<c-\><c-n><c-w>j]])
-  tnoremap('<c-w>k', [[<c-\><c-n><c-w>k]])
-  tnoremap('<c-w><c-k>', [[<c-\><c-n><c-w>k]])
-  tnoremap('<c-w>l', [[<c-\><c-n><c-w>l]])
-  tnoremap('<c-w><c-l>', [[<c-\><c-n><c-w>l]])
-  tnoremap('<c-w>c', [[<c-\><c-n><c-w>c]])
-  tnoremap('<c-w><c-c>', [[<c-\><c-n><c-w>c]])
-
+  ---terminal window mappings & motions
+  vim.keymap.set('t', '<c-g><c-g>', [[<c-\><c-n>]], { desc = 'Escape terminal with better keymap', })
+  vim.keymap.set('t', '<c-w>h', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-h>', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
+  vim.keymap.set('t', '<c-w>j', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-j>', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
+  vim.keymap.set('t', '<c-w>k', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-k>', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
+  vim.keymap.set('t', '<c-w>l', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-l>', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
+  vim.keymap.set('t', '<c-w>c', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-c>', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
   -- escape and re-enter insert mode to prevent issue with cursor not appearing in new terminal window
-  tnoremap('<c-w>n', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]])
-  tnoremap('<c-w><c-n>', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]])
+  vim.keymap.set('t', '<c-w>n', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
+  vim.keymap.set('t', '<c-w><c-n>', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
 
   --- tab navigation
   vim.keymap.set('n', '<leader>1', '1gt', { desc = 'go to tab 1', })
@@ -190,57 +190,47 @@ local function setup_key_mappings()
   vim.keymap.set('n', '<leader>8', '8gt', { desc = 'go to tab 8', })
   vim.keymap.set('n', '<leader>9', '9gt', { desc = 'go to tab 9', })
   vim.keymap.set('n', '<leader>0', '10gt', { desc = 'go to tab 10', })
-
-  -- yank GitHub permalink to clipboard
-  vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 end
 
 local function setup_lsp_mappings()
-  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { noremap = true })
-  map('n', '<c-h>', [[<cmd>lua vim.lsp.buf.signature_help()<cr>]], { silent = true })
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show LSP hover (fn docs, help &c.)', })
+  vim.keymap.set('n', '<c-h>', vim.lsp.buf.signature_help, { desc = 'Show LSP signature help', })
 
-  ---telescope variant
-  -- maptb('n', '<leader>gd', 'lsp_definitions()') -- go to definition
-  -- maptb('n', '<leader>gD', 'lsp_type_definitions()') -- go to type definition
-  -- maptb('n', '<leader>gi', 'lsp_implementation()') -- go to implementation
-  -- maptb('n', '<leader>gr', 'lsp_references()') -- go to reference(s)
+  -- Trouble's goto definition not working with neovim 0.7.0
+  -- vim.keymap.set('n', '<leader>gd', '<cmd>Trouble lsp_definitions<cr>', { desc='go to definition',  })
+  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end, { desc = 'go to definition', })
+  vim.keymap.set('n', '<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>', { desc = 'go to type definition', })
+  vim.keymap.set('n', '<leader>gi', '<cmd>Trouble lsp_implementation<cr>', { desc = 'go to implementations', })
+  vim.keymap.set('n', '<leader>gr', '<cmd>Trouble lsp_references<cr>', { desc = 'go to references', })
+  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>', { desc = 'go to/from trouble (i.e. toggle trouble window)', })
+  vim.keymap.set('n', '<leader>gci', vim.lsp.buf.incoming_calls, { desc = 'go to calls (inbound) -- who calls me?', })
+  vim.keymap.set('n', '<leader>gco', vim.lsp.buf.outgoing_calls, { desc = 'go to calls (outbound) -- who do i call?', })
 
-  ---trouble variant
-  -- see <https://github.com/folke/trouble.nvim/issues/153>
-  -- nmap('<leader>gd', '<cmd>Trouble lsp_definitions<cr>') -- go to definition
-  maptb('n', '<leader>gd', 'lsp_definitions()') -- list document symbols
-  nmap('<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>') -- go to type definition
-  nmap('<leader>gi', '<cmd>Trouble lsp_implementation<cr>') -- go to implementation
-  nmap('<leader>gr', '<cmd>Trouble lsp_references<cr>') -- go to reference(s)
-  -- useful for exploring multiple results e.g. multiple references
-  nmap('<leader>gt', '<cmd>TroubleToggle<cr>') -- toggle trouble window
+  vim.keymap.set('n', '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end, { desc = 'show document symbols', })
+  vim.keymap.set('n', '<leader>sS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>SS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>sf', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function' } }) end, { desc = 'show functions', })
+  vim.keymap.set('n', '<leader>so', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end, { desc = 'show outline', })
 
-  nmap('<leader>gci', '<cmd>lua vim.lsp.buf.incoming_calls()<cr>') -- who calls this function?
-  nmap('<leader>gco', '<cmd>lua vim.lsp.buf.outgoing_calls()<cr>') -- who does this function call?
-
-  maptb('n', '<leader>ss', 'lsp_document_symbols()') -- list document symbols
-  maptb('n', '<leader>sS', 'lsp_dynamic_workspace_symbols()') -- list workspace symbols
-  maptb('n', '<leader>SS', 'lsp_dynamic_workspace_symbols()') -- list workspace symbols
-  maptb('n', '<leader>sf', [[lsp_document_symbols({ symbols={'function'} })]]) -- list document symbols
-  maptb('n', '<leader>so', [[lsp_document_symbols({ symbols={'class', 'function'} })]]) -- list document symbols
   vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'list code actions under cursor' })
-  -- TODO: this gets a stacktrace; try again in nvim >= 0.6.2
-  -- maptb('v', '<leader>ca', 'lsp_range_code_actions()') -- list code actions (selected)
+  vim.keymap.set('v', '<leader>ca', vim.lsp.buf.range_code_action, { desc = 'list code actions in range' })
 
-  nmap('<leader>rn', [[<cmd>lua vim.lsp.buf.rename()<cr>]], { silent = true }) -- rename
+  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'rename symbol under cursor' })
 
-  imap('<c-h>', [[<cmd>lua vim.lsp.buf.signature_help()<cr>]], { silent = true })
+  vim.keymap.set('i', '<c-h>', vim.lsp.buf.signature_help, { desc = 'show signature help' })
 
-
+  -- TODO: this works but we don't have control over the specific server used
+  -- This is particularly unfortunate as TypeScript claims it can format, but
+  -- we want diagnosticls to actually do so
   vim.keymap.set('v', '<leader>rf', function()
     local vis_start = vim.api.nvim_buf_get_mark(0, '<')
     local vis_end = vim.api.nvim_buf_get_mark(0, '>')
+    vim.pretty_print('range fmt', vis_start, vis_end)
     vim.lsp.buf.range_formatting({}, vis_start, vis_end)
-    -- it would be nice to exit visual mode here. The following works:
-    --  :lua vim.cmd('stopinsert')
-    -- so it's not obvious to me why it wouldn't work in a callback
-    -- vim.cmd('stopinsert')
-  end)
+    -- send <esc> to exit visual mode after formatting
+    local escape = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
+    vim.api.nvim_feedkeys(escape, 'n', false)
+  end, { desc = 'Format selected range' })
 end
 
 local function setup_language_servers()
@@ -366,6 +356,8 @@ local function setup_language_servers()
 end
 
 local function setup_plugins(config)
+  local hjdivad = require('hjdivad/index')
+
   require('malleatus').setup {}
 
   local function check(plugin)
@@ -611,11 +603,17 @@ local function setup_window_management()
 end
 
 local function create_user_commands()
-  vim.api.nvim_create_user_command('HiUpdatePlugins', plugins.update_plugins, { desc = 'Update or install plugins' })
-end
+  vim.api.nvim_create_user_command('HiUpdatePlugins', function()
+    require('hjdivad/plugins').update_plugins {}
+  end, { desc = 'Update or install plugins' })
 
-local function setup_local_linking()
-  vim.opt_global.runtimepath:prepend(vim.env['HOME'] .. '/src/malleatus/common.nvim')
+  vim.api.nvim_create_user_command('HiResize', function()
+    require('hjdivad/index').resize_with_terminal()
+  end, { desc = 'Resize windows, ensuring a fixed-width terminal has appropriate width' })
+
+  vim.api.nvim_create_user_command('HiDisableMarkdownFolding', function()
+    vim.g.vim_markdown_folding_disabled = true
+  end, { desc = "Disable Markdown Folding as vim-markdown + treesitter don't get along" })
 end
 
 ---Creates some functions in the global scope.  Nothing depends on these, they are for user convenience.
@@ -636,6 +634,7 @@ end
 --- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
 --- * *mappings* Whether to create keymappings. Defaults to `false`.
 local function main(config)
+  local hjdivad = require('hjdivad/index')
   local opts = vim.tbl_deep_extend('force', {
     plugins = {},
     mappings = false,
@@ -643,23 +642,22 @@ local function main(config)
 
   --TODO: bootstrap here
 
-  setup_local_linking()
   setup_plugins(opts.plugins)
   setup_local_config()
   setup_clipboard()
   setup_colours()
   setup_statusline()
+  hjdivad.setup_terminal()
+  setup_window_management()
+  create_user_commands()
+  hjdivad.run_exrc()
+
   if opts.mappings then
     setup_key_mappings()
   end
-  hjdivad.setup_terminal()
-  setup_window_management()
-  hjdivad.run_exrc()
-  create_user_commands()
 end
 
 return {
   main = main,
-  update_plugins = plugins.update_plugins,
   create_debug_functions = create_debug_functions,
 }

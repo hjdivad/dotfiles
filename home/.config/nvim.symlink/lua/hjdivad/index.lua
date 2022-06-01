@@ -2,43 +2,12 @@ local utils = require('hjdivad/utils')
 local terminal = require('hjdivad/terminal')
 local exrc = require('hjdivad/exrc')
 local testing = require('hjdivad/testing')
+local tmux = require('hjdivad/tmux')
 
 local hi = utils.hjdivad_init
 local ha = utils.hjdivad_auto
 local assign = utils.assign
 
-function ha.get_tmux_panes()
-  local result = {}
-  local tmux_panes = utils.get_os_command_output({
-    'tmux', 'list-panes', '-a', '-F', '#{pane_id}⊱#{window_name}⊱#{session_name}'
-  })
-  for _, entry in ipairs(tmux_panes) do
-    local partsIter = entry:gmatch('([^⊱]+)[⊱]?')
-    local pane_id = partsIter()
-    local window_name = partsIter()
-    local session_name = partsIter()
-    table.insert(result, { pane_id = pane_id, window_name = window_name, session_name = session_name })
-  end
-  return result
-end
-
-function ha.goto_tmux_session(session_name, window_name)
-  local matching_pane = nil
-  for _, pane in ipairs(ha.get_tmux_panes()) do
-    if session_name == pane.session_name then
-      if window_name == pane.window_name then
-        matching_pane = pane
-        break
-      end
-    end
-  end
-
-  if matching_pane then
-    vim.api.nvim_command([[silent !tmux switch-client -t \\]] .. matching_pane.pane_id)
-  else
-    vim.api.nvim_err_writeln('Cannot find tmux pane "' .. session_name .. ':' .. window_name .. '"')
-  end
-end
 
 ---Show the nvim-tree
 ---
@@ -67,13 +36,14 @@ end
 ---@see setup_vimtest()
 ---@param repl_cmd string a command to start a REPL in a neoterm instance
 ---@param repl_extension string the name of the file to use for input commands to the REPL
-function ha.edit_repl(repl_cmd, repl_extension)
+local function edit_repl(repl_cmd, repl_extension)
+  local get_neoterm_window_ids = require('hjdivad/index').get_neoterm_window_ids
   -- TODO: make a toggle_repl that closes the repl windows if they're open
   local repl_file = '.repl.' .. repl_extension
   if not vim.g.neoterm.repl or not vim.g.neoterm.repl.instance_id then
     local starting_window = vim.api.nvim_get_current_win()
     -- create the REPL buffer
-    local open_terminals = ha.get_neoterm_window_ids()
+    local open_terminals = get_neoterm_window_ids()
     if #open_terminals > 0 then
       -- TODO: open the terminal if it's not visible
       -- if we have a terminal open on the left, create the REPL buffer in the topleft
@@ -108,7 +78,7 @@ function ha.edit_repl(repl_cmd, repl_extension)
   vim.cmd('stopinsert')
 end
 
-function ha.edit_generic_repl()
+local function edit_generic_repl()
   local repl_cmd = nil
   local repl_extension = nil
 
@@ -125,10 +95,9 @@ function ha.edit_generic_repl()
       'No extension given. Please specify an extension (to trigger filetype) for your REPL input buffer')
   end
 
-  ha.edit_repl(repl_cmd, repl_extension)
+  edit_repl(repl_cmd, repl_extension)
 
-  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', [[<cmd>ha.edit_repl(']] ..
-      repl_cmd .. [[', ']] .. repl_extension .. [[')]] .. ']]' .. [[<cr>']]
+  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad/index').edit_repl(']] .. repl_cmd .. [[', ']] .. repl_extension .. [[') end]]
   vim.notify([[To skip inputs next time, consider adding `]] .. suggested_keymap ..
     [[` to .vimrc.lua]], vim.log.levels.INFO, {})
 end
@@ -199,7 +168,6 @@ return {
   nmaptb = nmaptb,
   imaptb = imaptb,
   unmap = unmap,
-  setup_vimtest = testing.setup_vimtest,
   setup_repls = setup_repls,
   run_exrc = exrc.run_exrc,
   setup_terminal = terminal.setup_terminal,
@@ -208,5 +176,15 @@ return {
   -- TODO: move any of this to common.nvim?
   -- new exports
   toggle_nvim_tree = toggle_nvim_tree,
+
   toggle_terminal = terminal.toggle_terminal,
+  resize_with_terminal = terminal.resize_with_terminal,
+
+  goto_tmux_session = tmux.goto_tmux_session,
+
+  edit_repl = edit_repl,
+  edit_generic_repl = edit_generic_repl,
+
+  debug_nearest = testing.debug_nearest,
+  setup_vimtest = testing.setup_vimtest,
 }

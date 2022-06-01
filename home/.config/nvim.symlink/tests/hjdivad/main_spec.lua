@@ -1,4 +1,4 @@
-local main = require('hjdivad/main')
+local main = require('hjdivad/index')
 local init = require('hjdivad_init')
 local ptest = require('plenary/async/tests')
 local async_util = require('plenary/async/util')

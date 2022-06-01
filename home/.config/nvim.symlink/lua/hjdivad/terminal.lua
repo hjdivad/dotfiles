@@ -86,7 +86,7 @@ local function toggle_terminal()
   end
 end
 
-function hi.resize()
+local function resize_with_terminal()
   local etw = get_terminal_expected_width()
   vim.cmd([[vertical resize ]] .. etw)
   for _, win_id in ipairs(ha.get_neoterm_window_ids()) do
@@ -94,4 +94,9 @@ function hi.resize()
   end
 end
 
-return { setup_terminal = setup_terminal, toggle_terminal = toggle_terminal }
+return {
+  setup_terminal = setup_terminal,
+  toggle_terminal = toggle_terminal,
+  resize_with_terminal = resize_with_terminal,
+  get_neoterm_window_ids = get_neoterm_window_ids,
+}
