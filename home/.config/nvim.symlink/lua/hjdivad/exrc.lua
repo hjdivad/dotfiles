@@ -1,4 +1,4 @@
-local utils = require('hjdivad.utils')
+local utils = require('hjdivad/utils')
 local Path = utils.Path
 local File = utils.File
 local hi = utils.hjdivad_init
