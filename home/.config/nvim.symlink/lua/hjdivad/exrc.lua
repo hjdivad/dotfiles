@@ -1,19 +1,35 @@
 local utils = require('hjdivad/utils')
 local Path = utils.Path
 local File = utils.File
-local hi = utils.hjdivad_init
+
 -- Save nvim's vim.ui.select as our prompt causes a race with telescope-ui-select
 local select = vim.ui.select
 
 local exrc_entry_sep = ' ⊱ '
 
-local function get_data_path() return utils.xdg_data_path('nvim/hjdivad-init/exrc_dir_choices') end
+local function get_data_path()
+  return Path.join(vim.fn.stdpath('data'), 'hjdivad-init/exrc_dir_choices')
+end
 
-local function exrc(vimrc, vim_rtp)
+local function ierr(msg)
+  return '[internal error hjdivad/exrc]: ' .. msg
+end
+
+local function exrc(vimrc, vim_rtp, ...)
+  assert(vimrc or vim_rtp, ierr('one of vimrc or vim_ftp is required'))
+
+  -- LuaJIT (i.e. Lua5.1) compatible variant onf table.pack(...)[1]
+  local opts = ({ ... })[1] or {}
+
+  local io = opts.io or io
+  local loadfile = opts.loadfile or loadfile
+
   if vimrc then
     if vim.endswith(vimrc, '.lua') then
       local vimrc_lua = loadfile(vimrc, 't')
-      vimrc_lua()
+      if vimrc_lua then
+        vimrc_lua()
+      end
     else
       local viml = io.open(vimrc, 'r'):read('a')
       vim.api.nvim_exec(viml, false)
@@ -26,17 +42,19 @@ end
 local function update_exrc_choices(data_file, path, allow)
   local file = io.open(data_file, 'a')
   if not file then
-    vim.fn['mkdir'](Path.dirname(data_file))
+    vim.fn.mkdir(Path.dirname(data_file))
     file = io.open(data_file, 'a')
   end
 
-  if not file then error('Unable to write to "' .. data_file .. '"') end
-
-  file:write(path)
-  file:write(exrc_entry_sep)
-  file:write(allow and '1' or '0')
-  file:write('\n')
-  file:close()
+  if file then
+    file:write(path)
+    file:write(exrc_entry_sep)
+    file:write(allow and '1' or '0')
+    file:write('\n')
+    file:close()
+  else
+    error('Unable to write to "' .. data_file .. '"')
+  end
 end
 
 local function iterate_exrc_choices()
@@ -68,7 +86,7 @@ local function load_saved_exrc_choice(path)
 end
 
 local function run_exrc()
-  local cwd = vim.fn['getcwd']()
+  local cwd = vim.fn.getcwd()
   local vimrc = nil
   if File.readable(Path.join(cwd, '.vimrc.lua')) then
     vimrc = Path.join(cwd, '.vimrc.lua')
@@ -137,14 +155,13 @@ local function run_exrc()
   if saved_choice ~= nil then update_exrc_choices(get_data_path(), cwd, saved_choice) end
 end
 
-hi.exrc = {}
 ---Initialize `cwd` with a `.vimrc.lua` and `.vim/` for auto-exection.
 ---
 ---Does not update the saved choices file -- next time nvim is started in `cwd`
 ---you will be prompted before executing `.vimrc.lua`
-function hi.exrc.init()
+local function exrc_init()
   local blueprints = vim.api.nvim_get_runtime_file('blueprints/project', false)
-  local cwd = vim.fn['getcwd']()
+  local cwd = vim.fn.getcwd()
   if #blueprints == 0 then error('Unable to find blueprints/project anywhere in &runtimepath') end
 
   local blueprint = blueprints[1]
@@ -159,7 +176,7 @@ end
 ---```
 ---
 --- Where `choice` is either `1` (run `.vimrc.lua` and read `.vim`) or `0` (ignore `.vimrc.lua` and `.vim`)
-function hi.exrc.ls()
+local function exrc_ls()
   local data_path = get_data_path()
   local exrc_dir_choices = io.open(data_path, 'r')
   if exrc_dir_choices then
@@ -174,10 +191,10 @@ end
 ---
 ---If `cwd` contains `.vimrc.lua` or `.vim` you will again be prompted before
 ---executing the rc file.
-function hi.exrc.rm()
+local function exrc_rm()
   local data_path = get_data_path()
   local exrc_dir_choices = io.open(data_path, 'r')
-  local path = vim.fn['getcwd']()
+  local path = vim.fn.getcwd()
 
   local updated_choices = {}
   local found = false
@@ -191,12 +208,42 @@ function hi.exrc.rm()
 
   if found then
     exrc_dir_choices = io.open(data_path, 'w+')
-    exrc_dir_choices:write(table.concat(updated_choices, '\n'))
-    exrc_dir_choices:write('\n')
-    exrc_dir_choices:close()
+    if exrc_dir_choices then
+      exrc_dir_choices:write(table.concat(updated_choices, '\n'))
+      exrc_dir_choices:write('\n')
+      exrc_dir_choices:close()
+    else
+      assert(false, ierr('exrc_dir_choices vanished mid-read'))
+    end
   else
     print('<nop>: no entry "' .. path .. '" in "' .. data_path .. '"')
   end
 end
 
-return { run_exrc = run_exrc }
+local function create_user_commands()
+  vim.api.nvim_create_user_command('HiExrcInit', exrc_init, { desc = 'Create a {.vimrc.lua, .vim/} for the current directory' })
+  vim.api.nvim_create_user_command('HiExrcList', exrc_ls, { desc = 'List saved exrc choices' })
+  vim.api.nvim_create_user_command('HiExrcRemove', exrc_rm, { desc = 'Remove the current directory from the list of saved exrc choices' })
+end
+
+local did_setup = false
+local function setup()
+  did_setup = true
+
+  create_user_commands()
+end
+
+local function run_if_setup(cb)
+  if did_setup then
+    return cb()
+  end
+end
+
+return {
+  _get_data_path = get_data_path,
+  _exrc = exrc,
+
+  run_exrc = run_exrc,
+  run_if_setup = run_if_setup,
+  setup = setup,
+}

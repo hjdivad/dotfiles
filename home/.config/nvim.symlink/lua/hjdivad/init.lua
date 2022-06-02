@@ -465,6 +465,10 @@ local function setup_plugins(config)
     return config == 'all' or vim.tbl_contains(config, plugin)
   end
 
+  if check('exrc') then
+    require('hjdivad/exrc').setup {}
+  end
+
   if check('neoterm') then
     vim.g.neoterm_autoinsert = 1
 
@@ -751,7 +755,6 @@ local function main(config)
   setup_window_management()
   setup_statusline()
   require('hjdivad/terminal').setup_terminal()
-  require('hjdivad/exrc').run_exrc()
   create_user_commands()
 
   if opts.mappings then
