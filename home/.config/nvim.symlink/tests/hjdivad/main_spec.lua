@@ -1,20 +1,15 @@
+local ptest = require('plenary/async/tests')
+
+local test_helper = require('hjdivad/test_helper')
+
 local main = require('hjdivad/index')
 local init = require('hjdivad_init')
-local ptest = require('plenary/async/tests')
-local async_util = require('plenary/async/util')
-local say = require('say')
-local level = vim.fn.getenv('DEBUG')
--- TODO: extract these utilities to a test util
-if level == vim.NIL then
-  level = 'info'
-end
-local log = require('plenary.log').new {
-  plugin = 'hjdivad_init',
-  level = level,
-  -- TODO: this does write to $HOME/.cache/nvim/hjdivad_init.log
-  -- but does not seem to write to the console at all
-  use_console = 'sync',
-}
+
+
+local find_winnr_with_buffer_name = test_helper.find_winnr_with_buffer_name
+local find_bufnr_with_buffer_name = test_helper.find_bufnr_with_buffer_name
+local wait = test_helper.wait
+
 local a = {
   describe = ptest.describe,
   it = ptest.it,
@@ -22,52 +17,8 @@ local a = {
   after_each = ptest.after_each,
 }
 
----Wait until the next tick in the main loop using `vim.schedule`.
----
----*note* Probably does not guarantee order. If you see race conditions,
----consider using `vim.wait` (wrapped via `plenary/async.wrap`) instead.
-local function wait()
-  local err = async_util.scheduler()
-  assert.equals(nil, err, 'vim.schedule callback without error')
-end
+test_helper.setup()
 
-local function matches(_, args)
-  local pattern = args[1]
-  local string = args[2]
-  return string:find(pattern) ~= nil
-end
-
--- these get formatted in a bad way, probably due to
--- https://github.com/Olivine-Labs/luassert/blob/e2ab0d218d7a63bbaa2fdebfa861c24a48451e9d/src/assert.lua#L17
-say:set('assertion.matches.positive', 'Expected pattern %s to match string %s')
-say:set('assertion.matches.negative', 'Expected pattern %s to not match string %s')
-assert:register('assertion', 'matches', matches, 'assertion.matches.positive', 'assertion.matches.negative')
-
-local function find_winnr_with_buffer_name(search_bufname)
-  local wins = vim.api.nvim_list_wins()
-  for _, winnr in ipairs(wins) do
-    local bufnr = vim.fn.winbufnr(winnr)
-    local bufname = vim.fn.bufname(bufnr)
-    if search_bufname == bufname then
-      return winnr
-    end
-  end
-
-  return nil
-end
-
-local function find_bufnr_with_buffer_name(search_bufname)
-  local buffers = vim.api.nvim_list_bufs()
-  log.trace('find_bufnr: search', search_bufname)
-  for _, bufnr in ipairs(buffers) do
-    local bufname = vim.fn.bufname(bufnr)
-    if search_bufname == bufname then
-      return bufnr
-    end
-  end
-
-  return nil
-end
 
 a.describe('main.toggle_nvim_tree', function()
   init.main { plugins = { 'nvim-tree' } }
