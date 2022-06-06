@@ -77,12 +77,12 @@ if [[ -z "$DOTFILES_BASHRC_INIT" ]]; then
     export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
   fi
   
-  if [ -d $HOME/Library/Python/2.7/bin ]; then
-    export PATH=$PATH:$HOME/Library/Python/2.7/bin
-  fi
-  
   if [ -d $HOME/Library/Python/3.7/bin ]; then
     export PATH=$PATH:$HOME/Library/Python/3.7/bin
+  fi
+  
+  if [ -d $HOME/Library/Python/2.7/bin ]; then
+    export PATH=$PATH:$HOME/Library/Python/2.7/bin
   fi
   
   if [ -d /opt/adt/sdk/tools ]; then
