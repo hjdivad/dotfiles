@@ -18,88 +18,6 @@ local function toggle_nvim_tree()
   end
 end
 
----Open a REPL terminal that runs `repl_cmd` and begin editing the REPL input buffer `".repl." .. repl_extension`.
----The terminal is placed top-left if any neoterm instances are open, and vertically leftmost otherwise.
----`:write`ing to the RPEL file will send the contents to the repl. The extension is used for file type detection.
----
----@see setup_vimtest()
----@param repl_cmd string a command to start a REPL in a neoterm instance
----@param repl_extension string the name of the file to use for input commands to the REPL
-local function edit_repl(repl_cmd, repl_extension)
-  local get_neoterm_window_ids = require('hjdivad/terminal').get_neoterm_window_ids
-  -- TODO: make a toggle_repl that closes the repl windows if they're open
-  local repl_file = '.repl.' .. repl_extension
-  if not vim.g.neoterm.repl or not vim.g.neoterm.repl.instance_id then
-    local starting_window = vim.api.nvim_get_current_win()
-    -- create the REPL buffer
-    local open_terminals = get_neoterm_window_ids()
-    if #open_terminals > 0 then
-      -- TODO: open the terminal if it's not visible
-      -- if we have a terminal open on the left, create the REPL buffer in the topleft
-      vim.cmd([[
-        " Create a new neoterm window in the top-left
-        100wincmd h
-        100wincmd k
-        above new
-        Tnew
-        normal G
-      ]])
-    else
-      -- if we have no open terminals, create one vertically on the left
-      vim.cmd([[
-        vertical topleft Tnew
-        normal G
-      ]])
-    end
-
-    -- start the REPL
-    vim.cmd([[exe g:neoterm.last_id . 'T ]] .. repl_cmd .. "'")
-    -- Set the new neoterm as the REPL terminal
-    vim.cmd([[
-      exe 'TREPLSetTerm ' . g:neoterm.last_id
-    ]])
-
-    -- return to our starting window to edit the repl input file
-    vim.api.nvim_set_current_win(starting_window)
-  end
-
-  vim.cmd('edit ' .. repl_file)
-  vim.cmd('stopinsert')
-end
-
-local function edit_generic_repl()
-  local repl_cmd = nil
-  local repl_extension = nil
-
-  vim.ui.input({ prompt = 'REPL command (e.g. node) > ', default = 'node' },
-    function(input) repl_cmd = input end)
-
-  vim.ui.input({ prompt = 'REPL input file extension (e.g. js) > ', default = 'js' },
-    function(input) repl_extension = input end)
-
-  if not repl_cmd then error('No REPL command given. Please specify a commnad to start the REPL.') end
-
-  if not repl_extension then
-    error(
-      'No extension given. Please specify an extension (to trigger filetype) for your REPL input buffer')
-  end
-
-  edit_repl(repl_cmd, repl_extension)
-
-  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad').edit_repl(']] .. repl_cmd .. [[', ']] .. repl_extension .. [[') end]]
-  vim.notify([[To skip inputs next time, consider adding `]] .. suggested_keymap ..
-    [[` to .vimrc.lua]], vim.log.levels.INFO, {})
-end
-
-local function setup_repls()
-  vim.cmd([[
-    augroup REPL
-      autocmd!
-      autocmd BufWritePre .repl.* exe 'TREPLSendFile'
-    augroup end
-  ]])
-end
-
 local function setup_local_config()
   ---spelling
   vim.opt.spelllang = { 'sv', 'en_gb', 'en_us' }
@@ -252,12 +170,12 @@ local function setup_key_mappings()
   ---In general it's recommended to overwrite this mapping per-project with a
   ---specific repl command and repl file, for example:
   ---```lua
-  ---vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad').edit_repl('yarn repl', 'ts') end)
+  ---vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad/terminal').edit_repl('yarn repl', 'ts') end)
   ---```
   vim.keymap.set('n', '<leader>re', function()
-    require('hjdivad').edit_generic_repl()
+    require('hjdivad/terminal').edit_generic_repl()
   end, { desc = 'Open a REPL in a terminal and a linked REPL input buffer', })
-  vim.keymap.set('v', '<leader>re', ':TREPLSendSelection', { desc = 'Send selection to the REPL', })
+  vim.keymap.set('v', '<leader>re', ':TREPLSendSelection<cr>', { desc = 'Send selection to the REPL', })
 
   vim.keymap.set('n', '<leader>rr', '<cmd>TestFile<cr>', { desc = 'Run Test File (vim-test)', })
   vim.keymap.set('n', '<leader>rt', '<cmd>TestNearest<cr>', { desc = 'Run Nearest Test (vim-test)', })
@@ -278,21 +196,7 @@ local function setup_key_mappings()
   -- yank GitHub permalink to clipboard
   vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 
-  ---terminal window mappings & motions
   vim.keymap.set('t', '<c-g><c-g>', [[<c-\><c-n>]], { desc = 'Escape terminal with better keymap', })
-  vim.keymap.set('t', '<c-w>h', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-h>', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
-  vim.keymap.set('t', '<c-w>j', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-j>', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
-  vim.keymap.set('t', '<c-w>k', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-k>', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
-  vim.keymap.set('t', '<c-w>l', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-l>', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
-  vim.keymap.set('t', '<c-w>c', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-c>', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
-  -- escape and re-enter insert mode to prevent issue with cursor not appearing in new terminal window
-  vim.keymap.set('t', '<c-w>n', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-n>', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
 
   --- tab navigation
   vim.keymap.set('n', '<leader>1', '1gt', { desc = 'go to tab 1', })
@@ -519,12 +423,9 @@ local function setup_plugins(config)
   end
 
   if check('neoterm') then
-    vim.g.neoterm_autoinsert = 1
-
-    -- disable automapping from neoterm
-    vim.g.neoterm_automap_keys = '😡😡STUPID_PLUGIN_DO_NOT_AUTOMAP'
-
-    setup_repls()
+    require('hjdivad/terminal').setup {
+      mappings = true
+    }
   end
 
   if check('gitgutter') then
@@ -772,10 +673,6 @@ local function create_user_commands()
     require('hjdivad/plugins').update_plugins {}
   end, { desc = 'Update or install plugins' })
 
-  vim.api.nvim_create_user_command('HiResize', function()
-    require('hjdivad/terminal').resize_with_terminal()
-  end, { desc = 'Resize windows, ensuring a fixed-width terminal has appropriate width' })
-
   vim.api.nvim_create_user_command('HiDisableMarkdownFolding', function()
     vim.g.vim_markdown_folding_disabled = true
   end, { desc = "Disable Markdown Folding as vim-markdown + treesitter don't get along" })
@@ -814,7 +711,6 @@ local function main(options)
   setup_clipboard()
   setup_window_management()
   setup_statusline()
-  require('hjdivad/terminal').setup_terminal()
   create_user_commands()
 
   if opts.mappings then
@@ -825,8 +721,6 @@ end
 return {
   -- lib entry points
 
-  edit_repl = edit_repl,
-  edit_generic_repl = edit_generic_repl,
   toggle_nvim_tree = toggle_nvim_tree,
 
   -- main entry points
