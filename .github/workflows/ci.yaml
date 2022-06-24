@@ -53,6 +53,8 @@ jobs:
           nvim ${{ env.NVIM_FLAGS }} --headless --noplugin -u ./home/.config/nvim.symlink/bootstrap.lua  --cmd 'set rtp+=./home/.config/nvim.symlink'
 
       - name: test
+        env:
+          DEBUG: ${{ secrets.Debug }}
         run: |
           make --version
-          make -f Makefile.ci test
+          DEBUG=${{env.DEBUG}} make -f Makefile.ci test
