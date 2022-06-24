@@ -1,12 +1,28 @@
+--TODO: purify
 local telescope_utils = require('telescope.utils')
 local Job = require 'plenary.job'
+local Log = require('plenary.log')
 
----Global access; used for user-accessible API from ex mode and as entry
----points from autocommands
-hi = {}
+local level = vim.fn.getenv('DEBUG')
+if level == vim.NIL then
+  level = 'info'
+end
+
+local M = {}
+
+M.log = Log.new {
+  plugin = 'hjdivad_init',
+  level = level,
+  -- TODO: this does write to $HOME/.cache/nvim/hjdivad_init.log
+  -- but does not seem to write to the console at all
+  use_console = 'sync',
+}
+
 ---Global access; entry point for autocommands and mappings
 ---@diagnostic disable-next-line: lowercase-global
 ha = {}
+M.ha = ha
+M.hjdivad_auto = ha
 
 local startswith = vim.startswith
 local endswith = vim.endswith
@@ -16,19 +32,19 @@ local env = vim.env
 ---Only intended for testing
 ---
 ---@param new_env any
-local function __set_env(new_env) env = new_env end
+function M.__set_env(new_env) env = new_env end
 
 ---Reset any mutations done via `__set_env`
-local function __reset() env = vim.env end
+function M.__reset() env = vim.env end
 
-local function os_tmpdir()
+function M.os_tmpdir()
   return os.getenv('TMPDIR') and os.getenv('TMPDIR') or os.getenv('TEMP') or '/tmp'
 end
 
 ---Prints messages in `...`
 ---
 ---intended for simple printf debugging. For anthing advanced see vim.notify()
-local function echo(...)
+function M.echo(...)
   local args = { n = select('#', ...), ... }
   local messages = {}
   for i = 1, args.n do
@@ -40,13 +56,14 @@ local function echo(...)
 end
 
 -- TODO: vim.tbl_extend
-local function assign(target, source)
+function M.assign(target, source)
   for k, v in ipairs(source or {}) do target[k] = v end
 
   return target
 end
 
 local Path = {}
+M.Path = Path
 Path.Sep = '/'
 
 function Path.join(root, ...)
@@ -101,6 +118,7 @@ end
 function Path.isabsolute(path) return path:sub(1, 1) == Path.Sep end
 
 local File = {}
+M.File = File
 function File.readable(path)
   local file = io.open(path, 'r')
   if file then
@@ -120,7 +138,7 @@ function File.cp_r(path, dest) Job:new({ command = 'cp', args = { '-r', path, de
 ---@return boolean
 function File.isdirectory(path) return vim.fn['isdirectory'](path) == 1 end
 
-local function xdg_data_path(relpath)
+function M.xdg_data_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
   local xdg_dir =
   (env.XDG_DATA_HOME and Path.isabsolute(env.XDG_DATA_HOME) and env.XDG_DATA_HOME) or
@@ -128,26 +146,23 @@ local function xdg_data_path(relpath)
   return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
 
-local function xdg_config_path(relpath)
+function M.xdg_config_path(relpath)
   -- see <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
   local xdg_dir = (env.XDG_CONFIG_HOME and Path.isabsolute(env.XDG_CONFIG_HOME) and
       env.XDG_CONFIG_HOME) or (env.HOME and Path.join(env.HOME, '.config'))
   return xdg_dir and Path.join(xdg_dir, relpath) or nil
 end
 
-return {
-  hjdivad_init = hi,
-  hjdivad_auto = ha,
-  echo = echo,
-  assign = assign,
-  Path = Path,
-  File = File,
-  xdg_data_path = xdg_data_path,
-  xdg_config_path = xdg_config_path,
-  ---@param cmd table { command, [arg...] }
-  ---@param cwd string
-  get_os_command_output = telescope_utils.get_os_command_output,
-  os_tmpdir = os_tmpdir,
-  __set_env = __set_env,
-  __reset = __reset
-}
+function M.tbl_find(func, t)
+  for index, value in ipairs(t) do
+    if func(value, index) then
+      return value
+    end
+  end
+end
+
+---@param cmd table { command, [arg...] }
+---@param cwd string
+M.get_os_command_output = telescope_utils.get_os_command_output
+
+return M

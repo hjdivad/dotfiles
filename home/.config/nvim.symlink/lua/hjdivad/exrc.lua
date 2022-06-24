@@ -221,13 +221,16 @@ local function exrc_rm()
 end
 
 local function create_user_commands()
-  vim.api.nvim_create_user_command('HiExrcInit', exrc_init, { desc = 'Create a {.vimrc.lua, .vim/} for the current directory' })
+  vim.api.nvim_create_user_command('HiExrcInit', exrc_init,
+    { desc = 'Create a {.vimrc.lua, .vim/} for the current directory' })
   vim.api.nvim_create_user_command('HiExrcList', exrc_ls, { desc = 'List saved exrc choices' })
-  vim.api.nvim_create_user_command('HiExrcRemove', exrc_rm, { desc = 'Remove the current directory from the list of saved exrc choices' })
+  vim.api.nvim_create_user_command('HiExrcRemove', exrc_rm,
+    { desc = 'Remove the current directory from the list of saved exrc choices' })
 end
 
 local did_setup = false
-local function setup()
+---@diagnostic disable-next-line: unused-local
+local function setup(options)
   did_setup = true
 
   create_user_commands()

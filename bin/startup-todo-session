@@ -76,7 +76,7 @@ has_misc=$?
 if [ $has_misc != "0" ]; then
   echo 'creating scratch-misc session'
   tmux new-session -s 'scratch-misc' -n 'nyx' -d
-  tmux send-keys -t 'scratch-misc:nyx' 'cd ~/src/malleatus/nyx.js && nvim' Enter
+  tmux send-keys -t 'scratch-misc:nyx' 'cd ~/src/malleatus/nyx && nvim' Enter
 fi
 
 if [ "$TMUX" = "" ]; then

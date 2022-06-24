@@ -9,7 +9,7 @@ local function toggle_nvim_tree()
   -- TODO: make this work better when opening a file outside of <cwd>, as well as opening a file within <cwd> after nvimtree has cd-d outside
   --  i.e. NVIMTreeOpen dirname (file) or cwd + findfile
   -- TODO: make this work for NEW buffers (i.e buffers never saved)
-  local buffer_name = vim.fn['bufname']()
+  local buffer_name = vim.fn.bufname()
 
   if buffer_name == '' then
     vim.cmd('NvimTreeOpen')
@@ -351,7 +351,7 @@ local function setup_language_servers()
     vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
     -- TODO: see :he vim.lsp.buf.range_formatting()
-    if vim.fn['exists']('b:formatter_loaded') == 0 then
+    if vim.fn.exists('b:formatter_loaded') == 0 then
       vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
       vim.api.nvim_buf_set_var(0, 'formatter_loaded', true)
     end
@@ -366,27 +366,28 @@ local function setup_language_servers()
   -- list of configurations at <https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md>
   local lsp = require 'lspconfig'
 
+  -- TODO: nmap gf <leader>gd ? this actually works in e.g. this repo
+  -- unclear how best to do this on lsp_attach but it could also be a function that does one or the other based on whether lsp is attached
+  local runtime_path = vim.split(package.path, ';')
+  table.insert(runtime_path, 'lua/?.lua')
+  table.insert(runtime_path, 'lua/?/init.lua')
   lsp.sumneko_lua.setup {
     capabilities = capabilities,
     cmd = { 'lua-language-server' },
     settings = {
       Lua = {
         runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
           version = 'LuaJIT',
-          -- Setup your lua path
-          path = vim.split(package.path, ';')
+          path = runtime_path,
         },
         diagnostics = {
-          -- Get the language server to recognize the `vim` global
           globals = { 'vim' }
         },
         workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = {
-            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
-          }
+          library = vim.api.nvim_get_runtime_file('', true)
+        },
+        telemetry = {
+          enable = false
         }
       }
     },
@@ -564,6 +565,9 @@ local function setup_plugins(config)
   end
 
 
+  -- TODO: consider luasnips?
+  -- <https://github.com/L3MON4D3/LuaSnip>
+  -- examples: <https://github.com/molleweide/LuaSnip-snippets.nvim/tree/main/lua/luasnip_snippets/snippets>
   if check('ultisnips') then
     -- reverse the default ultisnip movement triggers
     vim.g.UltiSnipsJumpForwardTrigger = '<c-k>'
@@ -592,13 +596,16 @@ local function setup_plugins(config)
         -- This is useful when there is no LSP, but with an LSP + snippets it's mostly noise
         -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
         { name = 'path' }, -- trigger via `/`
-        { name = 'cmdline' }, { name = 'calc' }, { name = 'emoji' } -- trigger via `:` in insert mode
+        { name = 'emoji' }, -- trigger via `:` in insert mode
+        -- TODO: this doesn't seem to be working
+        { name = 'cmdline' },
       })
     }
 
-    -- -- configure /@ search for this buffer's document symbols
-    cmp.setup.cmdline('/', {
-      sources = cmp.config.sources({ { name = 'nvim_lsp_document_symbol' } }, { { name = 'buffer' } })
+    -- TODO: this doesn't seem to be working
+    -- <https://github.com/hrsh7th/cmp-cmdline>
+    cmp.setup.cmdline(':', {
+      sources = { name = 'cmdline' }
     })
 
     -- see <https://github.com/hrsh7th/nvim-cmp#setup>
@@ -696,6 +703,7 @@ local function setup_plugins(config)
   end
 end
 
+-- TODO: purify
 local function setup_window_management()
   vim.cmd([[
     augroup WindowManagement
@@ -735,16 +743,16 @@ end
 
 --- Configure neovim.
 ---
----@param config MainConfig Configuration options.
+---@param options MainConfig Configuration options.
 --- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
 --- * *mappings* Whether to create keymappings. Defaults to `false`.
-local function main(config)
+local function main(options)
   --TODO: bootstrap here
 
   local opts = vim.tbl_deep_extend('force', {
     plugins = {},
     mappings = false,
-  }, config)
+  }, options)
 
   setup_local_config()
   setup_colours()
