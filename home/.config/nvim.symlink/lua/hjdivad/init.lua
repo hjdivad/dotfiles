@@ -485,6 +485,31 @@ end
 local function setup_plugins(config)
   require('malleatus').setup {}
 
+  -- TODO: move to malleatus
+  -- TODO: create a plugin for nvim LSP development
+  --    update the vim global for runtime (vim.keymap = vim.keymap or require('vim.keymap'))
+  --    update the vim for c api (compile .lua stubs from C, e.g. </Users/hjdivad/src/neovim/neovim/src/nvim/api/vim.c> nvim_set_keymap )
+  -- TODO: fill out the vim global for LSP config
+  -- TODO: could probably have a single vim = vim or require('vim') doesn't
+  -- really help if looping over exports doesn't work and the whole thing has
+  -- to be compiled
+  if false then
+    vim.keymap = require('vim.keymap')
+    vim.lsp = require('vim.lsp') -- goto-def doesn't wokr here but it does on keymap?
+    vim.fn = require('vim.fn')
+    vim.lsp.buf = vim.lsp.buf or require('vim.lsp.buf')
+    -- vim.fn.bufname()
+    -- vim.lsp.start_client
+    -- vim.lsp.buf.rename()
+    -- TODO: get this to work for vim.X in shared e.g. vim.tbl_deep_extend
+    -- local shared = require('vim.shared')
+    -- for name, fn in pairs(shared) do
+    --   vim[name] = vim[name] or shared[name]
+    -- end
+    -- vim['tbl_deep_extend'] = vim['tbl_deep_extend'] or shared.tbl_deep_extend
+    -- vim.tbl_deep_extend
+  end
+
   local function check(plugin)
     return config == 'all' or vim.tbl_contains(config, plugin)
   end
