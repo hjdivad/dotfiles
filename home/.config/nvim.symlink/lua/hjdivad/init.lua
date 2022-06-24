@@ -510,8 +510,6 @@ local function setup_plugins(config)
 
 
   if check('nvim-tree') then
-    vim.g.nvim_tree_highlight_opened_files = 1 -- highlight open files + folders
-    vim.g.nvim_tree_group_empty = 1 -- compact folders that contain only another folder
     require('nvim-tree').setup {
       view = {
         mappings = {
@@ -569,6 +567,10 @@ local function setup_plugins(config)
             },
           }
         },
+      },
+      renderer = {
+        highlight_opened_files = 'all', -- highlight files opened in a buffer
+        group_empty = true, -- group folders that only contain one other folder (com/whatever/java/so/annoying &c.)
       },
       diagnostics = { enable = true, show_on_dirs = true },
       update_focused_file = {
