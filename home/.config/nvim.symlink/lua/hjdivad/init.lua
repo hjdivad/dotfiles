@@ -184,26 +184,37 @@ local function setup_key_mappings()
     require('hjdivad/terminal').toggle_terminal()
   end, { desc = 'now terminal (intelligent neoterm toggling)', })
 
-  vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end, { desc = 'find files relative to `cwd`', })
-  vim.keymap.set('n', '<leader>fF', function() require('telescope.builtin').find_files({ hidden = true, no_ignore = true }) end, { desc = 'find files harder (--hidden --no-ignore)', })
-  vim.keymap.set('n', '<leader>fg', function() require('telescope.builtin').git_files() end, { desc = 'find files in git', })
+  vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end,
+    { desc = 'find files relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fF',
+    function() require('telescope.builtin').find_files({ hidden = true, no_ignore = true }) end,
+    { desc = 'find files harder (--hidden --no-ignore)', })
+  vim.keymap.set('n', '<leader>fg', function() require('telescope.builtin').git_files() end,
+    { desc = 'find files in git', })
   -- TODO: improve this; get files from git diff <upstream>
-  vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').git_status() end, { desc = 'find files mentioned by git status', })
-  vim.keymap.set('n', '<leader>fc', function() require('telescope.builtin').git_commits() end, { desc = 'find git commits', })
+  vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').git_status() end,
+    { desc = 'find files mentioned by git status', })
+  vim.keymap.set('n', '<leader>fc', function() require('telescope.builtin').git_commits() end,
+    { desc = 'find git commits', })
   vim.keymap.set('n', '<leader>fm', function() require('telescope.builtin').marks() end, { desc = 'find marks', })
   vim.keymap.set('n', '<leader>fb', function() require('telescope.builtin').buffers() end, { desc = 'find buffers', })
-  vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').grep_string({ search = '' }) end, { desc = 'ripgrep relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').grep_string({ search = '' }) end,
+    { desc = 'ripgrep relative to `cwd`', })
   vim.keymap.set('n', '<leader>fR', function()
     require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden' } end })
   end, { desc = 'ripgrep harder (--hidden) relative to `cwd`', })
   vim.keymap.set('n', '<leader>FR', function()
-    require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden', '--no-ignore' } end })
+    require('telescope.builtin').grep_string({ search = '',
+      additional_args = function() return { '--hidden', '--no-ignore' } end })
   end, { desc = 'ripgrep harderest (--hidden --no-ignore) relative to `cwd`', })
   -- TODO: nice to add a (current_class_fuzzy_find, current_method_fuzzy_find &c.) using treesitter
   -- or perhaps using text objects? fuzzy_find_lines_in_text_objects <af> a function
-  vim.keymap.set('n', '<leader>fi', function() require('telescope.builtin').current_buffer_fuzzy_find() end, { desc = 'fuzzy find lines in buffer', })
-  vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { silent = true, desc = 'find anything by first finding a telescope finder', })
-  vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end, { desc = 'find (vim) help tags', })
+  vim.keymap.set('n', '<leader>fi', function() require('telescope.builtin').current_buffer_fuzzy_find() end,
+    { desc = 'fuzzy find lines in buffer', })
+  vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>',
+    { silent = true, desc = 'find anything by first finding a telescope finder', })
+  vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end,
+    { desc = 'find (vim) help tags', })
 
   vim.keymap.set('n', '<leader>ll', '<cmd>Trouble document_diagnostics<cr>', { desc = 'lint list buffer', })
   vim.keymap.set('n', '<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>', { desc = 'lint list workspace', })
@@ -217,7 +228,8 @@ local function setup_key_mappings()
 
 
   vim.keymap.set('i', '<C-f>', function() require('cmp').complete() end, { desc = 'Manually [re-]trigger completion', })
-  vim.keymap.set('n', '<leader>bd', '<cmd>Bclose!<cr><cmd>enew<cr>', { desc = 'buffer delete (but retain window, unlike bwipeout!)', })
+  vim.keymap.set('n', '<leader>bd', '<cmd>Bclose!<cr><cmd>enew<cr>',
+    { desc = 'buffer delete (but retain window, unlike bwipeout!)', })
 
   vim.keymap.set('n', '<leader>hn', '<cmd>GitGutterNextHunk<cr>', { desc = 'git hunk: next', })
   vim.keymap.set('n', '<leader>hp', '<cmd>GitGutterPrevHunk<cr>', { desc = 'git hunk: previous', })
@@ -301,19 +313,28 @@ local function setup_lsp_mappings()
 
   -- Trouble's goto definition not working with neovim 0.7.0
   -- vim.keymap.set('n', '<leader>gd', '<cmd>Trouble lsp_definitions<cr>', { desc='go to definition',  })
-  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end, { desc = 'go to definition', })
+  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end,
+    { desc = 'go to definition', })
   vim.keymap.set('n', '<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>', { desc = 'go to type definition', })
   vim.keymap.set('n', '<leader>gi', '<cmd>Trouble lsp_implementation<cr>', { desc = 'go to implementations', })
   vim.keymap.set('n', '<leader>gr', '<cmd>Trouble lsp_references<cr>', { desc = 'go to references', })
-  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>', { desc = 'go to/from trouble (i.e. toggle trouble window)', })
+  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>',
+    { desc = 'go to/from trouble (i.e. toggle trouble window)', })
   vim.keymap.set('n', '<leader>gci', vim.lsp.buf.incoming_calls, { desc = 'go to calls (inbound) -- who calls me?', })
   vim.keymap.set('n', '<leader>gco', vim.lsp.buf.outgoing_calls, { desc = 'go to calls (outbound) -- who do i call?', })
 
-  vim.keymap.set('n', '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end, { desc = 'show document symbols', })
-  vim.keymap.set('n', '<leader>sS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
-  vim.keymap.set('n', '<leader>SS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
-  vim.keymap.set('n', '<leader>sf', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function' } }) end, { desc = 'show functions', })
-  vim.keymap.set('n', '<leader>so', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end, { desc = 'show outline', })
+  vim.keymap.set('n', '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end,
+    { desc = 'show document symbols', })
+  vim.keymap.set('n', '<leader>sS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
+    { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>SS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
+    { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>sf',
+    function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function' } }) end,
+    { desc = 'show functions', })
+  vim.keymap.set('n', '<leader>so',
+    function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end,
+    { desc = 'show outline', })
 
   vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'list code actions under cursor' })
   vim.keymap.set('v', '<leader>ca', vim.lsp.buf.range_code_action, { desc = 'list code actions in range' })
