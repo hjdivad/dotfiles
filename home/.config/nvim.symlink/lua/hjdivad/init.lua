@@ -443,6 +443,8 @@ local function setup_language_servers()
 
   lsp.bashls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
+  lsp.ccls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
+
   local linters = {
     eslint = {
       sourceName = 'eslint',
