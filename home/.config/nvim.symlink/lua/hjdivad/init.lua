@@ -169,7 +169,7 @@ local function setup_statusline()
 end
 
 local function setup_key_mappings()
-  vim.keymap.del('n', 'Y') -- neovim 0.6.0 maps Y to "$ by default (see default-mappings)
+  vim.keymap.del('n', 'Y', {}) -- neovim 0.6.0 maps Y to "$ by default (see default-mappings)
 
   vim.keymap.set('n', 'Q', '', { desc = 'disable Ex mode from Q (unhelpful fat-finger trap)', })
   vim.keymap.set('n', 'j', 'gj', { desc = 'move (visual) row-wise instead of line-wise', })
