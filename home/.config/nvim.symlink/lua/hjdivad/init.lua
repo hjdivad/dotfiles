@@ -448,12 +448,12 @@ local function setup_language_servers()
 
   -- see <https://github.com/iamcco/diagnostic-languageserver>
   lsp.diagnosticls.setup {
-    filetypes = { 'typescript', 'javascript' },
+    filetypes = { 'typescript', 'javascript', 'markdown' },
     init_options = {
       linters = linters,
       filetypes = { typescript = 'eslint', javascript = 'eslint' },
       formatters = formatters,
-      formatFiletypes = { typescript = 'prettier' }
+      formatFiletypes = { typescript = 'prettier', javascript = 'prettier', markdown = 'prettier' }
     }
   }
 end
