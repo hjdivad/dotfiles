@@ -1,4 +1,4 @@
-local utils = require('hjdivad.utils')
+local utils = require('hjdivad/utils')
 local Path = utils.Path
 local File = utils.File
 local xdg_data_path = utils.xdg_data_path
@@ -80,7 +80,7 @@ describe('File', function()
     end)
   else
     it('cannot test everything',
-       function() error('cannot determine os.tmpdir, unable to test file writing') end)
+      function() error('cannot determine os.tmpdir, unable to test file writing') end)
   end
 end)
 
@@ -93,23 +93,23 @@ describe('XDG helpers', function()
     assert.equals(nil, xdg_data_path())
 
     -- no XDG_DATA_HOME, but we have HOME
-    __set_env({HOME = '/home/user'})
+    __set_env({ HOME = '/home/user' })
     assert.equals('/home/user/.local/share', xdg_data_path())
 
     -- XDG_DATA_HOME
-    __set_env({XDG_DATA_HOME = '/some/absolute/path'})
+    __set_env({ XDG_DATA_HOME = '/some/absolute/path' })
     assert.equals('/some/absolute/path', xdg_data_path())
 
     -- invalid XDG_DATA_HOME ignored
-    __set_env({XDG_DATA_HOME = 'relative/path'})
+    __set_env({ XDG_DATA_HOME = 'relative/path' })
     assert.equals(nil, xdg_data_path())
 
     -- XDG_DATA_HOME takes precedence over HOME
-    __set_env({XDG_DATA_HOME = '/some/absolute/path', HOME = '/home/user'})
+    __set_env({ XDG_DATA_HOME = '/some/absolute/path', HOME = '/home/user' })
     assert.equals('/some/absolute/path', xdg_data_path())
 
     -- invalid XDG_DATA_HOME ignored
-    __set_env({XDG_DATA_HOME = 'relative/path', HOME = '/home/user'})
+    __set_env({ XDG_DATA_HOME = 'relative/path', HOME = '/home/user' })
     assert.equals('/home/user/.local/share', xdg_data_path())
   end)
 
@@ -119,29 +119,29 @@ describe('XDG helpers', function()
     assert.equals(nil, xdg_config_path())
 
     -- no XDG_CONFIG_HOME, but we have HOME
-    __set_env({HOME = '/home/user'})
+    __set_env({ HOME = '/home/user' })
     assert.equals('/home/user/.config', xdg_config_path())
 
     -- XDG_CONFIG_HOME
-    __set_env({XDG_CONFIG_HOME = '/some/absolute/path'})
+    __set_env({ XDG_CONFIG_HOME = '/some/absolute/path' })
     assert.equals('/some/absolute/path', xdg_config_path())
 
     -- invalid XDG_CONFIG_HOME ignored
-    __set_env({XDG_CONFIG_HOME = 'relative/path'})
+    __set_env({ XDG_CONFIG_HOME = 'relative/path' })
     assert.equals(nil, xdg_config_path())
 
     -- XDG_CONFIG_HOME takes precedence over HOME
-    __set_env({XDG_CONFIG_HOME = '/some/absolute/path', HOME = '/home/user'})
+    __set_env({ XDG_CONFIG_HOME = '/some/absolute/path', HOME = '/home/user' })
     assert.equals('/some/absolute/path', xdg_config_path())
 
     -- invalid XDG_CONFIG_HOME ignored
-    __set_env({XDG_CONFIG_HOME = 'relative/path', HOME = '/home/user'})
+    __set_env({ XDG_CONFIG_HOME = 'relative/path', HOME = '/home/user' })
     assert.equals('/home/user/.config', xdg_config_path())
   end)
 end)
 
 describe('os helpers', function()
   it('get_os_command_output captures output from executing os commands', function()
-    assert.same({'hello', 'from echo'}, get_os_command_output({'/bin/echo', 'hello\nfrom echo'}))
+    assert.same({ 'hello', 'from echo' }, get_os_command_output({ '/bin/echo', 'hello\nfrom echo' }))
   end)
 end)

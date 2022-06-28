@@ -85,18 +85,15 @@ local function update_plugins(opts)
         'editorconfig/editorconfig-vim', -- support for editrconfig shared configs beyond vim
 
         ---completion & snippets
-        --TODO: ultisnips sad about python3
         'SirVer/ultisnips', -- snippets
         'hrsh7th/nvim-cmp', -- TODO: try https://github.com/hrsh7th/cmp-copilot
         'hrsh7th/cmp-nvim-lsp', -- complete by lsp symbols
-        'hrsh7th/cmp-buffer', -- complete by keywords in buffer
         'hrsh7th/cmp-path', -- complete file paths
         'hrsh7th/cmp-cmdline', -- /@ searches this buffer's document symbols
         'quangnguyen30192/cmp-nvim-ultisnips', -- complete by UltiSnips snippets
         'hrsh7th/cmp-nvim-lsp-signature-help',
         'hrsh7th/cmp-emoji', --complete emoji
         'hrsh7th/cmp-nvim-lua', --complete neovim's runtime api `vim.lsp.*` &c.
-        'hrsh7th/cmp-calc', -- *very* simple calculations
         'hrsh7th/cmp-nvim-lsp-document-symbol', -- /@ search buffer for LSP document symbols
 
         --- telescope deps
@@ -166,5 +163,6 @@ local function update_plugins(opts)
 end
 
 return {
+  -- TODO: try https://github.com/wbthomason/packer.nvim ?
   update_plugins = update_plugins,
 }

@@ -1,4 +1,5 @@
-local utils = require('hjdivad.utils')
+--TODO: purify
+local utils = require('hjdivad/utils')
 local ha = utils.hjdivad_auto
 
 function ha.vimtest_debug_transform(raw_cmd)

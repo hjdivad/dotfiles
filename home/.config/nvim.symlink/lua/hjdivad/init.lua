@@ -9,95 +9,13 @@ local function toggle_nvim_tree()
   -- TODO: make this work better when opening a file outside of <cwd>, as well as opening a file within <cwd> after nvimtree has cd-d outside
   --  i.e. NVIMTreeOpen dirname (file) or cwd + findfile
   -- TODO: make this work for NEW buffers (i.e buffers never saved)
-  local buffer_name = vim.fn['bufname']()
+  local buffer_name = vim.fn.bufname()
 
   if buffer_name == '' then
     vim.cmd('NvimTreeOpen')
   else
     vim.cmd('NvimTreeFindFile')
   end
-end
-
----Open a REPL terminal that runs `repl_cmd` and begin editing the REPL input buffer `".repl." .. repl_extension`.
----The terminal is placed top-left if any neoterm instances are open, and vertically leftmost otherwise.
----`:write`ing to the RPEL file will send the contents to the repl. The extension is used for file type detection.
----
----@see setup_vimtest()
----@param repl_cmd string a command to start a REPL in a neoterm instance
----@param repl_extension string the name of the file to use for input commands to the REPL
-local function edit_repl(repl_cmd, repl_extension)
-  local get_neoterm_window_ids = require('hjdivad/terminal').get_neoterm_window_ids
-  -- TODO: make a toggle_repl that closes the repl windows if they're open
-  local repl_file = '.repl.' .. repl_extension
-  if not vim.g.neoterm.repl or not vim.g.neoterm.repl.instance_id then
-    local starting_window = vim.api.nvim_get_current_win()
-    -- create the REPL buffer
-    local open_terminals = get_neoterm_window_ids()
-    if #open_terminals > 0 then
-      -- TODO: open the terminal if it's not visible
-      -- if we have a terminal open on the left, create the REPL buffer in the topleft
-      vim.cmd([[
-        " Create a new neoterm window in the top-left
-        100wincmd h
-        100wincmd k
-        above new
-        Tnew
-        normal G
-      ]])
-    else
-      -- if we have no open terminals, create one vertically on the left
-      vim.cmd([[
-        vertical topleft Tnew
-        normal G
-      ]])
-    end
-
-    -- start the REPL
-    vim.cmd([[exe g:neoterm.last_id . 'T ]] .. repl_cmd .. "'")
-    -- Set the new neoterm as the REPL terminal
-    vim.cmd([[
-      exe 'TREPLSetTerm ' . g:neoterm.last_id
-    ]])
-
-    -- return to our starting window to edit the repl input file
-    vim.api.nvim_set_current_win(starting_window)
-  end
-
-  vim.cmd('edit ' .. repl_file)
-  vim.cmd('stopinsert')
-end
-
-local function edit_generic_repl()
-  local repl_cmd = nil
-  local repl_extension = nil
-
-  vim.ui.input({ prompt = 'REPL command (e.g. node) > ', default = 'node' },
-    function(input) repl_cmd = input end)
-
-  vim.ui.input({ prompt = 'REPL input file extension (e.g. js) > ', default = 'js' },
-    function(input) repl_extension = input end)
-
-  if not repl_cmd then error('No REPL command given. Please specify a commnad to start the REPL.') end
-
-  if not repl_extension then
-    error(
-      'No extension given. Please specify an extension (to trigger filetype) for your REPL input buffer')
-  end
-
-  edit_repl(repl_cmd, repl_extension)
-
-  local suggested_keymap = [[vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad').edit_repl(']] .. repl_cmd .. [[', ']] .. repl_extension .. [[') end]]
-  vim.notify([[To skip inputs next time, consider adding `]] .. suggested_keymap ..
-    [[` to .vimrc.lua]], vim.log.levels.INFO, {})
-end
-
-local function setup_repls()
-  vim.cmd([[
-    augroup REPL
-      autocmd!
-      autocmd BufWritePre .repl.* exe 'TREPLSendFile'
-    augroup end
-  ]])
 end
 
 local function setup_local_config()
@@ -169,7 +87,7 @@ local function setup_statusline()
 end
 
 local function setup_key_mappings()
-  vim.keymap.del('n', 'Y') -- neovim 0.6.0 maps Y to "$ by default (see default-mappings)
+  vim.keymap.del('n', 'Y', {}) -- neovim 0.6.0 maps Y to "$ by default (see default-mappings)
 
   vim.keymap.set('n', 'Q', '', { desc = 'disable Ex mode from Q (unhelpful fat-finger trap)', })
   vim.keymap.set('n', 'j', 'gj', { desc = 'move (visual) row-wise instead of line-wise', })
@@ -184,26 +102,37 @@ local function setup_key_mappings()
     require('hjdivad/terminal').toggle_terminal()
   end, { desc = 'now terminal (intelligent neoterm toggling)', })
 
-  vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end, { desc = 'find files relative to `cwd`', })
-  vim.keymap.set('n', '<leader>fF', function() require('telescope.builtin').find_files({ hidden = true, no_ignore = true }) end, { desc = 'find files harder (--hidden --no-ignore)', })
-  vim.keymap.set('n', '<leader>fg', function() require('telescope.builtin').git_files() end, { desc = 'find files in git', })
+  vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end,
+    { desc = 'find files relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fF',
+    function() require('telescope.builtin').find_files({ hidden = true, no_ignore = true }) end,
+    { desc = 'find files harder (--hidden --no-ignore)', })
+  vim.keymap.set('n', '<leader>fg', function() require('telescope.builtin').git_files() end,
+    { desc = 'find files in git', })
   -- TODO: improve this; get files from git diff <upstream>
-  vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').git_status() end, { desc = 'find files mentioned by git status', })
-  vim.keymap.set('n', '<leader>fc', function() require('telescope.builtin').git_commits() end, { desc = 'find git commits', })
+  vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').git_status() end,
+    { desc = 'find files mentioned by git status', })
+  vim.keymap.set('n', '<leader>fc', function() require('telescope.builtin').git_commits() end,
+    { desc = 'find git commits', })
   vim.keymap.set('n', '<leader>fm', function() require('telescope.builtin').marks() end, { desc = 'find marks', })
   vim.keymap.set('n', '<leader>fb', function() require('telescope.builtin').buffers() end, { desc = 'find buffers', })
-  vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').grep_string({ search = '' }) end, { desc = 'ripgrep relative to `cwd`', })
+  vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').grep_string({ search = '' }) end,
+    { desc = 'ripgrep relative to `cwd`', })
   vim.keymap.set('n', '<leader>fR', function()
     require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden' } end })
   end, { desc = 'ripgrep harder (--hidden) relative to `cwd`', })
   vim.keymap.set('n', '<leader>FR', function()
-    require('telescope.builtin').grep_string({ search = '', additional_args = function() return { '--hidden', '--no-ignore' } end })
+    require('telescope.builtin').grep_string({ search = '',
+      additional_args = function() return { '--hidden', '--no-ignore' } end })
   end, { desc = 'ripgrep harderest (--hidden --no-ignore) relative to `cwd`', })
   -- TODO: nice to add a (current_class_fuzzy_find, current_method_fuzzy_find &c.) using treesitter
   -- or perhaps using text objects? fuzzy_find_lines_in_text_objects <af> a function
-  vim.keymap.set('n', '<leader>fi', function() require('telescope.builtin').current_buffer_fuzzy_find() end, { desc = 'fuzzy find lines in buffer', })
-  vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { silent = true, desc = 'find anything by first finding a telescope finder', })
-  vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end, { desc = 'find (vim) help tags', })
+  vim.keymap.set('n', '<leader>fi', function() require('telescope.builtin').current_buffer_fuzzy_find() end,
+    { desc = 'fuzzy find lines in buffer', })
+  vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>',
+    { silent = true, desc = 'find anything by first finding a telescope finder', })
+  vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end,
+    { desc = 'find (vim) help tags', })
 
   vim.keymap.set('n', '<leader>ll', '<cmd>Trouble document_diagnostics<cr>', { desc = 'lint list buffer', })
   vim.keymap.set('n', '<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>', { desc = 'lint list workspace', })
@@ -217,7 +146,8 @@ local function setup_key_mappings()
 
 
   vim.keymap.set('i', '<C-f>', function() require('cmp').complete() end, { desc = 'Manually [re-]trigger completion', })
-  vim.keymap.set('n', '<leader>bd', '<cmd>Bclose!<cr><cmd>enew<cr>', { desc = 'buffer delete (but retain window, unlike bwipeout!)', })
+  vim.keymap.set('n', '<leader>bd', '<cmd>Bclose!<cr><cmd>enew<cr>',
+    { desc = 'buffer delete (but retain window, unlike bwipeout!)', })
 
   vim.keymap.set('n', '<leader>hn', '<cmd>GitGutterNextHunk<cr>', { desc = 'git hunk: next', })
   vim.keymap.set('n', '<leader>hp', '<cmd>GitGutterPrevHunk<cr>', { desc = 'git hunk: previous', })
@@ -240,12 +170,12 @@ local function setup_key_mappings()
   ---In general it's recommended to overwrite this mapping per-project with a
   ---specific repl command and repl file, for example:
   ---```lua
-  ---vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad').edit_repl('yarn repl', 'ts') end)
+  ---vim.api.nvim_set_keymap('n', '<leader>re', function() require('hjdivad/terminal').edit_repl('yarn repl', 'ts') end)
   ---```
   vim.keymap.set('n', '<leader>re', function()
-    require('hjdivad').edit_generic_repl()
+    require('hjdivad/terminal').edit_generic_repl()
   end, { desc = 'Open a REPL in a terminal and a linked REPL input buffer', })
-  vim.keymap.set('v', '<leader>re', ':TREPLSendSelection', { desc = 'Send selection to the REPL', })
+  vim.keymap.set('v', '<leader>re', ':TREPLSendSelection<cr>', { desc = 'Send selection to the REPL', })
 
   vim.keymap.set('n', '<leader>rr', '<cmd>TestFile<cr>', { desc = 'Run Test File (vim-test)', })
   vim.keymap.set('n', '<leader>rt', '<cmd>TestNearest<cr>', { desc = 'Run Nearest Test (vim-test)', })
@@ -266,21 +196,7 @@ local function setup_key_mappings()
   -- yank GitHub permalink to clipboard
   vim.keymap.set('v', '<leader>yg', ':GBrowse!<cr>', { silent = true, desc = 'Yank GitHub permalink to clipboard' })
 
-  ---terminal window mappings & motions
   vim.keymap.set('t', '<c-g><c-g>', [[<c-\><c-n>]], { desc = 'Escape terminal with better keymap', })
-  vim.keymap.set('t', '<c-w>h', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-h>', [[<c-\><c-n><c-w>h]], { desc = 'win-left (in terminal)', })
-  vim.keymap.set('t', '<c-w>j', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-j>', [[<c-\><c-n><c-w>j]], { desc = 'win-down (in terminal)', })
-  vim.keymap.set('t', '<c-w>k', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-k>', [[<c-\><c-n><c-w>k]], { desc = 'win-up (in terminal)', })
-  vim.keymap.set('t', '<c-w>l', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-l>', [[<c-\><c-n><c-w>l]], { desc = 'win-right (in terminal)', })
-  vim.keymap.set('t', '<c-w>c', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-c>', [[<c-\><c-n><c-w>c]], { desc = 'win-close (in terminal)', })
-  -- escape and re-enter insert mode to prevent issue with cursor not appearing in new terminal window
-  vim.keymap.set('t', '<c-w>n', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
-  vim.keymap.set('t', '<c-w><c-n>', [[<cmd>aboveleft Tnew<cr><c-\><c-n><cmd>start<cr>]], { desc = 'win-new (in terminal)', })
 
   --- tab navigation
   vim.keymap.set('n', '<leader>1', '1gt', { desc = 'go to tab 1', })
@@ -301,19 +217,28 @@ local function setup_lsp_mappings()
 
   -- Trouble's goto definition not working with neovim 0.7.0
   -- vim.keymap.set('n', '<leader>gd', '<cmd>Trouble lsp_definitions<cr>', { desc='go to definition',  })
-  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end, { desc = 'go to definition', })
+  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end,
+    { desc = 'go to definition', })
   vim.keymap.set('n', '<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>', { desc = 'go to type definition', })
   vim.keymap.set('n', '<leader>gi', '<cmd>Trouble lsp_implementation<cr>', { desc = 'go to implementations', })
   vim.keymap.set('n', '<leader>gr', '<cmd>Trouble lsp_references<cr>', { desc = 'go to references', })
-  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>', { desc = 'go to/from trouble (i.e. toggle trouble window)', })
+  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>',
+    { desc = 'go to/from trouble (i.e. toggle trouble window)', })
   vim.keymap.set('n', '<leader>gci', vim.lsp.buf.incoming_calls, { desc = 'go to calls (inbound) -- who calls me?', })
   vim.keymap.set('n', '<leader>gco', vim.lsp.buf.outgoing_calls, { desc = 'go to calls (outbound) -- who do i call?', })
 
-  vim.keymap.set('n', '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end, { desc = 'show document symbols', })
-  vim.keymap.set('n', '<leader>sS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
-  vim.keymap.set('n', '<leader>SS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'show workspace symbols', })
-  vim.keymap.set('n', '<leader>sf', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function' } }) end, { desc = 'show functions', })
-  vim.keymap.set('n', '<leader>so', function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end, { desc = 'show outline', })
+  vim.keymap.set('n', '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end,
+    { desc = 'show document symbols', })
+  vim.keymap.set('n', '<leader>sS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
+    { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>SS', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
+    { desc = 'show workspace symbols', })
+  vim.keymap.set('n', '<leader>sf',
+    function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function' } }) end,
+    { desc = 'show functions', })
+  vim.keymap.set('n', '<leader>so',
+    function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end,
+    { desc = 'show outline', })
 
   vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'list code actions under cursor' })
   vim.keymap.set('v', '<leader>ca', vim.lsp.buf.range_code_action, { desc = 'list code actions in range' })
@@ -351,7 +276,7 @@ local function setup_language_servers()
     vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
     -- TODO: see :he vim.lsp.buf.range_formatting()
-    if vim.fn['exists']('b:formatter_loaded') == 0 then
+    if vim.fn.exists('b:formatter_loaded') == 0 then
       vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
       vim.api.nvim_buf_set_var(0, 'formatter_loaded', true)
     end
@@ -366,27 +291,28 @@ local function setup_language_servers()
   -- list of configurations at <https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md>
   local lsp = require 'lspconfig'
 
+  -- TODO: nmap gf <leader>gd ? this actually works in e.g. this repo
+  -- unclear how best to do this on lsp_attach but it could also be a function that does one or the other based on whether lsp is attached
+  local runtime_path = vim.split(package.path, ';')
+  table.insert(runtime_path, 'lua/?.lua')
+  table.insert(runtime_path, 'lua/?/init.lua')
   lsp.sumneko_lua.setup {
     capabilities = capabilities,
     cmd = { 'lua-language-server' },
     settings = {
       Lua = {
         runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
           version = 'LuaJIT',
-          -- Setup your lua path
-          path = vim.split(package.path, ';')
+          path = runtime_path,
         },
         diagnostics = {
-          -- Get the language server to recognize the `vim` global
           globals = { 'vim' }
         },
         workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = {
-            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
-          }
+          library = vim.api.nvim_get_runtime_file('', true)
+        },
+        telemetry = {
+          enable = false
         }
       }
     },
@@ -420,6 +346,8 @@ local function setup_language_servers()
   }
 
   lsp.bashls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
+
+  lsp.ccls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
   local linters = {
     eslint = {
@@ -461,6 +389,31 @@ end
 local function setup_plugins(config)
   require('malleatus').setup {}
 
+  -- TODO: move to malleatus
+  -- TODO: create a plugin for nvim LSP development
+  --    update the vim global for runtime (vim.keymap = vim.keymap or require('vim.keymap'))
+  --    update the vim for c api (compile .lua stubs from C, e.g. </Users/hjdivad/src/neovim/neovim/src/nvim/api/vim.c> nvim_set_keymap )
+  -- TODO: fill out the vim global for LSP config
+  -- TODO: could probably have a single vim = vim or require('vim') doesn't
+  -- really help if looping over exports doesn't work and the whole thing has
+  -- to be compiled
+  if false then
+    vim.keymap = require('vim.keymap')
+    vim.lsp = require('vim.lsp') -- goto-def doesn't wokr here but it does on keymap?
+    vim.fn = require('vim.fn')
+    vim.lsp.buf = vim.lsp.buf or require('vim.lsp.buf')
+    -- vim.fn.bufname()
+    -- vim.lsp.start_client
+    -- vim.lsp.buf.rename()
+    -- TODO: get this to work for vim.X in shared e.g. vim.tbl_deep_extend
+    -- local shared = require('vim.shared')
+    -- for name, fn in pairs(shared) do
+    --   vim[name] = vim[name] or shared[name]
+    -- end
+    -- vim['tbl_deep_extend'] = vim['tbl_deep_extend'] or shared.tbl_deep_extend
+    -- vim.tbl_deep_extend
+  end
+
   local function check(plugin)
     return config == 'all' or vim.tbl_contains(config, plugin)
   end
@@ -470,12 +423,9 @@ local function setup_plugins(config)
   end
 
   if check('neoterm') then
-    vim.g.neoterm_autoinsert = 1
-
-    -- disable automapping from neoterm
-    vim.g.neoterm_automap_keys = '😡😡STUPID_PLUGIN_DO_NOT_AUTOMAP'
-
-    setup_repls()
+    require('hjdivad/terminal').setup {
+      mappings = true
+    }
   end
 
   if check('gitgutter') then
@@ -486,8 +436,6 @@ local function setup_plugins(config)
 
 
   if check('nvim-tree') then
-    vim.g.nvim_tree_highlight_opened_files = 1 -- highlight open files + folders
-    vim.g.nvim_tree_group_empty = 1 -- compact folders that contain only another folder
     require('nvim-tree').setup {
       view = {
         mappings = {
@@ -546,6 +494,10 @@ local function setup_plugins(config)
           }
         },
       },
+      renderer = {
+        highlight_opened_files = 'all', -- highlight files opened in a buffer
+        group_empty = true, -- group folders that only contain one other folder (com/whatever/java/so/annoying &c.)
+      },
       diagnostics = { enable = true, show_on_dirs = true },
       update_focused_file = {
         enable = true, -- highlight focused file in NVIMTree
@@ -564,6 +516,9 @@ local function setup_plugins(config)
   end
 
 
+  -- TODO: consider luasnips?
+  -- <https://github.com/L3MON4D3/LuaSnip>
+  -- examples: <https://github.com/molleweide/LuaSnip-snippets.nvim/tree/main/lua/luasnip_snippets/snippets>
   if check('ultisnips') then
     -- reverse the default ultisnip movement triggers
     vim.g.UltiSnipsJumpForwardTrigger = '<c-k>'
@@ -592,13 +547,16 @@ local function setup_plugins(config)
         -- This is useful when there is no LSP, but with an LSP + snippets it's mostly noise
         -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
         { name = 'path' }, -- trigger via `/`
-        { name = 'cmdline' }, { name = 'calc' }, { name = 'emoji' } -- trigger via `:` in insert mode
+        { name = 'emoji' }, -- trigger via `:` in insert mode
+        -- TODO: this doesn't seem to be working
+        { name = 'cmdline' },
       })
     }
 
-    -- -- configure /@ search for this buffer's document symbols
-    cmp.setup.cmdline('/', {
-      sources = cmp.config.sources({ { name = 'nvim_lsp_document_symbol' } }, { { name = 'buffer' } })
+    -- TODO: this doesn't seem to be working
+    -- <https://github.com/hrsh7th/cmp-cmdline>
+    cmp.setup.cmdline(':', {
+      sources = { name = 'cmdline' }
     })
 
     -- see <https://github.com/hrsh7th/nvim-cmp#setup>
@@ -660,7 +618,9 @@ local function setup_plugins(config)
     telescope.load_extension('ui-select') -- use telescope for selecting prompt choices
   end
 
-  if check('nvim-treesitter') then
+  -- Don't try to run treesitter in CI, installation slows things down enough
+  -- to interfere with tests.
+  if check('nvim-treesitter') and vim.env.CI ~= 'true' then
 
     require 'nvim-treesitter.configs'.setup {
       ensure_installed = 'all',
@@ -696,6 +656,7 @@ local function setup_plugins(config)
   end
 end
 
+-- TODO: purify
 local function setup_window_management()
   vim.cmd([[
     augroup WindowManagement
@@ -711,10 +672,6 @@ local function create_user_commands()
   vim.api.nvim_create_user_command('HiUpdatePlugins', function()
     require('hjdivad/plugins').update_plugins {}
   end, { desc = 'Update or install plugins' })
-
-  vim.api.nvim_create_user_command('HiResize', function()
-    require('hjdivad/terminal').resize_with_terminal()
-  end, { desc = 'Resize windows, ensuring a fixed-width terminal has appropriate width' })
 
   vim.api.nvim_create_user_command('HiDisableMarkdownFolding', function()
     vim.g.vim_markdown_folding_disabled = true
@@ -735,16 +692,16 @@ end
 
 --- Configure neovim.
 ---
----@param config MainConfig Configuration options.
+---@param options MainConfig Configuration options.
 --- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
 --- * *mappings* Whether to create keymappings. Defaults to `false`.
-local function main(config)
+local function main(options)
   --TODO: bootstrap here
 
   local opts = vim.tbl_deep_extend('force', {
     plugins = {},
     mappings = false,
-  }, config)
+  }, options)
 
   setup_local_config()
   setup_colours()
@@ -754,7 +711,6 @@ local function main(config)
   setup_clipboard()
   setup_window_management()
   setup_statusline()
-  require('hjdivad/terminal').setup_terminal()
   create_user_commands()
 
   if opts.mappings then
@@ -765,8 +721,6 @@ end
 return {
   -- lib entry points
 
-  edit_repl = edit_repl,
-  edit_generic_repl = edit_generic_repl,
   toggle_nvim_tree = toggle_nvim_tree,
 
   -- main entry points
