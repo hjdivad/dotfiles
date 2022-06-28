@@ -717,7 +717,9 @@ local function setup_plugins(config)
     telescope.load_extension('ui-select') -- use telescope for selecting prompt choices
   end
 
-  if check('nvim-treesitter') then
+  -- Don't try to run treesitter in CI, installation slows things down enough
+  -- to interfere with tests.
+  if check('nvim-treesitter') and vim.env.CI ~= 'true' then
 
     require 'nvim-treesitter.configs'.setup {
       ensure_installed = 'all',
