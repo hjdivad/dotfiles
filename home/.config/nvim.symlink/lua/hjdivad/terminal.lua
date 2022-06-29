@@ -38,19 +38,23 @@ end
 ---scrolling back through terminal history in normal mode.
 local function insert_if_prompt_visible()
   local bufnr = vim.fn.bufnr()
+  log.trace('insert_if_prompt_visible: ', bufnr)
   --Add a level of async. Right when BufWinEnter fires, we won't get the right
   --value from vim.fn.line('w$'), so we wait a tick to know whether the prompt is actually visible.
   --Doing this requires us to check that the buffer is the same or we'll have
   --occasional "insert mode" bugs when switching from a terminal.
   vim.schedule(function()
     if bufnr ~= vim.fn.bufnr() then
+      log.trace('insert_if_prompt_visible: skip', bufnr, vim.fn.bufnr())
       return
     end
 
     local last_line_visible = vim.fn.line('w$')
     local line_count = vim.api.nvim_buf_line_count(0)
     local is_prompt_visible = last_line_visible >= line_count
+    log.trace('insert_if_prompt_visible: vis?', is_prompt_visible, '#lines', line_count, 'w$', last_line_visible)
     if is_prompt_visible then
+      log.trace('insert_if_prompt_visible: start!', vim.fn.bufnr())
       vim.cmd('start!')
     end
   end)
@@ -93,6 +97,10 @@ local function setup_terminal_autocommands(options)
           '<cmd>aboveleft Tnew<cr><cmd>start<cr>', {})
       end
     end,
+  }))
+  table.insert(autocmd_ids, vim.api.nvim_create_autocmd('WinEnter', {
+    pattern = 'term://*',
+    callback = insert_if_prompt_visible,
   }))
   table.insert(autocmd_ids, vim.api.nvim_create_autocmd('WinLeave', {
     pattern = 'term://*',
