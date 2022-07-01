@@ -369,7 +369,6 @@ local function setup_language_servers()
       sourceName = 'eslint',
       -- TODO: try https://github.com/mantoni/eslint_d.js/
       command = 'eslint',
-      rootPatterns = { '.eslintrc.js', 'package.json' },
       debounce = 100,
       args = { "--stdin", "--stdin-filename", "%filepath", "--format", "json" },
       parseJson = {
@@ -381,7 +380,15 @@ local function setup_language_servers()
         message = "${message} [${ruleId}]",
         security = "severity"
       },
-      securities = { [2] = "error", [1] = "warning" }
+      securities = { [2] = "error", [1] = "warning" },
+      rootPatterns = {
+        '.eslintrc',
+        '.eslintrc.cjs',
+        '.eslintrc.js',
+        '.eslintrc.json',
+        '.eslintrc.yaml',
+        '.eslintrc.yml',
+      }
     }
   }
 
