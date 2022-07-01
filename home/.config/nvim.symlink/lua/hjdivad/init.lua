@@ -1,3 +1,5 @@
+local M = {}
+
 ---Show the nvim-tree
 ---
 ---If the tree is not open, open it, otherwise switch to the tree's window.
@@ -5,7 +7,7 @@
 ---If the current buffer has a name, also find it in the tree.
 ---
 ---*note* finding files works poorly for those outside of `$CWD`
-local function toggle_nvim_tree()
+function M.toggle_nvim_tree()
   -- TODO: make this work better when opening a file outside of <cwd>, as well as opening a file within <cwd> after nvimtree has cd-d outside
   --  i.e. NVIMTreeOpen dirname (file) or cwd + findfile
   -- TODO: make this work for NEW buffers (i.e buffers never saved)
@@ -99,7 +101,7 @@ local function setup_key_mappings()
 
   vim.keymap.set('n', '<leader><leader>', '<cmd>nohl | checktime<cr>', { desc = 'use ,, to clear highlights', })
 
-  vim.keymap.set('n', '<leader>nf', toggle_nvim_tree, { desc = 'now files (toggle nvim-tree)', })
+  vim.keymap.set('n', '<leader>nf', M.toggle_nvim_tree, { desc = 'now files (toggle nvim-tree)', })
   vim.keymap.set('n', '<leader>nt', function()
     require('hjdivad/terminal').toggle_terminal()
   end, { desc = 'now terminal (intelligent neoterm toggling)', })
@@ -687,7 +689,7 @@ end
 ---Creates some functions in the global scope.  Nothing depends on these, they are for user convenience.
 ---
 ---* *pp* A synonym for `vim.pretty_print`
-local function create_debug_functions()
+function M.create_debug_functions()
   ---@diagnostic disable-next-line: lowercase-global
   pp = vim.pretty_print
 end
@@ -701,7 +703,7 @@ end
 ---@param options MainConfig Configuration options.
 --- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
 --- * *mappings* Whether to create keymappings. Defaults to `false`.
-local function main(options)
+function M.main(options)
   --TODO: bootstrap here
 
   local opts = vim.tbl_deep_extend('force', {
@@ -724,13 +726,4 @@ local function main(options)
   end
 end
 
-return {
-  -- lib entry points
-
-  toggle_nvim_tree = toggle_nvim_tree,
-
-  -- main entry points
-
-  main = main,
-  create_debug_functions = create_debug_functions,
-}
+return M
