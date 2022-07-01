@@ -762,11 +762,11 @@ function M.main(options)
   setup_colours()
 
   -- TODO: move these to malleatus?
+  create_user_commands()
   setup_plugins(opts.plugins)
   setup_clipboard()
   setup_window_management()
   setup_statusline()
-  create_user_commands()
 
   if opts.mappings then
     setup_key_mappings()
