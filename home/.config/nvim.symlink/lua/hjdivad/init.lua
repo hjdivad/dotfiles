@@ -145,14 +145,17 @@ local function setup_key_mappings()
   vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end,
     { desc = 'find (vim) help tags', })
 
-  vim.keymap.set('n', '<leader>ll', '<cmd>Trouble document_diagnostics<cr>', { desc = 'lint list buffer', })
-  vim.keymap.set('n', '<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>', { desc = 'lint list workspace', })
-  -- TODO: these two (ln, lp) seem to be broken in nvim 0.7.0
+  vim.keymap.set('n', '<leader>ll', function()
+    vim.diagnostic.setqflist()
+  end, { desc = 'lint list buffer', })
+  vim.keymap.set('n', '<leader>L', function()
+    vim.diagnostic.open_float()
+  end, { desc = 'lint list buffer', })
   vim.keymap.set('n', '<leader>ln', function()
-    require('trouble').next({ skip_groups = true, jump = true })
+    vim.diagnostic.goto_next({ wrap = true })
   end, { desc = 'lint next item', })
   vim.keymap.set('n', '<leader>lp', function()
-    require('trouble').previous({ skip_groups = true, jump = true })
+    vim.diagnostic.goto_prev({ wrap = true })
   end, { desc = 'lint previous item', })
 
 
@@ -226,15 +229,20 @@ local function setup_lsp_mappings()
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show LSP hover (fn docs, help &c.)', })
   vim.keymap.set('n', '<c-h>', vim.lsp.buf.signature_help, { desc = 'Show LSP signature help', })
 
-  -- Trouble's goto definition not working with neovim 0.7.0
-  -- vim.keymap.set('n', '<leader>gd', '<cmd>Trouble lsp_definitions<cr>', { desc='go to definition',  })
   vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end,
     { desc = 'go to definition', })
-  vim.keymap.set('n', '<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>', { desc = 'go to type definition', })
-  vim.keymap.set('n', '<leader>gi', '<cmd>Trouble lsp_implementation<cr>', { desc = 'go to implementations', })
-  vim.keymap.set('n', '<leader>gr', '<cmd>Trouble lsp_references<cr>', { desc = 'go to references', })
-  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>',
-    { desc = 'go to/from trouble (i.e. toggle trouble window)', })
+  vim.keymap.set('n', '<leader>gD', function()
+    require('telescope.builtin').lsp_type_definitions()
+  end, { desc = 'go to type definition', })
+  vim.keymap.set('n', '<leader>gi', function()
+    require('telescope.builtin').lsp_implementations()
+  end, { desc = 'go to implementations', })
+  vim.keymap.set('n', '<leader>gr', function()
+    require('telescope.builtin').lsp_references()
+  end, { desc = 'go to references', })
+  vim.keymap.set('n', '<leader>gl', function()
+    vim.cmd('cope')
+  end, { desc = 'go to linting diagnostics', })
   vim.keymap.set('n', '<leader>gci', vim.lsp.buf.incoming_calls, { desc = 'go to calls (inbound) -- who calls me?', })
   vim.keymap.set('n', '<leader>gco', vim.lsp.buf.outgoing_calls, { desc = 'go to calls (outbound) -- who do i call?', })
 
@@ -599,10 +607,6 @@ local function setup_plugins(config)
   end
 
   if check('telescope') then
-    -- kick off trouble :: pretty diagnostics
-    require 'trouble'.setup {}
-    local trouble_provider_telescope = require("trouble.providers.telescope")
-
     local telescope = require 'telescope'
     telescope.setup {
       defaults = {
@@ -611,9 +615,7 @@ local function setup_plugins(config)
             ['<C-k>'] = 'move_selection_previous',
             ['<C-j>'] = 'move_selection_next',
             ['<C-h>'] = 'which_key',
-            ['<c-t>'] = trouble_provider_telescope.open_with_trouble
           },
-          n = { ['<c-t>'] = trouble_provider_telescope.open_with_trouble }
         }
       },
 
