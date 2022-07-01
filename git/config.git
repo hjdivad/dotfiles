@@ -147,6 +147,9 @@
 [tag]
   sort = -v:refname
 
+[url "git@github.com:"]
+	insteadOf = https://github.com
+
 
 # vim:ft=gitconfig:
 
