@@ -21,6 +21,13 @@ function M.toggle_nvim_tree()
 end
 
 local function setup_local_config()
+  -- better diagnostic signs
+  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+  for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  end
+
   ---spelling
   vim.opt.spelllang = { 'sv', 'en_gb', 'en_us' }
   vim.opt.spellfile = {
@@ -588,15 +595,6 @@ local function setup_plugins(config)
     -- kick off trouble :: pretty diagnostics
     require 'trouble'.setup {}
     local trouble_provider_telescope = require("trouble.providers.telescope")
-
-    -- see <https://github.com/folke/trouble.nvim/issues/52#issuecomment-863885779>
-    -- and <https://github.com/folke/trouble.nvim/issues/52#issuecomment-988874117>
-    -- for making trouble work properly with nvim 0.6.x
-    local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
 
     local telescope = require 'telescope'
     telescope.setup {
