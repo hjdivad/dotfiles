@@ -82,6 +82,7 @@ local function update_plugins(opts)
 
         ---diagnostics, formatting &c.
         'kevinhwang91/nvim-bqf', -- better quickfix
+        'glepnir/lspsaga.nvim', -- nice ui for vim.diagnostic
         'editorconfig/editorconfig-vim', -- support for editrconfig shared configs beyond vim
 
         ---completion & snippets

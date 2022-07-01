@@ -149,13 +149,13 @@ local function setup_key_mappings()
     vim.diagnostic.setqflist()
   end, { desc = 'lint list buffer', })
   vim.keymap.set('n', '<leader>L', function()
-    vim.diagnostic.open_float()
+    require('lspsaga.diagnostic').show_line_diagnostics()
   end, { desc = 'lint list buffer', })
   vim.keymap.set('n', '<leader>ln', function()
-    vim.diagnostic.goto_next({ wrap = true })
+    require('lspsaga.diagnostic').goto_next()
   end, { desc = 'lint next item', })
   vim.keymap.set('n', '<leader>lp', function()
-    vim.diagnostic.goto_prev({ wrap = true })
+    require('lspsaga.diagnostic').goto_prev()
   end, { desc = 'lint previous item', })
 
 
@@ -226,11 +226,21 @@ local function setup_key_mappings()
 end
 
 local function setup_lsp_mappings()
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show LSP hover (fn docs, help &c.)', })
-  vim.keymap.set('n', '<c-h>', vim.lsp.buf.signature_help, { desc = 'Show LSP signature help', })
+  vim.keymap.set('n', 'K', function()
+    -- see <https://github.com/glepnir/lspsaga.nvim> to enable scrolling in
+    -- window. It's not clear how to focus the window
+    require('lspsaga.hover').render_hover_doc()
+  end, { desc = 'Show LSP hover (fn docs, help &c.)', })
+  vim.keymap.set('n', '<c-h>', function()
+    require('lspsaga.signaturehelp').signature_help()
+  end, { desc = 'Show LSP signature help', })
 
-  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end,
-    { desc = 'go to definition', })
+  vim.keymap.set('n', '<leader>gg', function()
+    require('lspsaga.finder').lsp_finder()
+  end, { desc = 'go go go (to something, defintion, references, &c.)', })
+  vim.keymap.set('n', '<leader>gd', function()
+    require('telescope.builtin').lsp_definitions()
+  end, { desc = 'go to definition', })
   vim.keymap.set('n', '<leader>gD', function()
     require('telescope.builtin').lsp_type_definitions()
   end, { desc = 'go to type definition', })
@@ -258,13 +268,26 @@ local function setup_lsp_mappings()
   vim.keymap.set('n', '<leader>so',
     function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end,
     { desc = 'show outline', })
+  vim.keymap.set('n', '<leader>sd', function() require('lspsaga.definition').preview_definition() end,
+    { desc = 'show definition preview', })
 
-  vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'list code actions under cursor' })
-  vim.keymap.set('v', '<leader>ca', vim.lsp.buf.range_code_action, { desc = 'list code actions in range' })
+  vim.keymap.set('n', '<leader>ca', function()
+    --TODO: this is a little bugged; code action on the same spot will keep
+    --increasing the list of code action choices
+    require('lspsaga.codeaction').code_action()
+  end, { desc = 'list code actions under cursor' })
+  vim.keymap.set('v', '<leader>ca', function()
+    vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>", true, false, true))
+    require('lspsaga.codeaction').range_code_action()
+  end, { desc = 'list code actions in range' })
 
-  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'rename symbol under cursor' })
+  vim.keymap.set('n', '<leader>rn', function()
+    require('lspsaga.rename').lsp_rename()
+  end, { desc = 'rename symbol under cursor' })
 
-  vim.keymap.set('i', '<c-h>', vim.lsp.buf.signature_help, { desc = 'show signature help' })
+  vim.keymap.set('i', '<c-h>', function()
+    require('lspsaga.signaturehelp').signature_help()
+  end, { desc = 'show signature help' })
 
   -- TODO: this works but we don't have control over the specific server used
   -- This is particularly unfortunate as TypeScript claims it can format, but
@@ -604,6 +627,23 @@ local function setup_plugins(config)
 
   if check('lspconfig') then
     setup_language_servers()
+  end
+
+  if check('lspsaga') then
+    require('lspsaga').init_lsp_saga({
+      move_in_saga = {
+        prev = 'k',
+        ['next'] = 'j',
+      },
+      finder_action_keys = {
+        open = '<cr>',
+        quit = '<C-c>',
+      },
+      code_action_keys = {
+        exec = '<cr>',
+        quit = '<C-c>',
+      },
+    })
   end
 
   if check('telescope') then
