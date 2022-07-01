@@ -1,3 +1,5 @@
+local M = {}
+
 ---Show the nvim-tree
 ---
 ---If the tree is not open, open it, otherwise switch to the tree's window.
@@ -5,7 +7,7 @@
 ---If the current buffer has a name, also find it in the tree.
 ---
 ---*note* finding files works poorly for those outside of `$CWD`
-local function toggle_nvim_tree()
+function M.toggle_nvim_tree()
   -- TODO: make this work better when opening a file outside of <cwd>, as well as opening a file within <cwd> after nvimtree has cd-d outside
   --  i.e. NVIMTreeOpen dirname (file) or cwd + findfile
   -- TODO: make this work for NEW buffers (i.e buffers never saved)
@@ -19,6 +21,13 @@ local function toggle_nvim_tree()
 end
 
 local function setup_local_config()
+  -- better diagnostic signs
+  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+  for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  end
+
   ---spelling
   vim.opt.spelllang = { 'sv', 'en_gb', 'en_us' }
   vim.opt.spellfile = {
@@ -99,7 +108,7 @@ local function setup_key_mappings()
 
   vim.keymap.set('n', '<leader><leader>', '<cmd>nohl | checktime<cr>', { desc = 'use ,, to clear highlights', })
 
-  vim.keymap.set('n', '<leader>nf', toggle_nvim_tree, { desc = 'now files (toggle nvim-tree)', })
+  vim.keymap.set('n', '<leader>nf', M.toggle_nvim_tree, { desc = 'now files (toggle nvim-tree)', })
   vim.keymap.set('n', '<leader>nt', function()
     require('hjdivad/terminal').toggle_terminal()
   end, { desc = 'now terminal (intelligent neoterm toggling)', })
@@ -136,14 +145,17 @@ local function setup_key_mappings()
   vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end,
     { desc = 'find (vim) help tags', })
 
-  vim.keymap.set('n', '<leader>ll', '<cmd>Trouble document_diagnostics<cr>', { desc = 'lint list buffer', })
-  vim.keymap.set('n', '<leader>lL', '<cmd>Trouble workspace_diagnostics<cr>', { desc = 'lint list workspace', })
-  -- TODO: these two (ln, lp) seem to be broken in nvim 0.7.0
+  vim.keymap.set('n', '<leader>ll', function()
+    vim.diagnostic.setqflist()
+  end, { desc = 'lint list buffer', })
+  vim.keymap.set('n', '<leader>L', function()
+    require('lspsaga.diagnostic').show_line_diagnostics()
+  end, { desc = 'lint list buffer', })
   vim.keymap.set('n', '<leader>ln', function()
-    require('trouble').next({ skip_groups = true, jump = true })
+    require('lspsaga.diagnostic').goto_next()
   end, { desc = 'lint next item', })
   vim.keymap.set('n', '<leader>lp', function()
-    require('trouble').previous({ skip_groups = true, jump = true })
+    require('lspsaga.diagnostic').goto_prev()
   end, { desc = 'lint previous item', })
 
 
@@ -214,18 +226,33 @@ local function setup_key_mappings()
 end
 
 local function setup_lsp_mappings()
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show LSP hover (fn docs, help &c.)', })
-  vim.keymap.set('n', '<c-h>', vim.lsp.buf.signature_help, { desc = 'Show LSP signature help', })
+  vim.keymap.set('n', 'K', function()
+    -- see <https://github.com/glepnir/lspsaga.nvim> to enable scrolling in
+    -- window. It's not clear how to focus the window
+    require('lspsaga.hover').render_hover_doc()
+  end, { desc = 'Show LSP hover (fn docs, help &c.)', })
+  vim.keymap.set('n', '<c-h>', function()
+    require('lspsaga.signaturehelp').signature_help()
+  end, { desc = 'Show LSP signature help', })
 
-  -- Trouble's goto definition not working with neovim 0.7.0
-  -- vim.keymap.set('n', '<leader>gd', '<cmd>Trouble lsp_definitions<cr>', { desc='go to definition',  })
-  vim.keymap.set('n', '<leader>gd', function() require('telescope.builtin').lsp_definitions() end,
-    { desc = 'go to definition', })
-  vim.keymap.set('n', '<leader>gD', '<cmd>Trouble lsp_type_definitions<cr>', { desc = 'go to type definition', })
-  vim.keymap.set('n', '<leader>gi', '<cmd>Trouble lsp_implementation<cr>', { desc = 'go to implementations', })
-  vim.keymap.set('n', '<leader>gr', '<cmd>Trouble lsp_references<cr>', { desc = 'go to references', })
-  vim.keymap.set('n', '<leader>gt', '<cmd>TroubleToggle<cr>',
-    { desc = 'go to/from trouble (i.e. toggle trouble window)', })
+  vim.keymap.set('n', '<leader>gg', function()
+    require('lspsaga.finder').lsp_finder()
+  end, { desc = 'go go go (to something, defintion, references, &c.)', })
+  vim.keymap.set('n', '<leader>gd', function()
+    require('telescope.builtin').lsp_definitions()
+  end, { desc = 'go to definition', })
+  vim.keymap.set('n', '<leader>gD', function()
+    require('telescope.builtin').lsp_type_definitions()
+  end, { desc = 'go to type definition', })
+  vim.keymap.set('n', '<leader>gi', function()
+    require('telescope.builtin').lsp_implementations()
+  end, { desc = 'go to implementations', })
+  vim.keymap.set('n', '<leader>gr', function()
+    require('telescope.builtin').lsp_references()
+  end, { desc = 'go to references', })
+  vim.keymap.set('n', '<leader>gl', function()
+    vim.cmd('cope')
+  end, { desc = 'go to linting diagnostics', })
   vim.keymap.set('n', '<leader>gci', vim.lsp.buf.incoming_calls, { desc = 'go to calls (inbound) -- who calls me?', })
   vim.keymap.set('n', '<leader>gco', vim.lsp.buf.outgoing_calls, { desc = 'go to calls (outbound) -- who do i call?', })
 
@@ -241,13 +268,26 @@ local function setup_lsp_mappings()
   vim.keymap.set('n', '<leader>so',
     function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end,
     { desc = 'show outline', })
+  vim.keymap.set('n', '<leader>sd', function() require('lspsaga.definition').preview_definition() end,
+    { desc = 'show definition preview', })
 
-  vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'list code actions under cursor' })
-  vim.keymap.set('v', '<leader>ca', vim.lsp.buf.range_code_action, { desc = 'list code actions in range' })
+  vim.keymap.set('n', '<leader>ca', function()
+    --TODO: this is a little bugged; code action on the same spot will keep
+    --increasing the list of code action choices
+    require('lspsaga.codeaction').code_action()
+  end, { desc = 'list code actions under cursor' })
+  vim.keymap.set('v', '<leader>ca', function()
+    vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>", true, false, true))
+    require('lspsaga.codeaction').range_code_action()
+  end, { desc = 'list code actions in range' })
 
-  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'rename symbol under cursor' })
+  vim.keymap.set('n', '<leader>rn', function()
+    require('lspsaga.rename').lsp_rename()
+  end, { desc = 'rename symbol under cursor' })
 
-  vim.keymap.set('i', '<c-h>', vim.lsp.buf.signature_help, { desc = 'show signature help' })
+  vim.keymap.set('i', '<c-h>', function()
+    require('lspsaga.signaturehelp').signature_help()
+  end, { desc = 'show signature help' })
 
   -- TODO: this works but we don't have control over the specific server used
   -- This is particularly unfortunate as TypeScript claims it can format, but
@@ -360,7 +400,6 @@ local function setup_language_servers()
       sourceName = 'eslint',
       -- TODO: try https://github.com/mantoni/eslint_d.js/
       command = 'eslint',
-      rootPatterns = { '.eslintrc.js', 'package.json' },
       debounce = 100,
       args = { "--stdin", "--stdin-filename", "%filepath", "--format", "json" },
       parseJson = {
@@ -372,7 +411,15 @@ local function setup_language_servers()
         message = "${message} [${ruleId}]",
         security = "severity"
       },
-      securities = { [2] = "error", [1] = "warning" }
+      securities = { [2] = "error", [1] = "warning" },
+      rootPatterns = {
+        '.eslintrc',
+        '.eslintrc.cjs',
+        '.eslintrc.js',
+        '.eslintrc.json',
+        '.eslintrc.yaml',
+        '.eslintrc.yml',
+      }
     }
   }
 
@@ -582,20 +629,24 @@ local function setup_plugins(config)
     setup_language_servers()
   end
 
+  if check('lspsaga') then
+    require('lspsaga').init_lsp_saga({
+      move_in_saga = {
+        prev = 'k',
+        ['next'] = 'j',
+      },
+      finder_action_keys = {
+        open = '<cr>',
+        quit = '<C-c>',
+      },
+      code_action_keys = {
+        exec = '<cr>',
+        quit = '<C-c>',
+      },
+    })
+  end
+
   if check('telescope') then
-    -- kick off trouble :: pretty diagnostics
-    require 'trouble'.setup {}
-    local trouble_provider_telescope = require("trouble.providers.telescope")
-
-    -- see <https://github.com/folke/trouble.nvim/issues/52#issuecomment-863885779>
-    -- and <https://github.com/folke/trouble.nvim/issues/52#issuecomment-988874117>
-    -- for making trouble work properly with nvim 0.6.x
-    local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
-
     local telescope = require 'telescope'
     telescope.setup {
       defaults = {
@@ -604,9 +655,7 @@ local function setup_plugins(config)
             ['<C-k>'] = 'move_selection_previous',
             ['<C-j>'] = 'move_selection_next',
             ['<C-h>'] = 'which_key',
-            ['<c-t>'] = trouble_provider_telescope.open_with_trouble
           },
-          n = { ['<c-t>'] = trouble_provider_telescope.open_with_trouble }
         }
       },
 
@@ -687,7 +736,7 @@ end
 ---Creates some functions in the global scope.  Nothing depends on these, they are for user convenience.
 ---
 ---* *pp* A synonym for `vim.pretty_print`
-local function create_debug_functions()
+function M.create_debug_functions()
   ---@diagnostic disable-next-line: lowercase-global
   pp = vim.pretty_print
 end
@@ -701,7 +750,7 @@ end
 ---@param options MainConfig Configuration options.
 --- * *plugins* What plugins to configure. Can be `'all'` or a list of plugin names. Defaults to `{}`.
 --- * *mappings* Whether to create keymappings. Defaults to `false`.
-local function main(options)
+function M.main(options)
   --TODO: bootstrap here
 
   local opts = vim.tbl_deep_extend('force', {
@@ -713,24 +762,15 @@ local function main(options)
   setup_colours()
 
   -- TODO: move these to malleatus?
+  create_user_commands()
   setup_plugins(opts.plugins)
   setup_clipboard()
   setup_window_management()
   setup_statusline()
-  create_user_commands()
 
   if opts.mappings then
     setup_key_mappings()
   end
 end
 
-return {
-  -- lib entry points
-
-  toggle_nvim_tree = toggle_nvim_tree,
-
-  -- main entry points
-
-  main = main,
-  create_debug_functions = create_debug_functions,
-}
+return M

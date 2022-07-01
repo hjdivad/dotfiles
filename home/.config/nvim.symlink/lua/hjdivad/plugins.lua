@@ -81,7 +81,8 @@ local function update_plugins(opts)
         'neovim/nvim-lspconfig', -- native lsp
 
         ---diagnostics, formatting &c.
-        'folke/trouble.nvim', -- pretty diagnostics
+        'kevinhwang91/nvim-bqf', -- better quickfix
+        'glepnir/lspsaga.nvim', -- nice ui for vim.diagnostic
         'editorconfig/editorconfig-vim', -- support for editrconfig shared configs beyond vim
 
         ---completion & snippets
