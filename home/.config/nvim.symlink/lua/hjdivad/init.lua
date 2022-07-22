@@ -585,12 +585,21 @@ local function setup_plugins(config)
 
   if check('cmp') then
     local cmp = require 'cmp'
+    if cmp == nil then
+      error('cmp not loaded')
+    end
+
     cmp.setup {
       snippet = { expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end },
       mapping = {
         ['<c-l>'] = cmp.mapping.confirm({ select = true }),
+        ['<c-c>'] = cmp.mapping.abort(),
         ['<c-n>'] = cmp.mapping.select_next_item(),
         ['<c-p>'] = cmp.mapping.select_prev_item(),
+      },
+      window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
       },
       sources = cmp.config.sources({
         { name = 'nvim_lsp' }, -- complete symbols (via LSP)
@@ -601,15 +610,22 @@ local function setup_plugins(config)
         -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
         { name = 'path' }, -- trigger via `/`
         { name = 'emoji' }, -- trigger via `:` in insert mode
-        -- TODO: this doesn't seem to be working
-        { name = 'cmdline' },
       })
     }
 
-    -- TODO: this doesn't seem to be working
-    -- <https://github.com/hrsh7th/cmp-cmdline>
     cmp.setup.cmdline(':', {
-      sources = { name = 'cmdline' }
+      mapping = cmp.mapping.preset.cmdline({
+        ['<c-l>'] = {
+          c = function()
+            if cmp.visible() then
+              cmp.confirm({ select = true })
+            end
+          end,
+        }
+      }),
+      sources = cmp.config.sources({
+        { name = 'cmdline' },
+        { name = 'path' } })
     })
 
     -- see <https://github.com/hrsh7th/nvim-cmp#setup>
