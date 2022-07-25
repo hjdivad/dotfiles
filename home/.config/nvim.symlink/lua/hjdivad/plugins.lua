@@ -96,8 +96,9 @@ local function update_plugins(opts)
         'hrsh7th/cmp-emoji', --complete emoji
         'hrsh7th/cmp-nvim-lua', --complete neovim's runtime api `vim.lsp.*` &c.
         'hrsh7th/cmp-nvim-lsp-document-symbol', -- /@ search buffer for LSP document symbols
+        'hjdivad/cmp-nvim-wikilinks', -- complete filenames against &path in [[wikilinks]]
 
-        --- telescope deps
+        -- telescope deps
         'nvim-lua/popup.nvim', -- create floating windows over other windows
         'nvim-lua/plenary.nvim', -- lots of lua utilities
         'sharkdp/fd', -- alternative file finder
