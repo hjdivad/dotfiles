@@ -1,4 +1,4 @@
-BASH="$HOME/.dotfiles/bash/Lib"
+BASH_LIB="$HOME/.dotfiles/bash/Lib"
 SRC="$HOME/src"
 
 # Homebrew bash completion
@@ -18,9 +18,9 @@ if [[ -d $HOME/.bash_completion.d ]]; then
 fi
 
 # If gh exists, add a wrapper that also completes aliases
-which gh > /dev/null 2>&1 && source "$BASH/gh_completion.sh"
+which gh > /dev/null 2>&1 && source "$BASH_LIB/gh_completion.sh"
 
-source $BASH/colours.sh
+source $BASH_LIB/colours.sh
 
 # Lang Libs + SDK{{{
 
