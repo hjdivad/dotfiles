@@ -592,6 +592,7 @@ local function setup_plugins(config)
       error('cmp not loaded')
     end
 
+    require('cmp_nvim_wikilinks').setup {}
     cmp.setup {
       snippet = { expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end },
       mapping = {
@@ -605,13 +606,14 @@ local function setup_plugins(config)
         documentation = cmp.config.window.bordered(),
       },
       sources = cmp.config.sources({
+        { name = 'ultisnips' }, -- UltiSnipsEdit + UltiSnipsAddFileTypes
         { name = 'nvim_lsp' }, -- complete symbols (via LSP)
         { name = 'nvim_lsp_signature_help' }, -- signature completion
         { name = 'nvim_lua' }, -- lua nvim api completion (vim.lsp.* &c.)
-        { name = 'ultisnips' }, -- UltiSnipsEdit + UltiSnipsAddFileTypes
         -- This is useful when there is no LSP, but with an LSP + snippets it's mostly noise
         -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
-        { name = 'path' }, -- trigger via `/`
+        { name = 'path' }, -- trigger via `/` or '.'
+        { name = 'wikilinks' }, -- complete obsidian-style wikilinks against &path
         { name = 'emoji' }, -- trigger via `:` in insert mode
       })
     }
