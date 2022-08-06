@@ -239,7 +239,7 @@ local function setup_lsp_mappings()
   end, { desc = 'Show LSP signature help', })
 
   vim.keymap.set('n', '<leader>gg', function()
-    require('lspsaga.finder').lsp_finder()
+    require('lspsaga.finder'):lsp_finder()
   end, { desc = 'go go go (to something, defintion, references, &c.)', })
   vim.keymap.set('n', '<leader>gd', function()
     require('telescope.builtin').lsp_definitions()
@@ -268,9 +268,7 @@ local function setup_lsp_mappings()
   vim.keymap.set('n', '<leader>sf',
     function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function' } }) end,
     { desc = 'show functions', })
-  vim.keymap.set('n', '<leader>so',
-    function() require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'class' } }) end,
-    { desc = 'show outline', })
+  vim.keymap.set('n', '<leader>so', '<cmd>LSoutlineToggle<cr>', { desc = 'show outline', })
   vim.keymap.set('n', '<leader>sd', function() require('lspsaga.definition').preview_definition() end,
     { desc = 'show definition preview', })
 
