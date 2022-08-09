@@ -283,6 +283,7 @@ function __tz {
 
 alias t='tmux'
 alias ts='tmux display-popup -E -w 80% -h 80% nvim -c ":Telescope tmux windows quit_on_select=true"'
+alias tt='tmux switch-client -l'
 # TODO: telescope this
 alias gz='__tz'
 
