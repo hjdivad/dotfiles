@@ -3,9 +3,9 @@ local telescope_utils = require('telescope.utils')
 local Job = require 'plenary.job'
 local Log = require('plenary.log')
 
-local level = vim.fn.getenv('DEBUG')
-if level == vim.NIL then
-  level = 'info'
+local level = 'info'
+if vim.fn.getenv('DEBUG') ~= vim.NIL then
+  level = 'trace'
 end
 
 local M = {}
