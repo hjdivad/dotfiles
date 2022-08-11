@@ -61,12 +61,16 @@ local function insert_if_prompt_visible()
 end
 
 local function resize_terminal_windows(options)
+  log.trace('resize_terminal_windows')
   local opts = vim.tbl_deep_extend('force', { all = false }, options or {})
   local etw = get_terminal_expected_width()
+  log.trace('-setw', 0, vim.api.nvim_get_current_win(), etw)
+  -- TODO: there's a bug here; when we're invoked in a terminal autocommand we know the current window is a terminal, but this isn't the case for the user command or the VimResized event
   vim.api.nvim_win_set_width(0, etw)
 
   if opts.all then
     for _, win_id in ipairs(get_neoterm_window_ids()) do
+      log.trace('-setw', win_id, etw)
       vim.api.nvim_win_set_width(win_id, etw)
     end
   end
@@ -118,7 +122,7 @@ local function setup_terminal_autocommands(options)
   }))
   table.insert(autocmd_ids, vim.api.nvim_create_autocmd('VimResized', {
     pattern = '*',
-    callback = resize_terminal_windows,
+    callback = function() resize_terminal_windows { all = true } end,
   }))
 end
 
