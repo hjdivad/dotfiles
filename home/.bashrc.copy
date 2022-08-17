@@ -1,9 +1,14 @@
+# export SHELL to make tmux happy
+# for some reason bash under kitty gets SHELL wrong (/bin/sh) which in turn
+# causes tmux to launch the wrong shell on new windows
+export SHELL=$BASH
+
 # Standard bashrc early escape when not running interactively.
 if [ -z "$PS1" ]; then return; fi
 
 DOTFILES=$HOME/.dotfiles
 
-source $DOTFILES/bashrc.bash
+source $DOTFILES/bash/bashrc.bash
 
 
 # vim:ft=sh:
