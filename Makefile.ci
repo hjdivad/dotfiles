@@ -35,6 +35,9 @@ test.nvim: # Run plenary tests
 	@pwd
 	nvim --headless --noplugin -u tests/runner_init.vim -c "PlenaryBustedDirectory tests/hjdivad/ {minimal_init = 'tests/test_init.vim'}"
 
+bootstrap.nvim: # install neovim plugins
+	nvim ${NVIM_FLAGS} --headless --noplugin -u ./home/.config/nvim.symlink/bootstrap.lua  --cmd 'set rtp+=./home/.config/nvim.symlink'
+
 TmpOut := "./tmp/test.out"
 
 test.bootstrap:
