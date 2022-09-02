@@ -1,6 +1,5 @@
-# Shouldn't have to set default-shell here, but something is messed up between kitty, bash & tmux
-set -g default-shell /usr/local/bin/bash
-set -g default-command "safe-reattach-to-user-namespace -l $SHELL"
+# https://wiki.archlinux.org/title/tmux#Start_a_non-login_shell
+set -g default-command "${SHELL}"
 
 # keybindings {{{
 setw -g mode-keys vi

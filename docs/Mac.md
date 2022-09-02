@@ -3,13 +3,12 @@
 ## Installation
 
 - install [homebrew][]
-- install [inconsolata for powerline][]
-- install [alacritty][] (>= 0.4.2-rc3)
 - install rustup
 - install volta
 - `brew install bash`
 - `brew install neovim`
 - `brew install tmux`
+- `brew install fzf`
 - `brew install z`
 - `brew install rbenv`
 - `gem install pws`
@@ -43,6 +42,9 @@ mkdir src
 
 # cat '/usr/local/bin/bash' >> /etc/shells
 # chsh -s /usr/local/bin/bash
+
+# set up ^r history fzf
+$(brew --prefix)/opt/fzf/install
 ```
 
 ## Configs
@@ -157,7 +159,5 @@ defaults write com.apple.dock no-bouncing -bool TRUE
 killall Dock
 ```
 
-[alacritty]: https://github.com/jwilm/alacritty/blob/master/INSTALL.md
-[inconsolata for powerline]: https://github.com/powerline/fonts/tree/master/Inconsolata
 [homebrew]: https://brew.sh/
 [disable animations]: https://apple.stackexchange.com/questions/14001/how-to-turn-off-all-animations-on-os-x

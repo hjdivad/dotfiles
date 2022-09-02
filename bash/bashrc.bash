@@ -1,12 +1,35 @@
+# -- login; skip w/--noprofile
+# /etc/profile
+# ~/.bash_profile
+# ~/.bash_login
+# ~/.profile
+# ...
+# ~/.bash_logout
+#
+# -- interactive non-login; skip w/--norc
+# ~/.bashrc
+#
+# -- non-interactive
+# $"BASH_ENV"
+
+
+
 BASH_LIB="$HOME/.dotfiles/bash/Lib"
 SRC="$HOME/src"
 
+if [ -d /opt/homebrew ]; then
+  HOMEBREW="/opt/homebrew"
+else
+  HOMEBREW="/usr/local"
+fi
+
+
 # Homebrew bash completion
-[ -r /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
+[ -r "${HOMEBREW}/etc/bash_completion" ] && source "${HOMEBREW}/etc/bash_completion"
 
 # Homebrew bash completion@2
-[[ -d "/usr/local/etc/bash_completion.d" ]] && export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+[[ -d "${HOMEBREW}/etc/bash_completion.d" ]] && export BASH_COMPLETION_COMPAT_DIR="${HOMEBREW}/etc/bash_completion.d"
+[[ -r "${HOMEBREW}/etc/profile.d/bash_completion.sh" ]] && . "${HOMEBREW}/etc/profile.d/bash_completion.sh"
 
 # Completion from alacritty src
 [ -r "$SRC/alacritty/alacritty/extra/completions/alacritty.bash" ] && source "$SRC/alacritty/alacritty/extra/completions/alacritty.bash"
@@ -45,8 +68,6 @@ if [[ -z "$DOTFILES_BASHRC_INIT" ]]; then
   if [[ -x /usr/libexec/java_home ]]; then
     export JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
   fi
-
-  export NODE_PATH=/usr/local/lib/jsctags/:$NODE_PATH
 fi
 
 #}}}
@@ -54,14 +75,8 @@ fi
 # Version Mgmt {{{
 
 # initialize rbenv
-if [[ -z "$DOTFILES_BASHRC_INIT" && -x /usr/local/bin/rbenv ]]; then
+if [[ -z "$DOTFILES_BASHRC_INIT" && -x ${HOMEBREW}/bin/rbenv ]]; then
   eval "$(rbenv init -)"
-fi
-
-# initialize volta
-if [[ -z "$DOTFILES_BASHRC_INIT" && -d "$HOME/.volta" ]]; then
-  export VOLTA_HOME="$HOME/.volta"
-  export PATH="$VOLTA_HOME/bin:$PATH"
 fi
 
 # Load RVM, if it is present.
@@ -118,17 +133,17 @@ if [[ -z "$DOTFILES_BASHRC_INIT" ]]; then
     export XARGS=/usr/bin/xargs
   fi
   
-  export PATH=/usr/local/bin:$PATH
-  export PATH=/usr/local/share/npm/bin:$PATH
+  export PATH=$HOMEBREW/bin:$PATH
   export PATH=$HOME/local/bin:$PATH
   export PATH=$HOME/.cargo/bin:$PATH
-  # TODO: relative to this file
   export PATH=$HOME/.dotfiles/bin:$PATH
-  # TODO: delete these;
-  # prefer XDG path for local bins, i.e. $HOME/.local/bin
-  # export PATH=$HOME/local/bin:$PATH
-  # export PATH=$HOME/bin:$PATH
   export PATH=$HOME/.local/bin:$PATH
+
+  # initialize volta
+  if [[ -d "$HOME/.volta" ]]; then
+    export VOLTA_HOME="$HOME/.volta"
+    export PATH="$VOLTA_HOME/bin:$PATH"
+  fi
 fi
 
 # }}}
@@ -336,9 +351,11 @@ PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; h
 # z jumparound; this must be sourced after $PROMPT_COMMAND is set
 if [ -f "$SRC/rupa/z/z.sh" ]; then
   source "$SRC/rupa/z/z.sh"
-elif [ -f /usr/local/Cellar/z/1.9/etc/profile.d/z.sh ]; then
-  source /usr/local/Cellar/z/1.9/etc/profile.d/z.sh
+elif [ -f "${HOMEBREW}/Cellar/z/1.9/etc/profile.d/z.sh" ]; then
+  source "${HOMEBREW}/Cellar/z/1.9/etc/profile.d/z.sh"
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 export FZF_CTRL_T_COMMAND='git branch | cut -c 3-'
 export FZF_CTRL_T_OPTS='--preview="git log --decorate=full --color --abbrev-commit origin/master..{}"'
