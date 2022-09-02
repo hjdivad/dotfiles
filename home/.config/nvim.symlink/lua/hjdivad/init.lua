@@ -286,6 +286,11 @@ local function setup_lsp_mappings()
     require('lspsaga.rename').lsp_rename()
   end, { desc = 'rename symbol under cursor' })
 
+  vim.keymap.set('n', '<leader>rf', function()
+    ---@diagnostic disable-next-line: missing-parameter
+    vim.lsp.buf.formatting_seq_sync()
+  end, { desc = 'format buffer' })
+
   vim.keymap.set('i', '<c-h>', function()
     require('lspsaga.signaturehelp').signature_help()
   end, { desc = 'show signature help' })
@@ -318,11 +323,11 @@ local function setup_language_servers()
     -- use LSP for formatxpr
     vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
-    -- TODO: see :he vim.lsp.buf.range_formatting()
-    if vim.fn.exists('b:formatter_loaded') == 0 then
-      vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
-      vim.api.nvim_buf_set_var(0, 'formatter_loaded', true)
-    end
+    -- disabled format on save until I can get it to play nice with folding
+    -- if vim.fn.exists('b:formatter_loaded') == 0 then
+    --   vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
+    --   vim.api.nvim_buf_set_var(0, 'formatter_loaded', true)
+    -- end
 
     -- for plugins with `on_attach` call them here
   end
