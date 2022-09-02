@@ -706,6 +706,9 @@ local function setup_plugins(config)
 
     require 'nvim-treesitter.configs'.setup {
       ensure_installed = 'all',
+      ignore_install = {
+        'phpdoc', -- npm 8 can't install from its package lock
+      },
       highlight = {
         enable = true,
 
