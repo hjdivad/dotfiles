@@ -200,7 +200,7 @@ alias ifconfig-active="ifconfig | pcregrep -M  -o '^[^\t:]+:([^\n]|\n\t)*status:
 # https://github.com/ogham/exa
 if $(which exa > /dev/null 2>&1); then
   alias ls='exa'
-  alias ll='exa -snew -l'
+  alias ll='exa -l --all --no-user --changed --sort=modified'
 fi
 
 # use fd if it exists
@@ -230,6 +230,8 @@ alias copy='tr -d "\n" | pbcopy'
 alias copy-url="tee /dev/tty | rg -o 'https?://(?:[\S]+)[\s]?' | copy"
 
 alias js='node -e '"'"'global.js = require(`${process.env.HOME}/.volta/tools/image/packages/jstat/lib/node_modules/jstat`)'"'"' -i'
+# startup jest with debugging + watch mode
+alias jest-debug='NODE_OPTIONS="--inspect" ./node_modules/.bin/jest --runInBand --watch nothing'
 
 
 # Trailing space to tell bash to check next word for alias as well
