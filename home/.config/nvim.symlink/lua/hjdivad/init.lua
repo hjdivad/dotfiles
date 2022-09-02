@@ -635,7 +635,8 @@ local function setup_plugins(config)
       }),
       sources = cmp.config.sources({
         { name = 'cmdline' },
-        { name = 'path' } })
+        { name = 'path' }
+      })
     })
 
     -- see <https://github.com/hrsh7th/nvim-cmp#setup>
