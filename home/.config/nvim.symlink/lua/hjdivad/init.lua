@@ -376,6 +376,8 @@ local function setup_language_servers()
 
   lsp.jsonls.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
+  lsp.graphql.setup { capabilities = capabilities, on_attach = on_lsp_attach }
+
 
   lsp.html.setup { capabilities = capabilities, on_attach = on_lsp_attach }
 
@@ -435,12 +437,12 @@ local function setup_language_servers()
 
   -- see <https://github.com/iamcco/diagnostic-languageserver>
   lsp.diagnosticls.setup {
-    filetypes = { 'typescript', 'javascript', 'markdown' },
+    filetypes = { 'typescript', 'javascript', 'markdown', 'graphql' },
     init_options = {
       linters = linters,
       filetypes = { typescript = 'eslint', javascript = 'eslint' },
       formatters = formatters,
-      formatFiletypes = { typescript = 'prettier', javascript = 'prettier', markdown = 'prettier' }
+      formatFiletypes = { typescript = 'prettier', javascript = 'prettier', markdown = 'prettier', graphql = 'prettier' }
     }
   }
 end
