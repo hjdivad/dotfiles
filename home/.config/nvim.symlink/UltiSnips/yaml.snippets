@@ -1,0 +1,27 @@
+snippet adu
+# Configuration for go/adu.
+# See go/adu-cfg for supported configuration properties and values.
+# e.g. default_reviewers, ignored_updates, automerge_updates ...
+#
+# .linkedin/adu/config.yml
+
+version: 1
+
+update_configs:
+	- package_manager: javascript
+		directory: /
+		update_schedule: daily
+		default_reviewers:
+			- dhamilto
+		allowed_updates:
+			- match:
+				dependency_name: ".*"
+		grouped_updates:
+			- match:
+				dependency_name: ".*"
+				group: all
+		automerged_updates:
+			- match:
+				update_type: "semver:minor"
+				dependency_name: "@linkedin/*"
+endsnippet
