@@ -1,0 +1,161 @@
+{
+  "BetterLua.vim": {
+    "commit": "d2d6c11"
+  },
+  "bclose": {
+    "commit": "23ced84"
+  },
+  "cmp-cmdline": {
+    "commit": "23c51b2"
+  },
+  "cmp-emoji": {
+    "commit": "19075c3"
+  },
+  "cmp-nvim-lsp": {
+    "commit": "5922477"
+  },
+  "cmp-nvim-lsp-document-symbol": {
+    "commit": "069a207"
+  },
+  "cmp-nvim-lsp-signature-help": {
+    "commit": "d2768cb"
+  },
+  "cmp-nvim-lua": {
+    "commit": "d276254"
+  },
+  "cmp-nvim-ultisnips": {
+    "commit": "21f02b6"
+  },
+  "cmp-nvim-wikilinks": {
+    "commit": "fb48f43"
+  },
+  "cmp-path": {
+    "commit": "91ff86c"
+  },
+  "common.nvim": {
+    "commit": "dd6e6c6"
+  },
+  "editorconfig-vim": {
+    "commit": "30ddc05"
+  },
+  "fd": {
+    "commit": "7c86c7d"
+  },
+  "json5.vim": {
+    "commit": "1e17189"
+  },
+  "lsp-colors.nvim": {
+    "commit": "4e6da19"
+  },
+  "lspsaga.nvim": {
+    "commit": "b7b4777"
+  },
+  "markdown-preview.nvim": {
+    "commit": "02cc387"
+  },
+  "neoterm": {
+    "commit": "e114858"
+  },
+  "nvim-cmp": {
+    "commit": "8bbaeda"
+  },
+  "nvim-lspconfig": {
+    "commit": "973aa14"
+  },
+  "nvim-nonicons": {
+    "commit": "c9b3a38"
+  },
+  "nvim-tree.lua": {
+    "commit": "29788cc"
+  },
+  "nvim-treesitter": {
+    "commit": "ee095ab"
+  },
+  "nvim-treesitter-textobjects": {
+    "commit": "e2ee8fd"
+  },
+  "nvim-web-devicons": {
+    "commit": "05e1072"
+  },
+  "onedark.vim": {
+    "commit": "b6b5ffe"
+  },
+  "packer.nvim": {
+    "commit": "dac4088"
+  },
+  "playground": {
+    "commit": "3421bbb"
+  },
+  "plenary.nvim": {
+    "commit": "4b7e520"
+  },
+  "popup.nvim": {
+    "commit": "b7404d3"
+  },
+  "tabular": {
+    "commit": "339091a"
+  },
+  "telescope-fzf-native.nvim": {
+    "commit": "fab3e22"
+  },
+  "telescope-tmux.nvim": {
+    "commit": "bb719ca"
+  },
+  "telescope-ui-select.nvim": {
+    "commit": "62ea5e5"
+  },
+  "telescope.nvim": {
+    "commit": "cabf991"
+  },
+  "terminus": {
+    "commit": "12b07e3"
+  },
+  "ultisnips": {
+    "commit": "e99fdf1"
+  },
+  "vim-airline": {
+    "commit": "6a4c82c"
+  },
+  "vim-airline-themes": {
+    "commit": "dd81554"
+  },
+  "vim-commentary": {
+    "commit": "e87cd90"
+  },
+  "vim-fugitive": {
+    "commit": "5b0b138"
+  },
+  "vim-git": {
+    "commit": "5143bea"
+  },
+  "vim-gitgutter": {
+    "commit": "400a120"
+  },
+  "vim-graphql": {
+    "commit": "4bf5d33"
+  },
+  "vim-markdown": {
+    "commit": "df4be86"
+  },
+  "vim-pdl": {
+    "commit": "9b98492"
+  },
+  "vim-repeat": {
+    "commit": "24afe92"
+  },
+  "vim-rhubarb": {
+    "commit": "cad60fe"
+  },
+  "vim-sensible": {
+    "commit": "1be4e4e"
+  },
+  "vim-surround": {
+    "commit": "3d188ed"
+  },
+  "vim-test": {
+    "commit": "c6e5d24"
+  },
+  "vim-unimpaired": {
+    "commit": "6d44a6d"
+  }
+}
