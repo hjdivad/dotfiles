@@ -27,3 +27,9 @@
 snippet function:one-line "a one-line function"
 function() ${0} end
 endsnippet
+
+snippet opts "options table w/defaults"
+local opts = vim.tbl_deep_extend('force', {
+	${0:default=value}
+}, options or {})
+endsnippet
