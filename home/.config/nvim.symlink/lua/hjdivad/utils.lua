@@ -18,6 +18,7 @@ M.log = Log.new {
   use_console = 'sync',
 }
 
+--TODO: delete global
 ---Global access; entry point for autocommands and mappings
 ---@diagnostic disable-next-line: lowercase-global
 ha = {}

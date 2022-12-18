@@ -30,10 +30,10 @@ jobs:
       - name: Download Neovim
         run: |
           mkdir -p build
-          wget https://github.com/neovim/neovim/releases/download/v0.7.0/nvim.appimage
+          wget https://github.com/neovim/neovim/releases/download/v0.8.1/nvim.appimage
           chmod +x nvim.appimage
-          mv nvim.appimage ./build/nvim
-          echo "${PWD}/build" >> $GITHUB_PATH
+          ./nvim.appimage --appimage-extract
+          echo "${PWD}/squashfs-root/usr/bin" >> $GITHUB_PATH
 
       - name: Install python3
         uses: actions/setup-python@v4
