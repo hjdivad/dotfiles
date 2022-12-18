@@ -41,8 +41,6 @@ test_helper.setup()
 
 
 a.describe('init.toggle_nvim_tree', function()
-  init.main { plugins = { 'nvim-tree' } }
-
   a.after_each(function()
     vim.cmd('NvimTreeClose')
   end)

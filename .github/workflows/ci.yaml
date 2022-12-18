@@ -14,7 +14,7 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 30
     steps:
 
       - name: Environment information
@@ -38,7 +38,7 @@ jobs:
       - name: Install python3
         uses: actions/setup-python@v4
         env:
-          DEBUG_SSH: ${{ secrets.DebugSSH }}
+          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
         if: ${{ env.DEBUG_SSH == 'true' }}
         with:
           python-version: '3.x'
@@ -46,14 +46,14 @@ jobs:
 
       - name: Install python neovim module
         env:
-          DEBUG_SSH: ${{ secrets.DebugSSH }}
+          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
         if: ${{ env.DEBUG_SSH == 'true' }}
         run: |
           pip3 install neovim
 
       - name: Setup upterm session
         env:
-          DEBUG_SSH: ${{ secrets.DebugSSH }}
+          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
         if: ${{ env.DEBUG_SSH == 'true' }}
         uses: lhotari/action-upterm@v1
         with:
@@ -62,15 +62,23 @@ jobs:
           ## limits ssh access and adds the ssh public keys of the listed GitHub users
           limit-access-to-users: hjdivad,rwjblue
 
+      - name: Install Dotfiles
+        run: |
+          # If we do a general install we have to remove $HOME/.gitconfig or
+          # we'll fail to clone packer due to preferring ssh over http
+          #
+          # make -f Makefile.ci install
+          ln -s $PWD/home/.config/nvim.symlink/ $HOME/.cache/nvim
+
       - name: Install Plugins
         env:
           NVIM_FLAGS: ${{ secrets.NvimFlags }}
         run: |
-          make bootstrap.nvim
+          make -f Makefile.ci nvim.install
 
       - name: test
         env:
           DEBUG: ${{ secrets.Debug }}
         run: |
-          make --version
+          make -f makefile.ci --version
           DEBUG=${{env.DEBUG}} make -f Makefile.ci test

@@ -35,22 +35,20 @@ test.nvim: # Run plenary tests
 	@pwd
 	nvim --headless --noplugin -u tests/runner_init.vim -c "PlenaryBustedDirectory tests/hjdivad/ {minimal_init = 'tests/test_init.vim'}"
 
-bootstrap.nvim: # install neovim plugins
-	nvim ${NVIM_FLAGS} --headless --noplugin -u ./home/.config/nvim.symlink/bootstrap.lua  --cmd 'set rtp+=./home/.config/nvim.symlink'
+
+nvim.install: # install nvim plugins + treesitter grammars
+	INSTALL=1 nvim --headless --noplugin
+
+nvim.update: # update nvim plugins + treesitter grammars
+	UPDATE=1 nvim --headless --noplugin
+
+nvim.rollback: # roll back plugins to the snapshot saved from the last update
+	ROLLBACK=1 nvim --headless --noplugin
 
 TmpOut := "./tmp/test.out"
 
-test.bootstrap:
-	@rm -f $(TmpOut)
-	XDG_DATA_HOME=/tmp/no/place/like/home/ nvim --headless -u ./home/.config/nvim.symlink/init.lua +quit 2>&1 | \
-		grep -C 100 Error && \
-		{
-			printf " $(red)\n\ninit.lua errored ungracefully when bootstrapping.${reset} See output above."
-		} || true
-
-# test: test.nvim test.bootstrap # Run all tests
 test: test.nvim # Run all tests
 
-.PHONY: install test test.nvim test.bootstrap
+.PHONY: install test test.nvim
 
 .DEFAULT_GOAL := test

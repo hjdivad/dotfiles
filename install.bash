@@ -48,7 +48,7 @@ for copy in $ALL_COPYS; do
   HOME_FILE="$HOME/${copy:5}"
   ABS_PATH="$DIR/${copy}.copy"
 
-  [[ ! -r "$HOME_FILE" ]] && cp -r $ABS_PATH $HOME_FILE
+  [[ ! -r "$HOME_FILE" ]] && mkdir -p dirname $HOME_FILE && cp -r $ABS_PATH $HOME_FILE
 done
 
 # link $HOME/.dotfiles to this repo as some of the 
