@@ -203,12 +203,6 @@ if $(which exa > /dev/null 2>&1); then
   alias ll='exa -l --all --no-user --changed --sort=modified'
 fi
 
-# use fd if it exists
-# https://github.com/sharkdp/fd
-if $(which fd > /dev/null 2>&1); then
-  alias find='fd'
-fi
-
 # always create paths when using mkdir.
 alias mkdir='mkdir -p'
 
