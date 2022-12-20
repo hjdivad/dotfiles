@@ -8,6 +8,10 @@ if vim.fn.getenv('DEBUG') ~= vim.NIL then
   level = 'trace'
 end
 
+-- TODO: file logging in CI should be okay but plenary ends up breaking on a
+-- bad mkdir -p
+local log_to_file = vim.fn.getenv('CI') == vim.NIL
+
 local M = {}
 
 M.log = Log.new {
@@ -16,6 +20,7 @@ M.log = Log.new {
   -- TODO: this does write to $HOME/.cache/nvim/hjdivad_init.log
   -- but does not seem to write to the console at all
   use_console = 'sync',
+  use_file = log_to_file,
 }
 
 --TODO: delete global
