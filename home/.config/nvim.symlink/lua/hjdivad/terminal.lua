@@ -199,6 +199,8 @@ function M.edit_repl(repl_cmd, repl_extension, options)
 
   local needs_repl_terminal = true
 
+  log.trace('edit_repl ' .. repl_cmd .. ' :: ' .. repl_file)
+
   -- first check to see if there's an existing valid REPL to use
   local repl_instance_id = vim.g.neoterm and vim.g.neoterm.repl and vim.g.neoterm.repl.instance_id
   if repl_instance_id then
