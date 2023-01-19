@@ -26,6 +26,22 @@
 # https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L511
 # https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L821
 
+snippet ::home-improvement:: "🏠 home improvement"
+🏠 [[home-improvement]]
+endsnippet
+
+snippet ::hacking:: "⚡ [[hacking]]"
+⚡ [[hacking]]
+endsnippet
+
+snippet ::level-up-⏫:: "⏫ [[level-up]]"
+⏫ [[level-up]
+endsnippet
+
+snippet ::kids:: "👪 [[ongoing/kids]]"
+👪 [[ongoing/kids]]
+endsnippet
+
 snippet todo
 - [ ] 🌑 ${0}
 endsnippet
@@ -109,6 +125,7 @@ snippet project
 # ${0:Project Name}
 
 **Tasks**:
+${0}
 
 **Links**:
 
@@ -128,12 +145,15 @@ ${0}
 
 🗒️ [[todo]]
 🏋️ [[exercise]]
+💰 [[purchase]]
+
+⏫ [[level-up]]
 ⚡ [[hacking]]
 🍰 [[kitchen]]
+👪 [[ongoing/kids]]
 🏠 [[home-improvement]]
 ❤️ [[health]]
-☎️ [[relationships]]
-💰 [[purchase]]
+☎️ [[ongoing/people]]
 
 [[ref/index]]
 
@@ -141,10 +161,38 @@ ${0}
 
 endsnippet
 
-snippet daily:tasks "regular tasks for the day"
-- [ ] disken
-- [ ] katterna
-- [ ] hönsen
+snippet daily:tasks "daily checklist @ 💻"
+**daily**:
+- [ ]${0} calendar
+- [ ] chat (telegram dms)
+- [ ] email
+- [ ] weekly:tasks if friday
+- [[todo]]
+endsnippet
+
+snippet weekly:tasks "weekly checklist @ 💻"
+**weekly**:
+- [ ] ${0}drain intake
+- [ ] review phone intake/reading tab
+- [ ] tidy up ongoing/
+- [ ] tidy up projects/
+- [ ] tidy up [[todo]]
+- [ ] physical intake (kitchen basket mail, computer room box)
+- [ ] monthly:tasks:1 if 2nd Friday
+- [ ] monthly:tasks:2 if 3nd Friday
+endsnippet
+
+snippet monthly:tasks:1 "monthly (primary) checklist @ 💻"
+**weekly**:
+- [ ] ${0}expense receipts (phone, internet)
+- [ ] savings snapshot
+- [ ] tidy up someday/
+endsnippet
+
+snippet monthly:tasks:2 "monthly (alternate) checklist @ 💻"
+**weekly**:
+- [ ] review [GitHub notifications](https://github.com/notifications)
+- [ ] drain [GitHub saved notifications](https://github.com/notifications?query=is%3Asaved)
 endsnippet
 
 snippet feedback
@@ -179,18 +227,31 @@ ${2:TODO}
 # Log
 
 ## Week 14 ()
+
 ## Week 13 ()
+
 ## Week 12 ()
+
 ## Week 11 ()
+
 ## Week 10 ()
+
 ## Week 9 ()
+
 ## Week 8 ()
+
 ## Week 7 ()
+
 ## Week 6 ()
+
 ## Week 5 ()
+
 ## Week 4 ()
+
 ## Week 3 ()
+
 ## Week 2 ()
+
 ## Week 1 ()
 
 # Links
