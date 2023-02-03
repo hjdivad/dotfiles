@@ -74,11 +74,9 @@ local function setup_colours()
 
     hi SpellBad gui=undercurl
 
-    hi markdownTSStrong guifg=#E5C07B cterm=bold gui=bold       " guifg=Type
-    hi markdownTSEmphasis guifg=#C678DD cterm=italic gui=italic " guifg=Question
-    hi markdown_inlineTSStrong guifg=#E5C07B cterm=bold gui=bold       " guifg=Type
-    hi markdown_inlineTSEmphasis guifg=#C678DD cterm=italic gui=italic " guifg=Question
-    " TODO: add highlights for cmp-highlight
+    hi @text.strong guifg=#E5C07B cterm=bold gui=bold       " guifg=Type
+    hi @text.emphasis guifg=#C678DD cterm=italic gui=italic " guifg=Question
+    hi @text.reference guifg=#6eb1fd
   ]])
 end
 
