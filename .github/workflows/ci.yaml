@@ -22,18 +22,38 @@ jobs:
           uname
           uname -a
 
+      - name: Required Directories
+        run: |
+          mkdir -p $HOME/.cache
+
       - uses: actions/checkout@v2
 
       - name: Install fzf
         run: sudo apt-get -y install fzf
 
-      - name: Download Neovim
+      - name: cache neovim
+        uses: actions/cache@v3
+        id: cache-neovim
+        with:
+          path: "~/.cache/neovim"
+          key: ${{secrets.NEOVIM_VERSION}}
+
+      # see https://stackoverflow.com/questions/59269850/caching-apt-packages-in-github-actions-workflow
+      - name: Install Neovim
+        env:
+          CACHE_HIT: ${{steps.cache-neovim.outputs.cache-hit}}
+          NEOVIM_VERSION: ${{secrets.NEOVIM_VERSION}}
         run: |
-          mkdir -p build
-          wget https://github.com/neovim/neovim/releases/download/v0.8.1/nvim.appimage
-          chmod +x nvim.appimage
-          ./nvim.appimage --appimage-extract
-          echo "${PWD}/squashfs-root/usr/bin" >> $GITHUB_PATH
+          if [[ "$CACHE_HIT" == 'true' ]]; then
+            echo "$HOME/.cache/neovim/squashfs-root/usr/bin" >> $GITHUB_PATH
+          else
+            mkdir -p ~/.cache/neovim
+            cd ~/.cache/neovim
+            wget https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim.appimage
+            chmod +x nvim.appimage
+            ./nvim.appimage --appimage-extract
+            echo "$HOME/.cache/neovim/squashfs-root/usr/bin" >> $GITHUB_PATH
+          fi
 
       - name: Install python3
         uses: actions/setup-python@v4
