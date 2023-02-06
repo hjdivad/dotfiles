@@ -1,6 +1,7 @@
 local M = {};
 
 local is_headless = #vim.api.nvim_list_uis() == 0
+local debug = vim.env.DEBUG or vim.env.CI
 
 local function check_or_install_packer()
   local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -28,7 +29,7 @@ local snapshot_path = util.join_paths(vim.fn.stdpath('config'), 'plugins-dev-sna
 -- TODO: move to plugin_config
 packer.startup({
   require('hjdivad/plugin_config'),
-  config = {
+  config = vim.tbl_deep_extend('force', debug and { log = { level = 'debug' } } or {}, {
     -- uncomment to change packer's log level
     -- log = { level = 'debug' },
     git = {
@@ -37,7 +38,7 @@ packer.startup({
         update = 'pull --force --ff-only --progress --rebase=false'
       }
     }
-  }
+  })
 })
 
 function M.take_snapshot(opts)

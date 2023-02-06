@@ -92,6 +92,7 @@ jobs:
 
       - name: Install Plugins
         env:
+          CI: true
           NVIM_FLAGS: ${{ secrets.NvimFlags }}
         run: |
           make -f Makefile.ci nvim.install
