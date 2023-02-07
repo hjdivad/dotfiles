@@ -27,11 +27,11 @@
 # https://github.com/SirVer/ultisnips/blob/2c83e40ce66814bf813457bb58ea96184ab9bb81/doc/UltiSnips.txt#L821
 
 snippet todo
-- [ ] ${0}
+- [ ] 🌑 ${0}
 endsnippet
 
 snippet todo:done
-- ✅ ${0}
+- [x] ✅ ${0}
 endsnippet
 
 snippet todo:morning
@@ -74,6 +74,9 @@ snippet meeting:entry
 
 **Agenda**:
 ${0}
+
+**Atendees**:
+
 **Action Items**:
 
 **Alignment**:
@@ -103,12 +106,13 @@ ${0}
 endsnippet
 
 snippet project
-# ${1:Project Name}
+# ${0:Project Name}
 
 **Tasks**:
-- [ ] **NA** ${0}
 
 **Links**:
+
+## Log
 
 ## ARCHIVE
 
