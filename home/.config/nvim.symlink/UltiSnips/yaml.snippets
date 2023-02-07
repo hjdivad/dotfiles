@@ -11,17 +11,8 @@ update_configs:
 	- package_manager: javascript
 		directory: /
 		update_schedule: daily
-		default_reviewers:
-			- dhamilto
-		allowed_updates:
-			- match:
-				dependency_name: ".*"
-		grouped_updates:
-			- match:
-				dependency_name: ".*"
-				group: all
 		automerged_updates:
 			- match:
-				update_type: "semver:minor"
-				dependency_name: "@linkedin/*"
+					update_type: 'in_range'
+					dependency_name: '.*'
 endsnippet
