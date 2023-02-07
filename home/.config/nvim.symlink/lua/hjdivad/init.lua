@@ -605,8 +605,8 @@ local function setup_plugins(config)
       },
       sources = cmp.config.sources({
         { name = 'ultisnips' }, -- UltiSnipsEdit + UltiSnipsAddFileTypes
-        { name = 'nvim_lsp' }, -- complete symbols (via LSP)
-        { name = 'nvim_lsp_signature_help' }, -- signature completion
+        { name = 'nvim_lsp', priority = 1000 }, -- complete symbols (via LSP)
+        { name = 'nvim_lsp_signature_help', priority = 1000 }, -- signature completion
         { name = 'nvim_lua' }, -- lua nvim api completion (vim.lsp.* &c.)
         -- This is useful when there is no LSP, but with an LSP + snippets it's mostly noise
         -- { name = 'buffer' }, -- autocomplete keywords (&isk) in buffer
