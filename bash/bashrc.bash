@@ -302,6 +302,7 @@ alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 
 alias y=yarn
 alias nr='npm run'
+alias npm-check-updates='npx npm-check-updates -i'
 
 alias we=watchexec
 
@@ -355,6 +356,8 @@ fi
 
 export FZF_CTRL_T_COMMAND='git branch | cut -c 3-'
 export FZF_CTRL_T_OPTS='--preview="git log --decorate=full --color --abbrev-commit origin/master..{}"'
+
+alias gd='cd $(fd --type directory | fzf)'
 
 #}}}
 
