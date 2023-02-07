@@ -776,6 +776,7 @@ end
 function M.main(options)
   --TODO: bootstrap here
 
+  --TODO: in malleatus/common disable setup_ftdetct in > 0.8.0
   local opts = vim.tbl_deep_extend('force', {
     plugins = {},
     mappings = false,
