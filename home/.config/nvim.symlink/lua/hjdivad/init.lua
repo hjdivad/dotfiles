@@ -139,7 +139,7 @@ local function setup_key_mappings()
   end, { desc = 'ripgrep harderest (--hidden --no-ignore) relative to `cwd`', })
   -- TODO: nice to add a (current_class_fuzzy_find, current_method_fuzzy_find &c.) using treesitter
   -- or perhaps using text objects? fuzzy_find_lines_in_text_objects <af> a function
-  vim.keymap.set('n', '<leader>fi', function() require('telescope.builtin').current_buffer_fuzzy_find() end,
+  vim.keymap.set('n', '<leader>fl', function() require('telescope.builtin').current_buffer_fuzzy_find() end,
     { desc = 'fuzzy find lines in buffer', })
   vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>',
     { silent = true, desc = 'find anything by first finding a telescope finder', })
@@ -233,11 +233,8 @@ local function setup_lsp_mappings()
   vim.keymap.set('n', 'K', function()
     -- see <https://github.com/glepnir/lspsaga.nvim> to enable scrolling in
     -- window. It's not clear how to focus the window
-    require('lspsaga.hover').render_hover_doc()
+    require('lspsaga.hover'):render_hover_doc()
   end, { desc = 'Show LSP hover (fn docs, help &c.)', })
-  vim.keymap.set('n', '<c-h>', function()
-    require('lspsaga.signaturehelp').signature_help()
-  end, { desc = 'Show LSP signature help', })
 
   vim.keymap.set('n', '<leader>gg', function()
     require('lspsaga.finder'):lsp_finder()
@@ -276,7 +273,7 @@ local function setup_lsp_mappings()
   vim.keymap.set('n', '<leader>ca', function()
     --TODO: this is a little bugged; code action on the same spot will keep
     --increasing the list of code action choices
-    require('lspsaga.codeaction').code_action()
+    require('lspsaga.codeaction'):code_action()
   end, { desc = 'list code actions under cursor' })
   vim.keymap.set('v', '<leader>ca', function()
     vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>", true, false, true))
@@ -284,17 +281,13 @@ local function setup_lsp_mappings()
   end, { desc = 'list code actions in range' })
 
   vim.keymap.set('n', '<leader>rn', function()
-    require('lspsaga.rename').lsp_rename()
+    require('lspsaga.rename'):lsp_rename()
   end, { desc = 'rename symbol under cursor' })
 
   vim.keymap.set('n', '<leader>rf', function()
     ---@diagnostic disable-next-line: missing-parameter
     vim.lsp.buf.formatting_seq_sync()
   end, { desc = 'format buffer' })
-
-  vim.keymap.set('i', '<c-h>', function()
-    require('lspsaga.signaturehelp').signature_help()
-  end, { desc = 'show signature help' })
 
   -- TODO: this works but we don't have control over the specific server used
   -- This is particularly unfortunate as TypeScript claims it can format, but
