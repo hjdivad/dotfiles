@@ -54,6 +54,8 @@
   dc = diff --cached
   dcw = diff --cached --ignore-all-space --color-words
   dw = diff --ignore-all-space --color-words
+  diff-files-changed = "!git --no-pager diff --name-status origin/HEAD"
+  ls-files-changed = "!git --no-pager diff --name-status origin/HEAD"
 
   st = status -sb -uall
 
