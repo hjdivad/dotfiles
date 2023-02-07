@@ -484,7 +484,7 @@ local function setup_plugins(config)
 
   if check('gitgutter') then
     -- TODO: this can be made more robust (handle origin/main + maybe toggle against upstreams)
-    vim.g.gitgutter_diff_base = 'origin/master'
+    vim.g.gitgutter_diff_base = 'origin/HEAD'
     vim.g.gitgutter_map_keys = 0
   end
 
