@@ -6,9 +6,9 @@ export SHELL=$BASH
 # Standard bashrc early escape when not running interactively.
 if [ -z "$PS1" ]; then return; fi
 
-DOTFILES=$HOME/.dotfiles
+BASHRC_DIR=#$PKG
 
-source $DOTFILES/bash/bashrc.bash
+source $BASHRC_DIR/shell.bash
 
 
 # vim:ft=sh:
