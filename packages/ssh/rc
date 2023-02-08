@@ -1,0 +1,7 @@
+# This exists for sshing into a session, creating a tmux session, leaving
+# and rejoining the server later, reconnecting to the tmux session, and
+# having agent forwarding still work.
+if [[ -n "$SSH_TTY" && -S "$SSH_AUTH_SOCK" ]]; then
+  # ssh with tty
+  ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+fi

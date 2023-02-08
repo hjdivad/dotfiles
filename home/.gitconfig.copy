@@ -1,5 +1,0 @@
-[include]
-  path = .dotfiles/git/config.git
-t
-
-# vim:ft=gitconfig:
