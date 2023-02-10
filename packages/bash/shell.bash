@@ -132,8 +132,9 @@ function __setup_unix_cmds {
   # use exa if it exists
   # https://github.com/ogham/exa
   if $(which exa > /dev/null 2>&1); then
-    alias ls='exa'
-    alias ll='exa -l --all --no-user --changed --sort=modified'
+    alias ls='exa --colour-scale'
+    alias ll='exa -l --all --no-user --changed --sort=modified --color-scale'
+    alias lt='exa --tree --level 3 -l --no-permissions --no-user --no-time --colour-scale'
   else
     # setup ls
     ls / --color=auto > /dev/null 2>&1
@@ -150,7 +151,7 @@ function __setup_env {
   fi
 }
 
-function _setup_aliases {
+function __setup_aliases {
   alias lsof-tcp='lsof -iTCP'
   alias lsof-tcp-listen='lsof -iTCP -sTCP:LISTEN -P'
 
@@ -364,6 +365,7 @@ __setup_ssh
 __setup_gpg
 __setup_pws
 __setup_clipboard
+__setup_aliases
 __setup_bash_options
 __setup_tmux
 __setup_wsl
