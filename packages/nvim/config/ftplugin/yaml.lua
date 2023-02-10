@@ -1,1 +1,0 @@
--- TODO: if path matches .github/workflows/* UltiSnipsAddFiletypes github-actions
