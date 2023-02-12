@@ -1,60 +1,6 @@
 local Util = require("lazyvim.util")
 
--- TODO: snippets + completion
--- see https://github.com/folke/lazy.nvim#-plugin-spec
 return {
-  {
-    "L3MON4D3/LuaSnip",
-    dependencies = {
-      -- TODO: do i want this?
-      "rafamadriz/friendly-snippets",
-      config = function()
-        require("luasnip.loaders.from_vscode").lazy_load()
-      end,
-    },
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
-  -- stylua: ignore
-  keys = {
-    {
-        --TODO: fix this
-      "<tab>",
-      function()
-        return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-      end,
-      expr = true, silent = true, mode = "i",
-    },
-    { "<c-j>", function() require("luasnip").jump(1) end, mode = "s" },
-    { "<c-k>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
-    },
-  },
-
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    cmd = "Neotree",
-    keys = {
-      -- disable LazyVim keymaps
-      { "<leader>fe", false },
-      { "<leader>fE", false },
-      { "<leader>E", false },
-      { "<leader>e", "<cmd>Neotree reveal_force_cwd<cr>", desc = "Open filesystem tree", remap = true },
-    },
-    opts = {
-      window = {
-        mappings = {
-          -- open file & close neotree
-          ["o"] = function(state)
-            local cmd = require("neo-tree/sources/filesystem/commands")
-            cmd.open(state)
-            vim.cmd([[Neotree close]])
-          end,
-        },
-      },
-    },
-  },
-
   -- see https://github.com/nvim-telescope/telescope.nvim
   {
     "nvim-telescope/telescope.nvim",
@@ -86,10 +32,10 @@ return {
             --   Util.telescope("find_files", { no_ignore = true, hidden = true })()
             -- end,
             ["<c-i>"] = function()
-              Util.telescope("find_files", { no_ignore = true })()
+              Util.telescope("find_files", { no_ignore = true, prompt_title = "find files (no ignore)" })()
             end,
             ["<c-h>"] = function()
-              Util.telescope("find_files", { hidden = true })()
+              Util.telescope("find_files", { hidden = true, prompt_title = "find files (hidden)" })()
             end,
             ["<C-k>"] = "move_selection_previous",
             ["<C-j>"] = "move_selection_next",

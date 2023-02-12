@@ -35,3 +35,5 @@ if vim.env.SSH_TTY ~= nil or vim.env.SSH_CLIENT ~= nil then
     cache_enabled = true,
   }
 end
+
+pp = vim.pretty_print
