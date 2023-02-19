@@ -2,10 +2,56 @@ return {
   -- lspconfig
   {
     "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      -- per project lsp config
+      { "folke/neoconf.nvim", cmd = "Neoconf", config = true },
+      -- lua plugin development lsp
+      { "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
+      "mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      {
+        "hrsh7th/cmp-nvim-lsp",
+        cond = function()
+          return require("lazyvim.util").has("nvim-cmp")
+        end,
+      },
+    },
     ---@class PluginLspOpts
     opts = {
       -- options for vim.diagnostic.config()
+      diagnostics = {
+        underline = true,
+        update_in_insert = false,
+        virtual_text = { spacing = 4, prefix = "●" },
+        severity_sort = true,
+      },
       autoformat = false,
+      -- options for vim.lsp.buf.format
+      -- `bufnr` and `filter` is handled by the LazyVim formatter,
+      -- but can be also overridden when specified
+      format = {
+        formatting_options = nil,
+        timeout_ms = nil,
+      },
+      -- LSP Server Settings
+      ---@type lspconfig.options
+      servers = {
+        jsonls = {},
+        lua_ls = {
+          -- mason = false, -- set to false if you don't want this server to be installed with mason
+          settings = {
+            Lua = {
+              workspace = {
+                checkThirdParty = false,
+              },
+              completion = {
+                callSnippet = "Replace",
+              },
+            },
+          },
+        },
+      },
     },
     ---`config` is copied from lazyvim's lsp/init.lua
     ---it is modified to replace the default keymaps with local ones
