@@ -7,6 +7,8 @@ M._keys = nil
 
 ---@return (LazyKeys|{has?:string})[]
 function M.get()
+  -- seems to ignore .editorconfig for e.g. quote_single
+  -- see /Users/test/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/lsp/format.lua
   local format = require("lazyvim.plugins.lsp.format").format
   if not M._keys then
   ---@class PluginLspKeys
