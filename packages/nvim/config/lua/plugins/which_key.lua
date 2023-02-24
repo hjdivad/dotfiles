@@ -22,7 +22,6 @@ return {
         ["<leader>G"] = { name = "+git/hunks" },
         ["<leader>s"] = { name = "+search/show" },
         ["<leader>n"] = { name = "+notifications" },
-        --TODO: add ui -> lazy 
         ["<leader>u"] = { name = "+ui" },
         ["<leader>un"] = { name = "+notifications" },
       })

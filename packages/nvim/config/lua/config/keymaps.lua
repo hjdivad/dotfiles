@@ -4,7 +4,6 @@
 
 local ks = vim.keymap.set
 local kd = vim.keymap.del
-
 local existing_keymaps_lhs = {}
 function kd(mode, lhs)
   local normalized_lhs = string.gsub(lhs, "<leader>", vim.g.mapleader)
@@ -143,4 +142,18 @@ ks("n", "<leader>yF", function()
   vim.fn.setreg(clipboard_reg, vim.fn.expand("%:p"))
 end, { desc = "yank absolute path (buf) to clipboard" })
 
--- TODO: see https://github.com/rwjblue/dotvim/blob/f2dcf5d5964ccdd7dc2cdd008898af7a5eb110d5/lua/config/keymaps.lua#L20-L30
+ks("t", "<c-g><c-g>", [[<c-\><c-n>]], { desc = "Terminal goto normal mode" })
+ks("t", "<c-w>h", [[<c-\><c-n><c-w>h]], { desc = "win-left (terminal)" })
+ks("t", "<c-w><c-h>", [[<c-\><c-n><c-w>h]], { desc = "win-left (terminal)" })
+ks("t", "<c-w>j", [[<c-\><c-n><c-w>j]], { desc = "win-down (terminal)" })
+ks("t", "<c-w><c-j>", [[<c-\><c-n><c-w>j]], { desc = "win-down (terminal)" })
+ks("t", "<c-w>k", [[<c-\><c-n><c-w>k]], { desc = "win-up (terminal)" })
+ks("t", "<c-w><c-k>", [[<c-\><c-n><c-w>k]], { desc = "win-up (terminal)" })
+ks("t", "<c-w>l", [[<c-\><c-n><c-w>l]], { desc = "win-right (terminal)" })
+ks("t", "<c-w><c-l>", [[<c-\><c-n><c-w>l]], { desc = "win-right (terminal)" })
+ks("t", "<c-w>n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (terminal)" })
+ks("t", "<c-w><c-n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (terminal)" })
+
+-- TODO: yank git (this required fugitive from before )
+
+ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })

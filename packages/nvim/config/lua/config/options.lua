@@ -5,6 +5,9 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = ","
 
+-- disable right-splitting from lazyvim
+vim.opt.splitright = false
+
 -- remote terminal, yank to client clipboard.
 -- Requires client to have configured remote port forwarding for ssh and agent forwarding
 -- Requires server config to have a host configuration named "client"

@@ -28,6 +28,7 @@ function M.get()
       { "<leader>dk", M.diagnostic_goto(false, "ERROR"), desc = "Prev Error Diagnostic" },
       { "<leader>dJ", M.diagnostic_goto(true), desc = "Next Diagnostic" },
       { "<leader>dK", M.diagnostic_goto(false), desc = "Prev Diagnostic" },
+      { "<leader>ca", vim.lsp.buf.code_action, desc = "Refactor: Code Action", mode = { "n", "v" }, has = "codeAction" },
       { "<leader>ra", vim.lsp.buf.code_action, desc = "Refactor: Code Action", mode = { "n", "v" }, has = "codeAction" },
       { "<leader>rf", format, desc = "Format Document", has = "documentFormatting" },
       { "<leader>rf", format, desc = "Format Range", mode = "v", has = "documentRangeFormatting" },
