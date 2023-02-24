@@ -153,6 +153,8 @@ ks("t", "<c-w>l", [[<c-\><c-n><c-w>l]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-l>", [[<c-\><c-n><c-w>l]], { desc = "win-right (terminal)" })
 ks("t", "<c-w>n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (terminal)" })
 ks("t", "<c-w><c-n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (terminal)" })
+ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
+ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
 -- TODO: yank git (this required fugitive from before )
 
