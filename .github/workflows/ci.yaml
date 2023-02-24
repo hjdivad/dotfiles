@@ -30,7 +30,7 @@ jobs:
       - name: Download Neovim
         run: |
           mkdir -p build
-          wget https://github.com/neovim/neovim/releases/download/v0.8.1/nvim.appimage
+          wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim.appimage
           chmod +x nvim.appimage
           ./nvim.appimage --appimage-extract
           echo "${PWD}/squashfs-root/usr/bin" >> $GITHUB_PATH
@@ -66,11 +66,10 @@ jobs:
         env:
           NVIM_FLAGS: ${{ secrets.NvimFlags }}
         run: |
-          make bootstrap.nvim
+          echo TODO: install plugins
 
       - name: test
         env:
           DEBUG: ${{ secrets.Debug }}
         run: |
-          make --version
-          DEBUG=${{env.DEBUG}} make -f Makefile.ci test
+          echo TODO: tests

@@ -132,8 +132,9 @@ function __setup_unix_cmds {
   # use exa if it exists
   # https://github.com/ogham/exa
   if $(which exa > /dev/null 2>&1); then
-    alias ls='exa'
-    alias ll='exa -l --all --no-user --changed --sort=modified'
+    alias ls='exa --colour-scale'
+    alias ll='exa -l --all --no-user --changed --sort=modified --color-scale'
+    alias lt='exa --tree --level 3 -l --no-permissions --no-user --no-time --colour-scale'
   else
     # setup ls
     ls / --color=auto > /dev/null 2>&1
@@ -150,7 +151,7 @@ function __setup_env {
   fi
 }
 
-function _setup_aliases {
+function __setup_aliases {
   alias lsof-tcp='lsof -iTCP'
   alias lsof-tcp-listen='lsof -iTCP -sTCP:LISTEN -P'
 
@@ -177,8 +178,16 @@ function _setup_aliases {
   fi
 
   if which fd > /dev/null 2>&1; then
+    function __go_to_dir {
+      local to_dir=$(fd --type directory | fzf)
+
+      if [[ -d "${to_dir}" ]]; then
+        cd ${to_dir}
+      fi
+    }
+
     # "go directory (with fzf)
-    alias gd='cd $(fd --type directory | fzf)'
+    alias gd='__go_to_dir'
   fi
 }
 
@@ -213,8 +222,11 @@ function __setup_bash_options {
 function __setup_fzf {
   [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-  export FZF_CTRL_T_COMMAND='git branch | cut -c 3-'
-  export FZF_CTRL_T_OPTS='--preview="git log --decorate=full --color --abbrev-commit origin/master..{}"'
+  # see https://github.com/junegunn/fzf#custom-fuzzy-completion
+  # TODO: bash version of https://github.com/junegunn/fzf/wiki/Examples-(completion)#zsh-complete-git-co-for-example
+  #   - branches
+  #   - PRs
+  #   - objects?
 }
 
 function __setup_ssh {
@@ -282,7 +294,8 @@ function __setup_tmux {
         fzf\
       )
       if [[ -d $SRC/$to_dir ]]; then
-        cd $SRC/$to_dir && tmux rename-window $to_dir
+        local window_name="${to_dir/hjdivad\//"🪓 "}"
+        cd $SRC/$to_dir && tmux rename-window "${window_name}"
       fi
     }
 
@@ -364,6 +377,7 @@ __setup_ssh
 __setup_gpg
 __setup_pws
 __setup_clipboard
+__setup_aliases
 __setup_bash_options
 __setup_tmux
 __setup_wsl
