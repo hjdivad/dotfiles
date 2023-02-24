@@ -23,7 +23,6 @@ return {
         map("n", "[h", gs.prev_hunk, "Prev Hunk")
         map("n", "<leader>Gj", gs.next_hunk, "Next Hunk")
         map("n", "<leader>Gk", gs.prev_hunk, "Prev Hunk")
-        map("n", "<leader>Gu", gs.undo_stage_hunk, "Undo Stage Hunk")
         map("n", "<leader>Gp", gs.preview_hunk, "Preview Hunk")
         map("n", "<leader>Gb", function() gs.blame_line({ full = true }) end, "Blame Line")
         map("n", "<leader>Gd", gs.diffthis, "Diff This")
