@@ -178,8 +178,16 @@ function __setup_aliases {
   fi
 
   if which fd > /dev/null 2>&1; then
+    function __go_to_dir {
+      local to_dir=$(fd --type directory | fzf)
+
+      if [[ -d "${to_dir}" ]]; then
+        cd ${to_dir}
+      fi
+    }
+
     # "go directory (with fzf)
-    alias gd='cd $(fd --type directory | fzf)'
+    alias gd='__go_to_dir'
   fi
 }
 
@@ -286,7 +294,8 @@ function __setup_tmux {
         fzf\
       )
       if [[ -d $SRC/$to_dir ]]; then
-        cd $SRC/$to_dir && tmux rename-window $to_dir
+        local window_name="${to_dir/hjdivad\//"🪓 "}"
+        cd $SRC/$to_dir && tmux rename-window "${window_name}"
       fi
     }
 
