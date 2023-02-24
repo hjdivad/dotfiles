@@ -21,6 +21,10 @@ brew install font-hasklug-nerd-font
 # neovim
 brew install neovim
 
+brew install fzf
+# setup ~/.fzf.bash
+/usr/local/opt/fzf/install
+
 # starship for bash prompt
 brew install starship
 

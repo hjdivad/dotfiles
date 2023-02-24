@@ -214,8 +214,11 @@ function __setup_bash_options {
 function __setup_fzf {
   [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-  export FZF_CTRL_T_COMMAND='git branch | cut -c 3-'
-  export FZF_CTRL_T_OPTS='--preview="git log --decorate=full --color --abbrev-commit origin/master..{}"'
+  # see https://github.com/junegunn/fzf#custom-fuzzy-completion
+  # TODO: bash version of https://github.com/junegunn/fzf/wiki/Examples-(completion)#zsh-complete-git-co-for-example
+  #   - branches
+  #   - PRs
+  #   - objects?
 }
 
 function __setup_ssh {

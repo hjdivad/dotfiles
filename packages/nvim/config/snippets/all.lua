@@ -119,7 +119,6 @@ ls.add_snippets("all", {
   --    4. this time return the computed date
   s("::tt::", {
     d(1, function(_args, snip)
-      vim.notify("dynamic")
       if tt_state == tt_states.start then
         return sn(nil, {
           t({ "", "" }),

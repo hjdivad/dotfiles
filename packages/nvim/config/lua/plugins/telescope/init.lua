@@ -32,7 +32,7 @@ return {
       { "<leader> ", false },
 
       { "<leader>/", Util.telescope("live_grep"), desc = "Find in Files (Grep)" },
-      { "<leader>fl", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find in Buffer" },
+      { "<leader>fl", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find line in Buffer" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       {
         "<leader>fs",
@@ -43,6 +43,7 @@ return {
         end,
         desc = "Find Git Changed Files (relative to origin/HEAD)",
       },
+      { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "Find git commits" },
       { "<leader>ff", Util.telescope("files", { attach_mappings = find_files_attach}), desc = "Find Files (root dir)" },
       { "<leader>fF", Util.telescope("files", { cwd = false , attach_mappings = find_files_attach}), desc = "Find Files (cwd)" },
       {

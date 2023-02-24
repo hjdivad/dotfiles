@@ -27,6 +27,9 @@ end
 
 -- delete default neovim mapping of Y to "$ (i.e. end of line vs whole line)
 kd("n", "Y", {})
+-- delete s & x mappings to train myself to use c (change) and d (delete)
+ks({ "n", "v" }, "x", "", { nowait = true })
+ks({ "n", "v" }, "s", "", { nowait = true })
 
 -- delete bad keymaps from LazyVim
 kd("n", "<C-H>")
