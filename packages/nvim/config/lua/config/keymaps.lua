@@ -79,6 +79,7 @@ kd("n", "<leader>uw") -- toggle word wrap
 kd("n", "<leader>ul") -- toggle relative number
 kd("n", "<leader>ud") -- toggle diagnostics
 kd("n", "<leader>uc") -- toggle conceal
+kd("n", "<leader>un") -- delete notifications
 kd("n", "<leader>gg") -- lazygit cwd=get_root()
 kd("n", "<leader>gG") -- lazygit
 kd("n", "<leader>qq") -- quit
