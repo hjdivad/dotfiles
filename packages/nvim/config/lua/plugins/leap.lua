@@ -1,13 +1,4 @@
-return {
-  -- easily jump to any location and enhanced f/t motions for Leap
-  {
-    "ggandor/leap.nvim",
-    event = "VeryLazy",
-    dependencies = { { "ggandor/flit.nvim", opts = { labeled_modes = "nv" } } },
-    keys = {
-      {
-        "<leader>gs",
-        function()
+local function leap_search()
           require("leap").leap({
             target_windows = vim.tbl_filter(function(win_id)
               local conf = vim.api.nvim_win_get_config(win_id)
@@ -21,7 +12,27 @@ return {
               return true
             end, vim.api.nvim_list_wins()),
           })
-        end,
+        end
+
+return  {
+  -- easily jump to any location and enhanced f/t motions for Leap
+  {
+    "ggandor/leap.nvim",
+    event = "VeryLazy",
+    dependencies = { { "ggandor/flit.nvim", opts = { labeled_modes = "nv" } } },
+    config = function (_, opts)
+      local leap = require('leap')
+      for k, v in pairs(opts) do
+        leap.opts[k] = v
+      end
+    end,
+    keys = {
+      {"S", false},
+      {"gs", false},
+      {"s", leap_search, desc = "Move cursor with leap labels"},
+      {
+        "<leader>gs",
+        leap_search,
         desc = "Move cursor with leap labels",
       },
     },
