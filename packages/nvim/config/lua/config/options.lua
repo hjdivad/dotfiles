@@ -39,4 +39,12 @@ if vim.env.SSH_TTY ~= nil or vim.env.SSH_CLIENT ~= nil then
   }
 end
 
+
+if vim.fn.has("nvim-0.9.0") == 1 then
+  -- automatically run trusted .nvim.lua .nvimrc .exrc
+  -- :trust <file> to trust
+  -- :trust ++deny/++remove <file>
+  vim.opt.exrc = true
+end
+
 pp = vim.pretty_print
