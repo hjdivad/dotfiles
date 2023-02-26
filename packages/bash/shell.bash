@@ -302,7 +302,7 @@ function __setup_tmux {
   fi
 
   alias t='tmux'
-  alias ts='tmux display-popup -E -w 100% -h 100% nvim -c ":Telescope tmux windows quit_on_select=true"'
+  alias tss='tmux display-popup -E -w 100% -h 100% nvim -c ":Telescope tmux windows quit_on_select=true"'
   alias tt='tmux switch-client -l'
   alias tsd=__ts_todos
   alias tsr=__ts_reference

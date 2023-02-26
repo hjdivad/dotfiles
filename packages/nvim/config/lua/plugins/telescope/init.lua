@@ -1,5 +1,6 @@
 local Util = require("lazyvim.util")
 local actions = require("telescope.actions")
+local tmux = require("plugins/telescope/tmux")
 
 local function find_files_no_ignore()
   Util.telescope("find_files", { no_ignore = true, prompt_title = "find files (no ignore)" })()
@@ -20,7 +21,8 @@ return {
   -- see https://github.com/nvim-telescope/telescope.nvim
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-telescope/telescope-fzf-native.nvim" },
+    -- TODO: do i need nvim-terminal.lua?
+    dependencies = { "nvim-telescope/telescope-fzf-native.nvim", "camgraff/telescope-tmux.nvim" },
     keys = {
       -- disable LazyVim keymaps
       { "<leader>,", false },
@@ -47,7 +49,7 @@ return {
       },
       {
         "<leader>fj",
-        Util.telescope("jumplist" ),
+        Util.telescope("jumplist"),
         desc = "Find jumplist location",
       },
       {
@@ -74,6 +76,47 @@ return {
           },
         }),
         desc = "Search Symbol",
+      },
+      -- TODO: this toggles sessions; do this in lua instead and toggle windows
+      { "<leader>tt", "<Cmd>silent !tmux switch-client -l<cr>", desc = "tmux toggle" },
+      {
+        "<leader>tss",
+        function()
+          require("telescope").extensions.tmux.windows({
+            -- Strip tmux format variables, although I would rather #{E:window_name} worked as expected
+            entry_format = [=[#S: #{s/##\[[^]*]*\]//:window_name}]=],
+            attach_mappings = tmux.attach_tmux_mappings,
+          })
+        end,
+        desc = "tmux switch window",
+      },
+      {
+        "<leader>tsn",
+        function()
+          tmux.new_tmux_session({})
+        end,
+        desc = "tmux new session",
+      },
+      {
+        "<leader>tsd",
+        function()
+          tmux.goto_tmux_session("todos", "todos")
+        end,
+        desc = "tmux goto todos",
+      },
+      {
+        "<leader>tsr",
+        function()
+          tmux.goto_tmux_session("todos", "reference")
+        end,
+        desc = "tmux goto reference",
+      },
+      {
+        "<leader>tsj",
+        function()
+          tmux.goto_tmux_session("todos", "todos")
+        end,
+        desc = "tmux goto journal",
       },
     },
     opts = {
