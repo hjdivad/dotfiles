@@ -7,6 +7,12 @@ export SHELL=$BASH
 if [ -z "$PS1" ]; then return; fi
 
 BASHRC_DIR=#$PKG
+SRC="$HOME/src"
+function __src_rename {
+  # Use tmux color changing e.g. #[fg=white]#[bg=blue]text#[fg=default]/
+  local result="${1/hjdivad\//"🪓 "}"
+  echo $result
+}
 
 source $BASHRC_DIR/shell.bash
 
