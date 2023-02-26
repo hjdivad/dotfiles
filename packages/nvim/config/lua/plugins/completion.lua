@@ -14,6 +14,9 @@ return {
       "hjdivad/cmp-nvim-wikilinks",
       "hrsh7th/cmp-nvim-lua", -- vim's API; would be nicer to get from lsp
     },
+    keys = {
+      { "<c-l>", desc="completion" }
+    },
     opts = function()
       local cmp = require("cmp")
       return {
@@ -42,8 +45,7 @@ return {
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
-          -- TODO: can we do this only for lua files?
-          -- { name = "nvim_lua" }, -- nvim api; would rather get from lsp
+          { name = "nvim_lua" }, -- nvim api; would rather get from lsp
           { name = "luasnip" },
           { name = "path" }, -- complete ./ &c.
           -- TODO: test that this works
@@ -66,7 +68,7 @@ return {
         },
       }
     end,
-    config = function(_plugin, opts)
+    config = function(_, opts)
       local cmp = require("cmp")
       cmp.setup(opts)
       cmp.setup.cmdline(":", {
