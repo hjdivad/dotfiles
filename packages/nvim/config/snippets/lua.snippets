@@ -11,3 +11,23 @@ snippet fu "function definition"
 		${0:--code}
 	end
 
+
+snippet __dirname "get __dirname of a script"
+	local function __dirname()
+		local fullpath = debug.getinfo(1,"S").source:sub(2)
+		local dirname, filename = fullpath:match('^(.*/)([^/]-)$')
+
+		return dirname, filename
+	end
+
+
+# vim snippets
+
+snippet autocmd
+	vim.api.nvim_create_autocmd({ "${1:BufEnter}" }, {
+		pattern = "${2:*.lua}",
+		group = vim.api.nvim_create_augroup("${3:hjdivad_exrc}", { clear=true }),
+		callback = function()
+			${0}
+		end,
+	})
