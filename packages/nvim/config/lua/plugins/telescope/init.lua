@@ -46,6 +46,11 @@ return {
         desc = "Find Files (cwd)",
       },
       {
+        "<leader>fj",
+        Util.telescope("jumplist" ),
+        desc = "Find jumplist location",
+      },
+      {
         "<leader>fh",
         function()
           require("telescope.builtin").help_tags({})
