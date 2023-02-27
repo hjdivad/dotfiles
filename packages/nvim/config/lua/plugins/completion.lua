@@ -38,8 +38,8 @@ return {
             end
           end,
           ["<c-c>"] = cmp.mapping.abort(),
-          ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-          ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+          ["<C-n>"] = cmp.mapping.select_next_item(),
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
         }),
         -- TODO: something's wrong here, we're still completing the local buffer
         sources = cmp.config.sources({
