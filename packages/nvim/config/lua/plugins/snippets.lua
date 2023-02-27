@@ -9,7 +9,7 @@ return {
     -- does nothing since lazy = false, but if we enable lazy loading, we
     -- should at least load luasnip when editing snippets files
     ft = "snippets",
-    config = function (_plugin, opts)
+    config = function (_, opts)
       require('luasnip').setup(opts)
 
       local snippets_path = "~/.config/nvim/snippets"
