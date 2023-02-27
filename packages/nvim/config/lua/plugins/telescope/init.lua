@@ -1,5 +1,5 @@
 local Util = require("lazyvim.util")
-local actions = require('telescope.actions')
+local actions = require("telescope.actions")
 
 local function find_files_no_ignore()
   Util.telescope("find_files", { no_ignore = true, prompt_title = "find files (no ignore)" })()
@@ -13,13 +13,12 @@ local function close_telescope()
   return require("telescope.actions").close()
 end
 
-
 local function find_files_attach(_, map)
-  map('i', '<c-i>', find_files_no_ignore)
-  map('i', '<c-h>', find_files_hidden)
+  map("i", "<c-i>", find_files_no_ignore)
+  map("i", "<c-h>", find_files_hidden)
 
   return true
-end 
+end
 
 return {
   -- see https://github.com/nvim-telescope/telescope.nvim
@@ -44,8 +43,12 @@ return {
         desc = "Find Git Changed Files (relative to origin/HEAD)",
       },
       { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "Find git commits" },
-      { "<leader>ff", Util.telescope("files", { attach_mappings = find_files_attach}), desc = "Find Files (root dir)" },
-      { "<leader>fF", Util.telescope("files", { cwd = false , attach_mappings = find_files_attach}), desc = "Find Files (cwd)" },
+      { "<leader>ff", Util.telescope("files", { attach_mappings = find_files_attach }), desc = "Find Files (root dir)" },
+      {
+        "<leader>fF",
+        Util.telescope("files", { cwd = false, attach_mappings = find_files_attach }),
+        desc = "Find Files (cwd)",
+      },
       {
         "<leader>fh",
         function()
@@ -76,28 +79,28 @@ return {
       defaults = {
         mappings = {
           i = {
-            ["<C-n>"] = false,        -- default mv next
-            ["<C-p>"] = false,        -- default mv prev
-            ["<Down>"] = false,       -- default down
-            ["<Up>"] = false,         -- default up
-            ["<C-x>"] = false,        -- default open horizontal
-            ["<C-v>"] = false,        -- default open veritcal
-            ["<C-t>"] = false,        -- default open tab
-            ["<PageUp>"] = false,     -- default scroll preview up
-            ["<PageDown>"] = false,   -- default scroll preview down
-            ["<Tab>"] = false,        -- default toggle selection + mv worse
-            ["<S-Tab>"] = false,      -- default toggle selection + mv bettter
-            ["<C-q>"] = false,        -- default send to qflist + open qflist
-            ["<M-q>"] = false,        -- default send selected to qflist + open qflist
-            ["<C-w>"] = false,        -- default ???
+            ["<C-n>"] = false, -- default mv next
+            ["<C-p>"] = false, -- default mv prev
+            ["<Down>"] = false, -- default down
+            ["<Up>"] = false, -- default up
+            ["<C-x>"] = false, -- default open horizontal
+            ["<C-v>"] = false, -- default open veritcal
+            ["<C-t>"] = false, -- default open tab
+            ["<PageUp>"] = false, -- default scroll preview up
+            ["<PageDown>"] = false, -- default scroll preview down
+            ["<Tab>"] = false, -- default toggle selection + mv worse
+            ["<S-Tab>"] = false, -- default toggle selection + mv bettter
+            ["<C-q>"] = false, -- default send to qflist + open qflist
+            ["<M-q>"] = false, -- default send selected to qflist + open qflist
+            ["<C-w>"] = false, -- default ???
 
-            ["<c-t>"] = false,        -- lazyvim open with trouble
-            ["<a-i>"] = false,        -- lazyvim find files (no ignore)
-            ["<a-h>"] = false,        -- lazyvim find files (hidden)
-            ["<C-Down>"] = false,     -- lazyvim cycle history next
-            ["<C-Up>"] = false,       -- lazyvim cycle history prev
-            ["<C-f>"] = false,        -- lazyvim preview scroll down
-            ["<C-b>"] = false,        -- lazyvim preview scroll up
+            ["<c-t>"] = false, -- lazyvim open with trouble
+            ["<a-i>"] = false, -- lazyvim find files (no ignore)
+            ["<a-h>"] = false, -- lazyvim find files (hidden)
+            ["<C-Down>"] = false, -- lazyvim cycle history next
+            ["<C-Up>"] = false, -- lazyvim cycle history prev
+            ["<C-f>"] = false, -- lazyvim preview scroll down
+            ["<C-b>"] = false, -- lazyvim preview scroll up
 
             ["<C-k>"] = "move_selection_previous",
             ["<C-j>"] = "move_selection_next",
@@ -107,19 +110,19 @@ return {
             ["<m-l>"] = actions.send_to_qflist + actions.open_qflist,
           },
           n = {
-            ["<C-x>"] = false,        -- default open horizontal
-            ["<C-v>"] = false,        -- default open veritcal
-            ["<C-t>"] = false,        -- default open tab
-            ["<Tab>"] = false,        -- default toggle selection + mv worse
-            ["<S-Tab>"] = false,      -- default toggle selection + mv bettter
-            ["<C-q>"] = false,        -- default send to qflist + open qflist
-            ["<M-q>"] = false,        -- default send selected to qflist + open qflist
-            ["<Down>"] = false,       -- default down
-            ["<Up>"] = false,         -- default up
-            ["<C-Down>"] = false,     -- lazyvim cycle history next
-            ["<C-Up>"] = false,       -- lazyvim cycle history prev
-            ["<PageUp>"] = false,     -- default scroll preview up
-            ["<PageDown>"] = false,   -- default scroll preview down
+            ["<C-x>"] = false, -- default open horizontal
+            ["<C-v>"] = false, -- default open veritcal
+            ["<C-t>"] = false, -- default open tab
+            ["<Tab>"] = false, -- default toggle selection + mv worse
+            ["<S-Tab>"] = false, -- default toggle selection + mv bettter
+            ["<C-q>"] = false, -- default send to qflist + open qflist
+            ["<M-q>"] = false, -- default send selected to qflist + open qflist
+            ["<Down>"] = false, -- default down
+            ["<Up>"] = false, -- default up
+            ["<C-Down>"] = false, -- lazyvim cycle history next
+            ["<C-Up>"] = false, -- lazyvim cycle history prev
+            ["<PageUp>"] = false, -- default scroll preview up
+            ["<PageDown>"] = false, -- default scroll preview down
 
             ["q"] = close_telescope,
 
@@ -129,7 +132,7 @@ return {
             ["<Space>"] = "toggle_selection",
             ["<C-l>"] = actions.send_selected_to_qflist + actions.open_qflist,
             ["<m-l>"] = actions.send_to_qflist + actions.open_qflist,
-          }
+          },
         },
       },
       extensions = {
