@@ -48,3 +48,6 @@ if vim.fn.has("nvim-0.9.0") == 1 then
 end
 
 pp = vim.pretty_print
+
+-- add ~/.config/nvim/lua/config/local_options.lua for machine-specific configuration
+pcall(require, 'config/local_options')

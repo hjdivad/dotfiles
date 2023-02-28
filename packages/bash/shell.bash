@@ -24,7 +24,6 @@ done
 BASHRC_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 BASH_LIB="$BASHRC_DIR/lib"
-SRC="$HOME/src"
 
 if [ -d /opt/homebrew ]; then
   HOMEBREW="/opt/homebrew"
@@ -294,7 +293,7 @@ function __setup_tmux {
         fzf\
       )
       if [[ -d $SRC/$to_dir ]]; then
-        local window_name="${to_dir/hjdivad\//"🪓 "}"
+        local window_name=$(__src_rename $to_dir)
         cd $SRC/$to_dir && tmux rename-window "${window_name}"
       fi
     }
@@ -303,7 +302,7 @@ function __setup_tmux {
   fi
 
   alias t='tmux'
-  alias ts='tmux display-popup -E -w 100% -h 100% nvim -c ":Telescope tmux windows quit_on_select=true"'
+  alias tss='tmux display-popup -E -w 100% -h 100% nvim -c ":Telescope tmux windows quit_on_select=true"'
   alias tt='tmux switch-client -l'
   alias tsd=__ts_todos
   alias tsr=__ts_reference
