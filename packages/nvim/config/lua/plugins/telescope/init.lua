@@ -9,10 +9,6 @@ local function find_files_hidden()
   Util.telescope("find_files", { hidden = true, prompt_title = "find files (hidden)" })()
 end
 
-local function close_telescope()
-  return require("telescope.actions").close()
-end
-
 local function find_files_attach(_, map)
   map("i", "<c-i>", find_files_no_ignore)
   map("i", "<c-h>", find_files_hidden)
@@ -124,7 +120,7 @@ return {
             ["<PageUp>"] = false, -- default scroll preview up
             ["<PageDown>"] = false, -- default scroll preview down
 
-            ["q"] = close_telescope,
+            ["q"] = actions.close,
 
             ["<C-k>"] = "cycle_history_prev",
             ["<C-j>"] = "cycle_history_next",
