@@ -1,9 +1,10 @@
+-- https://github.com/folke/lazy.nvim#-plugin-spec
 return {
   {
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPre", "BufNewFile" },
     opts = {
-      base = 'origin/HEAD',
+      base = "origin/HEAD",
       signs = {
         add = { text = "▎" },
         change = { text = "▎" },
@@ -24,11 +25,27 @@ return {
         map("n", "<leader>Gj", gs.next_hunk, "Next Hunk")
         map("n", "<leader>Gk", gs.prev_hunk, "Prev Hunk")
         map("n", "<leader>Gp", gs.preview_hunk, "Preview Hunk")
-        map("n", "<leader>Gb", function() gs.blame_line({ full = true }) end, "Blame Line")
+        map("n", "<leader>Gb", function()
+          gs.blame_line({ full = true })
+        end, "Blame Line")
         map("n", "<leader>Gd", gs.diffthis, "Diff This")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
         map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
       end,
+    },
+  },
+  {
+    "tpope/vim-fugitive",
+    dependencies = {"tpope/vim-rhubarb"},
+    cmd = { "Git", "G" },
+    keys = {
+      {
+        "<leader>yg",
+        ":GBrowse!<Cr>",
+        mode = "v",
+        silent = true,
+        desc = "Yank GitHub permalink to clipboard",
+      },
     },
   },
 }

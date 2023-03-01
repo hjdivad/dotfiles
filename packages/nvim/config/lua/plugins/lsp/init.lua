@@ -57,7 +57,7 @@ return {
     ---it is modified to replace the default keymaps with local ones
     ---
     ---@param opts PluginLspOpts
-    config = function(plugin, opts)
+    config = function(_, opts)
       -- setup autoformat
       require("lazyvim.plugins.lsp.format").autoformat = opts.autoformat
       -- setup formatting and keymaps
