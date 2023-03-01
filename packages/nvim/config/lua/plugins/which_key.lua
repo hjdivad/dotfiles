@@ -26,6 +26,7 @@ return {
         ["<leader>y"] = { name = "+yank (to clipboard)" },
         ["<leader>n"] = { name = "+notifications" },
         ["<leader>u"] = { name = "+ui" },
+        ["<leader>ul"] = { name = "+ui/show logs" },
         ["<leader>un"] = { name = "+notifications" },
       })
     end,
