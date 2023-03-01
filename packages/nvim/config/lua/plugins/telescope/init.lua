@@ -78,7 +78,7 @@ return {
         desc = "Search Symbol",
       },
       -- TODO: this toggles sessions; do this in lua instead and toggle windows
-      { "<leader>tt", "<Cmd>silent !tmux switch-client -l<cr>", desc = "tmux toggle" },
+      { "<leader>tst", "<Cmd>silent !tmux switch-client -l<cr>", desc = "tmux toggle" },
       {
         "<leader>tss",
         function()
