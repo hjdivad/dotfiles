@@ -22,6 +22,7 @@ return {
         ["<leader>G"] = { name = "+git/hunks" },
         ["<leader>s"] = { name = "+search/show" },
         ["<leader>t"] = { name = "+to/tmux" },
+        ["<leader>y"] = { name = "+yank (to clipboard)" },
         ["<leader>n"] = { name = "+notifications" },
         ["<leader>u"] = { name = "+ui" },
         ["<leader>un"] = { name = "+notifications" },

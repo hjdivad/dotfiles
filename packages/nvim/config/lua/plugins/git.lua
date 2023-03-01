@@ -31,4 +31,18 @@ return {
       end,
     },
   },
+  {
+    "tpope/vim-fugitive",
+    dependencies = {"tpope/vim-rhubarb"},
+    cmd = { "Git", "G" },
+    keys = {
+      {
+        "<leader>yg",
+        ":GBrowse!<Cr>",
+        mode = "v",
+        silent = true,
+        desc = "Yank GitHub permalink to clipboard",
+      },
+    },
+  },
 }

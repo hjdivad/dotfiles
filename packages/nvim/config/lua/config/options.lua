@@ -50,4 +50,5 @@ end
 pp = vim.pretty_print
 
 -- add ~/.config/nvim/lua/config/local_options.lua for machine-specific configuration
+-- e.g. vim.g.github_enterprise_urls = ["https://example.com"]
 pcall(require, 'config/local_options')
