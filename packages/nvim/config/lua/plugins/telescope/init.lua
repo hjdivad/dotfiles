@@ -114,7 +114,7 @@ return {
       {
         "<leader>tsj",
         function()
-          tmux.goto_tmux_session("todos", "todos")
+          tmux.goto_tmux_session("todos", "journal")
         end,
         desc = "tmux goto journal",
       },
