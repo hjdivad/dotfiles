@@ -30,6 +30,8 @@ return {
           -- tree action=show source=filesystem dir=~/.
           ["o"] = function(state)
             local cmd = require("neo-tree/sources/filesystem/commands")
+            -- https://github.com/nvim-neo-tree/neo-tree.nvim/blob/aec592bb1f0cf67f7e1123053d1eb17700aa9ed4/lua/neo-tree/sources/common/commands.lua#L541-L594
+            -- https://github.com/nvim-neo-tree/neo-tree.nvim/blob/aec592bb1f0cf67f7e1123053d1eb17700aa9ed4/lua/neo-tree/utils.lua#L416-L460
             cmd.open(state)
             vim.cmd([[Neotree close]])
           end,

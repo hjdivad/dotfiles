@@ -41,6 +41,7 @@ vim.api.nvim_create_autocmd({ "WinEnter" }, {
 })
 
 
+-- TODO: unset this stuff on bufleaving a term
 -- TODO: do this on BufWinEnter term://* as well
 vim.api.nvim_create_autocmd("TermOpen", {
   group = terminal_setup,
