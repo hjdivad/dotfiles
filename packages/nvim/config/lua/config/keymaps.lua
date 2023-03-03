@@ -2,6 +2,8 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+local term = require("sticky-term")
+
 local ks = vim.keymap.set
 local kd = vim.keymap.del
 local existing_keymaps_lhs = {}
@@ -158,6 +160,9 @@ ks("t", "<c-w><c-n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (
 ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
--- TODO: yank git (this required fugitive from before )
+-- TODO: remove
+term.setup({ log_level = "trace"})
+ks("n", "<leader>tt", term.goto_terminal, {desc="go to terminal"})
+ks("n", "<leader>ult", term.show_logs, {desc="show logs (sticky-term)"})
 
 ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })
