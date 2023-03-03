@@ -383,4 +383,4 @@ __setup_wsl
 __setup_fzf
 __setup_osx
 
-# vim:set tw=0
+# vim:set tw=0 ft=bash
