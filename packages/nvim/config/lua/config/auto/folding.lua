@@ -15,6 +15,7 @@ function M.setup( )
       -- see https://github.com/nvim-treesitter/nvim-treesitter#folding
       vim.wo.foldmethod = 'expr'
       vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+      vim.wo.foldlevel = 1
       vim.wo.foldenable = true
     end,
   })
