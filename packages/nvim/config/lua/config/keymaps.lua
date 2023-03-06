@@ -4,6 +4,10 @@
 
 local term = require("sticky-term")
 
+local function show_wikilinks_log()
+  require('cmp_nvim_wikilinks').show_logs()
+end
+
 local ks = vim.keymap.set
 local kd = vim.keymap.del
 local existing_keymaps_lhs = {}
@@ -160,9 +164,8 @@ ks("t", "<c-w><c-n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (
 ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
--- TODO: remove
-term.setup({ log_level = "trace"})
 ks("n", "<leader>tt", term.goto_terminal, {desc="go to terminal"})
 ks("n", "<leader>ult", term.show_logs, {desc="show logs (sticky-term)"})
+ks("n", "<leader>ulw", show_wikilinks_log, {desc="show logs (cmp-wikilinks)"})
 
 ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })

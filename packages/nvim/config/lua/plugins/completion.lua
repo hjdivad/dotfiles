@@ -1,6 +1,19 @@
 return {
   -- TODO: see https://github.com/hjdivad/dotfiles/blob/ba25ed22c114ddbaeeb6ed919659a319a727f845/packages/nvim/config/lua/hjdivad/init.lua#L593-L633
   {
+    "hjdivad/cmp-nvim-wikilinks",
+    opts = {
+      -- log_level = 'trace',
+      -- log_to_file = true,
+      glob_suffixes = {
+        "*",
+        "*/*",
+        "*/*/*",
+      }
+    }
+  },
+  -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/coding.lua
+  {
     "hrsh7th/nvim-cmp",
     version = false, -- last release is way too old
     event = "InsertEnter",
@@ -48,7 +61,6 @@ return {
           { name = "nvim_lua" }, -- nvim api; would rather get from lsp
           { name = "luasnip" },
           { name = "path" }, -- complete ./ &c.
-          -- TODO: test that this works
           { name = "wikilinks" }, -- complete [[foo]] &c.
           { name = "emoji" }, -- complete :emoji:
         }),
