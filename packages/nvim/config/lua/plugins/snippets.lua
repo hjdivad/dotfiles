@@ -27,6 +27,8 @@ return {
       delete_check_events = "TextChanged",
     },
     keys = {
+      {"<tab>", false},
+      {"<s-tab>", false},
       {
         "<C-k>",
         function()
