@@ -157,9 +157,5 @@
   # see https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view
   ignoreRevsFile = .git-blame-ignore-revs
 
-[url "git@github.com:"]
-	insteadOf = https://github.com
-
-
 # vim:ft=gitconfig:
 
