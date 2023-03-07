@@ -34,7 +34,7 @@ return {
         "<leader>fs",
         function()
           require("telescope.builtin").git_files({
-            git_command = { "git", "diff", "--name-only", "origin/HEAD" },
+            git_command = { "git", "diff", "--name-only", "--merge-base", "origin/HEAD" },
           })
         end,
         desc = "Find Git Changed Files (relative to origin/HEAD)",
