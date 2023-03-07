@@ -7,6 +7,15 @@ snippet schema:graphql-config "schema for .graphqlrc.json"
 snippet schema:tsconfig "schema for tsconfig.json"
 	"$schema": "https://json.schemastore.org/tsconfig.json",
 
+snippet scripts
+	"scripts": {
+		"start": "echo start",
+		"lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
+		"lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:*:fix\"",
+		"test": "echo test me",
+		"test:ci": "npm-run-all \"test:!(ci)\"",
+	},
+
 snippet modules
 	"type": "module",
 	"main": "${1:./dist/esnext/src/index.js}",
