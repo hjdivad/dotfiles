@@ -8,6 +8,10 @@ vim.g.maplocalleader = ","
 -- disable right-splitting from lazyvim
 vim.opt.splitright = false
 
+vim.opt.spelllang = { "sv", "en_gb", "en_us" }
+vim.opt.spellfile =
+  { ".vimspell.utf.8", "~/.local/share/.nvim/spell/en.utf-8.add", "~/.local/share/.nvim/spell/sv.utf-8.add" }
+
 -- remote terminal, yank to client clipboard.
 -- Requires client to have configured remote port forwarding for ssh and agent forwarding
 -- Requires server config to have a host configuration named "client"
@@ -39,7 +43,6 @@ if vim.env.SSH_TTY ~= nil or vim.env.SSH_CLIENT ~= nil then
   }
 end
 
-
 if vim.fn.has("nvim-0.9.0") == 1 then
   -- automatically run trusted .nvim.lua .nvimrc .exrc
   -- :trust <file> to trust
@@ -51,4 +54,4 @@ pp = vim.pretty_print
 
 -- add ~/.config/nvim/lua/config/local_options.lua for machine-specific configuration
 -- e.g. vim.g.github_enterprise_urls = ["https://example.com"]
-pcall(require, 'config/local_options')
+pcall(require, "config/local_options")
