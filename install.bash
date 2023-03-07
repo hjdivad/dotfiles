@@ -197,3 +197,5 @@ __symlink "$PACKAGES_DIR/starship/config/starship.toml" "$HOME/.config/starship.
 __symlink "$PACKAGES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
 
 exit 0
+
+# vim: ft=bash

@@ -6,6 +6,7 @@ export SHELL=$BASH
 # Standard bashrc early escape when not running interactively.
 if [ -z "$PS1" ]; then return; fi
 
+DOTFILES_DIR=#$DOTFILES
 BASHRC_DIR=#$PKG
 SRC="$HOME/src"
 function __src_rename {

@@ -75,11 +75,12 @@ tmux ls 2> /dev/null | grep -q 'scratch-misc'
 has_misc=$?
 if [ $has_misc != "0" ]; then
   echo 'creating scratch-misc session'
-  tmux new-session -s 'scratch-misc' -n 'nyx' -d
-  tmux send-keys -t 'scratch-misc:nyx' 'cd ~/src/malleatus/nyx && nvim' Enter
+  tmux new-session -s 'scratch-misc' -n 'data-eden' -d
+  tmux send-keys -t 'scratch-misc:data-eden' 'cd ~/src/data-eden/data-eden && nvim' Enter
 fi
 
 if [ "$TMUX" = "" ]; then
   tmux attach -t todos
 fi
 
+# vim: ft=bash
