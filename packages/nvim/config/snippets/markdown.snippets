@@ -1,0 +1,44 @@
+snippet table
+	| ${1:Column} | ${2:Centered-Column} | ${3:Right-Aligned-Column} |
+	| ------- | :-------------: | -------------------: |
+	| ${4:r1c1}    |      ${5:r1c2}       |                 ${6:r1c3} |
+
+snippet link:ref
+	[${1}][]${0}
+
+snippet link:inline
+	[${1}](${2})${0}
+
+snippet ref
+	[${1}]: ${0}
+
+snippet footnote:ref "footnote reference"
+	[^${1:1}]
+
+snippet footnote:definition "footnote definition"
+	[^${1:1}]: ${0:Body of the footnote}
+
+snippet warn "A github-style warning callout"
+	> **Warning**
+	> ${0}
+
+snippet note "A github-style note callout"
+	> **Note**
+	> ${0}
+
+snippet info "A github-style note callout"
+	> **Note**
+	> ${0}
+
+snippet release:notes ""
+	## ${0:version}
+	#### :boom: Breaking Change
+	
+	#### :rocket: Enhancement
+	
+	#### :bug: Bug Fix
+	
+	#### :house: Internal
+	
+	#### Committers: 1
+	- David J. Hamilton ([@hjdivad](https://github.com/hjdivad))
