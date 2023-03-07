@@ -1,5 +1,1 @@
-/home/.config/nvim.symlink/.netrwhist
-.repl.lua
-/tmp
-.repl.txt
-hjdivad_local.lua
+packages/nvim/config/lua/config/local_options.lua
