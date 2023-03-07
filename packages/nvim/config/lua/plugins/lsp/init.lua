@@ -113,4 +113,22 @@ return {
       require("mason-lspconfig").setup_handlers({ setup })
     end,
   },
+
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = { "mason.nvim" },
+    opts = function()
+      local nls = require("null-ls")
+      return {
+        sources = {
+          nls.builtins.code_actions.eslint,
+          nls.builtins.diagnostics.commitlint,
+          nls.builtins.diagnostics.flake8,
+          nls.builtins.formatting.prettier,
+          nls.builtins.formatting.stylua,
+        },
+      }
+    end,
+  },
 }
