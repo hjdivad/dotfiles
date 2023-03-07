@@ -21,7 +21,6 @@ return {
   -- see https://github.com/nvim-telescope/telescope.nvim
   {
     "nvim-telescope/telescope.nvim",
-    -- TODO: do i need nvim-terminal.lua?
     dependencies = { "nvim-telescope/telescope-fzf-native.nvim", "camgraff/telescope-tmux.nvim" },
     keys = {
       -- disable LazyVim keymaps
