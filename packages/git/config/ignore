@@ -2,6 +2,7 @@
 /.vimrc
 /.vimrc.lua
 /.vim
+/.nvim.lua
 
 # node
 /node_modules
