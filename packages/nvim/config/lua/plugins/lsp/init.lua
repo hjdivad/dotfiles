@@ -124,6 +124,7 @@ return {
         sources = {
           nls.builtins.code_actions.eslint,
           nls.builtins.diagnostics.commitlint,
+          nls.builtins.diagnostics.eslint,
           nls.builtins.diagnostics.flake8,
           nls.builtins.formatting.prettier,
           nls.builtins.formatting.stylua,
