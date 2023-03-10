@@ -12,6 +12,8 @@ vim.opt.spelllang = { "sv", "en_gb", "en_us" }
 vim.opt.spellfile =
   { ".vimspell.utf.8", "~/.local/share/.nvim/spell/en.utf-8.add", "~/.local/share/.nvim/spell/sv.utf-8.add" }
 
+vim.opt.swapfile = false
+
 -- remote terminal, yank to client clipboard.
 -- Requires client to have configured remote port forwarding for ssh and agent forwarding
 -- Requires server config to have a host configuration named "client"
