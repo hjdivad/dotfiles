@@ -76,6 +76,43 @@ return {
         }),
         desc = "Search Symbol",
       },
+      -- TODO: #89
+      -- {
+      --   "<leader>sS",
+      --   Util.telescope("lsp_workspace_symbols", {
+      --     symbols = {
+      --       "Class",
+      --       "Function",
+      --       "Method",
+      --       "Constructor",
+      --       "Interface",
+      --       "Module",
+      --       "Struct",
+      --       "Trait",
+      --       "Field",
+      --       "Property",
+      --     },
+      --   }),
+      --   desc = "Search Workspace Symbol",
+      -- },
+      -- {
+      --   "<leader>SS",
+      --   Util.telescope("lsp_workspace_symbols", {
+      --     symbols = {
+      --       "Class",
+      --       "Function",
+      --       "Method",
+      --       "Constructor",
+      --       "Interface",
+      --       "Module",
+      --       "Struct",
+      --       "Trait",
+      --       "Field",
+      --       "Property",
+      --     },
+      --   }),
+      --   desc = "Search Workspace Symbol",
+      -- },
       -- TODO: this toggles sessions; do this in lua instead and toggle windows
       { "<leader>tst", "<Cmd>silent !tmux switch-client -l<cr>", desc = "tmux toggle" },
       {
