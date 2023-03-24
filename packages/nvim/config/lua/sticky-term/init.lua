@@ -31,6 +31,7 @@ function M.find_visible_terminal_in_tab()
 
     log.trace(("win(%s): buf(%s: %s)"):format(win_id, buf_id, buf_name))
     if buf_name:match("^term://") then
+      log.trace('found terminal buffer (%s)', buf_id)
       return win_id
     end
   end
@@ -52,9 +53,11 @@ function M.find_neotree_window()
 end
 
 function M.find_any_terminal_buffer()
+  log.trace('find_any_terminal_buffer')
   local buffers = vim.api.nvim_list_bufs()
   for _, buf_id in ipairs(buffers) do
     local name = vim.api.nvim_buf_get_name(buf_id)
+    log.trace(("buf(%s: %s)"):format(buf_id, name))
     if string.match(name, "^term://") then
       return buf_id
     end
@@ -62,6 +65,7 @@ function M.find_any_terminal_buffer()
 end
 
 function M.open_window_for_terminal()
+  log.trace('open_window_for_terminal')
   local neotree_win_id = M.find_neotree_window()
   if neotree_win_id then
     log.trace("split right of neo-tree win(%s)", neotree_win_id)
