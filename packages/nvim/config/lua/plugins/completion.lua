@@ -31,7 +31,9 @@ return {
       "hrsh7th/cmp-nvim-lua", -- vim's API; would be nicer to get from lsp
     },
     keys = {
-      { "<c-l>", desc="completion" }
+      { "<c-l>", desc="completion" },
+      -- disable imap tab from LazyVim
+      {"<tab>", false },
     },
     opts = function()
       local cmp = require("cmp")
