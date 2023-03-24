@@ -35,7 +35,7 @@ kd("n", "Y", {})
 -- delete s & x mappings to train myself to use c (change) and d (delete)
 ks({ "n", "v" }, "x", "", { nowait = true })
 ks({ "n", "v" }, "X", "", { nowait = true })
-ks({ "n", "v" }, "S", "", { nowait = true })
+ks({ "n" }, "S", "", { nowait = true })
 -- leave only `s` for leap
 
 -- delete bad keymaps from LazyVim
