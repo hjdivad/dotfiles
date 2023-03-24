@@ -1,6 +1,10 @@
 return {
   -- TODO: see https://github.com/hjdivad/dotfiles/blob/ba25ed22c114ddbaeeb6ed919659a319a727f845/packages/nvim/config/lua/hjdivad/init.lua#L593-L633
   {
+    -- TODO: too slow
+    --  configure path (i.e. something more narrow than &path)
+    --  cache (watch neotree for invalidation or maybe fswatch)
+    --  Fix #88
     "hjdivad/cmp-nvim-wikilinks",
     opts = {
       -- log_level = 'trace',
