@@ -18,6 +18,18 @@ return {
     opts = {
       window = {
         mappings = {
+          ["a"] = {
+            "add",
+            config = {
+              show_path = "relative"
+            }
+          },
+          ["m"] = {
+            "move",
+            config = {
+              show_path = "relative"
+            }
+          },
           ["<leader>/"] = function(state)
             -- TODO: debug; seems to have issues when loading file out of pwd
             local node = state.tree:get_node()
