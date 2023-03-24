@@ -66,11 +66,6 @@ return {
             },
             { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
             { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
-            -- stylua: ignore
-            {
-              function() return require("nvim-navic").get_location() end,
-              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
-            },
           },
           lualine_x = {
             -- stylua: ignore
@@ -110,7 +105,3 @@ return {
     end,
   },
 }
-
--- TODO: can I configure navic to show in the winbar?
--- TODO: if so, should I drop it from luabar? (i.e. the statusbar) 
--- TODO: also if so, how much do i really care about the tabbar?

@@ -64,6 +64,10 @@ return {
       require("lazyvim.util").on_attach(function(client, buffer)
         require("lazyvim.plugins.lsp.format").on_attach(client, buffer)
         require("plugins/lsp/keymaps").on_attach(client, buffer)
+
+        -- show code context in winbar
+        require('nvim-navic')
+        vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
       end)
 
       -- diagnostics
