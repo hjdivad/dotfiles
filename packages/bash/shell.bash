@@ -177,8 +177,12 @@ function __setup_aliases {
   fi
 
   if which fd > /dev/null 2>&1; then
+    function __pick_dir {
+      fd --type directory | fzf
+    }
+
     function __go_to_dir {
-      local to_dir=$(fd --type directory | fzf)
+      local to_dir=$(__pick_dir)
 
       if [[ -d "${to_dir}" ]]; then
         cd ${to_dir}
@@ -187,7 +191,13 @@ function __setup_aliases {
 
     # "go directory (with fzf)
     alias gd='__go_to_dir'
+    alias pd='__pick_dir'
   fi
+
+  function __pick_branch {
+    git branch | sed 's/^.\{2\}//' | fzf -m --bind 'ctrl-h:clear-query'
+  }
+  alias pb='__pick_branch'
 }
 
 function __setup_clipboard {
