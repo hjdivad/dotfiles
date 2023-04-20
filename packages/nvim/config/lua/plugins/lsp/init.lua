@@ -125,8 +125,8 @@ return {
     opts = function()
       local nls = require("null-ls")
       return {
-        -- log_level = 'trace',
-        -- debug = true,
+        log_level = 'trace',
+        debug = true,
         sources = {
           nls.builtins.code_actions.eslint,
           nls.builtins.diagnostics.commitlint,
