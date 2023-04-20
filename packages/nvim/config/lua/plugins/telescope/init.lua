@@ -19,13 +19,14 @@ end
 
 return {
   -- see https://github.com/nvim-telescope/telescope.nvim
+  -- /Users/hjdivad/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/editor.lua
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-telescope/telescope-fzf-native.nvim", "camgraff/telescope-tmux.nvim" },
     keys = {
       -- disable LazyVim keymaps
       { "<leader>,", false },
-      { "<leader> ", false },
+      { "<leader><space>", false },
 
       { "<leader>/", Util.telescope("live_grep"), desc = "Find in Files (Grep)" },
       { "<leader>fl", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find line in Buffer" },
