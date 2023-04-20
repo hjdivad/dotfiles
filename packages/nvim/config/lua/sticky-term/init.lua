@@ -20,6 +20,13 @@ function M.setup(options)
   has_configured = true
 end
 
+function M.ensure_setup()
+  if not has_configured then
+    -- set up with defaults
+    M.setup()
+  end
+end
+
 function M.find_visible_terminal_in_tab()
   log.trace("find_visible_terminal_in_tab")
 
@@ -89,11 +96,7 @@ end
 
 function M.goto_terminal()
   log.trace("goto_terminal")
-
-  if not has_configured then
-    -- set up with defaults
-    M.setup()
-  end
+  M.ensure_setup()
 
   local terminal_win = M.find_visible_terminal_in_tab()
   if terminal_win ~= nil then
