@@ -4,6 +4,18 @@ local function augroup(name)
   return vim.api.nvim_create_augroup("hjd_term_" .. name, { clear = true })
 end
 
+function M.setup_terminal_window()
+  local win_id = vim.api.nvim_get_current_win()
+  local win = vim.wo[win_id]
+
+  win.number = false
+  win.relativenumber = false
+  win.winfixwidth = true
+
+  -- TODO: calculate window width
+  vim.api.nvim_win_set_width(win_id, 100)
+end
+
 function M.setup()
   local terminal_setup = augroup("terminal_setup")
 
@@ -13,6 +25,12 @@ function M.setup()
     callback = function()
       vim.cmd("startinsert")
     end,
+  })
+
+  vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+    pattern = "term://*",
+    group = terminal_setup,
+    callback = M.setup_terminal_window,
   })
 
   vim.api.nvim_create_autocmd({ "WinEnter" }, {
@@ -32,20 +50,9 @@ function M.setup()
   })
 
   -- TODO: unset this stuff on bufleaving a term
-  -- TODO: do this on BufWinEnter term://* as well
-  vim.api.nvim_create_autocmd("TermOpen", {
+  vim.api.nvim_create_autocmd({ "TermOpen" }, {
     group = terminal_setup,
-    callback = function()
-      local win_id = vim.api.nvim_get_current_win()
-      local win = vim.wo[win_id]
-
-      win.number = false
-      win.relativenumber = false
-      win.winfixwidth = true
-
-      -- TODO: calculate window width
-      vim.api.nvim_win_set_width(win_id, 100)
-    end,
+    callback = M.setup_terminal_window,
   })
 end
 

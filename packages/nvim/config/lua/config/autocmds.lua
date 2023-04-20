@@ -17,5 +17,14 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = "*.code-workspace",
+  group = vim.api.nvim_create_augroup("hjdivad_ft", { clear=true }),
+  callback = function()
+    -- TODO: need to configure null-ls to pass `--parser=json` to prettier for this buffer (or like, always?)
+    vim.bo.filetype = 'json'
+  end,
+})
+
 term.setup()
 fold.setup()
