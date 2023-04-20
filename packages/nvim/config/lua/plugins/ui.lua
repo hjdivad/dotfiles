@@ -30,6 +30,9 @@ return {
       },
       routes = {
         {
+          -- default messages to a popup that can be closed with q
+          -- this is really annoying for useless messages, so it's best to remap them to `silent!`
+          -- but it's way better when you actually care about reading what the message says
           filter = {
             event = "msg_show",
           },
@@ -37,11 +40,6 @@ return {
         }
       }
     },
-    config = function(_, opts)
-      local noice = require("noice")
-      noice.setup(opts)
-      noice.redirect("Inspect")
-    end,
     -- stylua: ignore
     keys = {
       { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
