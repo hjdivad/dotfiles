@@ -68,6 +68,8 @@
   name-of = name-rev --name-only
   commit-show-message = show -s --format='%s%n%n%b'
 
+  setup-blame-ignore-revs = "!f() { [[ ! -f .git-blame-ignore-revs ]] && { touch .git-blame-ignore-revs && echo '.git-blame-ignore-revs' >> .git/info/exclude; }; }; f"
+
   off-my-lawn = "!f() { echo '\
     _____ _____ _____   _________________    \n\
    |  __ \\_   _|_   _| |  _  |  ___|  ___|   \n\
