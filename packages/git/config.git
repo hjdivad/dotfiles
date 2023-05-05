@@ -1,5 +1,6 @@
 [alias]
   c = checkout
+  cb = "!f() { git checkout $(git branch | sed 's/^.\\{2\\}//' | fzf -m --bind 'ctrl-h:clear-query'); }; f"
   backup = "!f() { local name=`git name-rev HEAD | cut -d' ' -f 2`; git branch -D \"backup/$name\" 2> /dev/null; git branch \"backup/$name\"; }; f"
 	ff = merge --ff-only
 
