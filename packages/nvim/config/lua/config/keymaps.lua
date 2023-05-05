@@ -174,3 +174,6 @@ ks("n", "<leader>um", "<Cmd>Mason<CR>", { desc = "lsp/dap &c. management with ma
 
 ks('n', 'u', '<cmd>silent! u<cr>', {})
 ks('n', '<c-r>', '<cmd>silent! redo<cr>', {})
+
+-- use ⌘-s to save to avoid the confirmation dialog
+ks('n', '<a-s>', '<cmd>silent! wall<cr>', {})
