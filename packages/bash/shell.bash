@@ -181,6 +181,10 @@ function __setup_aliases {
       fd --type directory | fzf
     }
 
+    function __pick_file {
+      fd . | fzf
+    }
+
     function __go_to_dir {
       local to_dir=$(__pick_dir)
 
@@ -192,6 +196,7 @@ function __setup_aliases {
     # "go directory (with fzf)
     alias gd='__go_to_dir'
     alias pd='__pick_dir'
+    alias pf='__pick_file'
   fi
 
   function __pick_branch {
