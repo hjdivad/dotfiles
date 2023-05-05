@@ -10,9 +10,32 @@ return {
     },
   },
 
+  -- Disable this growl/toast distraction
+  -- use show notifications; show-last notification instead
+  {
+    "rcarriga/nvim-notify",
+    enabled = false,
+    keys = {
+      {
+        "<leader>un",
+        false,
+      },
+    },
+    opts = {
+      timeout = 3000,
+      max_height = function()
+        return math.floor(vim.o.lines * 0.75)
+      end,
+      max_width = function()
+        return math.floor(vim.o.columns * 0.75)
+      end,
+    },
+  },
+
   -- noicer ui
   {
     -- https://github.com/folke/noice.nvim#%EF%B8%8F-configuration
+    -- https://github.com/folke/noice.nvim#-filters
     -- https://github.com/folke/noice.nvim#-views
     "folke/noice.nvim",
     event = "VeryLazy",
@@ -30,6 +53,23 @@ return {
       },
       routes = {
         {
+          filter = {
+            kind = "search_count"
+          },
+          opts = {
+            skip = true
+          }
+        },
+        {
+          filter = {
+            kind = "return_prompt"
+          },
+          opts = {
+            skip = true
+          }
+        },
+
+        {
           -- default messages to a popup that can be closed with q
           -- this is really annoying for useless messages, so it's best to remap them to `silent!`
           -- but it's way better when you actually care about reading what the message says
@@ -37,8 +77,8 @@ return {
             event = "msg_show",
           },
           view = "popup",
-        }
-      }
+        },
+      },
     },
     -- stylua: ignore
     keys = {

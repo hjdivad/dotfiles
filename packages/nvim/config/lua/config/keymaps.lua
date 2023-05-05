@@ -173,4 +173,4 @@ ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })
 ks("n", "<leader>um", "<Cmd>Mason<CR>", { desc = "lsp/dap &c. management with mason" })
 
 ks('n', 'u', '<cmd>silent! u<cr>', {})
-ks('n', '<c-r>', '<cmd>silent! <c-r><cr>', {})
+ks('n', '<c-r>', '<cmd>silent! redo<cr>', {})
