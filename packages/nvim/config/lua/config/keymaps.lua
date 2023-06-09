@@ -170,6 +170,7 @@ ks("n", "<leader>ulw", show_wikilinks_log, {desc="show logs (cmp-wikilinks)"})
 ks("n", "<leader>ull", '<Cmd>NullLsLog<Cr>', {desc="show logs (null-ls)"})
 
 ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })
+ks("n", "<leader>um", "<Cmd>Mason<CR>", { desc = "lsp/dap &c. management with mason" })
 
 ks('n', 'u', '<cmd>silent! u<cr>', {})
 ks('n', '<c-r>', '<cmd>silent! <c-r><cr>', {})
