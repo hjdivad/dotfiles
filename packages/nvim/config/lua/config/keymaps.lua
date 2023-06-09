@@ -127,7 +127,7 @@ ks("n", "<leader>8", "8gt", { desc = "go to tab 8" })
 ks("n", "<leader>9", "9gt", { desc = "go to tab 9" })
 ks("n", "<leader>0", "0gt", { desc = "go to tab 10" })
 
-ks("n", "<m-;>", ":lua ", { desc = "lua cmdline" })
+ks("n", "<m-;>", ":lua =", { desc = "lua cmdline" })
 
 ks(
   "n",
