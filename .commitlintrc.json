@@ -3,7 +3,7 @@
   "rules": {
     "type-case": [2, "always", ["lower-case"]],
     "type-empty": [2, "never"],
-    "type-enum": [2, "always", ["feat", "fix", "chore"]],
+    "type-enum": [2, "always", ["feat", "fix", "chore", "wip"]],
     "subject-empty": [2, "never"],
     "subject-full-stop": [2, "never"],
     "subject-case": [

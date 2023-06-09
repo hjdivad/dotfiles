@@ -168,10 +168,11 @@ ks("t", "<c-w><c-n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (
 ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
-ks("n", "<leader>tt", term.goto_terminal, { desc = "go to terminal" })
-ks("n", "<leader>ult", term.show_logs, { desc = "show logs (sticky-term)" })
-ks("n", "<leader>ulw", show_wikilinks_log, { desc = "show logs (cmp-wikilinks)" })
-ks("n", "<leader>ull", "<Cmd>NullLsLog<Cr>", { desc = "show logs (null-ls)" })
+ks("n", "<leader>tt", term.goto_terminal, {desc="go to terminal"})
+ks("n", "<leader>ult", term.show_logs, {desc="show logs (sticky-term)"})
+ks("n", "<leader>ulw", show_wikilinks_log, {desc="show logs (cmp-wikilinks)"})
+ks("n", "<leader>ull", '<Cmd>NullLsLog<Cr>', {desc="show logs (null-ls)"})
+ks("n", "<leader>uld", '<Cmd>DapShowLog<Cr>', {desc="show logs (DAP)"})
 
 ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })
 ks("n", "<leader>um", "<Cmd>Mason<CR>", { desc = "lsp/dap &c. management with mason" })
