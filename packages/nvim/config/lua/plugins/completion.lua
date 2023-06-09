@@ -43,7 +43,6 @@ return {
         },
         snippet = {
           expand = function(args)
-            -- TODO: i don't get why lsp_expand vs expand
             require("luasnip").lsp_expand(args.body)
           end,
         },
@@ -59,12 +58,19 @@ return {
           ["<C-n>"] = cmp.mapping.select_next_item(),
           ["<C-p>"] = cmp.mapping.select_prev_item(),
         }),
-        -- TODO: something's wrong here, we're still completing the local buffer
         sources = cmp.config.sources({
+          -- TODO: getting weird buffer keyword completion after lsp initializes
+          --  `nvim packages/nvim/config/lua/chronic/init.lua`
+          --    :tbldeep
+          --  will complete `tbl_deep_extend`
+          --    :inspi
+          --  will complete Inspired (from a comment)
+          --  see https://github.com/hrsh7th/cmp-nvim-lsp/blob/0e6b2ed705ddcff9738ec4ea838141654f12eeef/lua/cmp_nvim_lsp/init.lua#L37-L83
+          --  This seems to be an issue with the lua lsp specifically
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
-          { name = "nvim_lua" }, -- nvim api; would rather get from lsp
-          { name = "luasnip" },
+          -- { name = "nvim_lua" }, -- nvim api; would rather get from lsp
+          { name = "luasnip"},
           { name = "path" }, -- complete ./ &c.
           { name = "wikilinks" }, -- complete [[foo]] &c.
           { name = "emoji" }, -- complete :emoji:
