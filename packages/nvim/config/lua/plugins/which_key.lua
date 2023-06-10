@@ -14,6 +14,7 @@ return {
         ["g"] = { name = "+goto (builtin)" },
         ["]"] = { name = "+next" },
         ["["] = { name = "+prev" },
+        ["<leader>d"] = { name = "+diagnostics/debugger" },
         ["<leader>b"] = { name = "+buffer" },
         ["<leader>c"] = { name = "+code" },
         ["<leader>r"] = { name = "+refactor" },

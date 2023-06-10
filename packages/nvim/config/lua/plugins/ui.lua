@@ -10,9 +10,32 @@ return {
     },
   },
 
+  -- Disable this growl/toast distraction
+  -- use show notifications; show-last notification instead
+  {
+    "rcarriga/nvim-notify",
+    enabled = false,
+    keys = {
+      {
+        "<leader>un",
+        false,
+      },
+    },
+    opts = {
+      timeout = 3000,
+      max_height = function()
+        return math.floor(vim.o.lines * 0.75)
+      end,
+      max_width = function()
+        return math.floor(vim.o.columns * 0.75)
+      end,
+    },
+  },
+
   -- noicer ui
   {
     -- https://github.com/folke/noice.nvim#%EF%B8%8F-configuration
+    -- https://github.com/folke/noice.nvim#-filters
     -- https://github.com/folke/noice.nvim#-views
     "folke/noice.nvim",
     event = "VeryLazy",
@@ -31,17 +54,126 @@ return {
       routes = {
         {
           filter = {
+            kind = "search_count",
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            kind = "return_prompt",
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d changes?;"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "--No lines in buffer--"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d lines? >ed"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d lines? <ed"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d more lines?"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d fewer lines?"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d line? less"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d lines? yanked"
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "Already at oldest change"
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "Already at newest change"
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "search hit BOTTOM",
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "Pattern not found",
+          },
+          view = "mini",
+        },
+
+        {
+          -- use print('debug ${msg}') to skip popups for printf-debugging
+          filter = {
+            find = "debug .*",
+          },
+          view = "mini",
+        },
+
+        {
+          -- default messages to a popup that can be closed with q
+          -- this is really annoying for useless messages, so it's best to remap them to `silent!`
+          -- but it's way better when you actually care about reading what the message says
+          filter = {
             event = "msg_show",
           },
-          view = "popup",
-        }
-      }
+          view = "mini",
+        },
+      },
     },
-    config = function(_, opts)
-      local noice = require("noice")
-      noice.setup(opts)
-      noice.redirect("Inspect")
-    end,
     -- stylua: ignore
     keys = {
       { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },

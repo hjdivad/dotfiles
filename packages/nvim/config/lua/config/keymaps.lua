@@ -5,7 +5,7 @@
 local term = require("sticky-term")
 
 local function show_wikilinks_log()
-  require('cmp_nvim_wikilinks').show_logs()
+  require("cmp_nvim_wikilinks").show_logs()
 end
 
 local ks = vim.keymap.set
@@ -127,7 +127,11 @@ ks("n", "<leader>8", "8gt", { desc = "go to tab 8" })
 ks("n", "<leader>9", "9gt", { desc = "go to tab 9" })
 ks("n", "<leader>0", "0gt", { desc = "go to tab 10" })
 
-ks("n", "<m-;>", ":lua ", { desc = "lua cmdline" })
+ks("n", "<m-;>", ":lua =", { desc = "lua cmdline" })
+
+ks("n", "<c-g>", function()
+  require("noice").redirect("file")
+end, { desc = "show :file in popup" })
 
 ks(
   "n",
@@ -168,5 +172,13 @@ ks("n", "<leader>tt", term.goto_terminal, {desc="go to terminal"})
 ks("n", "<leader>ult", term.show_logs, {desc="show logs (sticky-term)"})
 ks("n", "<leader>ulw", show_wikilinks_log, {desc="show logs (cmp-wikilinks)"})
 ks("n", "<leader>ull", '<Cmd>NullLsLog<Cr>', {desc="show logs (null-ls)"})
+ks("n", "<leader>uld", '<Cmd>DapShowLog<Cr>', {desc="show logs (DAP)"})
 
 ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })
+ks("n", "<leader>um", "<Cmd>Mason<CR>", { desc = "lsp/dap &c. management with mason" })
+
+ks("n", "u", "<cmd>silent! u<cr>", {})
+ks("n", "<c-r>", "<cmd>silent! redo<cr>", {})
+
+-- use ⌘-s to save to avoid the confirmation dialog
+ks("n", "<a-s>", "<cmd>silent! wall<cr>", {})

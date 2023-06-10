@@ -38,3 +38,7 @@ volta install yaml-language-server
 # set up dotfiles
 ./install.bash
 ```
+
+## Usage
+
+See [Debugging.md](./Debugging.md)
