@@ -17,12 +17,22 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_autocmd({ "FileType" }, {
+local ft_group = vim.api.nvim_create_augroup("hjdivad_ft", { clear=true })
+
+vim.api.nvim_create_autocmd({ "BufRead" }, {
   pattern = "*.code-workspace",
-  group = vim.api.nvim_create_augroup("hjdivad_ft", { clear=true }),
+  group = ft_group,
   callback = function()
     -- TODO: need to configure null-ls to pass `--parser=json` to prettier for this buffer (or like, always?)
     vim.bo.filetype = 'json'
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead" }, {
+  pattern = ".commitlintrc.json",
+  group = ft_group,
+  callback = function()
+    require('luasnip').filetype_extend('json', { 'commitlint' })
   end,
 })
 
