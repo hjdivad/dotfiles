@@ -54,19 +54,113 @@ return {
       routes = {
         {
           filter = {
-            kind = "search_count"
+            kind = "search_count",
           },
           opts = {
-            skip = true
-          }
+            skip = true,
+          },
         },
         {
           filter = {
-            kind = "return_prompt"
+            kind = "return_prompt",
           },
           opts = {
-            skip = true
-          }
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d changes?;"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "--No lines in buffer--"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d lines? >ed"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d lines? <ed"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d more lines?"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d fewer lines?"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d line? less"
+          },
+          opts = {
+            skip = true,
+          },
+        },
+        {
+          filter = {
+            find = "%d lines? yanked"
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "Already at oldest change"
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "Already at newest change"
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "search hit BOTTOM",
+          },
+          view = "mini",
+        },
+        {
+          filter = {
+            find = "Pattern not found",
+          },
+          view = "mini",
+        },
+
+        {
+          -- use print('debug ${msg}') to skip popups for printf-debugging
+          filter = {
+            find = "debug .*",
+          },
+          view = "mini",
         },
 
         {
@@ -76,7 +170,7 @@ return {
           filter = {
             event = "msg_show",
           },
-          view = "popup",
+          view = "mini",
         },
       },
     },

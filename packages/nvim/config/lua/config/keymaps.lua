@@ -129,6 +129,10 @@ ks("n", "<leader>0", "0gt", { desc = "go to tab 10" })
 
 ks("n", "<m-;>", ":lua =", { desc = "lua cmdline" })
 
+ks("n", "<c-g>", function()
+  require("noice").redirect("file")
+end, { desc = "show :file in popup" })
+
 ks(
   "n",
   "<leader><leader>",
