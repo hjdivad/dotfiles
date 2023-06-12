@@ -52,8 +52,23 @@ if vim.fn.has("nvim-0.9.0") == 1 then
   vim.opt.exrc = true
 end
 
-pp = vim.pretty_print
+
+-- global functions
+
+function pp(...)
+  local args = { ... }
+  require('noice').redirect(function ()
+    vim.print(unpack(args))
+  end)
+end
+
+function ni(...)
+  require('noice').redirect(...)
+end
 
 -- add ~/.config/nvim/lua/config/local_options.lua for machine-specific configuration
 -- e.g. vim.g.github_enterprise_urls = ["https://example.com"]
 pcall(require, "config/local_options")
+
+
+

@@ -24,9 +24,6 @@ function kd(mode, lhs)
 
   if vim.tbl_contains(km_lhs, normalized_lhs) then
     vim.keymap.del(mode, lhs)
-    -- else
-    --   print('no such keymap "' .. mode .. ": " .. lhs .. '"')
-    --   vim.pretty_print("km_lhs(" .. mode .. ")", km_lhs)
   end
 end
 
