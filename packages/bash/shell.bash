@@ -130,7 +130,7 @@ function __setup_unix_cmds {
 
   # use exa if it exists
   # https://github.com/ogham/exa
-  if $(which exa > /dev/null 2>&1); then
+  if which exa > /dev/null 2>&1; then
     alias ls='exa --colour-scale'
     alias ll='exa -l --all --no-user --changed --sort=modified --color-scale'
     alias lt='exa --tree --level 3 -l --no-permissions --no-user --no-time --colour-scale'
@@ -144,7 +144,7 @@ function __setup_unix_cmds {
 }
 
 function __setup_env {
-  if $(which nvim > /dev/null 2>&1); then
+  if which nvim > /dev/null 2>&1; then
     export EDITOR='nvim'
     export GIT_EDITOR='nvim'
   fi
