@@ -16,7 +16,8 @@
   fo = fetch --prune origin
   fa = fetch --prune --all
 
-  rr = !sh -c 'git rebase -i $(git merge-base HEAD origin/HEAD)'
+  rr = !sh -c 'git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD)'
+  rro = rebase -i refs/remotes/origin/HEAD
   rc = rebase --continue
 
   ap = add --patch
