@@ -162,6 +162,7 @@ function __setup_aliases {
 
   # startup jest with debugging + watch mode
   alias jest-debug='NODE_OPTIONS="--inspect" ./node_modules/.bin/jest --runInBand --watch nothing'
+  alias vitest-debug='vitest --inspect-brk --isolate false --single-thread --test-timeout 0'
 
   # Trailing space to tell bash to check next word for alias as well
   alias sudo='sudo '
