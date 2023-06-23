@@ -55,6 +55,9 @@ end
 
 -- global functions
 
+---pretty print lua expression into a noice popup
+--
+---@param ... unknown
 function pp(...)
   local args = { ... }
   require('noice').redirect(function ()
@@ -62,6 +65,16 @@ function pp(...)
   end)
 end
 
+---noice inspect via redirection
+---
+---Example:
+---
+--- ```lua
+--- -- run :version and display the results in a noice popup
+--- ni('version')
+--- ```
+---
+---@param ... unknown
 function ni(...)
   require('noice').redirect(...)
 end

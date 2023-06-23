@@ -4,8 +4,7 @@
 
 local term = require("sticky-term")
 
-local function show_wikilinks_log()
-  require("cmp_nvim_wikilinks").show_logs()
+local function show_wikilinks_log() require("cmp_nvim_wikilinks").show_logs()
 end
 
 local ks = vim.keymap.set
