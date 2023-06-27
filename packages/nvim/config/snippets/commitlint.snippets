@@ -1,4 +1,22 @@
-snippet base "base hjdivad commitlintrc configuration"
+snippet base-commitlint-rc "base hjdivad commitlintrc configuration"
+	{
+		"$$schema": "https://json.schemastore.org/commitlintrc.json",
+		"rules": {
+			"type-case": [2, "always", ["lower-case"]],
+			"type-empty": [2, "never"],
+			"type-enum": [2, "always", ["feat", "fix", "chore"]],
+			"subject-empty": [2, "never"],
+			"subject-full-stop": [2, "never"],
+			"subject-case": [
+				2,
+				"never",
+				["sentence-case", "pascal-case", "upper-case", "start-case"]
+			],
+			"body-leading-blank": [1, "always"]${0}
+		}
+	}
+
+snippet commitlint-rc "base hjdivad commitlintrc configuration"
 	{
 		"$$schema": "https://json.schemastore.org/commitlintrc.json",
 		"rules": {

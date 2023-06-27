@@ -36,5 +36,13 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "vite.config.ts",
+  group = ft_group,
+  callback = function()
+    require('luasnip').filetype_extend('typescript', { 'vite-config' })
+  end,
+})
+
 term.setup()
 fold.setup()

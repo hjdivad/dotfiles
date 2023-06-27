@@ -1,0 +1,51 @@
+snippet "in-source-testing"
+	if(import.meta.vitest) {
+		const { it, expect } = import.meta.vitest;
+
+		it('does something', () => {
+			expect(2).toEqual(3);
+		})
+	}
+
+snippet vitest-happy-dom
+	// @vitest-environment happy-dom
+
+snippet vitest-html-test
+	// @vitest-environment happy-dom
+
+	function html(strings, ...values) {
+		// Combine the strings and values into a single result
+		let result = '';
+		for (let i = 0; i < strings.length; i++) {
+			result += strings[i];
+			if (i < values.length) {
+				result += values[i];
+			}
+		}
+		return result;
+	}
+
+	it('does something', () => {
+		Window.document.write(html`
+			<html>
+				<head>
+				</head>
+				<body>
+				</body>
+			</html>
+		`);
+		expect(2).toEqual(3);
+	})
+
+snippet noop-tagged-template
+	function ${1:name}(strings, ...values) {
+		// Combine the strings and values into a single result
+		let result = '';
+		for (let i = 0; i < strings.length; i++) {
+			result += strings[i];
+			if (i < values.length) {
+				result += values[i];
+			}
+		}
+		return result;
+	}
