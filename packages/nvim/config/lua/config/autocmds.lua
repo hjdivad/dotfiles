@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 local ft_group = vim.api.nvim_create_augroup("hjdivad_ft", { clear=true })
 
-vim.api.nvim_create_autocmd({ "BufRead" }, {
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.code-workspace",
   group = ft_group,
   callback = function()
@@ -28,7 +28,7 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({ "BufRead" }, {
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = ".commitlintrc.json",
   group = ft_group,
   callback = function()
