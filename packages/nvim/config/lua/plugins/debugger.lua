@@ -1,4 +1,4 @@
----@type LazyPlutbl_dginSpec[]
+---@type LazySpec
 local specs = {
   -- TODO: dapui better icons?
   -- TODO: dapui always open in new tab
