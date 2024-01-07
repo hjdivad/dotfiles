@@ -44,5 +44,13 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  group = ft_group,
+  pattern = { "typescriptreact" },
+  callback = function()
+    require('luasnip').filetype_extend('typescriptreact', { 'typescript' })
+  end,
+})
+
 term.setup()
 fold.setup()
