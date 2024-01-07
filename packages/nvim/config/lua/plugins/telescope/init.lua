@@ -42,11 +42,11 @@ return {
         desc = "Find Git Changed Files (relative to origin/HEAD)",
       },
       { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "Find git commits" },
-      { "<leader>ff", Util.telescope("files", { attach_mappings = find_files_attach }), desc = "Find Files (root dir)" },
+      { "<leader>ff", Util.telescope("find_files", { attach_mappings = find_files_attach, cwd = vim.fn.getcwd() }), desc = "Find Files (cwd)" },
       {
         "<leader>fF",
-        Util.telescope("files", { cwd = false, attach_mappings = find_files_attach }),
-        desc = "Find Files (cwd)",
+        Util.telescope("files", { attach_mappings = find_files_attach }),
+        desc = "Find Files (git)",
       },
       {
         "<leader>fj",
