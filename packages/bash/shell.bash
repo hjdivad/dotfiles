@@ -167,10 +167,12 @@ function __setup_aliases {
   # Trailing space to tell bash to check next word for alias as well
   alias sudo='sudo '
 
-    # Update dependencies interactively
+  # Update dependencies interactively
   alias npm-check-updates='npx npm-check-updates -i'
   alias nr='npm run'
   alias y=yarn
+
+  alias c=cargo
 
   alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
   if which watchexec > /dev/null 2>&1; then
@@ -381,7 +383,7 @@ __prepend_path "/Library/TeX/texbin"
 __prepend_path "${HOME}/Library/Python/2.7/bin"
 __prepend_path "$HOME/Library/Python/3.7/bin"
 [[ -n "$GOPATH" ]] && __prepend_path "${GOPATH}/bin"
-__prepend_path "$HOME/.cargo/bin:$PATH"
+__prepend_path "$HOME/.cargo/bin"
 [[ -n "$VOLTA_HOME" ]] && __prepend_path "${VOLTA_HOME}/bin"
 [[ -n "$DOTFILES_DIR" ]] && __prepend_path "$DOTFILES_DIR//bin"
 __prepend_path "$HOME/.local/bin"
