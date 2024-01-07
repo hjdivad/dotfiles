@@ -165,6 +165,7 @@ ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
 ks("n", "<leader>tt", term.goto_terminal, {desc="go to terminal"})
+--TODO: <leader>tq close terminal win
 ks("n", "<leader>ult", term.show_logs, {desc="show logs (sticky-term)"})
 ks("n", "<leader>ulw", show_wikilinks_log, {desc="show logs (cmp-wikilinks)"})
 ks("n", "<leader>ull", '<Cmd>NullLsLog<Cr>', {desc="show logs (null-ls)"})
