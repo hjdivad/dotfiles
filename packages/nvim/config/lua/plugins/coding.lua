@@ -1,5 +1,8 @@
+---@type LazySpec
 return {
-  -- TODO: see https://github.com/hjdivad/dotfiles/blob/ba25ed22c114ddbaeeb6ed919659a319a727f845/packages/nvim/config/lua/hjdivad/init.lua#L593-L633
+  -- see https://www.lazyvim.org/plugins/coding
+
+  -- completion
   {
     -- TODO: too slow
     --  configure path (i.e. something more narrow than &path)
@@ -12,8 +15,8 @@ return {
       glob_suffixes = {
         "*",
         "*/*",
-      }
-    }
+      },
+    },
   },
   -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/coding.lua
   {
@@ -31,9 +34,9 @@ return {
       "hrsh7th/cmp-nvim-lua", -- vim's API; would be nicer to get from lsp
     },
     keys = {
-      { "<c-l>", desc="completion" },
+      { "<c-l>", desc = "completion" },
       -- disable imap tab from LazyVim
-      {"<tab>", false },
+      { "<tab>", false },
     },
     opts = function()
       local cmp = require("cmp")
@@ -70,7 +73,7 @@ return {
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
           -- { name = "nvim_lua" }, -- nvim api; would rather get from lsp
-          { name = "luasnip"},
+          { name = "luasnip" },
           { name = "path" }, -- complete ./ &c.
           { name = "wikilinks" }, -- complete [[foo]] &c.
           { name = "emoji" }, -- complete :emoji:
