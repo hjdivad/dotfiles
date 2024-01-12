@@ -1,7 +1,7 @@
 return {
   -- search/replace in multiple files
   {
-    "windwp/nvim-spectre",
+    "nvim-pack/nvim-spectre",
     -- stylua: ignore
     keys = {
       {'<leader>sr', false},

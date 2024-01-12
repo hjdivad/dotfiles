@@ -28,3 +28,7 @@ snippet usercmd
 	vim.api.nvim_create_user_command("${1:HiUserCommand}", function()
 		${0}
 	end, { desc = "${2:What does it do?}" })
+
+snippet stylua-ignore "don't format the next line"
+	-- stylua: ignore
+	

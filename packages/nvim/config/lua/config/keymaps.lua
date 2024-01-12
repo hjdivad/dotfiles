@@ -3,8 +3,10 @@
 -- Add any additional keymaps here
 
 local term = require("sticky-term")
+local LazyVimUtil = require("lazyvim.util")
 
-local function show_wikilinks_log() require("cmp_nvim_wikilinks").show_logs()
+local function show_wikilinks_log()
+  require("cmp_nvim_wikilinks").show_logs()
 end
 
 local ks = vim.keymap.set
@@ -34,6 +36,8 @@ ks({ "n", "v" }, "X", "", { nowait = true })
 ks({ "n" }, "S", "", { nowait = true })
 -- leave only `s` for leap
 
+-- see LazyVim's keymaps
+-- $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/config/keymaps.lua
 -- delete bad keymaps from LazyVim
 kd("n", "<C-H>")
 kd("n", "<C-L>")
@@ -58,6 +62,16 @@ kd("n", "<leader>`")
 kd("n", "<Esc>")
 kd("i", "<Esc>")
 kd("n", "<leader>ur")
+kd("n", "<leader>|")
+kd("n", "<leader>K")
+kd("n", "<leader>bl")
+kd("n", "<leader>br")
+kd("n", "<leader>bo")
+kd("n", "<leader>L")
+kd("n", "<leader>cd")
+kd("n", "<leader>uF")
+kd("n", "<leader>ut")
+kd("n", "<leader>uT")
 
 -- I have no idea what map("n", "gw", "*N") is supposed to do
 kd("n", "gw")
@@ -164,15 +178,16 @@ ks("t", "<c-w><c-n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (
 ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
-ks("n", "<leader>tt", term.goto_terminal, {desc="go to terminal"})
+ks("n", "<leader>tt", term.goto_terminal, { desc = "go to terminal" })
 --TODO: <leader>tq close terminal win
-ks("n", "<leader>ult", term.show_logs, {desc="show logs (sticky-term)"})
-ks("n", "<leader>ulw", show_wikilinks_log, {desc="show logs (cmp-wikilinks)"})
-ks("n", "<leader>ull", '<Cmd>NullLsLog<Cr>', {desc="show logs (null-ls)"})
-ks("n", "<leader>uld", '<Cmd>DapShowLog<Cr>', {desc="show logs (DAP)"})
-
+ks("n", "<leader>ult", term.show_logs, { desc = "show logs (sticky-term)" })
+ks("n", "<leader>ulw", show_wikilinks_log, { desc = "show logs (cmp-wikilinks)" })
+ks("n", "<leader>ull", "<Cmd>NullLsLog<Cr>", { desc = "show logs (null-ls)" })
+ks("n", "<leader>uld", "<Cmd>DapShowLog<Cr>", { desc = "show logs (DAP)" })
+ks("n", "<leader>uL", function()
+  LazyVimUtil.news.changelog()
+end, { desc = "LazyVim Changelog" })
 ks("n", "<leader>up", "<Cmd>Lazy<CR>", { desc = "plugin management with lazy" })
-ks("n", "<leader>um", "<Cmd>Mason<CR>", { desc = "lsp/dap &c. management with mason" })
 
 ks("n", "u", "<cmd>silent! u<cr>", {})
 ks("n", "<c-r>", "<cmd>silent! redo<cr>", {})

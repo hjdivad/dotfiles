@@ -1,6 +1,5 @@
 -- https://github.com/folke/lazy.nvim#-plugin-spec
 
-
 return {
   {
     "lewis6991/gitsigns.nvim",
@@ -29,7 +28,7 @@ return {
         end
 
         local function update_git_base()
-          local merge_base = vim.fn.system('git merge-base HEAD origin/HEAD')
+          local merge_base = vim.fn.system("git merge-base HEAD origin/HEAD")
           if merge_base and #merge_base > 3 then
             -- strip newline from the command output
             gs.change_base(merge_base:sub(1, #merge_base - 1), true)
@@ -38,9 +37,9 @@ return {
 
         map("n", "]h", gs.next_hunk, "Next Hunk")
         map("n", "[h", gs.prev_hunk, "Prev Hunk")
-        map("n", "<leader>gj", gs.next_hunk, "Next Hunk")
-        map("n", "<leader>gk", gs.prev_hunk, "Prev Hunk")
-        map("n", "<leader>gp", preview_hunk, "Preview Hunk")
+        map("n", "<leader>gj", gs.next_hunk, "Goto Next Hunk")
+        map("n", "<leader>gk", gs.prev_hunk, "Goto Prev Hunk")
+        map("n", "<leader>gp", preview_hunk, "Goto Preview Hunk")
         map("n", "<leader>gb", function()
           gs.blame_line({ full = true })
         end, "Blame Line")
@@ -53,7 +52,7 @@ return {
   },
   {
     "tpope/vim-fugitive",
-    dependencies = {"tpope/vim-rhubarb"},
+    dependencies = { "tpope/vim-rhubarb" },
     cmd = { "Git", "G" },
     keys = {
       {
@@ -67,8 +66,8 @@ return {
         "<leader>GD",
         "<Cmd>Gvdiffsplit!<Cr>",
         mode = "n",
-        desc = "Diff this conflict"
-      }
+        desc = "Diff this conflict",
+      },
     },
   },
 }

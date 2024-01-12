@@ -70,7 +70,7 @@ return {
         },
         {
           filter = {
-            find = "%d changes?;"
+            find = "%d changes?;",
           },
           opts = {
             skip = true,
@@ -78,7 +78,7 @@ return {
         },
         {
           filter = {
-            find = "--No lines in buffer--"
+            find = "--No lines in buffer--",
           },
           opts = {
             skip = true,
@@ -86,7 +86,7 @@ return {
         },
         {
           filter = {
-            find = "%d lines? >ed"
+            find = "%d lines? >ed",
           },
           opts = {
             skip = true,
@@ -94,7 +94,7 @@ return {
         },
         {
           filter = {
-            find = "%d lines? <ed"
+            find = "%d lines? <ed",
           },
           opts = {
             skip = true,
@@ -102,7 +102,7 @@ return {
         },
         {
           filter = {
-            find = "%d more lines?"
+            find = "%d more lines?",
           },
           opts = {
             skip = true,
@@ -110,7 +110,7 @@ return {
         },
         {
           filter = {
-            find = "%d fewer lines?"
+            find = "%d fewer lines?",
           },
           opts = {
             skip = true,
@@ -118,7 +118,7 @@ return {
         },
         {
           filter = {
-            find = "%d line? less"
+            find = "%d line? less",
           },
           opts = {
             skip = true,
@@ -126,19 +126,19 @@ return {
         },
         {
           filter = {
-            find = "%d lines? yanked"
+            find = "%d lines? yanked",
           },
           view = "mini",
         },
         {
           filter = {
-            find = "Already at oldest change"
+            find = "Already at oldest change",
           },
           view = "mini",
         },
         {
           filter = {
-            find = "Already at newest change"
+            find = "Already at newest change",
           },
           view = "mini",
         },
@@ -180,11 +180,9 @@ return {
       { "<leader>snl", false},
       { "<leader>snh", false},
       { "<leader>sna", false},
+      { "<leader>snd", false},
       { "<c-f>", false },
       { "<c-b>", false },
-      { "<leader>nl", function() require("noice").cmd("last") end, desc = "Noice Last Message" },
-      { "<leader>nh", function() require("noice").cmd("history") end, desc = "Noice History" },
-      { "<leader>na", function() require("noice").cmd("all") end, desc = "Noice All" },
       { "<leader>unl", function() require("noice").cmd("last") end, desc = "Noice Last Message" },
       { "<leader>unh", function() require("noice").cmd("history") end, desc = "Noice History" },
       { "<leader>una", function() require("noice").cmd("all") end, desc = "Noice All" },

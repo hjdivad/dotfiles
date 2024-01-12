@@ -42,7 +42,11 @@ return {
         desc = "Find Git Changed Files (relative to origin/HEAD)",
       },
       { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "Find git commits" },
-      { "<leader>ff", Util.telescope("find_files", { attach_mappings = find_files_attach, cwd = vim.fn.getcwd() }), desc = "Find Files (cwd)" },
+      {
+        "<leader>ff",
+        Util.telescope("find_files", { attach_mappings = find_files_attach, cwd = vim.fn.getcwd() }),
+        desc = "Find Files (cwd)",
+      },
       {
         "<leader>fF",
         Util.telescope("files", { attach_mappings = find_files_attach }),
@@ -78,43 +82,6 @@ return {
         }),
         desc = "Search Symbol",
       },
-      -- TODO: #89
-      -- {
-      --   "<leader>sS",
-      --   Util.telescope("lsp_workspace_symbols", {
-      --     symbols = {
-      --       "Class",
-      --       "Function",
-      --       "Method",
-      --       "Constructor",
-      --       "Interface",
-      --       "Module",
-      --       "Struct",
-      --       "Trait",
-      --       "Field",
-      --       "Property",
-      --     },
-      --   }),
-      --   desc = "Search Workspace Symbol",
-      -- },
-      -- {
-      --   "<leader>SS",
-      --   Util.telescope("lsp_workspace_symbols", {
-      --     symbols = {
-      --       "Class",
-      --       "Function",
-      --       "Method",
-      --       "Constructor",
-      --       "Interface",
-      --       "Module",
-      --       "Struct",
-      --       "Trait",
-      --       "Field",
-      --       "Property",
-      --     },
-      --   }),
-      --   desc = "Search Workspace Symbol",
-      -- },
       -- TODO: this toggles sessions; do this in lua instead and toggle windows
       { "<leader>tst", "<Cmd>silent !tmux switch-client -l<cr>", desc = "tmux toggle" },
       {
