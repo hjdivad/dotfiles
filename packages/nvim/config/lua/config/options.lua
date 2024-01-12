@@ -5,6 +5,9 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = ","
 
+-- Disable LazyVim format-on-save
+vim.g.autoformat = false
+
 -- disable right-splitting from lazyvim
 vim.opt.splitright = false
 
@@ -52,7 +55,6 @@ if vim.fn.has("nvim-0.9.0") == 1 then
   vim.opt.exrc = true
 end
 
-
 -- global functions
 
 ---pretty print lua expression into a noice popup
@@ -60,7 +62,7 @@ end
 ---@param ... unknown
 function pp(...)
   local args = { ... }
-  require('noice').redirect(function ()
+  require("noice").redirect(function()
     vim.print(unpack(args))
   end)
 end
@@ -76,12 +78,9 @@ end
 ---
 ---@param ... unknown
 function ni(...)
-  require('noice').redirect(...)
+  require("noice").redirect(...)
 end
 
 -- add ~/.config/nvim/lua/config/local_options.lua for machine-specific configuration
 -- e.g. vim.g.github_enterprise_urls = ["https://example.com"]
 pcall(require, "config/local_options")
-
-
-

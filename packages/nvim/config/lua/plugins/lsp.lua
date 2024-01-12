@@ -8,6 +8,7 @@ end
 
 ---@type LazyPluginSpec
 return {
+  -- see https://www.lazyvim.org/plugins/lsp
   "neovim/nvim-lspconfig",
   -- override LSP keybindings here
   init = function()
@@ -41,4 +42,16 @@ return {
     keys[#keys + 1] = { "<leader>cJ", diagnostic_goto(true), desc = "Next Diagnostic" }
     keys[#keys + 1] = { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" }
   end,
+  ---@type PluginLspOpts
+  opts = {
+    -- see https://www.lazyvim.org/plugins/lsp#nvim-lspconfig / Full Spec
+    --
+    -- LSP-specific keymaps here
+    --
+    -- servers = {
+    --   lua_ls = {
+    --     keys = {}
+    --   }
+    -- }
+  },
 }

@@ -72,6 +72,7 @@ kd("n", "<leader>cd")
 kd("n", "<leader>uF")
 kd("n", "<leader>ut")
 kd("n", "<leader>uT")
+kd("n", ";")
 
 -- I have no idea what map("n", "gw", "*N") is supposed to do
 kd("n", "gw")
@@ -138,6 +139,7 @@ ks("n", "<leader>9", "9gt", { desc = "go to tab 9" })
 ks("n", "<leader>0", "0gt", { desc = "go to tab 10" })
 
 ks("n", "<m-;>", ":lua =", { desc = "lua cmdline" })
+ks("n", "<c-n>", ":lua =require('noice').redirect([[]])<Left><Left><Left>", { desc = "noice cmdline" })
 
 ks("n", "<c-g>", function()
   require("noice").redirect("file")
