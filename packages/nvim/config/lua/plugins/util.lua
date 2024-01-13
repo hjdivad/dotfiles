@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   -- TODO: combine this with a good tmux-select and there might be a nice tmux session select here
   --  a. pick from local workspaces e.g. src/{gh,li} or dynamic search (gh; ghe)

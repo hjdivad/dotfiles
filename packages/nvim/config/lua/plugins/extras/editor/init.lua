@@ -1,4 +1,3 @@
-local util = require("hjdivad_util")
-local leap = require("plugins/extras/editor/leap")
+-- local util = require("hjdivad_util")
 
-return util.concat(leap)
+return {}
