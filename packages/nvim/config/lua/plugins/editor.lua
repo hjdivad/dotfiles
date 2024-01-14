@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 return {
   -- see https://www.lazyvim.org/plugins/editor
 
@@ -68,15 +68,17 @@ return {
       },
     },
   },
-  --TODO: delete fF &c. from flash
-  -- {
-  --   "folke/flash.nvim",
-  --   {
-  --     -- TODO: consider keeping s, S (search, treesitter search)
-  --     -- TODO: and then maybe drop leap, flit entirely?
-  --     keys = {},
-  --   },
-  -- },
+  {
+    "folke/flash.nvim",
+    ---@type Flash.Config
+    opts = {
+      modes = {
+        char = {
+          enabled = false,
+        },
+      },
+    },
+  },
 
   -- todo comments
   {
