@@ -1,6 +1,6 @@
 local Util = require("lazyvim.util")
 local actions = require("telescope.actions")
-local tmux = require("plugins/telescope/tmux")
+local tmux = require("plugins/coding/telescope/tmux")
 
 local function find_files_no_ignore()
   Util.telescope("find_files", { no_ignore = true, prompt_title = "find files (no ignore)" })()

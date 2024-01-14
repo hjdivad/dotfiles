@@ -1,5 +1,8 @@
----@type LazySpec
-return {
+local util = require("hjdivad_util")
+local telescope = require("plugins/coding/telescope")
+
+---@type LazyPluginSpec
+local specs = {
   -- see https://www.lazyvim.org/plugins/coding
 
   -- completion
@@ -184,3 +187,5 @@ return {
     end,
   },
 }
+
+return util.concat(specs, telescope)

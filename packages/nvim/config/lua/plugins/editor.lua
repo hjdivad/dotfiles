@@ -68,14 +68,15 @@ return {
       },
     },
   },
-  {
-    "folke/flash.nvim",
-    {
-      -- TODO: consider keeping s, S (search, treesitter search)
-      -- TODO: and then maybe drop leap, flit entirely?
-      keys = {},
-    },
-  },
+  --TODO: delete fF &c. from flash
+  -- {
+  --   "folke/flash.nvim",
+  --   {
+  --     -- TODO: consider keeping s, S (search, treesitter search)
+  --     -- TODO: and then maybe drop leap, flit entirely?
+  --     keys = {},
+  --   },
+  -- },
 
   -- todo comments
   {
