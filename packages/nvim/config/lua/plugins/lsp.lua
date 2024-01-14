@@ -18,6 +18,7 @@ return {
     -- remove unwanted
     keys[#keys + 1] = { "gy", false }
     keys[#keys + 1] = { "gI", false }
+    keys[#keys + 1] = { "<leader>cs", false }
 
     -- add missing
     keys[#keys + 1] = {
@@ -41,6 +42,8 @@ return {
     keys[#keys + 1] = { "<leader>ck", diagnostic_goto(false, "ERROR"), desc = "Prev Error Diagnostic" }
     keys[#keys + 1] = { "<leader>cJ", diagnostic_goto(true), desc = "Next Diagnostic" }
     keys[#keys + 1] = { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" }
+    keys[#keys + 1] = { "<leader>cs", "<cmd>AerialToggle!<cr>", desc = "Code Symbols" }
+    keys[#keys + 1] = { "<leader>cS", "<cmd>AerialOpen<cr>", desc = "Code Symbols (focus)" }
   end,
   ---@type PluginLspOpts
   opts = {
