@@ -381,6 +381,9 @@ function __setup_osx {
   export BASH_SILENCE_DEPRECATION_WARNING=1
 }
 
+
+export NODE_BIGMEM="--max-old-space-size=16384" # mb
+
 __setup_bash_completion
 __setup_prompt
 __setup_sdks
@@ -397,6 +400,7 @@ __prepend_path "${HOME}/Library/Python/2.7/bin"
 __prepend_path "$HOME/Library/Python/3.7/bin"
 [[ -n "$GOPATH" ]] && __prepend_path "${GOPATH}/bin"
 __prepend_path "$HOME/.cargo/bin"
+__prepend_path "$HOME/.bun/bin"
 [[ -n "$VOLTA_HOME" ]] && __prepend_path "${VOLTA_HOME}/bin"
 [[ -n "$DOTFILES_DIR" ]] && __prepend_path "$DOTFILES_DIR//bin"
 __prepend_path "$HOME/.local/bin"
