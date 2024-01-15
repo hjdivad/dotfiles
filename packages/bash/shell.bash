@@ -160,9 +160,14 @@ function __setup_aliases {
   alias ssh-no-agent-forwarding='ssh -o "ForwardAgent no"'
   alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 
+  # node ts
+  alias node-ts='node --loader ts-node/esm --no-warnings'
+  alias node-ts-debug='node --loader ts-node/esm --no-warnings --inspect --watch'
+  alias node-ts-test='node --loader ts-node/esm --no-warnings --test'
+
   # startup jest with debugging + watch mode
   alias jest-debug='NODE_OPTIONS="--inspect" ./node_modules/.bin/jest --runInBand --watch nothing'
-  alias vitest-debug='vitest --inspect-brk --isolate false --single-thread --test-timeout 0'
+  alias vitest-debug='vitest --inspect-brk --threads false --isolate false --single-thread --test-timeout 0'
 
   # Trailing space to tell bash to check next word for alias as well
   alias sudo='sudo '
@@ -172,7 +177,15 @@ function __setup_aliases {
   alias nr='npm run'
   alias y=yarn
 
-  alias c=cargo
+  # ask user for input
+  # e.g. echo $(inp)
+  alias inp='read -s -p "Password: " pass; echo $pass'
+
+  alias py='python3'
+
+  # rust
+  alias c='cargo'
+  alias ct='cargo nextest'
 
   alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
   if which watchexec > /dev/null 2>&1; then
