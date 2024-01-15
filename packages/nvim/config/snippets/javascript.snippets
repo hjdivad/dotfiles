@@ -48,4 +48,36 @@ snippet noop-tagged-template
 			}
 		}
 		return result;
+
+snippet main
+	import { fileURLToPath } from 'node:url';
+
+	async function main() {
+		${0}
+	}
+
+	let thisFile = fileURLToPath(import.meta.url);
+	if (process.argv[1] === thisFile) {
+		await main();
+	}
+
+snippet exec
+	import { exec as execNode} from 'node:child_process';
+
+	async function exec(
+		cmd,
+		options = {},
+	) {
+		return new Promise((resolve, reject) => {
+			execNode(cmd, options, (error, stdout, stderr) => {
+				if (error) {
+					reject(error);
+				}
+
+				resolve({
+					out: stdout,
+					err: stderr,
+				});
+			});
+		});
 	}

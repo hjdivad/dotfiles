@@ -10,6 +10,9 @@ snippet schema:tsconfig "schema for tsconfig.json"
 snippet schema:prettier.json "schema for .prettierrc.json"
   "$$schema": "https://json.schemastore.org/prettierrc.json",
 
+snippet schema:swcrc "schema for .swcrc"
+  "$schema": "https://json.schemastore.org/swcrc",
+
 snippet scripts
 	"scripts": {
 		"start": "echo start",
@@ -34,5 +37,21 @@ snippet modules
 	"typesVersions": {
 		"*": {
 			"main.d.ts": "${5:./dist/esnext/src/index.d.ts}"
+		}
+	}
+
+snippet typescript-cli-package-json "minimal package.json for a typescript CLI"
+	{
+		"$schema": "https://json.schemastore.org/package.json",
+		"$comment": "Add .eslintrc.json and use cli snippet for script/my-script.mts",
+		"type": "module",
+		"devDependencies": {
+			"@types/node": "^20.10.6",
+			"@typescript-eslint/eslint-plugin": "^6.17.0",
+			"@typescript-eslint/parser": "^6.17.0",
+			"eslint": "^8.56.0"
+		},
+		"volta": {
+			"node": "20.10.0"
 		}
 	}
