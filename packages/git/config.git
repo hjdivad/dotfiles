@@ -63,7 +63,10 @@
 
   gl = log --decorate --cherry-mark --oneline --graph --boundary
 
+  yuno = check-ignore -nv
+
   head = show -w --color-words HEAD
+  head-msg = log --pretty="%s%n%n%b" -n 1
   # show list of all committers, with commit counts + email
   count = shortlog -sne
   who-commits = shortlog -sne
