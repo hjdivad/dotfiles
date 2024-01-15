@@ -17,7 +17,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-local ft_group = vim.api.nvim_create_augroup("hjdivad_ft", { clear=true })
+local ft_group = vim.api.nvim_create_augroup("hjdivad_ft", { clear = true })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.code-workspace",
@@ -28,11 +28,37 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead" }, {
+  pattern = {  ".swcrc" },
+  group = ft_group,
+  callback = function()
+    -- TODO: need to configure null-ls to pass `--parser=json` to prettier for this buffer (or like, always?)
+    vim.bo.filetype = "json"
+    require("luasnip").filetype_extend("json", { "swc" })
+  end,
+})
+
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = ".commitlintrc.json",
   group = ft_group,
   callback = function()
-    require('luasnip').filetype_extend('json', { 'commitlint' })
+    require("luasnip").filetype_extend("json", { "commitlint" })
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead" }, {
+  pattern = ".eslintrc.json",
+  group = ft_group,
+  callback = function()
+    require("luasnip").filetype_extend("json", { "eslint" })
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead" }, {
+  pattern = "Cargo.toml",
+  group = ft_group,
+  callback = function()
+    require("luasnip").filetype_extend("toml", { "cargo" })
   end,
 })
 
