@@ -1,8 +1,6 @@
 use std::{
-    cell::RefCell,
     iter,
-    rc::Rc,
-    str::FromStr, borrow::Borrow,
+    str::FromStr,
 };
 
 /// Suffix Tree `T` for m-char string `S` ending in unique character `$`.
@@ -15,29 +13,28 @@ use std::{
 ///     * Edges labelled with non-empty substring of `S`
 ///     * No two edges from the same node have labels beginning with the same character
 ///
-pub struct Tree {
-    text: String,
-    root: Node,
+pub struct Tree<'a> {
+    text: &'a str,
+    root: Node<'a>,
 }
 
-type NodePtr = Rc<RefCell<Node>>;
-type EdgePtr = Rc<RefCell<Edge>>;
-
-pub struct Node {
-    children: Vec<EdgePtr>,
-    parent: Option<NodePtr>,
-    suffix_link: Option<NodePtr>,
+#[derive(Default)]
+pub struct Node<'a> {
+    children: Vec<Edge<'a>>,
+    parent: Option<&'a Node<'a>>,
+    suffix_link: Option<&'a Node<'a>>,
 }
 
-enum Edge {
-    ToInternal(InternalEdge),
+enum Edge<'a> {
+    ToInternal(InternalEdge<'a>),
     ToLeaf(LeafEdge),
 }
 
-pub struct InternalEdge {
+pub struct InternalEdge<'a> {
+    // TODO: see if we can replace these with &'a str without increasing memory
     label_start_idx: u64,
     label_end_idx: u64,
-    node: NodePtr,
+    node: Node<'a>,
 }
 
 pub struct LeafEdge {
@@ -47,7 +44,7 @@ pub struct LeafEdge {
 
 pub enum SuffixTreeError {}
 
-impl FromStr for Tree {
+impl<'a> FromStr for Tree<'a> {
     type Err = SuffixTreeError;
 
     fn from_str(text: &str) -> Result<Self, Self::Err> {
@@ -140,37 +137,43 @@ impl FromStr for Tree {
 
 type DebugEdge<'a> = (&'a str, u64, u64);
 type DebugVec<'a> = Vec<DebugEdge<'a>>;
-impl Tree {
-    // fn iter_edges(&self) -> Box<dyn Iterator<Item = &EdgePtr>> {
-    //     self.root.iter_edges()
-    // }
+impl<'a> Tree<'a> {
+    fn iter_edges(&self) -> Box<dyn Iterator<Item = &Edge<'a>> + '_> {
+        self.root.iter_edges()
+    }
     fn debug_to_vec(&self) -> DebugVec {
         // TODO: impl as list of edges
         // (("ab", 1, 2), ("cabx", 3, 6), ("x", 6, 6), ("bcabx", 2, 6), ("cabx", 3, 6))
         todo!()
     }
+
+    fn new(text: &'a str) -> Self {
+        Tree {text, root: Node::default()}
+    }
 }
 
-impl Node {
-    fn iter_edges(&self) -> Box<dyn Iterator<Item = &EdgePtr> + '_> {
-        // TODO: couple things to try
-        // see https://chat.openai.com/g/g-sJlmeiArO-rust-mentor/c/a6ba8aed-76fd-4f1f-84a1-932e59c32e64
-        //  1. maybe return weak edgeptr instead of strong edgeptr (Rc::downgrade)
-        //  2. Separate iterator creation from edge borrowing
-        //      a. create an iterator only for children that yields (edge, Option<Node>)
-        //      b. then itr = itr.flat_map(move |edge, maybe_node|) that yields either
-        //      edge.int_iter or same but w/chain
-        let itr = self.children.iter().flat_map(|edge_ptr| {
-            let edge = (**edge_ptr).borrow();
-            match *edge {
-                Edge::ToLeaf(_) => Box::new(iter::once(edge_ptr)) as Box<dyn Iterator<Item = &EdgePtr> + '_>,
-                Edge::ToInternal(_) => Box::new(iter::once(edge_ptr)) as Box<dyn Iterator<Item = &EdgePtr> + '_>,
-                // TODO: iterate internal children (join self + node.iter_edges)
-                // Edge::ToInternal(i_edge) => Box::new(iter::once(edge_ptr).chain((*i_edge.node).borrow().iter_edges())) as Box<dyn Iterator<Item = &EdgePtr> + '_>,
+impl<'a> Node<'a> {
+    fn iter_edges(&self) -> Box<dyn Iterator<Item = &Edge<'a>> + '_> {
+        let itr = self.children.iter().flat_map(|edge|{
+            match edge {
+                Edge::ToLeaf(_) => Box::new(iter::once(edge)) as Box<dyn Iterator<Item = &Edge<'a>> + '_>,
+                Edge::ToInternal(i_edge) => {
+                    let itr = iter::once(edge);
+                    let subtree_itr = i_edge.node.iter_edges();
+                    Box::new(itr.chain(subtree_itr)) as Box<dyn Iterator<Item = &Edge<'a>> + '_>
+                },
             }
-        });
+        }
+        );
 
         Box::new(itr)
+    }
+
+    fn add_leaf_edge(&mut self, leaf_edge: LeafEdge) {
+        self.children.push(Edge::ToLeaf(leaf_edge));
+    }
+
+    fn add_internal_edge() {
     }
 }
 
@@ -178,10 +181,13 @@ impl Node {
 mod tests {
     use super::*;
 
-    // abcabxabcd
+    const TEST_STRING : & str= "abcabxabcd";
 
     #[test]
-    fn it_works() {
-        assert_eq!(1, 1, "Pretty sure 1==1")
+    fn iter_edges() {
+        let mut tree = Tree::new(TEST_STRING);
+        tree.root.add_leaf_edge(LeafEdge { label_start_idx: 23});
+
+        assert_eq!(tree.iter_edges().collect::<Vec<&Edge>>().len(),1);
     }
 }
