@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "nvim_test"
+name = "suffix_tree"
 version = "0.1.0"
