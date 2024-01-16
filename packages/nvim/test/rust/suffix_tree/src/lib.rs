@@ -153,6 +153,13 @@ impl Tree {
 
 impl Node {
     fn iter_edges(&self) -> Box<dyn Iterator<Item = &EdgePtr> + '_> {
+        // TODO: couple things to try
+        // see https://chat.openai.com/g/g-sJlmeiArO-rust-mentor/c/a6ba8aed-76fd-4f1f-84a1-932e59c32e64
+        //  1. maybe return weak edgeptr instead of strong edgeptr (Rc::downgrade)
+        //  2. Separate iterator creation from edge borrowing
+        //      a. create an iterator only for children that yields (edge, Option<Node>)
+        //      b. then itr = itr.flat_map(move |edge, maybe_node|) that yields either
+        //      edge.int_iter or same but w/chain
         let itr = self.children.iter().flat_map(|edge_ptr| {
             let edge = (**edge_ptr).borrow();
             match *edge {
