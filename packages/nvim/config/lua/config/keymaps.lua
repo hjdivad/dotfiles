@@ -71,6 +71,8 @@ kd("n", "<leader>uF")
 kd("n", "<leader>ut")
 kd("n", "<leader>uT")
 kd("n", ";")
+kd("t", "<C-l>");
+kd("t", "<C-L>");
 
 -- I have no idea what map("n", "gw", "*N") is supposed to do
 kd("n", "gw")
