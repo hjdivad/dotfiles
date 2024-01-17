@@ -3,5 +3,14 @@
 version = 3
 
 [[package]]
+name = "nextest"
+version = "0.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f12ea694d270547969e9693ca5b19deed2fe73ef493ef6057e5fe8ecc8384c23"
+
+[[package]]
 name = "suffix_tree"
 version = "0.1.0"
+dependencies = [
+ "nextest",
+]
