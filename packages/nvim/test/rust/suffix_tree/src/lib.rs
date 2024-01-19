@@ -1,5 +1,5 @@
 use log::{debug, info, log_enabled, Level::Debug};
-use std::{iter, str::FromStr};
+use std::{borrow::Borrow, iter, str::FromStr};
 
 extern crate pretty_env_logger;
 
@@ -15,26 +15,41 @@ extern crate pretty_env_logger;
 ///
 pub struct Tree<'a> {
     text: &'a str,
-    root: Node<'a>,
+    nodes: Vec<Node>,
+    edges: Vec<Edge>,
+
+    root: NodeIndex,
 }
+
+#[derive(Debug, Clone, Copy)]
+struct NodeIndex(usize);
+#[derive(Debug, Clone, Copy)]
+struct EdgeIndex(usize);
 
 #[derive(Default)]
-pub struct Node<'a> {
-    children: Vec<Edge<'a>>,
-    parent: Option<&'a Node<'a>>,
-    suffix_link: Option<&'a Node<'a>>,
+pub struct Node {
+    children: Vec<EdgeIndex>,
 }
 
-pub enum Edge<'a> {
-    ToInternal(InternalEdge<'a>),
+struct NodeShortcuts {
+    parent: Option<NodeIndex>,
+    suffix_link: Option<NodeIndex>,
+}
+
+pub enum Edge {
+    ToInternal(InternalEdge),
     ToLeaf(LeafEdge),
 }
 
-pub struct InternalEdge<'a> {
+pub struct InternalEdge {
     // TODO: see if we can replace these with &'a str without increasing memory
     label_start_idx: usize,
     label_end_idx: usize,
-    node: Node<'a>,
+    node: NodeIndex,
+}
+struct InternalEdgeBuild {
+    label_start_idx: usize,
+    label_end_idx: usize,
 }
 
 pub struct LeafEdge {
@@ -47,9 +62,14 @@ pub struct LeafEdge {
 pub enum SuffixTreeError {}
 
 impl<'a> Tree<'a> {
-    fn from_str(text: &'a str) -> Result<Self, SuffixTreeError> {
+    pub fn from_str(text: &'a str) -> Result<Self, SuffixTreeError> {
         Self::from_str_with_terminator(text, '$')
     }
+}
+
+type DebugEdge<'a> = (&'a str, usize, usize, Option<usize>);
+type DebugVec<'a> = Vec<DebugEdge<'a>>;
+impl<'a> Tree<'a> {
     fn from_str_with_terminator(text: &'a str, term: char) -> Result<Self, SuffixTreeError> {
         // Pseudocode for Ukkonen's algorithm
         //  see https://www.geeksforgeeks.org/ukkonens-suffix-tree-construction-part-1/
@@ -136,9 +156,7 @@ impl<'a> Tree<'a> {
         //
 
         let mut tree = Tree::new(text);
-        let mut active_node = &mut tree.root;
-        let mut active_edge: Option<&Edge> = None;
-        let mut active_length = 0;
+        let mut active_point: (NodeIndex, Option<(EdgeIndex, usize)>) = (tree.root, None);
 
         let m = text.len();
         if log_enabled!(Debug) {
@@ -153,7 +171,8 @@ impl<'a> Tree<'a> {
             // phase i
             // add character S[i] to T
 
-            debug!("phase {} - '{}'", i, text.chars().nth(i).unwrap());
+            let character = text.chars().nth(i).unwrap();
+            debug!("phase {} - '{}'", i, character);
             for j in 0..i + 1 {
                 debug!("  extension {}", j);
                 // extension j
@@ -161,25 +180,33 @@ impl<'a> Tree<'a> {
                 // find path P that ends S[j..i-1]
                 // extend P with S[i]
 
-                //  extension rule 1. If the path S[j..i] ends at leaf edge then S[i+] is added to the edge label.
-
-                //  2. If the path S[j..i] ends at non-leaf edge and the next character is not s[i+1] then
-                //     a new leaf edge with label s[i+1] and number j is created starting from S[i+1]. A
-                //     new internal node will also be created if S[1..i] ends inside a non-leaf edge.
-
-                (active_node , active_edge, active_length) = match (active_node, active_edge, active_length) {
-                    (node, None, 0) => {
+                // TODO: remove all this logic
+                // TODO: instead, active_point is only where traversal begins
+                // the goal is to traverse S[j..i-1] and see where it ends
+                active_point = match active_point {
+                    (node, None) => {
                         debug!("    rule 2 - add leaf");
                         // S[j..i] ends at node; there is no next character, add a leaf node
-                        node.add_leaf_edge(LeafEdge {
-                            label_start_idx: i,
-                            leaf_value: j,
-                        });
-                        let edge = node.children.last().unwrap();
+                        let new_edge = tree.add_leaf_edge(
+                            node,
+                            LeafEdge {
+                                label_start_idx: i,
+                                leaf_value: j,
+                            },
+                        );
 
-                        (node, Some(edge), 0)
+                        (node, Some((new_edge, 0)))
                     }
-                    (node, edge, len) => (node, edge, len),
+                    (node, Some((edge_index, _))) => match tree.edge_for(edge_index) {
+                        Edge::ToInternal(_) => {
+                            debug!("    TODO: (node, internal_edge, len)");
+                            (node, None)
+                        }
+                        Edge::ToLeaf(_) => {
+                            debug!("    TODO: (node, leaf_edge, len)");
+                            (node, None)
+                        }
+                    },
                 };
             }
         }
@@ -188,20 +215,36 @@ impl<'a> Tree<'a> {
 
         Ok(tree)
     }
-}
 
-type DebugEdge<'a> = (&'a str, usize, usize, Option<usize>);
-type DebugVec<'a> = Vec<DebugEdge<'a>>;
-impl<'a> Tree<'a> {
-    pub fn iter_edges(&self) -> Box<dyn Iterator<Item = &Edge<'a>> + '_> {
-        self.root.iter_edges()
+    pub fn iter_edges(&self) -> Box<dyn Iterator<Item = &Edge> + '_> {
+        self.iter_edges_from(self.root)
     }
-    fn debug_vec(&self) -> DebugVec {
-        self.debug_vec_from(&self.root)
+    fn iter_edges_from(&self, node: NodeIndex) -> Box<dyn Iterator<Item = &Edge> + '_> {
+        let node = &self.nodes[node.0];
+        let itr = node.children.iter().flat_map(|edge| {
+            let edge = &self.edges[edge.0];
+            match edge {
+                Edge::ToLeaf(_) => {
+                    Box::new(iter::once(edge)) as Box<dyn Iterator<Item = &Edge> + '_>
+                }
+                Edge::ToInternal(i_edge) => {
+                    let itr = iter::once(edge);
+                    let subtree_itr = self.iter_edges_from(i_edge.node);
+                    let itr = itr.chain(subtree_itr);
+                    Box::new(itr) as Box<dyn Iterator<Item = &Edge> + '_>
+                }
+            }
+        });
+
+        Box::new(itr)
     }
 
-    fn debug_vec_from(&self, node: &'a Node) -> DebugVec {
-        node.iter_edges()
+    fn _debug_vec(&self) -> DebugVec {
+        self._debug_vec_from(self.root)
+    }
+
+    fn _debug_vec_from(&self, node: NodeIndex) -> DebugVec {
+        self.iter_edges_from(node)
             .map(|e| {
                 let (start_idx, end_idx, maybe_leaf_value) = match e {
                     Edge::ToInternal(i_edge) => {
@@ -214,7 +257,7 @@ impl<'a> Tree<'a> {
                     ),
                 };
 
-                let label = self.debug_label(e);
+                let label = self._debug_label(e);
                 (label, start_idx, end_idx, maybe_leaf_value)
             })
             .collect()
@@ -223,66 +266,72 @@ impl<'a> Tree<'a> {
     fn new(text: &'a str) -> Self {
         Tree {
             text,
-            // TODO: does this make any difference at all?
-            root: Node {
-                children: Vec::new(),
-                parent: None,
-                suffix_link: None,
-            },
-            // root: Node::default()
+            nodes: vec![Node::default()],
+            edges: Vec::new(),
+            root: NodeIndex(0),
         }
     }
 
-    fn debug_label(&self, edge: &Edge<'a>) -> &'a str {
+    fn _debug_label(&self, edge: &Edge) -> &'a str {
         let (s, i): (usize, usize) = match edge {
             Edge::ToInternal(i_edge) => (i_edge.label_start_idx, i_edge.label_end_idx + 1),
             Edge::ToLeaf(l_edge) => (l_edge.label_start_idx, self.text.len()),
         };
         &self.text[s..i]
     }
-}
 
-impl<'a> Node<'a> {
-    pub fn iter_edges(&self) -> Box<dyn Iterator<Item = &Edge<'a>> + '_> {
-        let itr = self.children.iter().flat_map(|edge| match edge {
-            Edge::ToLeaf(_) => {
-                Box::new(iter::once(edge)) as Box<dyn Iterator<Item = &Edge<'a>> + '_>
-            }
-            Edge::ToInternal(i_edge) => {
-                let itr = iter::once(edge);
-                let subtree_itr = i_edge.node.iter_edges();
-                Box::new(itr.chain(subtree_itr)) as Box<dyn Iterator<Item = &Edge<'a>> + '_>
-            }
+    fn node_index_for(&self, edge: EdgeIndex) -> NodeIndex {
+        if let Edge::ToInternal(edge) = &self.edges[edge.0] {
+            edge.node
+        } else {
+            panic!("edge index {:?} is a leaf edge, not an internal edge", edge);
+        }
+    }
+
+    fn edge_for(&self, edge: EdgeIndex) -> &Edge {
+        self.edges[edge.0].borrow()
+    }
+
+    fn add_edge(&mut self, node: NodeIndex, edge: Edge) -> EdgeIndex {
+        let node = &mut self.nodes[node.0];
+
+        self.edges.push(edge);
+
+        let edge = EdgeIndex(self.edges.len() - 1);
+        node.children.push(edge);
+        edge
+    }
+
+    fn add_leaf_edge(&mut self, node: NodeIndex, edge: LeafEdge) -> EdgeIndex {
+        self.add_edge(node, Edge::ToLeaf(edge))
+    }
+
+    fn add_internal_edge(&mut self, parent_node: NodeIndex, edge: InternalEdgeBuild) -> EdgeIndex {
+        self.nodes.push(Node::default());
+        let node = NodeIndex(self.nodes.len() - 1);
+        let InternalEdgeBuild {
+            label_start_idx,
+            label_end_idx,
+        } = edge;
+        let edge = Edge::ToInternal(InternalEdge {
+            node,
+            label_start_idx,
+            label_end_idx,
         });
-
-        Box::new(itr)
-    }
-
-    fn add_leaf_edge(&mut self, leaf_edge: LeafEdge) {
-        self.children.push(Edge::ToLeaf(leaf_edge));
-    }
-
-    fn add_internal_edge(&mut self, internal_edge: InternalEdge<'a>) {
-        self.children.push(Edge::ToInternal(internal_edge));
+        self.add_edge(parent_node, edge)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use std::env;
-
     use super::*;
     use pretty_env_logger::env_logger;
     use pretty_env_logger::env_logger::Env;
 
     fn setup_logging() {
-        // env::set_var("RUST_LOG", "trace");
-        // pretty_env_logger::formatted_builder().is_test(true).init();
-
         env_logger::Builder::from_env(Env::default().default_filter_or("trace"))
             .is_test(true)
             .init();
-        // pretty_env_logger::init();
     }
 
     //                         0123456789
@@ -299,45 +348,67 @@ mod tests {
         let test = "xabxac";
         let mut tree = Tree::new(test);
 
-        tree.root.add_leaf_edge(LeafEdge {
-            label_start_idx: 2,
-            leaf_value: 2,
-        });
+        tree.add_leaf_edge(
+            tree.root,
+            LeafEdge {
+                label_start_idx: 2,
+                leaf_value: 2,
+            },
+        );
 
-        tree.root.add_leaf_edge(LeafEdge {
-            label_start_idx: 5,
-            leaf_value: 5,
-        });
+        tree.add_leaf_edge(
+            tree.root,
+            LeafEdge {
+                label_start_idx: 5,
+                leaf_value: 5,
+            },
+        );
 
-        let mut i_edge = InternalEdge {
-            label_start_idx: 1,
-            label_end_idx: 1,
-            node: Node::default(),
-        };
-        i_edge.node.add_leaf_edge(LeafEdge {
-            label_start_idx: 5,
-            leaf_value: 4,
-        });
-        i_edge.node.add_leaf_edge(LeafEdge {
-            label_start_idx: 2,
-            leaf_value: 1,
-        });
-        tree.root.add_internal_edge(i_edge);
+        let i_edge = tree.add_internal_edge(
+            tree.root,
+            InternalEdgeBuild {
+                label_start_idx: 1,
+                label_end_idx: 1,
+            },
+        );
+        let node = tree.node_index_for(i_edge);
+        tree.add_leaf_edge(
+            node,
+            LeafEdge {
+                label_start_idx: 5,
+                leaf_value: 4,
+            },
+        );
+        tree.add_leaf_edge(
+            node,
+            LeafEdge {
+                label_start_idx: 2,
+                leaf_value: 1,
+            },
+        );
 
-        let mut i_edge = InternalEdge {
-            label_start_idx: 0,
-            label_end_idx: 1,
-            node: Node::default(),
-        };
-        i_edge.node.add_leaf_edge(LeafEdge {
-            label_start_idx: 5,
-            leaf_value: 3,
-        });
-        i_edge.node.add_leaf_edge(LeafEdge {
-            label_start_idx: 2,
-            leaf_value: 0,
-        });
-        tree.root.add_internal_edge(i_edge);
+        let i_edge = tree.add_internal_edge(
+            tree.root,
+            InternalEdgeBuild {
+                label_start_idx: 0,
+                label_end_idx: 1,
+            },
+        );
+        let node = tree.node_index_for(i_edge);
+        tree.add_leaf_edge(
+            node,
+            LeafEdge {
+                label_start_idx: 5,
+                leaf_value: 3,
+            },
+        );
+        tree.add_leaf_edge(
+            node,
+            LeafEdge {
+                label_start_idx: 2,
+                leaf_value: 0,
+            },
+        );
 
         tree
     }
@@ -345,14 +416,17 @@ mod tests {
     #[test]
     fn iter_edges() {
         let mut tree = Tree::new(TEST_STRING);
-        tree.root.add_leaf_edge(LeafEdge {
-            label_start_idx: 8,
-            leaf_value: 8,
-        });
+        tree.add_leaf_edge(
+            tree.root,
+            LeafEdge {
+                label_start_idx: 8,
+                leaf_value: 8,
+            },
+        );
 
         assert_eq!(
             tree.iter_edges()
-                .map(|e| tree.debug_label(e))
+                .map(|e| tree._debug_label(e))
                 .collect::<Vec<&str>>(),
             vec!["cd"]
         );
@@ -361,7 +435,7 @@ mod tests {
 
         assert_eq!(
             tree.iter_edges()
-                .map(|e| tree.debug_label(e))
+                .map(|e| tree._debug_label(e))
                 .collect::<Vec<&str>>(),
             vec!["bxac", "c", "a", "c", "bxac", "xa", "c", "bxac"]
         );
@@ -372,7 +446,7 @@ mod tests {
         let tree = test_tree_xabxac();
 
         assert_eq!(
-            tree.debug_vec(),
+            tree._debug_vec(),
             vec![
                 ("bxac", 2, 5, Some(2)),
                 ("c", 5, 5, Some(5)),
@@ -390,7 +464,7 @@ mod tests {
     fn from_str_a() {
         let tree = Tree::from_str("a").unwrap();
 
-        assert_eq!(tree.debug_vec(), vec![("a", 0, 0, Some(0)),]);
+        assert_eq!(tree._debug_vec(), vec![("a", 0, 0, Some(0)),]);
     }
 
     #[test]
@@ -398,16 +472,20 @@ mod tests {
         setup_logging();
         let tree = Tree::from_str("ab").unwrap();
 
-        assert_eq!(tree.debug_vec(), vec![("ab", 0, 1, Some(0)),]);
+        assert_eq!(
+            tree._debug_vec(),
+            vec![("ab", 0, 1, Some(0)), ("b", 1, 1, Some(1))]
+        );
     }
 
     #[test]
+    // TODO: impl
     #[ignore]
     fn from_str() {
         let tree = Tree::from_str("xabxac").unwrap();
 
         assert_eq!(
-            tree.debug_vec(),
+            tree._debug_vec(),
             vec![
                 ("bxac", 2, 5, Some(2)),
                 ("c", 5, 5, Some(5)),
