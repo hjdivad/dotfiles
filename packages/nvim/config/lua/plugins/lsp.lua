@@ -19,6 +19,8 @@ return {
     keys[#keys + 1] = { "gy", false }
     keys[#keys + 1] = { "gI", false }
     keys[#keys + 1] = { "<leader>cs", false }
+    keys[#keys + 1] = { "<c-k>", false, mode ="i" }
+    keys[#keys + 1] = { "<C-k>", false, mode="i" }
 
     -- add missing
     keys[#keys + 1] = {
@@ -44,6 +46,7 @@ return {
     keys[#keys + 1] = { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" }
     keys[#keys + 1] = { "<leader>cs", "<cmd>AerialToggle!<cr>", desc = "Code Symbols" }
     keys[#keys + 1] = { "<leader>cS", "<cmd>AerialOpen<cr>", desc = "Code Symbols (focus)" }
+    keys[#keys + 1] = { "<c-h>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" }
   end,
   ---@type PluginLspOpts
   opts = {

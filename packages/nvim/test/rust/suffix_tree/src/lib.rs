@@ -1,4 +1,7 @@
+use log::{debug, info, log_enabled, Level::Debug};
 use std::{iter, str::FromStr};
+
+extern crate pretty_env_logger;
 
 /// Suffix Tree `T` for m-char string `S` ending in unique character `$`.
 ///
@@ -40,12 +43,14 @@ pub struct LeafEdge {
     leaf_value: usize,
 }
 
+#[derive(Debug)]
 pub enum SuffixTreeError {}
 
-impl<'a> FromStr for Tree<'a> {
-    type Err = SuffixTreeError;
-
-    fn from_str(text: &str) -> Result<Self, Self::Err> {
+impl<'a> Tree<'a> {
+    fn from_str(text: &'a str) -> Result<Self, SuffixTreeError> {
+        Self::from_str_with_terminator(text, '$')
+    }
+    fn from_str_with_terminator(text: &'a str, term: char) -> Result<Self, SuffixTreeError> {
         // Pseudocode for Ukkonen's algorithm
         //  see https://www.geeksforgeeks.org/ukkonens-suffix-tree-construction-part-1/
         //
@@ -53,7 +58,7 @@ impl<'a> FromStr for Tree<'a> {
         //
         // The true (non-implicit) suffix tree is added from T_m by adding $
         //
-        // One extension for each of the i+1 suffixes of S[1..i+1]
+        // One extension for each of the i+1 suffixes of S
         // In extension 1 of phase i+1 string S[1..i+1] goes in the tree. S[1..i] will already be
         // present from previous phase i. We only need character S[i+1] if it's not already there.
         //
@@ -129,7 +134,59 @@ impl<'a> FromStr for Tree<'a> {
         //  - When walking down, update activeNode and activeEdge during the walk.
         //  - When length == 0, activeEdge will update.
         //
-        todo!()
+
+        let mut tree = Tree::new(text);
+        let mut active_node = &mut tree.root;
+        let mut active_edge: Option<&Edge> = None;
+        let mut active_length = 0;
+
+        let m = text.len();
+        if log_enabled!(Debug) {
+            let text_short = if m > 6 {
+                format!("{}...", &text[0..6])
+            } else {
+                text.to_string()
+            };
+            debug!(r#""{}" -> SuffixTree"#, text_short);
+        }
+        for i in 0..m {
+            // phase i
+            // add character S[i] to T
+
+            debug!("phase {} - '{}'", i, text.chars().nth(i).unwrap());
+            for j in 0..i + 1 {
+                debug!("  extension {}", j);
+                // extension j
+
+                // find path P that ends S[j..i-1]
+                // extend P with S[i]
+
+                //  extension rule 1. If the path S[j..i] ends at leaf edge then S[i+] is added to the edge label.
+
+                //  2. If the path S[j..i] ends at non-leaf edge and the next character is not s[i+1] then
+                //     a new leaf edge with label s[i+1] and number j is created starting from S[i+1]. A
+                //     new internal node will also be created if S[1..i] ends inside a non-leaf edge.
+
+                (active_node , active_edge, active_length) = match (active_node, active_edge, active_length) {
+                    (node, None, 0) => {
+                        debug!("    rule 2 - add leaf");
+                        // S[j..i] ends at node; there is no next character, add a leaf node
+                        node.add_leaf_edge(LeafEdge {
+                            label_start_idx: i,
+                            leaf_value: j,
+                        });
+                        let edge = node.children.last().unwrap();
+
+                        (node, Some(edge), 0)
+                    }
+                    (node, edge, len) => (node, edge, len),
+                };
+            }
+        }
+
+        // TODO: process special string-terminator char '$'
+
+        Ok(tree)
     }
 }
 
@@ -152,7 +209,7 @@ impl<'a> Tree<'a> {
                     }
                     Edge::ToLeaf(l_edge) => (
                         l_edge.label_start_idx,
-                        self.text.len()-1,
+                        self.text.len() - 1,
                         Some(l_edge.leaf_value),
                     ),
                 };
@@ -166,7 +223,13 @@ impl<'a> Tree<'a> {
     fn new(text: &'a str) -> Self {
         Tree {
             text,
-            root: Node::default(),
+            // TODO: does this make any difference at all?
+            root: Node {
+                children: Vec::new(),
+                parent: None,
+                suffix_link: None,
+            },
+            // root: Node::default()
         }
     }
 
@@ -206,7 +269,21 @@ impl<'a> Node<'a> {
 
 #[cfg(test)]
 mod tests {
+    use std::env;
+
     use super::*;
+    use pretty_env_logger::env_logger;
+    use pretty_env_logger::env_logger::Env;
+
+    fn setup_logging() {
+        // env::set_var("RUST_LOG", "trace");
+        // pretty_env_logger::formatted_builder().is_test(true).init();
+
+        env_logger::Builder::from_env(Env::default().default_filter_or("trace"))
+            .is_test(true)
+            .init();
+        // pretty_env_logger::init();
+    }
 
     //                         0123456789
     const TEST_STRING: &str = "abcabxabcd";
@@ -310,7 +387,38 @@ mod tests {
     }
 
     #[test]
+    fn from_str_a() {
+        let tree = Tree::from_str("a").unwrap();
+
+        assert_eq!(tree.debug_vec(), vec![("a", 0, 0, Some(0)),]);
+    }
+
+    #[test]
+    fn from_str_ab() {
+        setup_logging();
+        let tree = Tree::from_str("ab").unwrap();
+
+        assert_eq!(tree.debug_vec(), vec![("ab", 0, 1, Some(0)),]);
+    }
+
+    #[test]
+    #[ignore]
     fn from_str() {
+        let tree = Tree::from_str("xabxac").unwrap();
+
+        assert_eq!(
+            tree.debug_vec(),
+            vec![
+                ("bxac", 2, 5, Some(2)),
+                ("c", 5, 5, Some(5)),
+                ("a", 1, 1, None),
+                ("c", 5, 5, Some(4)),
+                ("bxac", 2, 5, Some(1)),
+                ("xa", 0, 1, None),
+                ("c", 5, 5, Some(3)),
+                ("bxac", 2, 5, Some(0)),
+            ]
+        );
         // TODO: from_str xabxac
         // TODO: from_str TEST_STRING
         //
