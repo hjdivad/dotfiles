@@ -211,7 +211,7 @@ impl<'a> Tree<'a> {
             }
         }
 
-        // TODO: process special string-terminator char '$'
+        // TODO: process string terminator `term`
 
         Ok(tree)
     }
