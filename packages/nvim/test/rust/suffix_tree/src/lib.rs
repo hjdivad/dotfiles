@@ -1,5 +1,7 @@
+use builder::PathEnd;
+use core::panic;
 use log::{debug, info, log_enabled, Level::Debug};
-use std::{borrow::Borrow, iter, str::FromStr};
+use std::{borrow::Borrow, iter, slice::SliceIndex, str::FromStr};
 
 extern crate pretty_env_logger;
 
@@ -31,27 +33,55 @@ pub struct Node {
     children: Vec<EdgeIndex>,
 }
 
-struct NodeShortcuts {
-    parent: Option<NodeIndex>,
-    suffix_link: Option<NodeIndex>,
-}
-
+#[derive(Debug)]
 pub enum Edge {
     ToInternal(InternalEdge),
     ToLeaf(LeafEdge),
 }
 
+#[derive(Debug)]
 pub struct InternalEdge {
     // TODO: see if we can replace these with &'a str without increasing memory
+    ///
+    /// Start index of this edge's label, inclusive
     label_start_idx: usize,
+    /// End index of this edge's label, inclusive
     label_end_idx: usize,
     node: NodeIndex,
 }
-struct InternalEdgeBuild {
-    label_start_idx: usize,
-    label_end_idx: usize,
+
+mod builder {
+    pub struct InternalEdge {
+        pub label_start_idx: usize,
+        pub label_end_idx: usize,
+    }
+
+    pub struct NodeShortcuts {
+        pub parent: Option<super::NodeIndex>,
+        pub suffix_link: Option<super::NodeIndex>,
+    }
+
+    #[derive(Debug)]
+    pub struct PathEnd<'a> {
+        /// The parent node of the last edge in this path.
+        pub parent: super::NodeIndex,
+        /// The last edge in this path, if any.
+        pub end: PathPos<'a>,
+        // TODO: mv lastChar to end since the usize field is the same
+        // path_end.end.last_char
+        /// Last character information in this path
+        /// an Option<(usize, char)> tuple where
+        ///     - `.0` the character position within the text of the last char
+        ///     - `.1` the character at that position
+        ///
+        pub last_char: LastChar,
+    }
+
+    pub type LastChar = Option<(usize, char)>;
+    type PathPos<'a> = Option<(&'a super::Edge, usize)>;
 }
 
+#[derive(Debug)]
 pub struct LeafEdge {
     // leaves always end at index e of phase e, and eventually at len(text)
     label_start_idx: usize,
@@ -156,7 +186,8 @@ impl<'a> Tree<'a> {
         //
 
         let mut tree = Tree::new(text);
-        let mut active_point: (NodeIndex, Option<(EdgeIndex, usize)>) = (tree.root, None);
+        let mut active_point: (builder::LastChar, NodeIndex, Option<(EdgeIndex, usize)>) =
+            (None, tree.root, None);
 
         let m = text.len();
         if log_enabled!(Debug) {
@@ -171,8 +202,9 @@ impl<'a> Tree<'a> {
             // phase i
             // add character S[i] to T
 
-            let character = text.chars().nth(i).unwrap();
-            debug!("phase {} - '{}'", i, character);
+            let ch = |i| text.chars().nth(i).unwrap();
+            let next_char = ch(i);
+            debug!("phase {} - '{}'", i, next_char);
             for j in 0..i + 1 {
                 debug!("  extension {}", j);
                 // extension j
@@ -180,43 +212,152 @@ impl<'a> Tree<'a> {
                 // find path P that ends S[j..i-1]
                 // extend P with S[i]
 
-                // TODO: remove all this logic
-                // TODO: instead, active_point is only where traversal begins
-                // the goal is to traverse S[j..i-1] and see where it ends
-                active_point = match active_point {
-                    (node, None) => {
-                        debug!("    rule 2 - add leaf");
-                        // S[j..i] ends at node; there is no next character, add a leaf node
-                        let new_edge = tree.add_leaf_edge(
-                            node,
+                let (last_char, parent, path_end) = active_point;
+                let mut path_end = PathEnd {
+                    parent,
+                    end: path_end.map(|(edge, len)| (tree.edge_for(edge), len)),
+                    last_char,
+                };
+                // TODO: traverse from active_point and update path_end
+                // TODO: this traversal is obviously wrong
+                // TODO: while path_end.last_char_pos < i
+                #[allow(clippy::never_loop)]
+                loop {
+                    match (path_end.last_char, i) {
+                        (None, 0) => {
+                            debug!("    traverse i=0, path ends at $");
+                            // i = 0, S[j..i] is $
+                            break;
+                        }
+                        (None, i) => {
+                            debug!("    traverse from root to s[j], j={}, s[j]={}", j, ch(j));
+                            // find outgoing edge for s[j..i]
+                            let label_edge =
+                                tree.find_outgoing_edge(parent, ch(j)).unwrap_or_else(|| {
+                                    panic!(
+                                        "find_outgoing_edge == None! (i,j,ch) = ({}, {}, {})",
+                                        i,
+                                        j,
+                                        ch(j)
+                                    )
+                                });
+
+                            // does s[j..i] end on the edge?
+                            let edge = tree.edge_for(label_edge);
+                            let label_edge_end = match edge {
+                                Edge::ToInternal(edge) => edge.label_end_idx,
+                                Edge::ToLeaf(_) => m - 1,
+                            };
+                            if label_edge_end <= i {
+                                // s[j..i] ends on this edge
+                                path_end = PathEnd {
+                                    parent,
+                                    end: Some((&edge, i)),
+                                    last_char: Some((i, ch(i))),
+                                };
+                                break;
+                            }
+                            // s[j..i] continues past the edge, keep looping
+                            path_end = PathEnd {
+                                parent,
+                                end: Some((&edge, label_edge_end)),
+                                last_char: Some((label_edge_end, ch(label_edge_end))),
+                            };
+                        }
+                        (Some((char_pos, char)), i) => {
+                            if (char_pos == i - 1) {
+                                // traversed all the way to S[j..i]
+                                break;
+                            }
+
+                            // TODO: advance
+                            panic!("TODO: advance");
+                        }
+                    }
+                }
+
+                match path_end {
+                    PathEnd {
+                        end: Some((&Edge::ToLeaf(_), _)),
+                        ..
+                    } => {
+                        debug!(
+                            "    rule 1 trick 3 - ends at leaf edge; incr leaf free - do nothing"
+                        );
+                        // TODO: update activepoint?
+                    }
+                    PathEnd {
+                        end: Some((&Edge::ToInternal(_), _)),
+                        parent: _parent,
+                        last_char: Some((_len, last_char)),
+                    } => {
+                        if last_char == next_char {
+                            debug!("    rule 3 trick 2 - do nothing, exit phase {}", i);
+                            // TODO: update activepoint?
+                            break;
+                        }
+
+                        debug!(
+                            "    rule 2 - internal edge, last_char {} != next_char {}",
+                            last_char, next_char
+                        );
+                        // TODO: add the leaf edge
+                        // TODO: maybe add a new internal node
+
+                        // TODO: update activepoint?
+                    }
+                    PathEnd {
+                        parent, end: None, ..
+                    } => {
+                        debug!(
+                            "    rule 2 - path ends at internal node ({:?}), add leaf",
+                            parent
+                        );
+                        tree.add_leaf_edge(
+                            parent,
                             LeafEdge {
+                                // TODO: not sure these values are right
                                 label_start_idx: i,
                                 leaf_value: j,
                             },
                         );
-
-                        (node, Some((new_edge, 0)))
+                        // TODO: update active point?
                     }
-                    (node, Some((edge_index, _))) => match tree.edge_for(edge_index) {
-                        Edge::ToInternal(_) => {
-                            debug!("    TODO: (node, internal_edge, len)");
-                            (node, None)
-                        }
-                        Edge::ToLeaf(_) => {
-                            debug!("    TODO: (node, leaf_edge, len)");
-                            (node, None)
-                        }
-                    },
-                };
+                    _ => panic!(
+                        "invalid path_end phase {} extension {} - {:?}",
+                        i, j, path_end
+                    ),
+                }
+
+                // TODO: delete this; active_point should be updated in the updating match above
+                active_point = (None, tree.root, None);
             }
         }
 
         // TODO: process string terminator `term`
+        // probably mv the loop to .update and then call it again with term
 
         Ok(tree)
     }
 
-    pub fn iter_edges(&self) -> Box<dyn Iterator<Item = &Edge> + '_> {
+    fn find_outgoing_edge(&self, node_index: NodeIndex, c: char) -> Option<EdgeIndex> {
+        let node = &self.nodes[node_index.0];
+        let ch = |i| self.text.chars().nth(i).unwrap();
+        for edge_index in &node.children {
+            let edge_first_char = match &self.edges[edge_index.0] {
+                Edge::ToLeaf(leaf_edge) => leaf_edge.label_start_idx,
+                Edge::ToInternal(internal_edge) => internal_edge.label_start_idx,
+            };
+
+            if ch(edge_first_char) == c {
+                return Some(*edge_index);
+            }
+        }
+
+        None
+    }
+
+    fn iter_edges(&self) -> Box<dyn Iterator<Item = &Edge> + '_> {
         self.iter_edges_from(self.root)
     }
     fn iter_edges_from(&self, node: NodeIndex) -> Box<dyn Iterator<Item = &Edge> + '_> {
@@ -306,10 +447,14 @@ impl<'a> Tree<'a> {
         self.add_edge(node, Edge::ToLeaf(edge))
     }
 
-    fn add_internal_edge(&mut self, parent_node: NodeIndex, edge: InternalEdgeBuild) -> EdgeIndex {
+    fn add_internal_edge(
+        &mut self,
+        parent_node: NodeIndex,
+        edge: builder::InternalEdge,
+    ) -> EdgeIndex {
         self.nodes.push(Node::default());
         let node = NodeIndex(self.nodes.len() - 1);
-        let InternalEdgeBuild {
+        let builder::InternalEdge {
             label_start_idx,
             label_end_idx,
         } = edge;
@@ -366,7 +511,7 @@ mod tests {
 
         let i_edge = tree.add_internal_edge(
             tree.root,
-            InternalEdgeBuild {
+            builder::InternalEdge {
                 label_start_idx: 1,
                 label_end_idx: 1,
             },
@@ -389,7 +534,7 @@ mod tests {
 
         let i_edge = tree.add_internal_edge(
             tree.root,
-            InternalEdgeBuild {
+            builder::InternalEdge {
                 label_start_idx: 0,
                 label_end_idx: 1,
             },
