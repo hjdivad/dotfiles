@@ -1,6 +1,6 @@
 use builder::PathEnd;
 use core::panic;
-use log::{debug, info, log_enabled, Level::Debug};
+use log::{debug, info, log_enabled, trace, Level::Debug};
 use std::{borrow::Borrow, iter, slice::SliceIndex, str::FromStr};
 
 extern crate pretty_env_logger;
@@ -67,17 +67,9 @@ mod builder {
         pub parent: super::NodeIndex,
         /// The last edge in this path, if any.
         pub end: PathPos<'a>,
-        // TODO: mv lastChar to end since the usize field is the same
-        // path_end.end.last_char
-        /// Last character information in this path
-        /// an Option<(usize, char)> tuple where
-        ///     - `.0` the character position within the text of the last char
-        ///     - `.1` the character at that position
-        ///
-        pub last_char: LastChar,
+        pub last_char: Option<char>,
     }
 
-    pub type LastChar = Option<(usize, char)>;
     type PathPos<'a> = Option<(&'a super::Edge, usize)>;
 }
 
@@ -186,7 +178,7 @@ impl<'a> Tree<'a> {
         //
 
         let mut tree = Tree::new(text);
-        let mut active_point: (builder::LastChar, NodeIndex, Option<(EdgeIndex, usize)>) =
+        let mut active_point: (Option<char>, NodeIndex, Option<(EdgeIndex, usize)>) =
             (None, tree.root, None);
 
         let m = text.len();
@@ -213,27 +205,35 @@ impl<'a> Tree<'a> {
                 // extend P with S[i]
 
                 let (last_char, parent, path_end) = active_point;
+                // path_end is the end of the path S[j..i] and contains the information we need,
+                // alongside s[i] to complete this extension
                 let mut path_end = PathEnd {
                     parent,
                     end: path_end.map(|(edge, len)| (tree.edge_for(edge), len)),
                     last_char,
                 };
-                // TODO: traverse from active_point and update path_end
-                // TODO: this traversal is obviously wrong
-                // TODO: while path_end.last_char_pos < i
-                #[allow(clippy::never_loop)]
-                loop {
-                    match (path_end.last_char, i) {
-                        (None, 0) => {
-                            debug!("    traverse i=0, path ends at $");
-                            // i = 0, S[j..i] is $
-                            break;
-                        }
-                        (None, i) => {
-                            debug!("    traverse from root to s[j], j={}, s[j]={}", j, ch(j));
+                // k is the character between j..i that we're at during our traversal of S[j..i]
+                // from root.
+                // When k == i-1 we've reached the end of the path and are ready to extend the
+                // suffix S[j..i] with the new character S[i].
+                let mut k = j;
+                // traverse from active_point and update path_end
+                while k < i - 1 {
+                    trace!("    traverse from {:?}", path_end);
+                    match path_end {
+                        PathEnd {
+                            parent, end: None, ..
+                        } => {
+                            trace!(
+                                "    traverse from InternalNode s[j..i], s[k]; s[{}..{}], s[{}]={}",
+                                i,
+                                j,
+                                k,
+                                ch(k)
+                            );
                             // find outgoing edge for s[j..i]
                             let label_edge =
-                                tree.find_outgoing_edge(parent, ch(j)).unwrap_or_else(|| {
+                                tree.find_outgoing_edge(parent, ch(k)).unwrap_or_else(|| {
                                     panic!(
                                         "find_outgoing_edge == None! (i,j,ch) = ({}, {}, {})",
                                         i,
@@ -244,37 +244,52 @@ impl<'a> Tree<'a> {
 
                             // does s[j..i] end on the edge?
                             let edge = tree.edge_for(label_edge);
-                            let label_edge_end = match edge {
-                                Edge::ToInternal(edge) => edge.label_end_idx,
-                                Edge::ToLeaf(_) => m - 1,
-                            };
-                            if label_edge_end <= i {
-                                // s[j..i] ends on this edge
-                                path_end = PathEnd {
-                                    parent,
-                                    end: Some((&edge, i)),
-                                    last_char: Some((i, ch(i))),
-                                };
-                                break;
+                            match edge {
+                                Edge::ToLeaf(_) => {
+                                    // traversal ends at leaf
+                                    path_end = PathEnd {
+                                        parent,
+                                        end: Some((&edge, i - 1)),
+                                        last_char: Some(ch(i - 1)),
+                                    };
+                                    break;
+                                }
+                                Edge::ToInternal(i_edge) => {
+                                    let label_end = i_edge.label_end_idx;
+                                    if label_end < i - 1 {
+                                        // s[j..i] ends somewhere past this edge
+                                        // skip the whole edge and loop again at the next internal node
+                                        path_end = PathEnd {
+                                            parent: i_edge.node,
+                                            end: None,
+                                            last_char: None,
+                                        };
+                                        // next character to check when looking for the next
+                                        // outgoing edge
+                                        k = label_end + 1;
+                                    } else {
+                                        // traversal ends somewhere on this edge
+                                        path_end = PathEnd {
+                                            parent,
+                                            end: Some((&edge, i - 1)),
+                                            last_char: Some(ch(i - 1)),
+                                        };
+                                        break;
+                                    }
+                                }
                             }
-                            // s[j..i] continues past the edge, keep looping
-                            path_end = PathEnd {
-                                parent,
-                                end: Some((&edge, label_edge_end)),
-                                last_char: Some((label_edge_end, ch(label_edge_end))),
-                            };
                         }
-                        (Some((char_pos, char)), i) => {
-                            if (char_pos == i - 1) {
-                                // traversed all the way to S[j..i]
-                                break;
-                            }
-
-                            // TODO: advance
-                            panic!("TODO: advance");
+                        PathEnd {
+                            parent,
+                            end: Some((edge, len)),
+                            ..
+                        } => {
+                            panic!("TODO: traverse from edge");
                         }
                     }
                 }
+
+                trace!("    path_end: {:?}", path_end);
 
                 match path_end {
                     PathEnd {
@@ -289,7 +304,7 @@ impl<'a> Tree<'a> {
                     PathEnd {
                         end: Some((&Edge::ToInternal(_), _)),
                         parent: _parent,
-                        last_char: Some((_len, last_char)),
+                        last_char: Some(last_char),
                     } => {
                         if last_char == next_char {
                             debug!("    rule 3 trick 2 - do nothing, exit phase {}", i);
@@ -310,7 +325,7 @@ impl<'a> Tree<'a> {
                         parent, end: None, ..
                     } => {
                         debug!(
-                            "    rule 2 - path ends at internal node ({:?}), add leaf",
+                            "    rule 2 - path ends at internal node or root ({:?}), add leaf",
                             parent
                         );
                         tree.add_leaf_edge(
