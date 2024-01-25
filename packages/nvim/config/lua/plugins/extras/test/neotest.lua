@@ -15,7 +15,25 @@ return {
     keys = {
       { "<leader>tt", false },
       { "<leader>ts", false },
-      { "<leader>tS", function() require("neotest").summary.toggle() end, desc = "Toggle Summary" },
+      { "<leader>to", function() require("neotest").output.open({ enter = true, auto_close = true, last_run = true }) end, desc = "Show Output" },
+      { "<leader>tr", function() require("neotest").summary.run_marked() end,                                              desc = "Run Marked" },
+      {
+        "<leader>tS",
+        function()
+          require("neotest").summary.toggle()
+          vim.defer_fn(function()
+            -- Type annotations are wrong for bufwinid
+            ---@diagnostic disable-next-line: param-type-mismatch
+            local win = vim.fn.bufwinid("Neotest Summary")
+            -- see https://github.com/nvim-neotest/neotest/issues/275
+            -- see https://github.com/nvim-neotest/neotest/discussions/197#discussioncomment-4775271
+            if win > -1 then
+              vim.api.nvim_set_current_win(win)
+            end
+          end, 101)
+        end,
+        desc = "Toggle Summary"
+      },
       {
         "<leader>tf",
         function()
