@@ -13,28 +13,38 @@ return {
   -- override LSP keybindings here
   init = function()
     -- see https://www.lazyvim.org/plugins/lsp#%EF%B8%8F-customizing-lsp-keymaps
+    -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/lsp/keymaps.lua
     local keys = require("lazyvim.plugins.lsp.keymaps").get()
 
     -- remove unwanted
     keys[#keys + 1] = { "gy", false }
     keys[#keys + 1] = { "gI", false }
+    keys[#keys + 1] = { "gd", false }
     keys[#keys + 1] = { "<leader>cs", false }
-    keys[#keys + 1] = { "<c-k>", false, mode ="i" }
-    keys[#keys + 1] = { "<C-k>", false, mode="i" }
+    keys[#keys + 1] = { "<c-k>", false, mode = "i" }
+    keys[#keys + 1] = { "<C-k>", false, mode = "i" }
 
     -- add missing
     keys[#keys + 1] = {
       "gt",
       function()
-        require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
+        require("telescope.builtin").lsp_type_definitions()
       end,
       desc = "Goto [T]ype Definition",
     }
 
     keys[#keys + 1] = {
+      "gd",
+      function() require("telescope.builtin").lsp_definitions() end,
+      desc =
+      "Goto Definition",
+      has = "definition"
+    }
+
+    keys[#keys + 1] = {
       "gi",
       function()
-        require("telescope.builtin").lsp_implementations({ reuse_win = true })
+        require("telescope.builtin").lsp_implementations()
       end,
       desc = "Goto Implementation",
     }
