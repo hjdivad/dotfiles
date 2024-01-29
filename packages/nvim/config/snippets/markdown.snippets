@@ -18,17 +18,32 @@ snippet footnote:ref "footnote reference"
 snippet footnote:definition "footnote definition"
 	[^${1:1}]: ${0:Body of the footnote}
 
-snippet warn "A github-style warning callout"
+snippet gh-warn "A github-style warning callout"
 	> **Warning**
 	> ${0}
 
-snippet note "A github-style note callout"
+snippet gh-note "A github-style note callout"
 	> **Note**
 	> ${0}
 
-snippet info "A github-style note callout"
+snippet gh-info "A github-style note callout"
 	> **Note**
 	> ${0}
+	
+snippet docusaurus-tip "tip callout in docusaurus"
+	:::tip
+	${0}
+	:::
+	
+snippet docusaurus-warn "warning callout in docusaurus"
+	:::warning
+	${0}
+	:::
+	
+snippet docusaurus-info "info callout in docusaurus"
+	:::info
+	${0}
+	:::
 
 snippet release:controlled-release-readme
 
