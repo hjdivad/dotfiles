@@ -46,6 +46,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = ".markdownlintrc",
+  group = ft_group,
+  callback = function()
+    vim.bo.filetype = 'json'
+  end,
+})
+
 vim.api.nvim_create_autocmd({ "BufRead" }, {
   pattern = ".eslintrc.json",
   group = ft_group,
