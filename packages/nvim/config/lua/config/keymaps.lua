@@ -89,7 +89,7 @@ kd("v", "<C-S>")
 kd("n", "<C-S>")
 kd("s", "<C-S>")
 
-kd("n", "<leader>l") -- lazy
+kd("n", "<leader>l")  -- lazy
 kd("n", "<leader>fn") -- new file
 kd("n", "<leader>xl") -- location list
 kd("n", "<leader>xq") -- quickfix list
@@ -110,19 +110,19 @@ if vim.fn.has("nvim-0.9.0") == 1 then
   kd("n", "<leader>ui") -- inspect pos; no idea what this does
 end
 
-kd("n", "<leader>ft") -- floating terminal cwd=get_root()
-kd("n", "<leader>fT") -- floating terminal
-kd("n", "<leader>ww") -- other window
-kd("n", "<leader>wd") -- delete window
-kd("n", "<leader>w-") -- split below
-kd("n", "<leader>w|") -- split right
-kd("n", "<leader>-") -- split below
-kd("n", "<leader><Tab>l") -- last tab
-kd("n", "<leader><Tab>f") -- first tab
+kd("n", "<leader>ft")         -- floating terminal cwd=get_root()
+kd("n", "<leader>fT")         -- floating terminal
+kd("n", "<leader>ww")         -- other window
+kd("n", "<leader>wd")         -- delete window
+kd("n", "<leader>w-")         -- split below
+kd("n", "<leader>w|")         -- split right
+kd("n", "<leader>-")          -- split below
+kd("n", "<leader><Tab>l")     -- last tab
+kd("n", "<leader><Tab>f")     -- first tab
 kd("n", "<leader><Tab><Tab>") -- new tab
-kd("n", "<leader><Tab>]") -- next tab
-kd("n", "<leader><Tab>d") -- delete tab
-kd("n", "<leader><Tab>[") -- previous tab
+kd("n", "<leader><Tab>]")     -- next tab
+kd("n", "<leader><Tab>d")     -- delete tab
+kd("n", "<leader><Tab>[")     -- previous tab
 
 -- add keymaps
 
@@ -151,6 +151,20 @@ ks(
   "<cmd>nohl | diffupdate | checktime<cr>",
   { desc = "Redraw / clear hlsearch / checktime / diff update" }
 )
+
+
+local lazyterm = function()
+  LazyVimUtil.terminal(nil, {
+    cwd = LazyVimUtil.root(),
+    border = "rounded",
+    size = {
+      height = 0.5,
+      width = 0.5
+    }
+  })
+end
+ks("n", "<c-t>", lazyterm, { desc = "Terminal (root dir)" })
+
 
 local clipboard_reg
 if vim.fn.has("clipboard") then

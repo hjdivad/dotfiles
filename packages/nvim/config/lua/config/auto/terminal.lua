@@ -12,8 +12,13 @@ function M.setup_terminal_window()
   win.relativenumber = false
   win.winfixwidth = true
 
-  -- TODO: calculate window width
-  vim.api.nvim_win_set_width(win_id, 100)
+  local win_config = vim.api.nvim_win_get_config(win_id)
+  local is_not_float = win_config.relative == ""
+
+  if is_not_float then
+    -- TODO: calculate window width
+    vim.api.nvim_win_set_width(win_id, 100)
+  end
 end
 
 function M.setup()
