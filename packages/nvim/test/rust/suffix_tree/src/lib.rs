@@ -255,8 +255,8 @@ impl<'a> Tree<'a> {
                         parent, end: None, ..
                     } => {
                         debug!(
-                            "    rule 2 - path ends at internal node or root ({:?}), add leaf",
-                            parent
+                            "    rule 2 - path ends at internal node or root ({:?}), add leaf ({}, {})",
+                            parent, i, j
                         );
                         tree.add_leaf_edge(
                             parent,
@@ -305,20 +305,26 @@ impl<'a> Tree<'a> {
             end: path_end.map(|(edge, len)| (self.edge_for(edge), len)),
             last_char,
         };
-        trace!("    traverse from {:?}", path_end);
-
-        if i == 0 {
-            return (path_end, active_point);
-        }
 
         // k is the character between j..i that we're at during our traversal of S[j..i]
         // from root.
         // When k == i-1 we've reached the end of the path and are ready to extend the
         // suffix S[j..i] with the new character S[i].
-        let mut k = j;
+        let mut k = j - 1;
+        trace!("    traverse from {:?}, i={}, k={}", path_end, i, k);
+
+        if i == 0 || j == 0 {
+            return (path_end, active_point);
+        }
+
         // traverse from active_point and update path_end
-        while k < i - 1 {
-            trace!("    traverse from {:?}", path_end);
+        while k < i {
+            trace!(
+                "    traverse from {:?}, k={}, char={}",
+                path_end,
+                k,
+                self.ch(k)
+            );
             match path_end {
                 PathEnd {
                     parent, end: None, ..
