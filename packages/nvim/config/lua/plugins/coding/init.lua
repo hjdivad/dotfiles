@@ -53,16 +53,16 @@ local specs = {
           end,
         },
         mapping = cmp.mapping.preset.insert({
-          ["<c-l>"] = function()
+              ["<c-l>"] = function()
             if cmp.visible() then
               cmp.confirm({ select = true })
             else
               cmp.complete()
             end
           end,
-          ["<c-c>"] = cmp.mapping.abort(),
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
+              ["<c-c>"] = cmp.mapping.abort(),
+              ["<C-n>"] = cmp.mapping.select_next_item(),
+              ["<C-p>"] = cmp.mapping.select_prev_item(),
         }),
         sources = cmp.config.sources({
           -- TODO: getting weird buffer keyword completion after lsp initializes
@@ -77,9 +77,9 @@ local specs = {
           { name = "nvim_lsp_signature_help" },
           -- { name = "nvim_lua" }, -- nvim api; would rather get from lsp
           { name = "luasnip" },
-          { name = "path" }, -- complete ./ &c.
+          { name = "path" },      -- complete ./ &c.
           { name = "wikilinks" }, -- complete [[foo]] &c.
-          { name = "emoji" }, -- complete :emoji:
+          { name = "emoji" },     -- complete :emoji:
         }),
         formatting = {
           format = function(_, item)
@@ -102,7 +102,7 @@ local specs = {
       cmp.setup(opts)
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline({
-          ["<c-l>"] = {
+              ["<c-l>"] = {
             c = function()
               if cmp.visible() then
                 cmp.confirm({ select = true })
@@ -153,11 +153,11 @@ local specs = {
     config = function(_, opts)
       require("luasnip").setup(opts)
 
-      local snippets_path = "~/.config/nvim/snippets"
+      local snippets_paths = { "~/.config/nvim/snippets" }
       require("luasnip.loaders.from_snipmate").lazy_load({
-        paths = snippets_path,
+        paths = snippets_paths,
       })
-      require("luasnip.loaders.from_lua").lazy_load({ paths = snippets_path })
+      require("luasnip.loaders.from_lua").lazy_load({ paths = snippets_paths })
 
       vim.api.nvim_create_user_command("HiEditSnippets", function()
         require("luasnip.loaders").edit_snippet_files({})
