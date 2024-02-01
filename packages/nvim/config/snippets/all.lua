@@ -111,6 +111,17 @@ local tt_states = {
 local tt_state = tt_states.start
 
 ls.add_snippets("all", {
+  s("::today::", {
+    d(1, function ()
+      return sn(nil, t(os.date('%e %b %Y (%A)')))
+    end)
+  }),
+  s("::tts::", {
+    d(1, function ()
+      return sn(nil, t(os.date('%e %b %Y')))
+    end)
+  }),
+
   -- see https://github.com/L3MON4D3/LuaSnip/wiki/Misc#dynamicnode-with-user-input
   -- plan is to
   --  1. reset state to 0
