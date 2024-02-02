@@ -163,6 +163,7 @@ local lazyterm = function()
     }
   })
 end
+-- TODO: need another one that opens at &pwd
 ks("n", "<c-t>", lazyterm, { desc = "Terminal (root dir)" })
 
 
