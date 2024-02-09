@@ -9,6 +9,8 @@ return {
         ---@type table<string, conform.FormatterUnit[]>
         formatters_by_ft = {
           markdown = { "prettier" },
+          json = { "fixjson" },
+          lua = { "stylua" },
         },
       }
       return opts
