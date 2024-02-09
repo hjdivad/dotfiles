@@ -118,7 +118,7 @@ ls.add_snippets("all", {
   }),
   s("::tts::", {
     d(1, function ()
-      return sn(nil, t(os.date('%e %b %Y')))
+      return sn(nil, t(os.date('%e %b')))
     end)
   }),
 
