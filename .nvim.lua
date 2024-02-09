@@ -6,7 +6,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 		vim.keymap.set("n", "<leader>rt", function()
 			require("plenary.test_harness").test_directory(
 				vim.fn.expand("%:p"),
-				{ minimal_init = "tests//init.lua", sequential=true }
+				{ minimal_init = "tests/init.lua", sequential=true }
 			)
 		end, { desc = "Run the current file's tests in Plenary", buffer = true })
 	end,
