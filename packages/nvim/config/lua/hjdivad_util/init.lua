@@ -1,4 +1,8 @@
+local map_stack = require('hjdivad_util/map_stack')
+
 local M = {}
+
+M.map_stack = map_stack
 
 --- Concatenates multiple array-like tables into one.
 --- This function accepts a variable number of table
