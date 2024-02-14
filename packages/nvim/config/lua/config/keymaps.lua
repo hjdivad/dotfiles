@@ -11,9 +11,8 @@ local function show_wikilinks_log()
 end
 
 local ks = vim.keymap.set
-local kd = vim.keymap.del
 local existing_keymaps_lhs = {}
-function kd(mode, lhs)
+local kd = function (mode, lhs)
   local normalized_lhs = string.gsub(lhs, "<leader>", vim.g.mapleader)
   local km_lhs = existing_keymaps_lhs[mode]
   if not km_lhs then
@@ -30,7 +29,7 @@ function kd(mode, lhs)
 end
 
 -- delete default neovim mapping of Y to "$ (i.e. end of line vs whole line)
-kd("n", "Y", {})
+kd("n", "Y")
 -- delete s & x mappings to train myself to use c (change) and d (delete)
 ks({ "n", "v" }, "x", "", { nowait = true })
 ks({ "n", "v" }, "X", "", { nowait = true })
