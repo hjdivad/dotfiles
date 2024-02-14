@@ -2,6 +2,7 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+-- TODO: rm sticky-term in favour of float term
 local term = require("sticky-term")
 local LazyVimUtil = require("lazyvim.util")
 
