@@ -114,7 +114,7 @@ function __setup_volta {
 }
 
 function __prepend_path {
-  if [[ -d "$1" ]] && grep -vq "$1" <<<$PATH; then
+  if [[ -d "$1" ]] && grep -vq "$1" <<<"$PATH"; then
     export PATH="$1:$PATH"
   fi
 }
