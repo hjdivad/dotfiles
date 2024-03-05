@@ -11,6 +11,7 @@ return {
           markdown = { "prettier" },
           json = { "fixjson" },
           lua = { "stylua" },
+          python = { "black" },
         },
       }
       return opts
