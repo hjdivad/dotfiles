@@ -186,6 +186,7 @@ function __setup_aliases {
   # rust
   alias c='cargo'
   alias ct='cargo nextest'
+  alias cr='cargo run'
 
   alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
   if which watchexec > /dev/null 2>&1; then
