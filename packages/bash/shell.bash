@@ -98,7 +98,8 @@ function __setup_sdks {
 }
 
 function __setup_ruby {
-  if [[ -x ${HOMEBREW}/bin/rbenv ]]; then
+  local rbp="${HOME}/.rbenv/shims"
+  if [[ -d "${rbp}" ]] && grep -vq "${rbp}" <<<"$PATH" && [[ -x "${HOMEBREW}/bin/rbenv" ]]; then
     eval "$(rbenv init -)"
   fi
 
