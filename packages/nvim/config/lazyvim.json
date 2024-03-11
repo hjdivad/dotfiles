@@ -12,6 +12,7 @@
     "lazyvim.plugins.extras.lang.tailwind",
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.lang.yaml",
+    "lazyvim.plugins.extras.lazyrc",
     "lazyvim.plugins.extras.test.core",
     "plugins.extras.dap.keymaps",
     "plugins.extras.test.neotest"
@@ -19,5 +20,5 @@
   "news": {
     "NEWS.md": "2123"
   },
-  "version": 2
+  "version": 3
 }
