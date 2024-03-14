@@ -10,9 +10,7 @@ function M.setup_terminal_window()
 
   win.number = false
   win.relativenumber = false
-
-  local win_config = vim.api.nvim_win_get_config(win_id)
-  local is_not_float = win_config.relative == ""
+  vim.wo.foldmethod = 'manual'
 end
 
 function M.setup()
