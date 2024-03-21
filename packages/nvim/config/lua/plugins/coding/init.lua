@@ -1,7 +1,7 @@
 local util = require("hjdivad_util")
 local telescope = require("plugins/coding/telescope")
 
----@type LazyPluginSpec
+---@type LazyPluginSpec[]
 local specs = {
   -- see https://www.lazyvim.org/plugins/coding
 

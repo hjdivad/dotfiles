@@ -1,4 +1,4 @@
----@type LazyPluginSpec
+---@type LazyPluginSpec[]
 return {
   -- see https://www.lazyvim.org/plugins/editor
 

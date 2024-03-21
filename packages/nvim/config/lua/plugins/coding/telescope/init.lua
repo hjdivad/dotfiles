@@ -17,7 +17,7 @@ local function find_files_attach(_, map)
   return true
 end
 
----@type LazySpec
+---@type LazySpec[]
 return {
   -- see https://github.com/nvim-telescope/telescope.nvim
   -- /Users/hjdivad/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/editor.lua
