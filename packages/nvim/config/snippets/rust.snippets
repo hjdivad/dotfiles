@@ -14,3 +14,25 @@ snippet dd "derive macro"
 
 snippet allow "allow(clippy::) -> lint disable"
 	#[allow(clippy::${0})]
+
+snippet cli "CLI scaffolding"
+	use clap::Parser;
+
+	#[derive(Parser, Debug)]
+	#[command(version, about, long_about = None)]
+	struct CommandArgs {
+			#[arg(long)]
+			dry_run: bool,
+
+			/// Print debugging information
+			#[arg(long)]
+			debug: bool,
+	}
+
+	pub fn main() {
+			let options = CommmandArgs::parse();
+
+			if options.debug {
+					println!("hello");
+			}
+	}
