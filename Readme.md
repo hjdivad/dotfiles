@@ -37,6 +37,9 @@ volta install yaml-language-server
 
 # set up dotfiles
 ./install.bash
+
+# install local bin utils
+cd packages/binutils && cargo install --path .
 ```
 
 ## Usage
