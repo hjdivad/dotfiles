@@ -167,7 +167,7 @@ fn build_window_initial_cmds(win_config: &TmuxWindowSetup) -> Command {
         s!["Enter"],
     ];
     for cmd in &win_config.startup_cmds {
-        args.push(format!("\"{}\"", cmd));
+        args.push(cmd.clone());
         args.push("Enter".to_string());
     }
     cmd_window_initial_cmd.args(args);
