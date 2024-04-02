@@ -53,6 +53,8 @@ kd("n", "H")
 kd("n", "L")
 kd("n", "[b")
 kd("n", "]b")
+kd("n", "<leader>ub")
+kd("n", "<leader>ut")
 kd("n", "<leader>bb")
 kd("n", "<leader>`")
 kd("n", "<Esc>")
@@ -66,7 +68,6 @@ kd("n", "<leader>bo")
 kd("n", "<leader>L")
 kd("n", "<leader>cd")
 kd("n", "<leader>uF")
-kd("n", "<leader>ut")
 kd("n", "<leader>uT")
 kd("n", ";")
 kd("t", "<C-l>")
@@ -179,8 +180,8 @@ local lazyterm = function()
     cwd = LazyVimUtil.root(),
     border = "rounded",
     size = {
-      height = 0.5,
-      width = 0.5,
+      height = 0.9,
+      width = 0.9,
     },
   })
 end
