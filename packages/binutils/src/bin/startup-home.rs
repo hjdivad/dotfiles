@@ -1,7 +1,6 @@
-use binutils::tmux::{TmuxKnowledge, startup_tmux, maybe_attach_tmux};
+use binutils::tmux::{maybe_attach_tmux, startup_tmux, TmuxKnowledge};
 use clap::Parser;
 use std::env;
-
 
 #[macro_use]
 extern crate binutils;
@@ -38,7 +37,6 @@ impl binutils::tmux::Options for StartupHome {
     }
 }
 
-
 pub fn main() {
     let options = StartupHome::parse();
 
@@ -66,4 +64,3 @@ pub fn main() {
         println!("{:?}", tmux);
     }
 }
-
