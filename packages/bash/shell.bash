@@ -149,6 +149,10 @@ function __setup_env {
     export EDITOR='nvim'
     export GIT_EDITOR='nvim'
   fi
+
+  if which difft> /dev/null 2>&1; then
+    export GIT_EXTERNAL_DIFF=difft
+  fi
 }
 
 function __setup_aliases {
