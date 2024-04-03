@@ -65,7 +65,9 @@
 
   yuno = check-ignore -nv
 
-  head = show -w --color-words HEAD
+  head = show 
+  ; these options don't make sense when using delta
+  ; head = show -w --color-words HEAD
   head-msg = log --pretty="%s%n%n%b" -n 1
   # show list of all committers, with commit counts + email
   count = shortlog -sne
@@ -101,6 +103,7 @@
 
 [core]
 	editor = /usr/bin/vim
+  pager = delta
 
 [color]
   grep = true
@@ -158,6 +161,27 @@
 
 [init]
 	defaultBranch = master
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  side-by-side = true
+  line-numbers = true
+  features = "tokyonight"
+  true-color = always
+  # https://github.com/folke/tokyonight.nvim/blob/v3.0.1/extras/delta/tokyonight_night.gitconfig
+  minus-style                   = syntax "#37222c"
+  minus-non-emph-style          = syntax "#37222c"
+  minus-emph-style              = syntax "#713137"
+  minus-empty-line-marker-style = syntax "#37222c"
+  line-numbers-minus-style      = "#b2555b"
+  plus-style                    = syntax "#20303b"
+  plus-non-emph-style           = syntax "#20303b"
+  plus-emph-style               = syntax "#2c5a66"
+  plus-empty-line-marker-style  = syntax "#20303b"
+  line-numbers-plus-style       = "#266d6a"
+  line-numbers-zero-style       = "#3b4261"
 
 [blame]
   # Use GitHub's default file for ignoring blame revs
