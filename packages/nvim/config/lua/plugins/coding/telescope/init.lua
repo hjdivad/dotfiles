@@ -26,14 +26,14 @@ return {
     dependencies = { "nvim-telescope/telescope-fzf-native.nvim", "camgraff/telescope-tmux.nvim" },
     keys = {
       -- disable LazyVim keymaps
-      { "<leader>,",       false },
+      { "<leader>,", false },
       { "<leader><space>", false },
-      { "<leader>uC",      false }, -- colorscheme selection
-      { "<leader>gs",      false }, -- git status
+      { "<leader>uC", false }, -- colorscheme selection
+      { "<leader>gs", false }, -- git status
 
-      { "<leader>/",       Util.telescope("live_grep"),                    desc = "Find in Files (Grep)" },
-      { "<leader>fl",      "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find line in Buffer" },
-      { "<leader>fb",      "<cmd>Telescope buffers<cr>",                   desc = "Buffers" },
+      { "<leader>/", Util.telescope("live_grep"), desc = "Find in Files (Grep)" },
+      { "<leader>fl", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find line in Buffer" },
+      { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       {
         "<leader>fs",
         function()
@@ -43,7 +43,12 @@ return {
         end,
         desc = "Find Git Changed Files (relative to origin/HEAD)",
       },
-      { "<leader>fc",  "<cmd>Telescope git_commits<cr>",         desc = "Find git commits" },
+      { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "Find git commits" },
+      {
+        "<leader>fg",
+        Util.telescope("git_files", { attach_mappings = find_files_attach  }),
+        desc = "Find Files (git)",
+      },
       {
         "<leader>ff",
         Util.telescope("find_files", { attach_mappings = find_files_attach, cwd = vim.fn.getcwd() }),
@@ -51,8 +56,8 @@ return {
       },
       {
         "<leader>fF",
-        Util.telescope("files", { attach_mappings = find_files_attach }),
-        desc = "Find Files (git)",
+        Util.telescope("find_files", { attach_mappings = find_files_attach, cwd=vim.uv.cwd(), hidden=true, no_ignore =true }),
+        desc = "Find Files (+hidden +ignored)",
       },
       {
         "<leader>fj",
@@ -128,6 +133,15 @@ return {
     },
     opts = {
       defaults = {
+        -- see https://www.lua.org/manual/5.1/manual.html#5.4.1
+        -- these are lua regexes
+        file_ignore_patterns = {
+          -- even when looking for hidden and ignored files, disregard .git itself
+          '^.git/',
+          -- even when looking for ignored files, disregard cargo build targets
+          '^target/',
+          '/target/',
+        },
         get_selection_window = function()
           local wins = vim.api.nvim_list_wins()
           table.insert(wins, 1, vim.api.nvim_get_current_win())
@@ -142,28 +156,28 @@ return {
         end,
         mappings = {
           i = {
-            ["<C-n>"] = false,      -- default mv next
-            ["<C-p>"] = false,      -- default mv prev
-            ["<Down>"] = false,     -- default down
-            ["<Up>"] = false,       -- default up
-            ["<C-x>"] = false,      -- default open horizontal
-            ["<C-v>"] = false,      -- default open veritcal
-            ["<C-t>"] = false,      -- default open tab
-            ["<PageUp>"] = false,   -- default scroll preview up
+            ["<C-n>"] = false, -- default mv next
+            ["<C-p>"] = false, -- default mv prev
+            ["<Down>"] = false, -- default down
+            ["<Up>"] = false, -- default up
+            ["<C-x>"] = false, -- default open horizontal
+            ["<C-v>"] = false, -- default open veritcal
+            ["<C-t>"] = false, -- default open tab
+            ["<PageUp>"] = false, -- default scroll preview up
             ["<PageDown>"] = false, -- default scroll preview down
-            ["<Tab>"] = false,      -- default toggle selection + mv worse
-            ["<S-Tab>"] = false,    -- default toggle selection + mv bettter
-            ["<C-q>"] = false,      -- default send to qflist + open qflist
-            ["<M-q>"] = false,      -- default send selected to qflist + open qflist
-            ["<C-w>"] = false,      -- default ???
+            ["<Tab>"] = false, -- default toggle selection + mv worse
+            ["<S-Tab>"] = false, -- default toggle selection + mv bettter
+            ["<C-q>"] = false, -- default send to qflist + open qflist
+            ["<M-q>"] = false, -- default send selected to qflist + open qflist
+            ["<C-w>"] = false, -- default ???
 
-            ["<c-t>"] = false,      -- lazyvim open with trouble
-            ["<a-i>"] = false,      -- lazyvim find files (no ignore)
-            ["<a-h>"] = false,      -- lazyvim find files (hidden)
-            ["<C-Down>"] = false,   -- lazyvim cycle history next
-            ["<C-Up>"] = false,     -- lazyvim cycle history prev
-            ["<C-f>"] = false,      -- lazyvim preview scroll down
-            ["<C-b>"] = false,      -- lazyvim preview scroll up
+            ["<c-t>"] = false, -- lazyvim open with trouble
+            ["<a-i>"] = false, -- lazyvim find files (no ignore)
+            ["<a-h>"] = false, -- lazyvim find files (hidden)
+            ["<C-Down>"] = false, -- lazyvim cycle history next
+            ["<C-Up>"] = false, -- lazyvim cycle history prev
+            ["<C-f>"] = false, -- lazyvim preview scroll down
+            ["<C-b>"] = false, -- lazyvim preview scroll up
 
             ["<C-k>"] = "move_selection_previous",
             ["<C-j>"] = "move_selection_next",
@@ -173,18 +187,18 @@ return {
             ["<m-l>"] = actions.send_to_qflist + actions.open_qflist,
           },
           n = {
-            ["<C-x>"] = false,      -- default open horizontal
-            ["<C-v>"] = false,      -- default open veritcal
-            ["<C-t>"] = false,      -- default open tab
-            ["<Tab>"] = false,      -- default toggle selection + mv worse
-            ["<S-Tab>"] = false,    -- default toggle selection + mv bettter
-            ["<C-q>"] = false,      -- default send to qflist + open qflist
-            ["<M-q>"] = false,      -- default send selected to qflist + open qflist
-            ["<Down>"] = false,     -- default down
-            ["<Up>"] = false,       -- default up
-            ["<C-Down>"] = false,   -- lazyvim cycle history next
-            ["<C-Up>"] = false,     -- lazyvim cycle history prev
-            ["<PageUp>"] = false,   -- default scroll preview up
+            ["<C-x>"] = false, -- default open horizontal
+            ["<C-v>"] = false, -- default open veritcal
+            ["<C-t>"] = false, -- default open tab
+            ["<Tab>"] = false, -- default toggle selection + mv worse
+            ["<S-Tab>"] = false, -- default toggle selection + mv bettter
+            ["<C-q>"] = false, -- default send to qflist + open qflist
+            ["<M-q>"] = false, -- default send selected to qflist + open qflist
+            ["<Down>"] = false, -- default down
+            ["<Up>"] = false, -- default up
+            ["<C-Down>"] = false, -- lazyvim cycle history next
+            ["<C-Up>"] = false, -- lazyvim cycle history prev
+            ["<PageUp>"] = false, -- default scroll preview up
             ["<PageDown>"] = false, -- default scroll preview down
 
             ["q"] = actions.close,
@@ -206,7 +220,6 @@ return {
           case_mode = "smart",
         },
       },
-
     },
   },
   {
