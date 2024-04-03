@@ -21,6 +21,9 @@ brew install font-hasklug-nerd-font
 # neovim
 brew install neovim
 
+# better git diff + pager
+brew install git-delta
+
 brew install fzf
 # setup ~/.fzf.bash
 /usr/local/opt/fzf/install
