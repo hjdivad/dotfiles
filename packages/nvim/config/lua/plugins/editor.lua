@@ -11,9 +11,10 @@ return {
       { "<leader>xX", false },
       { "<leader>xL", false },
       { "<leader>xQ", false },
-      { "<leader>cq", "<cmd>TroubleClose<cr>", desc = "Close Diagnostics (Trouble)" },
-      { "<leader>cd", "<cmd>Trouble document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
-      { "<leader>cD", "<cmd>Trouble workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+      { "<leader>cq", "<cmd>Trouble diagnostics close<cr>", desc = "Close Diagnostics (Trouble)" },
+      { "<leader>cd", "<cmd>Trouble diagnostics filter.buf=0 focus=true<cr>", desc = "Document Diagnostics (Trouble)" },
+      -- TODO: can we filter these by path?
+      { "<leader>cD", "<cmd>Trouble diagnostics focus=true<cr>", desc = "Workspace Diagnostics (Trouble)" },
     },
   },
   {
