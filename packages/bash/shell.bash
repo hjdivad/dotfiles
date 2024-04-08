@@ -117,8 +117,42 @@ function __setup_volta {
 }
 
 function __prepend_path {
-  if [[ -d "$1" ]] && grep -vq "$1" <<<"$PATH"; then
-    export PATH="$1:$PATH"
+  local force=0
+  local dir
+
+  # Check if the first argument is -f
+  if [[ "$1" == "-f" ]]; then
+    force=1
+    dir="$2"
+  else
+    dir="$1"
+  fi
+
+  # Ensure the directory exists
+  if [[ -d "$dir" ]]; then
+    # If forcing, remove the dir if it's already in PATH
+    if [[ "$force" -eq 1 ]]; then
+      # Use colon as delimiter to split PATH into an array
+      IFS=':' read -r -a path_array <<< "$PATH"
+      PATH=""
+      for entry in "${path_array[@]}"; do
+        # Rebuild PATH without the specified dir
+        if [[ "$entry" != "$dir" ]]; then
+          # Only add a colon if PATH is not empty
+          [[ -n "$PATH" ]] && PATH="$PATH:"
+          PATH="$PATH$entry"
+        fi
+      done
+    # If not forcing, just check if the dir is not already in PATH
+    elif grep -qv "$dir" <<< "$PATH"; then
+      # The dir is not in PATH, no further action needed here
+      true
+    else
+      # The directory is already in PATH and we're not forcing, so exit
+      return
+    fi
+    # Prepend the directory to PATH
+    export PATH="$dir:$PATH"
   fi
 }
 
@@ -400,15 +434,15 @@ __prepend_path "/opt/adt/sdk/tools"
 __prepend_path "/opt/adt/eclipse/Eclipse.app/Contents/MacOS"
 __prepend_path "$HOME/Library/Android/sdk/platform-tools"
 __prepend_path "/Library/TeX/texbin"
-[[ -n "$HOMEBREW" ]] && __prepend_path "$HOMEBREW/bin"
+[[ -n "$HOMEBREW" ]] && __prepend_path -f "$HOMEBREW/bin"
 __prepend_path "${HOME}/Library/Python/2.7/bin"
 __prepend_path "$HOME/Library/Python/3.7/bin"
 [[ -n "$GOPATH" ]] && __prepend_path "${GOPATH}/bin"
-__prepend_path "$HOME/.cargo/bin"
 __prepend_path "$HOME/.bun/bin"
-[[ -n "$VOLTA_HOME" ]] && __prepend_path "${VOLTA_HOME}/bin"
-[[ -n "$DOTFILES_DIR" ]] && __prepend_path "$DOTFILES_DIR//bin"
-__prepend_path "$HOME/.local/bin"
+__prepend_path -f "$HOME/.cargo/bin"
+[[ -n "$VOLTA_HOME" ]] && __prepend_path -f "${VOLTA_HOME}/bin"
+[[ -n "$DOTFILES_DIR" ]] && __prepend_path -f "$DOTFILES_DIR//bin"
+__prepend_path -f "$HOME/.local/bin"
 
 __setup_unix_cmds
 __setup_env
