@@ -34,18 +34,20 @@ fi
 # This variable is used elsewhere to write an os-agnostic grep either with gnu
 # grep installed on macos or it being present on linux systems
 if which ggrep > /dev/null 2>&1; then
-  export GREP=$(which ggrep)
+  GREP=$(which ggrep)
 elif [ -x /usr/bin/grep ]; then
-  export GREP=/usr/bin/grep
+  GREP=/usr/bin/grep
 fi
+export GREP
 
 # Use gnu xargs if possible on osx; on other systems the local xargs will
 # already be a reasonable version
 if which gxargs > /dev/null 2>&1; then
-  export XARGS=$(which gxargs)
+  XARGS=$(which gxargs)
 elif [ -x /usr/bin/grep ]; then
-  export XARGS=/usr/bin/xargs
+  XARGS=/usr/bin/xargs
 fi
+export XARGS
 
 
 function __setup_bash_completion {
@@ -57,7 +59,7 @@ function __setup_bash_completion {
   [[ -r "${HOMEBREW}/etc/profile.d/bash_completion.sh" ]] && . "${HOMEBREW}/etc/profile.d/bash_completion.sh"
 
   if [[ -d $HOME/.bash_completion.d ]]; then
-    for local_completion in $(ls $HOME/.bash_completion.d); do
+    for local_completion in $(ls "$HOME"/.bash_completion.d); do
       source $HOME/.bash_completion.d/$local_completion
     done
   fi
@@ -93,7 +95,8 @@ function __setup_sdks {
   fi
 
   if [[ -x /usr/libexec/java_home ]]; then
-    export JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
+    JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
+    export JAVA_HOME
   fi
 }
 
