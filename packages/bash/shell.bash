@@ -215,7 +215,7 @@ function __setup_aliases {
   alias nr='npm run'
   alias y=yarn
   # go-task
-  alias t=task
+  alias tt=task
 
   # ask user for input
   # e.g. echo $(inp)
