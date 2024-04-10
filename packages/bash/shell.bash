@@ -214,6 +214,8 @@ function __setup_aliases {
   alias npm-check-updates='npx npm-check-updates -i'
   alias nr='npm run'
   alias y=yarn
+  # go-task
+  alias t=task
 
   # ask user for input
   # e.g. echo $(inp)
