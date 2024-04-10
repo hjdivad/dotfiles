@@ -1,16 +1,16 @@
----@type LazySpec
+---@type LazySpec[]
 return {
   -- see https://www.lazyvim.org/plugins/formatting
   {
     "stevearc/conform.nvim",
-    opt = {
-        formatters_by_ft = {
-          markdown = { "prettier" },
-          json = { "fixjson" },
-          lua = { "stylua" },
-          rust = { "rustfmt" },
-          python = {},
-        },
+    opts = {
+      formatters_by_ft = {
+        markdown = { { "prettierd", "prettier" } },
+        json = { "fixjson" },
+        lua = { "stylua" },
+        rust = { "rustfmt" },
+        python = {},
+      },
     },
   },
 }
