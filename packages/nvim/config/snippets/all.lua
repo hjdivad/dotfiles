@@ -116,7 +116,7 @@ ls.add_snippets("all", {
       return sn(nil, t(os.date('%e %b %Y (%A)')))
     end)
   }),
-  s("::tts::", {
+  s("::today-short::", {
     d(1, function ()
       return sn(nil, t(os.date('%e %b')))
     end)
@@ -128,7 +128,7 @@ ls.add_snippets("all", {
   --  2. return sn with inputs (date + format)
   --  3. on exit, mv state to 1 and run again
   --    4. this time return the computed date
-  s("::tt::", {
+  s("::date::", {
     d(1, function(_args, snip)
       if tt_state == tt_states.start then
         return sn(nil, {
