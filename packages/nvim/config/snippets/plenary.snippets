@@ -1,0 +1,8 @@
+snippet deep-equal "deep compare table values"
+	assert.same(${1:expected}, ${2:actual}, "${0:label}")
+
+snippet test "test"
+	it("${0:does something}", function()
+		assert.same(false, true, "test is implemented")
+	end)
+	
