@@ -2,6 +2,7 @@
 return {
   {
     "nvim-neotest/neotest",
+    dependencies = { "nvim-neotest/neotest-plenary" },
     -- see ~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/test/core.lua
     opts = {
       -- --- @type neotest.Config.summary
