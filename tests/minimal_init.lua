@@ -22,19 +22,12 @@ function M.load(plugin)
   end
 end
 
----see :help default-mappings
-function M.unset_default_keymaps()
-  vim.keymap.del('n', '&')
-  vim.keymap.del('n', 'Y')
-  vim.keymap.del('n', '<C-l>')
-end
 
 function M.setup()
   vim.cmd([[set runtimepath=$VIMRUNTIME]])
   vim.opt.runtimepath:append(M.root())
   vim.opt.packpath = { M.root(".tests/site") }
   M.load("nvim-lua/plenary.nvim")
-  M.unset_default_keymaps()
   vim.opt.runtimepath:append(M.root("packages/nvim/config"))
   vim.env.XDG_CONFIG_HOME = M.root(".tests/config")
   vim.env.XDG_DATA_HOME = M.root(".tests/data")
