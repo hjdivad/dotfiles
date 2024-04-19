@@ -11,13 +11,40 @@ return {
       -- ---@type neotest.Config.diagnostic
       -- diagnostic = { enabled = true, severity = vim.diagnostic.severity.ERROR },
       ---@type neotest.Config.output
-      output = { enabled = true, open_on_run = false }
+      output = { enabled = true, open_on_run = false },
+      ---@type neotest.Adapter[]
+      adapters = {
+        -- Can't just require it here because of load-order issues, but it's
+        -- safe to call setup repeatedly so in a .nvim.lua
+        --  require('neotest').setup({ adapters={ require('neotes-plenary')}})
+        -- require("neotest-plenary"),
+      },
     },
     keys = {
       { "<leader>tt", false },
       { "<leader>ts", false },
-      { "<leader>to", function() require("neotest").output.open({ enter = true, auto_close = true, last_run = true }) end, desc = "Show Output" },
-      { "<leader>tr", function() require("neotest").summary.run_marked() end,                                              desc = "Run Marked" },
+      {
+        "<leader>to",
+        function()
+          require("neotest").output.open({ enter = true, auto_close = true, last_run = true })
+        end,
+        desc = "Show Output",
+      },
+      {
+        "<leader>tr",
+        function()
+          require("neotest").summary.run_marked()
+        end,
+        desc = "Run Marked",
+      },
+      {
+        "<leader>tR",
+        function()
+          require("neotest").run.run()
+          require("neotest").output.open({ enter = true, auto_close = true, last_run = true })
+        end,
+        desc = "Run Nearest",
+      },
       {
         "<leader>tS",
         function()
@@ -33,7 +60,7 @@ return {
             end
           end, 101)
         end,
-        desc = "Toggle Summary"
+        desc = "Toggle Summary",
       },
       {
         "<leader>tf",
@@ -41,9 +68,8 @@ return {
           require("neotest").run.run(vim.fn.expand("%"))
           require("neotest").summary.open()
         end,
-        desc = "Run File"
+        desc = "Run File",
       },
-    }
-    ,
+    },
   },
 }
