@@ -29,11 +29,12 @@ jobs:
 
       - name: Download Neovim
         run: |
-          mkdir -p build
-          wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim.appimage
-          chmod +x nvim.appimage
+          mkdir -p /tmp/nvim
+          wget -q https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage -O /tmp/nvim/nvim.appimage
+          cd /tmp/nvim
+          chmod a+x ./nvim.appimage
           ./nvim.appimage --appimage-extract
-          echo "${PWD}/squashfs-root/usr/bin" >> $GITHUB_PATH
+          echo "/tmp/nvim/squashfs-root/usr/bin/" >> $GITHUB_PATH
 
       - name: Install python3
         uses: actions/setup-python@v4
@@ -71,5 +72,4 @@ jobs:
       - name: test
         env:
           DEBUG: ${{ secrets.Debug }}
-        run: |
-          echo TODO: tests
+        run: tests/run
