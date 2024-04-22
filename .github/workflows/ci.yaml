@@ -1,4 +1,6 @@
 # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+#
+# see https://github.com/folke/lazy.nvim/blob/main/.github/workflows/ci.yml
 name: CI
 
 on:
