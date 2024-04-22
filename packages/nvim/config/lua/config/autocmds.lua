@@ -78,6 +78,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*_spec.lua",
+  group = ft_group,
+  callback = function()
+    require('luasnip').filetype_extend('lua', { 'plenary' })
+  end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
   group = ft_group,
   pattern = { "typescriptreact" },
