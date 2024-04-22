@@ -48,3 +48,13 @@ cd packages/binutils && cargo install --path .
 ## Usage
 
 See [Debugging.md](./Debugging.md)
+
+### Project-Local Snippets
+
+```lua
+-- .nvim.lua
+
+-- local-snippet<complete>
+```
+
+
