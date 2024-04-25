@@ -51,7 +51,8 @@ pub fn main() {
         // dotfiles session
         [
             "dotfiles",
-            ["dotfiles", "{home}/src/hjdivad/dotfiles", ["nvim"]]
+            ["dotfiles", "{home}/src/hjdivad/dotfiles", ["nvim"]],
+            ["rwjblue/dotvim", "{home}/src/rwjblue/dotvim", ["nvim"]]
         ]
     ];
 
