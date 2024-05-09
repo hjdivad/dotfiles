@@ -3,6 +3,7 @@
 /.vimrc.lua
 /.vim
 /.nvim.lua
+/.lazy.lua
 
 # node
 /node_modules
