@@ -168,6 +168,10 @@ ks("n", "<c-g>", function()
   require("noice").redirect("file")
 end, { desc = "show :file in popup" })
 
+ks("n", "ga", function()
+  require("noice").redirect("ascii")
+end, { desc = "show :ascii in popup" })
+
 ks(
   "n",
   "<leader><leader>",
