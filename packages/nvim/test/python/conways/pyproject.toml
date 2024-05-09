@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "conways"
+version = "0.1.0"
+description = ""
+authors = ["David J. Hamilton <github@hjdivad.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+click="^8.0"
+
+[tool.poetry.scripts]
+conways = "conways.cli:main"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
