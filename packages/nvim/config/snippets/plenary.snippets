@@ -1,8 +1,22 @@
-snippet deep-equal "deep compare table values"
+snippet equal "assert values deep-equal"
 	assert.same(${1:expected}, ${2:actual}, "${0:label}")
+
+snippet deep-equal "assert values deep-equal"
+	assert.same(${1:expected}, ${2:actual}, "${0:label}")
+
+snippet error "assert fn throws error"
+	assert.has_error(${1:fn}, "${2:error-msg}", "${0:label}")
 
 snippet test "test"
 	it("${0:does something}", function()
 		assert.same(false, true, "test is implemented")
+	end)
+
+snippet test-suite "start a test suite"
+	describe("${1:some-module}", function()
+		local assert = require("luassert")
+		local pp = vim.print
+
+		${0}
 	end)
 	
