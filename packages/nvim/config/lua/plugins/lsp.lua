@@ -97,11 +97,30 @@ return {
       --
       -- LSP-specific keymaps here
       --
-      -- servers = {
-      --   lua_ls = {
-      --     keys = {}
-      --   }
-      -- }
+      ---@type lspconfig.options
+      ---@diagnostic disable-next-line: missing-fields
+      servers = {
+        ---@diagnostic disable-next-line: missing-fields
+        lua_ls = {
+          --TODO: mv this to  packages/nvim/config/lua/plugins/extras/dap/keymaps.lua
+          --in lua autocmd
+          keys = {
+            {
+              "<leader>dr",
+              function()
+                local osv = require("osv")
+                if osv.is_running() then
+                  osv.stop()
+                  print("server stopped")
+                else
+                  osv.launch({ port = 8086 })
+                end
+              end,
+              desc = "Toggle OSV (lua debugee server)",
+            },
+          },
+        },
+      },
     },
   },
 }

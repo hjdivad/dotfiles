@@ -10,6 +10,18 @@ snippet __dirname "get __dirname of a script"
 		return dirname, filename
 	end
 
+snippet class "create a class in lua"
+	local ${1:ClassName} = {}
+	${1:ClassName}.__index = ${1:ClassName}
+
+	function ${1:ClassName}:new()
+		local instance = {}
+		setmetatable(instance, ${1:ClassName})
+		return instance
+	end
+
+	${0}
+
 # vim snippets
 
 snippet opts "options with defaults"
