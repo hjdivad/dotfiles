@@ -17,5 +17,7 @@ function __src_rename {
 
 source $BASHRC_DIR/shell.bash
 
+# export OATMEAL_OPENAI_TOKEN=""
+
 
 # vim:ft=sh:
