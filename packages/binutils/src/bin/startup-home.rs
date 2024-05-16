@@ -53,6 +53,11 @@ pub fn main() {
             "dotfiles",
             ["dotfiles", "{home}/src/hjdivad/dotfiles", ["nvim"]],
             ["rwjblue/dotvim", "{home}/src/rwjblue/dotvim", ["nvim"]]
+        ],
+        // ud:macros
+        [
+            "💪 ud_macros",
+            ["💪 ud_macros", "{home}/src/hjdivad/ud_macros", ["nvim"]]
         ]
     ];
 
