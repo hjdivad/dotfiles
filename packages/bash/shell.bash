@@ -93,11 +93,6 @@ function __setup_sdks {
     # The next line enables shell command completion for gcloud.
     source "$HOME/apps/google-cloud-sdk/completion.bash.inc"
   fi
-
-  if [[ -x /usr/libexec/java_home ]]; then
-    JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
-    export JAVA_HOME
-  fi
 }
 
 function __setup_ruby {
