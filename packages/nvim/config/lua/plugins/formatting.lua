@@ -9,6 +9,7 @@ return {
         json = { "fixjson" },
         lua = { "stylua" },
         rust = { "rustfmt" },
+        kotlin = { "ktfmt" },
         python = {},
       },
     },
