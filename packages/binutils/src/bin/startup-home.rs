@@ -57,7 +57,17 @@ pub fn main() {
         // ud:macros
         [
             "💪 ud_macros",
-            ["💪 ud_macros", "{home}/src/hjdivad/ud_macros", ["nvim"]]
+            ["💪 ud_macros", "{home}/src/hjdivad/ud_macros", ["nvim"]],
+            ["sandbox-kotlin", "{home}/src/hjdivad/sandbox-kotlin", ["nvim"]],
+            ["sandbox-android", "{home}/src/hjdivad/sandbox-android", ["nvim"]],
+            ["sandbox-android2", "{home}/src/hjdivad/sandbox-android", ["nvim"]],
+            ["kotlin-language-server", "{home}/src/fcwd/kotlin-language-server", ["nvim"]]
+        ],
+        // montoya.nvim
+        [
+            "montoya",
+            ["montoya", "{home}/src/malleatus/montoya.nvim", ["nvim"]],
+            ["montoya", "{home}/src/malleatus/montoya.nvim", ["nvim"]]
         ]
     ];
 
