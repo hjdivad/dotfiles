@@ -257,6 +257,8 @@ function __setup_aliases {
     git branch | sed 's/^.\{2\}//' | fzf -m --bind 'ctrl-h:clear-query'
   }
   alias pb='__pick_branch'
+
+  alias md2jira='pandoc --from=markdown --to=jira'
 }
 
 function __setup_clipboard {
