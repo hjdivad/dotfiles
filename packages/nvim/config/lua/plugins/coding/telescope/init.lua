@@ -3,11 +3,11 @@ local actions = require("telescope.actions")
 local tmux = require("plugins/coding/telescope/tmux")
 
 local function find_files_no_ignore()
-  Util.telescope("find_files", { no_ignore = true, prompt_title = "find files (no ignore)" })()
+  LazyVim.pick("find_files", { no_ignore = true, prompt_title = "find files (no ignore)" })()
 end
 
 local function find_files_hidden()
-  Util.telescope("find_files", { hidden = true, prompt_title = "find files (hidden)" })()
+  LazyVim.pick("find_files", { hidden = true, prompt_title = "find files (hidden)" })()
 end
 
 local function find_files_attach(_, map)
@@ -31,7 +31,7 @@ return {
       { "<leader>uC", false }, -- colorscheme selection
       { "<leader>gs", false }, -- git status
 
-      { "<leader>/", Util.telescope("live_grep"), desc = "Find in Files (Grep)" },
+      { "<leader>/", LazyVim.pick("live_grep"), desc = "Find in Files (Grep)" },
       { "<leader>fl", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find line in Buffer" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       {
@@ -46,22 +46,22 @@ return {
       { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "Find git commits" },
       {
         "<leader>fg",
-        Util.telescope("git_files", { attach_mappings = find_files_attach  }),
+        LazyVim.pick("git_files", { attach_mappings = find_files_attach  }),
         desc = "Find Files (git)",
       },
       {
         "<leader>ff",
-        Util.telescope("find_files", { attach_mappings = find_files_attach, cwd = vim.fn.getcwd() }),
+        LazyVim.pick("find_files", { attach_mappings = find_files_attach, cwd = vim.fn.getcwd() }),
         desc = "Find Files (cwd)",
       },
       {
         "<leader>fF",
-        Util.telescope("find_files", { attach_mappings = find_files_attach, cwd=vim.uv.cwd(), hidden=true, no_ignore =true }),
+        LazyVim.pick("find_files", { attach_mappings = find_files_attach, cwd=vim.uv.cwd(), hidden=true, no_ignore =true }),
         desc = "Find Files (+hidden +ignored)",
       },
       {
         "<leader>fj",
-        Util.telescope("jumplist"),
+        LazyVim.pick("jumplist"),
         desc = "Find jumplist location",
       },
       {
@@ -73,7 +73,7 @@ return {
       },
       {
         "<leader>ss",
-        Util.telescope("lsp_document_symbols", {
+        LazyVim.pick("lsp_document_symbols", {
           symbols = {
             "Class",
             "Function",

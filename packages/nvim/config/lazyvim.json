@@ -1,25 +1,26 @@
 {
   "extras": [
     "lazyvim.plugins.extras.dap.core",
-    "lazyvim.plugins.extras.test.core",
     "lazyvim.plugins.extras.dap.nlua",
     "lazyvim.plugins.extras.lang.docker",
     "lazyvim.plugins.extras.lang.java",
     "lazyvim.plugins.extras.lang.json",
+    "lazyvim.plugins.extras.lang.kotlin",
     "lazyvim.plugins.extras.lang.markdown",
     "lazyvim.plugins.extras.lang.python",
     "lazyvim.plugins.extras.lang.rust",
     "lazyvim.plugins.extras.lang.tailwind",
+    "lazyvim.plugins.extras.lang.toml",
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.lang.yaml",
+    "lazyvim.plugins.extras.test.core",
     "plugins.extras.ai.oatmeal",
     "plugins.extras.d2.lang",
     "plugins.extras.dap.keymaps",
-    "plugins.extras.test.neotest",
-    "lazyvim.plugins.extras.editor.trouble-v3"
+    "plugins.extras.test.neotest"
   ],
   "news": {
-    "NEWS.md": "4964"
+    "NEWS.md": "6077"
   },
-  "version": 4
+  "version": 6
 }
