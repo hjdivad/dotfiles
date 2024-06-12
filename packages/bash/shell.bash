@@ -358,7 +358,7 @@ function __setup_tmux {
   if which fd > /dev/null 2>&1; then
     function __ts_go_source {
       local to_dir=$(
-        fd . --type directory --max-depth 3 "$SRC" |\
+        fd . --type directory --max-depth 2 "$SRC" |\
         sed s/"${SRC//\//\\\/}\/"//g |\
         sed 's/\/$//g' |\
         fzf\
