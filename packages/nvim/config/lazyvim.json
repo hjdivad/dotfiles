@@ -1,7 +1,8 @@
 {
   "extras": [
+    "lazyvim.plugins.extras.coding.copilot",
+    "lazyvim.plugins.extras.coding.copilot-chat",
     "lazyvim.plugins.extras.dap.core",
-    "lazyvim.plugins.extras.test.core",
     "lazyvim.plugins.extras.dap.nlua",
     "lazyvim.plugins.extras.lang.docker",
     "lazyvim.plugins.extras.lang.java",
@@ -14,6 +15,7 @@
     "lazyvim.plugins.extras.lang.toml",
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.lang.yaml",
+    "lazyvim.plugins.extras.test.core",
     "plugins.extras.ai.oatmeal",
     "plugins.extras.d2.lang",
     "plugins.extras.dap.keymaps",
