@@ -17,7 +17,6 @@ return {
         "marksman",
         "pyright",
         "ruff-lsp",
-        "rust-analyzer",
         "sqlls",
         "typescript-language-server",
         "yaml-language-server",
