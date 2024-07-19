@@ -164,9 +164,9 @@ function __setup_unix_cmds {
   # use exa if it exists
   # https://github.com/ogham/exa
   if which exa > /dev/null 2>&1; then
-    alias ls='exa --colour-scale'
-    alias ll='exa -l --all --no-user --changed --sort=modified --color-scale'
-    alias lt='exa --tree --level 3 -l --no-permissions --no-user --no-time --colour-scale'
+    alias ls='eza --colour-scale'
+    alias ll='eza -l --all --no-user --changed --sort=modified --color-scale'
+    alias lt='eza --tree --level 3 -l --no-permissions --no-user --no-time --colour-scale'
   else
     # setup ls
     ls / --color=auto > /dev/null 2>&1
