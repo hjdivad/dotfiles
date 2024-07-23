@@ -1,163 +1,98 @@
-# OSX
+# Mac OS
 
-## Installation
+## Setup
 
+**Minimal Keyboard Config for Sanity**
+
+- max key repeat rate
+- min delay until repeat
+- customize modifier keys / caps lock -> control
+
+**Install Preliminaries**
+
+- install brave
 - install [homebrew][]
-- install rustup
-- install volta
-- `brew install bash`
-- `brew install neovim`
-- `brew install tmux`
-- `brew install fzf`
-- `brew install z`
-- `brew install rbenv`
-- `gem install pws`
-- log in to apple store
-- install from app store or wherever
-  - divvy
-  - spotify
-  - alfred
-  - discord
-  - telegram
-  - flux
-  - signal
-  - use-together
-  - keycastr
-  - soundsource
-  - krisp.ai
-- install explicitly from outside apple store
-  - dash
+- `brave://settings` -> set up sync
 
-## home
-```sh
+```bash
+brew install \
+  kitty \
+  neovim \
+  tmux \
+  fzf \
+  z \
+  rbenv \
+  gh \
+  volta \
+  bat \
+  ripgrep \
+  fd \
+  sheldon \
+  sd \
+  hyperfine \
+  git-delta
+
+volta install node
+brew install cask font-hasklug-nerd-font
+
 cd $HOME
-ln -s tmp Downloads
-mkdir src
+ln -s Downloads tmp
+
+mkdir docs
+mkdir -p src/hjdivad
+cd src/hjdivad
+gh auth login
+gh repo clone hjdivad/dotfiles
+cd hjdivad/dotfiles
+./install.zsh
 ```
 
-## etc
+- install [nonicons font](https://github.com/yamatsum/nonicons/blob/master/dist/nonicons.ttf)
+- restart kitty
 
-```sh
-# hostname $NEW_MACHINE_HOSTNAME
+**Installation round 2**
 
-# cat '/usr/local/bin/bash' >> /etc/shells
-# chsh -s /usr/local/bin/bash
+```bash
+rbenv install 3.3.3
+rbenv global 3.3.3
+gem install pws
+```
 
-# set up ^r history fzf
+- install rustup
+- install from app store
+  - divvy
+- install outside of app store
+  - [alfred](https://www.alfredapp.com/)
+  - [telegram](https://desktop.telegram.org/)
+  - [discord](https://discord.com/download)
+  - [signal](https://signal.org/download/macos/)
+  - [drovio](https://www.drovio.com/)
+  - [flux](https://justgetflux.com/)
+  - [krisp.ai](https://krisp.ai/)
+  - [spotify](https://www.spotify.com/de-en/download/mac/)
+  - [dash](https://kapeli.com/dash)
+  - [obsidian](https://obsidian.md/download)
+  - [iStat Menus](https://bjango.com/mac/istatmenus/)
+
+```bash
+# install fzf (^r, ^t)
 $(brew --prefix)/opt/fzf/install
+
+# Add $NEW_HOST to network
+NEW_HOST="something"
+sudo hostname $NEW_HOST
+sudo scutil --set HostName $NEW_HOST
+sudo scutil --set LocalHostName $NEW_HOST
 ```
 
-## Configs
-
-- trackpad
-  - tap to click
-  - disable "Look up & data detectors"
-  - Swipe between pages: "three fingers"
-  - disable "Swipe between full-screen apps"
-  - mission control: "Up with four fingers"
-  - disable "Launchpad"
-  - disable "Show Desktop"
-
-- keyboard setup
-  - caps lock to ctrl
-  - key repeat fast
-  - repeat delay short
-  - remove siri from touchbar
-  - text
-    - disable correct spelling automatically
-    - disable capitalize words automatically
-    - disable add period with double-space
-    - disable touch bar typing suggestions
-  - shortcuts
-    - launchpad & dock disable all
-    - display disable all
-    - keyboard disable all except move focus to next window and focus status menus (⌘^-m)
-    - services disable all
-    - spotlight disable all (after installing alfred)
-    - app shortcuts disable all
-    - accessibility disable all
-
-- keyboard setup extra: sculpt
-  - swap ⌘ and option
-
-- sharing
-  - set computer name
-
-- dock
-  - position right
-  - minimize using scale
-  - ✅ automatically show & hide the dock
-  - ❌ animate opening applications
-
-- screensaver
-  - hot corner bottom right start screensaver
-  - start after 30 minutes
-  - word of the day
-  - show with clock
-
-- system prefs
-  - spotlight add dirs to not index
-    - `.volta`
-    - `.rbenv`
-    - `docs`
-    - `src`
-    - `tmp`
-
-[disable animations][]:
-```
-# opening and closing windows and popovers
-defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
-
-# smooth scrolling
-defaults write -g NSScrollAnimationEnabled -bool false
-
-# showing and hiding sheets, resizing preference windows, zooming windows
-# float 0 doesn't work
-defaults write -g NSWindowResizeTime -float 0.001
-
-# opening and closing Quick Look windows
-defaults write -g QLPanelAnimationDuration -float 0
-
-# rubberband scrolling (doesn't affect web views)
-defaults write -g NSScrollViewRubberbanding -bool false
-
-# resizing windows before and after showing the version browser
-# also disabled by NSWindowResizeTime -float 0.001
-defaults write -g NSDocumentRevisionsWindowTransformAnimation -bool false
-
-# showing a toolbar or menu bar in full screen
-defaults write -g NSToolbarFullScreenAnimationDuration -float 0
-
-# scrolling column views
-defaults write -g NSBrowserColumnAnimationSpeedMultiplier -float 0
-
-# showing the Dock
-defaults write com.apple.dock autohide-time-modifier -float 0
-defaults write com.apple.dock autohide-delay -float 0
-
-# showing and hiding Mission Control, command+numbers
-defaults write com.apple.dock expose-animation-duration -float 0
-
-# showing and hiding Launchpad
-defaults write com.apple.dock springboard-show-duration -float 0
-defaults write com.apple.dock springboard-hide-duration -float 0
-
-# changing pages in Launchpad
-defaults write com.apple.dock springboard-page-duration -float 0
-
-# at least AnimateInfoPanes
-defaults write com.apple.finder DisableAllAnimations -bool true
-
-# sending messages and opening windows for replies
-defaults write com.apple.Mail DisableSendAnimations -bool true
-defaults write com.apple.Mail DisableReplyAnimations -bool true
-```
-
-disable dock bounce
-```
-defaults write com.apple.dock no-bouncing -bool TRUE
-killall Dock
-```
+- set up alfred
+  - copy `$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/` from old machine to new
+  - disable ⌘-space spotlight
+  - enable ⌘-space alfred
+- set up obsidian
+  - open local vault (git clone)
+  - connect it to remote vault
+- set up divvy shortcuts
+- set up system settings
 
 [homebrew]: https://brew.sh/
-[disable animations]: https://apple.stackexchange.com/questions/14001/how-to-turn-off-all-animations-on-os-x
