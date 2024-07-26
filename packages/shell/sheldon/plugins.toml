@@ -22,6 +22,11 @@ local = "~/.zsh/completions"
 use = ["*"]
 apply = ["fpath"]
 
+[plugins.homebrew-completions]
+local = "/opt/homebrew/share/zsh/site-functions"
+use = ["*"]
+apply = ["fpath"]
+
 [plugins.local-plugins]
 local = "~/.zsh/plugins"
 use = ["*"]
@@ -31,3 +36,6 @@ apply = ["source"]
 local = "~/.zsh/plugins.deferred"
 use = ["*"]
 apply = ["defer"]
+
+[plugins.compinit]
+inline = 'autoload -Uz compinit && zsh-defer compinit'
