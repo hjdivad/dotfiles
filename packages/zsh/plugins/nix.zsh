@@ -14,9 +14,9 @@ alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 # use eza if it exists
 # https://github.com/eza-community/eza (replacement for https://github.com/ogham/exa)
 if which eza > /dev/null 2>&1; then
-  alias ls='eza --color-scale'
-  alias ll='eza -l --all --no-user --changed --sort=modified --color-scale'
-  alias lt='eza --tree --level 3 -l --no-permissions --no-user --no-time --color-scale'
+  alias ls='eza'
+  alias ll='eza -l --all --no-user --changed --sort=modified'
+  alias lt='eza --tree --level 3 -l --no-permissions --no-user --no-time'
 else
   # setup ls
   ls / --color=auto > /dev/null 2>&1
