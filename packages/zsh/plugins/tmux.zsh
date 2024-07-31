@@ -39,7 +39,7 @@ function __ts_reference {
 if which fd > /dev/null 2>&1; then
   function __ts_go_source {
     local to_dir=$(
-      fd . --type directory --max-depth 2 "$HOME/src" |\
+      fd . --type directory --max-depth 3 "$HOME/src" |\
       sd "$HOME/src/" '' |\
       sd "/$" '' |\
       fzf\

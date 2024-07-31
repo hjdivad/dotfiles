@@ -51,8 +51,8 @@ pub fn main() {
         // dotfiles session
         [
             "dotfiles",
-            ["dotfiles", "{home}/src/hjdivad/dotfiles", ["nvim"]],
-            ["rwjblue/dotvim", "{home}/src/rwjblue/dotvim", ["nvim"]]
+            ["dotfiles", "{home}/src/github/hjdivad/dotfiles", ["nvim"]],
+            ["rwjblue/dotvim", "{home}/src/github/rwjblue/dotvim", ["nvim"]]
         ],
         // ud:macros
         [
@@ -66,8 +66,8 @@ pub fn main() {
         // montoya.nvim
         [
             "montoya",
-            ["montoya", "{home}/src/malleatus/montoya.nvim", ["nvim"]],
-            ["montoya", "{home}/src/malleatus/montoya.nvim", ["nvim"]]
+            ["montoya", "{home}/src/github/malleatus/montoya.nvim", ["nvim"]],
+            ["montoya", "{home}/src/github/malleatus/montoya.nvim", ["nvim"]]
         ]
     ];
 
