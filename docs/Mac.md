@@ -30,7 +30,8 @@ brew install \
   sheldon \
   sd \
   hyperfine \
-  git-delta
+  git-delta \
+  tldr
 
 volta install node
 brew install cask font-hasklug-nerd-font
