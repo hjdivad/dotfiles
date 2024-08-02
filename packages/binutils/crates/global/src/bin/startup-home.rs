@@ -37,6 +37,11 @@ impl binutils::tmux::Options for StartupHome {
     }
 }
 
+// TODO: switch to [rob's
+// version](https://github.com/rwjblue/dotfiles/blob/master/binutils/src/tmux.rs)
+// TODO: and pull compile_binutils &c. from other startup
+// TODO: also move the domain-specific stuff to its own package root
+// TODO: including its own globals?
 pub fn main() {
     let options = StartupHome::parse();
 
