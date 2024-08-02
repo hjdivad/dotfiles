@@ -7,4 +7,6 @@ edition = "2021"
 # Augment errors with additional context
 # https://github.com/dtolnay/anyhow
 anyhow = "1.0.79"
+chrono = "0.4.38"
 clap = {version = "4.5.3", features = ["derive"]}
+dirs = "5.0.1"
