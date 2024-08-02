@@ -1,0 +1,10 @@
+[package]
+name = "binutils"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Augment errors with additional context
+# https://github.com/dtolnay/anyhow
+anyhow = "1.0.79"
+clap = {version = "4.5.3", features = ["derive"]}
