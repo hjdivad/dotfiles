@@ -49,12 +49,13 @@ return {
             },
           },
           ["<leader>/"] = function(state)
-            -- TODO: debug; seems to have issues when loading file out of pwd
             local node = state.tree:get_node()
-            require("telescope.builtin").live_grep({
-              cwd = node.path,
-              prompt_title = "rg (regex): " .. node.path,
-            })
+            local gf = require("grug-far")
+            local saved_splitright = vim.opt.splitright
+
+            vim.opt.splitright = true
+            gf.grug_far({ prefills = { paths=node.path} })
+            vim.opt.splitright = saved_splitright
           end,
           -- open file & close neotree
           -- tree action=show source=filesystem dir=~/.
