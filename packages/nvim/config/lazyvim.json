@@ -16,13 +16,14 @@
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.lang.yaml",
     "lazyvim.plugins.extras.test.core",
+    "lazyvim.plugins.extras.util.mini-hipatterns",
     "plugins.extras.ai.oatmeal",
     "plugins.extras.d2.lang",
     "plugins.extras.dap.keymaps",
     "plugins.extras.test.neotest"
   ],
   "news": {
-    "NEWS.md": "6077"
+    "NEWS.md": "6520"
   },
   "version": 6
 }
