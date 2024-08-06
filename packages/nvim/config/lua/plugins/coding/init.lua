@@ -153,7 +153,9 @@ local specs = {
     config = function(_, opts)
       require("luasnip").setup(opts)
 
-      local snippets_paths = { "~/.config/nvim/snippets" }
+      local snippets_paths = {
+        "~/.config/nvim/snippets",
+      }
       require("luasnip.loaders.from_snipmate").lazy_load({
         paths = snippets_paths,
       })
