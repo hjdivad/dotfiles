@@ -31,7 +31,7 @@ return {
       { "<leader>uC", false }, -- colorscheme selection
       { "<leader>gs", false }, -- git status
 
-      { "<leader>/", LazyVim.pick("live_grep"), desc = "Find in Files (Grep)" },
+      { "<leader>/", require('grug-far').grug_far, desc = "Find in Files (Grep)" },
       { "<leader>fl", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find line in Buffer" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       {
