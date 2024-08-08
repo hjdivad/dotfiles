@@ -33,7 +33,6 @@ return {
 
         -- formatters
         "fixjson",
-        "markdownlint",
         "shfmt",
         "stylua",
       },

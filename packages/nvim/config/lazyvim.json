@@ -20,6 +20,7 @@
     "plugins.extras.ai.oatmeal",
     "plugins.extras.d2.lang",
     "plugins.extras.dap.keymaps",
+    "plugins.extras.lang.markdown",
     "plugins.extras.test.neotest"
   ],
   "news": {
