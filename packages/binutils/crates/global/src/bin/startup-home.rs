@@ -57,7 +57,8 @@ pub fn main() {
         [
             "dotfiles",
             ["dotfiles", "{home}/src/github/hjdivad/dotfiles", ["nvim"]],
-            ["rwjblue/dotvim", "{home}/src/github/rwjblue/dotvim", ["nvim"]]
+            ["rwjblue/dotvim", "{home}/src/github/rwjblue/dotvim", ["nvim"]],
+            ["binutils", "{home}/src/github/hjdivad/dotfiles/packages/binutils/crates/global", ["nvim"]]
         ],
         // ud:macros
         [
