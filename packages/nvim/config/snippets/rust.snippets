@@ -18,6 +18,21 @@ snippet derive "derive macro"
 snippet allow "allow(clippy::) -> lint disable"
 	#[allow(clippy::${0})]
 
+snippet use:log "use logger"
+  use tracing::{debug, info, trace};
+
+snippet init:log "use logger"
+  use tracing_subscriber::EnvFilter;
+  // Initialize tracing, but only if RUST_LOG is set
+  tracing_subscriber::fmt()
+      .with_env_filter(
+          EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off")),
+      )
+      .init();
+
+snippet use:anyhow "use anyhow (result.context('foo'))"
+  use anyhow::{Context, Result};
+
 snippet cli "CLI scaffolding"
 	use clap::Parser;
 
