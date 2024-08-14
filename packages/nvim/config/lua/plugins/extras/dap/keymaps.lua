@@ -1,9 +1,9 @@
 local hjdivad_util = require('hjdivad_util')
-local hjdivad_sys = require("hjdivad_util/sys")
+local hjdivad_os = require("hjdivad_util.os")
 local ft_keymaps = vim.api.nvim_create_augroup("nvim_dap_keymaps", { clear = true })
 
 local args_list = hjdivad_util.args_list
-local ConfigurationsPath = hjdivad_sys.cache_path("dap-configurations.json")
+local ConfigurationsPath = hjdivad_os.cache_path("dap-configurations.json")
 
 local function load_configurations()
   local config_file = io.open(ConfigurationsPath, 'r')
