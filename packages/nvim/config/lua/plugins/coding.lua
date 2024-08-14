@@ -1,10 +1,6 @@
-local util = require("hjdivad_util")
-local telescope = require("plugins/coding/telescope")
-
 ---@type LazyPluginSpec[]
-local specs = {
+return {
   -- see https://www.lazyvim.org/plugins/coding
-
   -- completion
   {
     -- TODO: too slow
@@ -53,16 +49,16 @@ local specs = {
           end,
         },
         mapping = cmp.mapping.preset.insert({
-              ["<c-l>"] = function()
+          ["<c-l>"] = function()
             if cmp.visible() then
               cmp.confirm({ select = true })
             else
               cmp.complete()
             end
           end,
-              ["<c-c>"] = cmp.mapping.abort(),
-              ["<C-n>"] = cmp.mapping.select_next_item(),
-              ["<C-p>"] = cmp.mapping.select_prev_item(),
+          ["<c-c>"] = cmp.mapping.abort(),
+          ["<C-n>"] = cmp.mapping.select_next_item(),
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
         }),
         sources = cmp.config.sources({
           -- TODO: getting weird buffer keyword completion after lsp initializes
@@ -77,9 +73,9 @@ local specs = {
           { name = "nvim_lsp_signature_help" },
           -- { name = "nvim_lua" }, -- nvim api; would rather get from lsp
           { name = "luasnip" },
-          { name = "path" },      -- complete ./ &c.
+          { name = "path" }, -- complete ./ &c.
           { name = "wikilinks" }, -- complete [[foo]] &c.
-          { name = "emoji" },     -- complete :emoji:
+          { name = "emoji" }, -- complete :emoji:
         }),
         formatting = {
           format = function(_, item)
@@ -102,7 +98,7 @@ local specs = {
       cmp.setup(opts)
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline({
-              ["<c-l>"] = {
+          ["<c-l>"] = {
             c = function()
               if cmp.visible() then
                 cmp.confirm({ select = true })
@@ -189,5 +185,3 @@ local specs = {
     end,
   },
 }
-
-return util.concat(specs, telescope)
