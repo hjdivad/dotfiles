@@ -94,11 +94,9 @@ return {
       { "[t", function() require("todo-comments").jump_prev() end, desc = "Previous todo comment" },
       { "<leader>xt", false},
       { "<leader>xT", false},
-      --TODO: i'd love to have a variant of this that only matched lines that were in the git diff
-      --from e.g. ``git diff -U0 | rg '(?<=^\+(?!\+))(.*)' --pcre2 -o`
-      --This is likely doable via rg's --pre and --glob args
-      { "<leader>ft", "<cmd>TodoTelescope<cr>", desc = "Find todos" },
     },
+    --TODO: opts.search use git diff $(git merge-base origin/master) rather than rg
+    --see <https://github.com/folke/todo-comments.nvim#%EF%B8%8F-configuration>
   },
 
   -- find & replace

@@ -25,6 +25,7 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   -- TODO: configure tokyonight? https://github.com/folke/tokyonight.nvim#%EF%B8%8F-configuration
+  -- TODO: install.missing = false when starting a git editor?
   install = { colorscheme = { "tokyonight", "habamax" } },
   checker = {
     -- disable automatic plugin updating.
