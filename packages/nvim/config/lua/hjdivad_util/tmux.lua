@@ -109,9 +109,20 @@ function M._selection_string_to_pane_info(selection)
   return pane_info
 end
 
-function M.goto_fzf_tmux_session()
+
+---@class GotoFzfTmuxSessionOptions
+---@field quit_on_selection boolean | nil
+---
+---@param options GotoFzfTmuxSessionOptions
+function M.goto_fzf_tmux_session(options)
+  ---@type GotoFzfTmuxSessionOptions
+  local defaults = {
+    quit_on_selection = false
+  }
+  ---@type GotoFzfTmuxSessionOptions
+  local opts = vim.tbl_deep_extend("force", defaults, options or {})
+
   -- see <https://github.com/ibhagwan/fzf-lua/blob/8f9c3a2e308755c25630087f3c5d35786803cfd0/lua/fzf-lua/utils.lua#L577-L595>
-  local c = require('fzf-lua').utils.ansi_codes
   local panes = M.get_tmux_panes()
   local selections = {}
 
@@ -127,6 +138,10 @@ function M.goto_fzf_tmux_session()
       ['default'] = function (selected, _)
         local pane_info = M._selection_string_to_pane_info(selected[1])
         M.goto_tmux_session(pane_info.session_name, pane_info.window_name)
+
+        if opts.quit_on_selection then
+          vim.cmd('quitall')
+        end
       end
     }
   })

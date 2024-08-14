@@ -61,7 +61,7 @@ if which fd > /dev/null 2>&1; then
 fi
 
 alias t='tmux'
-alias tss='tmux display-popup -E -w 100% -h 100% nvim -c ":Telescope tmux windows quit_on_select=true"'
+alias tss='tmux display-popup -E -w 100% -h 100% nvim -c "lua require('"'"'hjdivad_util.tmux'"'"').goto_fzf_tmux_session({ quit_on_selection=true })"'
 alias tst='tmux switch-client -l'
 alias tsd=__ts_todos
 alias tsr=__ts_reference
