@@ -8,9 +8,9 @@ snippet error "assert fn throws error"
 	assert.has_error(${1:fn}, "${2:error-msg}", "${0:label}")
 
 snippet test "test"
-	it("${0:does something}", function()
-		assert.same(false, true, "test is implemented")
-	end)
+  it("${0:does something}", function()
+    assert.same('expected', 'actual', "test is implemented")
+  end)
 
 snippet test-suite "start a test suite"
 	describe("${1:some-module}", function()
