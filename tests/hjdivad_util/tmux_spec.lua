@@ -4,21 +4,34 @@ describe("tmux", function()
 	local assert = require("luassert")
 	local pp = vim.print
 
+	---@class TSysOptions
+	---@field continue_on_error boolean
+	---
 	---@param tmux_cmd string[]
-	local function tsys(tmux_cmd)
+	---@param options TSysOptions | nil
+	local function tsys(tmux_cmd, options)
+		---@type TSysOptions
+		local defaults = { continue_on_error = false }
+		---@type TSysOptions
+		local opts = vim.tbl_deep_extend("force", defaults, options or {})
+
 		local sys_cmd = { "tmux", "-L", "tmux_spec" }
 		vim.list_extend(sys_cmd, tmux_cmd)
 		local result = vim.system(sys_cmd):wait()
 
-		if result.code ~= 0 then
+		if result.code ~= 0 and opts.continue_on_error ~= true then
 			local cmd_str = table.concat(sys_cmd, " ")
 			error(string.format("Command failed: %s\nError: %s", cmd_str, result.stderr))
 		end
 	end
 
 	before_each(function()
-		tsys({ "kill-server" })
+		tsys({ "kill-server" }, { continue_on_error = true })
 	end)
+
+  after_each(function ()
+		tsys({ "kill-server" }, { continue_on_error = true })
+  end)
 
 	describe("get_tmux_panes", function()
 		it("lists sessions with their windows", function()
