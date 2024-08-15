@@ -6,6 +6,15 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
+local function is_buffer_in_git_repo()
+    local buf_path = vim.fn.bufname('%')
+    return (buf_path:match('^%.git/') ~= nil) or  (buf_path:match('/%.git/') ~= nil)
+end
+
+-- Don't attempt to install missing plugins when editing a .git/ file, i.e.
+-- when we're probably launched by git as part of a rebase or commit
+local install_missing_plugins = not is_buffer_in_git_repo()
+
 require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
@@ -25,8 +34,10 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   -- TODO: configure tokyonight? https://github.com/folke/tokyonight.nvim#%EF%B8%8F-configuration
-  -- TODO: install.missing = false when starting a git editor?
-  install = { colorscheme = { "tokyonight", "habamax" } },
+  install = {
+    missing = install_missing_plugins,
+    colorscheme = { "tokyonight", "habamax" }
+  },
   checker = {
     -- disable automatic plugin updating.
     -- manually updating can be done via the lazyvim ui
