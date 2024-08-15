@@ -41,7 +41,7 @@ jobs:
       - name: Install python3
         uses: actions/setup-python@v4
         env:
-          DEBUG_SSH: ${{ secrets.DebugSSH }}
+          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
         if: ${{ env.DEBUG_SSH == 'true' }}
         with:
           python-version: '3.x'
@@ -49,14 +49,14 @@ jobs:
 
       - name: Install python neovim module
         env:
-          DEBUG_SSH: ${{ secrets.DebugSSH }}
+          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
         if: ${{ env.DEBUG_SSH == 'true' }}
         run: |
           pip3 install neovim
 
       - name: Setup upterm session
         env:
-          DEBUG_SSH: ${{ secrets.DebugSSH }}
+          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
         if: ${{ env.DEBUG_SSH == 'true' }}
         uses: lhotari/action-upterm@v1
         with:

@@ -25,7 +25,10 @@ snippet class "create a class in lua"
 # vim snippets
 
 snippet opts "options with defaults"
-	local opts = vim.tbl_deep_extend("force", { ${1:--[[defaults]]} }, options or {})
+  ---@type ${1:OptionsTypeName}
+  local default_options = { ${0:defaults} }
+  ---@type ${1:OptionsTypeName}
+  local opts = vim.tbl_deep_extend("force", default_options, options or {})
 
 snippet autocmd
 	vim.api.nvim_create_autocmd({ "${1:BufEnter}" }, {
