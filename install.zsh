@@ -162,7 +162,8 @@
     packages/binutils/crates/target/debug/generate-binutils-symlinks
 
     echo "cache shell setup"
-    binutils/crates/target/debug/cache-shell-setup
+    # TODO: needs -s -d
+    # binutils/binutils/crates/target/debug/cache-shell-setup
   }
 
   # TODO: preflight checklist brew
