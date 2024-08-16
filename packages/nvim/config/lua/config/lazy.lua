@@ -6,14 +6,14 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
-local function is_buffer_in_git_repo()
+local function is_buffer_in_git_subdir()
     local buf_path = vim.fn.bufname('%')
     return (buf_path:match('^%.git/') ~= nil) or  (buf_path:match('/%.git/') ~= nil)
 end
 
 -- Don't attempt to install missing plugins when editing a .git/ file, i.e.
 -- when we're probably launched by git as part of a rebase or commit
-local install_missing_plugins = not is_buffer_in_git_repo()
+local install_missing_plugins = not is_buffer_in_git_subdir()
 
 require("lazy").setup({
   spec = {
