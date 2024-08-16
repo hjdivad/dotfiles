@@ -19,6 +19,7 @@
   local PKG="$DOTFILES/packages"
 
 
+  # TODO: add --force-link option to rm & relink existing symlinks
   function link_dotfile {
     local src="$1"
     local dst="$2"
@@ -153,6 +154,17 @@
     copy_template_with_merge "$GIT/template/gitconfig" "$HOME/.gitconfig"
   }
 
+  function install_binutils {
+    echo "building binutils"
+    cargo build --manifest-path=packages/binutils/crates/Cargo.toml
+
+    echo "setting up binutils symlinks"
+    packages/binutils/crates/target/debug/generate-binutils-symlinks
+
+    echo "cache shell setup"
+    binutils/crates/target/debug/cache-shell-setup
+  }
+
   # TODO: preflight checklist brew
 
   preamble
@@ -167,6 +179,8 @@
   link_dotfile "$PKG/starship/config/starship.toml" "$HOME/.config/starship.toml"
   link_dotfile "$PKG/tmux/tmux.conf" "$HOME/.tmux.conf"
   link_dotfile "$PKG/binutils/config" "$HOME/.config/binutils"
+
+  install_binutils
 
   exit 0
 )
