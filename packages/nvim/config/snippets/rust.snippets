@@ -20,10 +20,19 @@ snippet allow "allow(clippy::) -> lint disable"
 
 snippet use:log "use logger"
   use tracing::{debug, info, trace};
+  // cargo.toml
+  //
+  // tracing = "0.1.40"
+  // tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 
-snippet init:log "use logger"
+snippet do:init:log "init logger"
   use tracing_subscriber::EnvFilter;
-  // Initialize tracing, but only if RUST_LOG is set
+  // cargo.toml
+  //
+  // tracing = "0.1.40"
+  // tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+
+  // Initialize tracing, but only if RUST_LOG=<level> info | debug | trace
   tracing_subscriber::fmt()
       .with_env_filter(
           EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off")),
@@ -33,7 +42,27 @@ snippet init:log "use logger"
 snippet use:anyhow "use anyhow (result.context('foo'))"
   use anyhow::{Context, Result};
 
-snippet cli "CLI scaffolding"
+snippet use:default "default use preamble"
+  use clap::Parser;
+  use insta::{assert_debug_snapshot, assert_yaml_snapshot};
+  use tracing::{debug, info, trace};
+  use tracing_subscriber::EnvFilter;
+  use anyhow::{Context, Result};
+
+  // cargo.toml
+  //
+  // [dependencies]
+  // # Augment errors with additional context
+  // # https://github.com/dtolnay/anyhow
+  // anyhow = "1.0.79"
+  // chrono = "0.4.38"
+  // clap = {version = "4.5.3", features = ["derive"]}
+  // dirs = "5.0.1"
+  //
+  // [dev-dependencies]
+  // insta = { version = "1.36.1", features = ["yaml", "toml"] }
+
+snippet do:cli "CLI scaffolding"
 	use clap::Parser;
 
 	#[derive(Parser, Debug)]
@@ -48,9 +77,45 @@ snippet cli "CLI scaffolding"
 	}
 
 	pub fn main() {
-			let options = CommmandArgs::parse();
+			let options = CommandArgs::parse();
 
 			if options.debug {
 					println!("hello");
 			}
 	}
+
+snippet do:exec "exec a command (replace process)"
+  use std::process::Command;
+  let mut command = Command::new("ls");
+  command.env("HELLO", 1);
+  command.args(vec!["--ok", "--seems-good"])
+  let error = command.exec();
+
+snippet do:spawn "spawn a command (async)"
+  use std::process::Command;
+  let mut command = Command::new("ls");
+  command.env("HELLO", 1);
+  command.args(vec!["--ok", "--seems-good"])
+  let child = command.spawn();
+
+snippet do:sys "spawn a comamnd (sync)"
+  use std::process::Command;
+  use anyhow::{anyhow, Context, Result};
+
+  let mut command = Command::new("${1}");
+  command.args(vec![${2}]);
+  command.env("HELLO", 1);
+  command.current_dir(&"${3}");
+
+  let output = command.output();
+  let cmd_fail_error = || format!("Error running command: {:?}", command);
+  let output = output.with_context(cmd_fail_error)?;
+
+  if !output.status.success() {
+      Err(anyhow!(cmd_fail_error()))
+  } else {
+      ${0:Ok(())}
+  }
+
+snippet do:anyhow:err "create an anyhow error"
+  Err(anyhow!(format!("${0}")));
