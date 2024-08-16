@@ -109,6 +109,20 @@ function M._selection_string_to_pane_info(selection)
   return pane_info
 end
 
+---@param selected string[]
+---@param opts GotoFzfTmuxSessionOptions
+function M._fzf_lua_action_default(selected, opts)
+  if #selected == 0 then
+    return
+  end
+
+  local pane_info = M._selection_string_to_pane_info(selected[1])
+  M.goto_tmux_session(pane_info.session_name, pane_info.window_name)
+
+  if opts.quit_on_selection then
+    vim.cmd('quitall')
+  end
+end
 
 ---@class GotoFzfTmuxSessionOptions
 ---@field quit_on_selection boolean | nil
@@ -136,12 +150,7 @@ function M.goto_fzf_tmux_session(options)
     actions = {
       ---@param selected string[]
       ['default'] = function (selected, _)
-        local pane_info = M._selection_string_to_pane_info(selected[1])
-        M.goto_tmux_session(pane_info.session_name, pane_info.window_name)
-
-        if opts.quit_on_selection then
-          vim.cmd('quitall')
-        end
+        M._fzf_lua_action_default(selected, opts)
       end
     }
   })
