@@ -38,21 +38,21 @@ return {
       {
         "<leader>tsd",
         function()
-          tmux.goto_tmux_session("todos", "todos")
+          tmux.goto_tmux_session("📋 todos", "todos")
         end,
         desc = "tmux -> todos",
       },
       {
         "<leader>tsr",
         function()
-          tmux.goto_tmux_session("todos", "reference")
+          tmux.goto_tmux_session("📋 todos", "reference")
         end,
         desc = "tmux -> reference",
       },
       {
         "<leader>tsj",
         function()
-          tmux.goto_tmux_session("todos", "journal")
+          tmux.goto_tmux_session("📋 todos", "journal")
         end,
         desc = "tmux -> journal",
       },

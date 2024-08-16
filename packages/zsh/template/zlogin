@@ -2,7 +2,7 @@
 # hjdivad/dotfiles template
 # ---------------------------------------------------------------------------
 
-source "$HOME/$DOTFILES_RELATIVE/packages/zsh/zlogin.zsh"
+source "$HOME/$DOTFILES_RELATIVE/packages/zsh/dist/zlogin.zsh"
 
 # ---------------------------------------------------------------------------
 

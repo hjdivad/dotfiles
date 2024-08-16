@@ -2,7 +2,7 @@
 # hjdivad/dotfiles template
 # ---------------------------------------------------------------------------
 
-source "$HOME/$DOTFILES_RELATIVE/packages/zsh/zshenv.zsh"
+source "$HOME/$DOTFILES_RELATIVE/packages/zsh/dist/zshenv.zsh"
 
 # ---------------------------------------------------------------------------
 

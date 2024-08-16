@@ -1,1 +1,1 @@
-eval "$(starship init zsh)"
+# CMD: starship init zsh

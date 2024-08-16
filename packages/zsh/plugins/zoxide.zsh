@@ -1,3 +1,3 @@
 # Setup zoxide - defines `z` and `zi` commands
-
-eval "$(zoxide init zsh)"
+#
+# CMD: zoxide init zsh
