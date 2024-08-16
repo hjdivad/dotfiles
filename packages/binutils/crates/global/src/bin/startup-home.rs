@@ -48,14 +48,14 @@ pub fn main() {
     let startup_config = config![
         // todos session
         [
-            "todos",
+            "📋 todos",
             ["todos", "{home}/docs/vadnu/home", ["nvim"]],
             ["reference", "{home}/docs/vadnu/home/ref", ["nvim"]],
             ["journal", "{home}/docs/vadnu/home/journal", ["nvim"]]
         ],
         // dotfiles session
         [
-            "dotfiles",
+            "🟡 dotfiles",
             ["dotfiles", "{home}/src/github/hjdivad/dotfiles", ["nvim"]],
             ["rwjblue/dotvim", "{home}/src/github/rwjblue/dotvim", ["nvim"]],
             ["binutils", "{home}/src/github/hjdivad/dotfiles/packages/binutils/crates", ["nvim"]]
@@ -63,7 +63,7 @@ pub fn main() {
         // ud:macros
         [
             "💪 ud_macros",
-            ["💪 ud_macros", "{home}/src/hjdivad/ud_macros", ["nvim"]],
+            ["ud_macros", "{home}/src/hjdivad/ud_macros", ["nvim"]],
             ["sandbox-kotlin", "{home}/src/hjdivad/sandbox-kotlin", ["nvim"]],
             ["sandbox-android", "{home}/src/hjdivad/sandbox-android", ["nvim"]],
             ["sandbox-android2", "{home}/src/hjdivad/sandbox-android", ["nvim"]],
@@ -71,7 +71,7 @@ pub fn main() {
         ],
         // montoya.nvim
         [
-            "montoya",
+            "🦾 montoya",
             ["montoya", "{home}/src/github/malleatus/montoya.nvim", ["nvim"]],
             ["montoya", "{home}/src/github/malleatus/montoya.nvim", ["nvim"]]
         ]
@@ -80,7 +80,7 @@ pub fn main() {
     let mut tmux = TmuxKnowledge::default();
 
     startup_tmux(startup_config, &options, &mut tmux);
-    maybe_attach_tmux(&options, "todos");
+    maybe_attach_tmux(&options, "📋 todos");
 
     if options.debug {
         println!("{:?}", tmux);
