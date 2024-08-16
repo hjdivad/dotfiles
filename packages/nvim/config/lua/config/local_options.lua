@@ -1,0 +1,1 @@
+../../../../../local-packages/nvim/config/lua/config/local_options.lua
