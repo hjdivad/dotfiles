@@ -18,7 +18,7 @@ macro_rules! config {
             $(
                 // Directly use the `home` variable with `replace` to handle the "{home}" placeholder
                 let path_with_home = $path.replace("{home}", &home);
-                configs.push(binutils::tmux::win(
+                configs.push(binutils::tmux_proscribed::win(
                     s![$session],
                     s![$window],
                     path_with_home,

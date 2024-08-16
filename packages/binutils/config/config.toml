@@ -1,0 +1,85 @@
+#:schema ../crates/config/config_schema.json
+
+
+# TODO:mv to (or prioritize) local-config.toml
+# TODO: use this instead of startup-home when it works
+
+[[tmux.sessions]]
+name = "📋 todos"
+
+[[tmux.sessions.windows]]
+name = "todos"
+path = "~/docs/vadnu/home"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "reference"
+path = "~/docs/vadnu/home/ref"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "journal"
+path = "~/docs/vadnu/home/journal"
+command = "nvim"
+
+
+[[tmux.sessions]]
+name = "dotfiles"
+
+[[tmux.sessions.windows]]
+name = "dotfiles"
+path = "~/src/github/hjdivad/dotfiles"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "binutils"
+path = "~/src/github/hjdivad/dotfiles/packages/binutils/crates"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "shared-binutils"
+path = "~/src/github/malleatus/shared_binutils/"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "rwjblue/dotfiles"
+path = "~/src/github/rwjblue/dotfiles"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "rwjblue/dotvim"
+path = "~/src/github/rwjblue/dotvim"
+command = "nvim"
+
+
+[[tmux.sessions]]
+name = "💪 ud_macros"
+
+[[tmux.sessions.windows]]
+name = "sandbox-kotlin"
+path = "~/src/nas/hjdivad/sandbox-kotlin/"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "sandbox-android"
+path = "~/src/nas/hjdivad/sandbox-android/"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "sandbox-android2"
+path = "~/src/nas/hjdivad/sandbox-android/"
+command = "nvim"
+
+
+[[tmux.sessions]]
+name = "🦾 montoya"
+
+[[tmux.sessions.windows]]
+name = "montoya"
+path = "~/src/github/malleatus/montoya.nvim/"
+command = "nvim"
+
+[[tmux.sessions.windows]]
+name = "montoya2"
+path = "~/src/github/malleatus/montoya.nvim/"
+command = "nvim"

@@ -1,38 +1,40 @@
 # see <https://github.com/rwjblue/dotfiles/blob/master/zsh/plugins/tmux.zsh>
 
+TODOS="📋 todos"
+
 function __ts_todos {
-  tmux select-window -t "todos:todos"
+  tmux select-window -t "${TODOS}:todos"
 
   t_current_session=$(tmux display -p '#S')
   t_current_session=${t_current_session%\n}
-  if [[ "$t_current_session" != "todos" ]]; then
+  if [[ "$t_current_session" != "${TODOS}" ]]; then
     # switch to "last" (ie last used) session
     # switch to the todos session
-    tmux switch-client -t todos
+    tmux switch-client -t "${TODOS}"
   fi
 }
 
 function __ts_journal {
-  tmux select-window -t "todos:journal"
+  tmux select-window -t "${TODOS}:journal"
 
   t_current_session=$(tmux display -p '#S')
   t_current_session=${t_current_session%\n}
-  if [[ "$t_current_session" != "todos" ]]; then
+  if [[ "$t_current_session" != "${TODOS}" ]]; then
     # switch to "last" (ie last used) session
     # switch to the todos session
-    tmux switch-client -t todos
+    tmux switch-client -t "${TODOS}"
   fi
 }
 
 function __ts_reference {
-  tmux select-window -t "todos:reference"
+  tmux select-window -t "${TODOS}:reference"
 
   t_current_session=$(tmux display -p '#S')
   t_current_session=${t_current_session%\n}
-  if [[ "$t_current_session" != "todos" ]]; then
+  if [[ "$t_current_session" != "${TODOS}" ]]; then
     # switch to "last" (ie last used) session
     # switch to the todos session
-    tmux switch-client -t todos
+    tmux switch-client -t "${TODOS}"
   fi
 }
 

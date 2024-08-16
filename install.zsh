@@ -130,9 +130,11 @@
   }
 
   function install_zsh_config {
+    # TODO: ideally change this to $PKG/zsh/dist
+    # this requires building binutils and running cache-shell-setup first
     local ZSH="$PKG/zsh"
 
-    link_dotfile "$ZSH" "$HOME/.zsh"
+    link_dotfile "$ZSH/dist" "$HOME/.zsh"
     copy_template_with_merge "$ZSH/template/zlogin" "$HOME/.zlogin"
     copy_template_with_merge "$ZSH/template/zshenv" "$HOME/.zshenv"
     copy_template_with_merge "$ZSH/template/zprofile" "$HOME/.zprofile"
@@ -164,6 +166,7 @@
   link_dotfile "$PKG/ssh/rc" "$HOME/.ssh/rc"
   link_dotfile "$PKG/starship/config/starship.toml" "$HOME/.config/starship.toml"
   link_dotfile "$PKG/tmux/tmux.conf" "$HOME/.tmux.conf"
+  link_dotfile "$PKG/binutils/config" "$HOME/.config/binutils"
 
   exit 0
 )

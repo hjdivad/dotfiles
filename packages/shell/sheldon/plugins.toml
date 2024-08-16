@@ -2,7 +2,14 @@
 # see <https://thevaluable.dev/zsh-completion-guide-examples/>
 
 [templates]
+# This does reduce shell startup-time, but "deferral" still impacts
+# time-to-interactive, so it's not clear if it ever actually adds value
 defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"
+
+# [plugins.local-deferred-plugins]
+# local = "~/.zsh/plugins.deferred"
+# use = ["*"]
+# apply = ["defer"]
 
 [plugins.zsh-defer]
 github = "romkatv/zsh-defer"
@@ -31,11 +38,6 @@ apply = ["fpath"]
 local = "~/.zsh/plugins"
 use = ["*"]
 apply = ["source"]
-
-[plugins.local-deferred-plugins]
-local = "~/.zsh/plugins.deferred"
-use = ["*"]
-apply = ["defer"]
 
 [plugins.compinit]
 inline = 'autoload -Uz compinit && zsh-defer compinit'

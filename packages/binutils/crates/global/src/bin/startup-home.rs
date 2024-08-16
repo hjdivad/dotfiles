@@ -1,4 +1,4 @@
-use binutils::tmux::{maybe_attach_tmux, startup_tmux, TmuxKnowledge};
+use binutils::tmux_proscribed::{maybe_attach_tmux, startup_tmux, TmuxKnowledge};
 use clap::Parser;
 use std::env;
 
@@ -23,7 +23,7 @@ struct StartupHome {
     attach: Option<bool>,
 }
 
-impl binutils::tmux::Options for StartupHome {
+impl binutils::tmux_proscribed::Options for StartupHome {
     fn is_dry_run(&self) -> bool {
         self.dry_run
     }
@@ -58,7 +58,7 @@ pub fn main() {
             "dotfiles",
             ["dotfiles", "{home}/src/github/hjdivad/dotfiles", ["nvim"]],
             ["rwjblue/dotvim", "{home}/src/github/rwjblue/dotvim", ["nvim"]],
-            ["binutils", "{home}/src/github/hjdivad/dotfiles/packages/binutils", ["nvim"]]
+            ["binutils", "{home}/src/github/hjdivad/dotfiles/packages/binutils/crates", ["nvim"]]
         ],
         // ud:macros
         [
