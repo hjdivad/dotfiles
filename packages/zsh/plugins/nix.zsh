@@ -25,6 +25,20 @@ else
   fi
 fi
 
+if which gron > /dev/null 2>&1; then
+  function __qj() {
+    gron "$@" | fzf
+  }
+  alias qj='__qj'
+
+  # FIXME: This doesn't work.
+  #
+  # function _qj() {
+  #   _files
+  # }
+  # compdef _qj qj
+fi
+
 # Support colour in pager, tabsize 2 and case insensitive searching.
 export LESS='-R -x2 -i'
 
