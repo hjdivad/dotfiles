@@ -110,6 +110,8 @@ snippet do:sys "spawn a comamnd (sync)"
   let output = command.output();
   let cmd_fail_error = || format!("Error running command: {:?}", command);
   let output = output.with_context(cmd_fail_error)?;
+  let output = String::from_utf8(output.stdout)?;
+  let output = output.trim();
 
   if !output.status.success() {
       Err(anyhow!(cmd_fail_error()))
