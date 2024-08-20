@@ -26,6 +26,7 @@ fi
 
 # TODO: add this to template/zshrc
 path_add "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
+path_add "$HOME/src/github/hjdivad/dotfiles/local-packages/crates/global/target/debug"
 path_add "$HOME/.local/bin"
 
 

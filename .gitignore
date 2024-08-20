@@ -2,3 +2,4 @@
 /.lazy
 dist/
 .cargo/
+/local-packages
