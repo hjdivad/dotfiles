@@ -518,7 +518,6 @@ dependencies = [
  "dirs",
  "insta",
  "latest_bin",
- "nix",
  "rand",
  "regex",
  "schemars",
