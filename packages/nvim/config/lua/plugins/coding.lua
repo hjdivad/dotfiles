@@ -1,3 +1,10 @@
+local function __dirname()
+  local fullpath = debug.getinfo(1,"S").source:sub(2)
+  local dirname, filename = fullpath:match('^(.*/)([^/]-)$')
+
+  return dirname, filename
+end
+
 ---@type LazyPluginSpec[]
 return {
   -- see https://www.lazyvim.org/plugins/coding
@@ -151,6 +158,7 @@ return {
 
       local snippets_paths = {
         "~/.config/nvim/snippets",
+        __dirname() .. "/../../../../../local-packages/nvim/config/snippets"
       }
       require("luasnip.loaders.from_snipmate").lazy_load({
         paths = snippets_paths,
