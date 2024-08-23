@@ -128,6 +128,8 @@
   function preamble {
     mkdir -p "$HOME/.config"
     mkdir -p "$HOME/.local/bin"
+    mkdir -p "$HOME/.local/app"
+    mkdir -p "$HOME/src/github"
   }
 
   function install_zsh_config {

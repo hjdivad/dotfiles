@@ -13,6 +13,7 @@
 - install brave
 - install [homebrew][]
 - `brave://settings` -> set up sync
+- install [rustup](https://www.rust-lang.org/tools/install)
 
 ```bash
 brew install \
@@ -59,7 +60,6 @@ rbenv global 3.3.3
 gem install pws
 ```
 
-- install rustup
 - install from app store
   - divvy
 - install outside of app store
