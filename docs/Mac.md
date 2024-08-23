@@ -49,6 +49,7 @@ cd hjdivad/dotfiles
 ./install.zsh
 ```
 
+- install [berkeley mono font](https://berkeleygraphics.com/typefaces/berkeley-mono/)
 - install [nonicons font](https://github.com/yamatsum/nonicons/blob/master/dist/nonicons.ttf)
 - restart kitty
 
