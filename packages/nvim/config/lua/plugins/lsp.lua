@@ -47,6 +47,8 @@ return {
       -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/lsp/keymaps.lua
       local keys = require("lazyvim.plugins.lsp.keymaps").get()
 
+      -- FIXME: these are no longer being removed
+      --
       -- remove unwanted
       keys[#keys + 1] = { "gy", false }
       keys[#keys + 1] = { "gI", false }
@@ -55,29 +57,24 @@ return {
       keys[#keys + 1] = { "<c-k>", false, mode = "i" }
       keys[#keys + 1] = { "<C-k>", false, mode = "i" }
 
+      -- see :he fzf-lua-lsp/diagnostics
       -- add missing
       keys[#keys + 1] = {
         "gt",
-        function()
-          require("telescope.builtin").lsp_type_definitions()
-        end,
+        '<cmd>FzfLua lsp_typedefs<cr>',
         desc = "Goto [T]ype Definition",
       }
 
       keys[#keys + 1] = {
         "gd",
-        function()
-          require("telescope.builtin").lsp_definitions()
-        end,
+        '<cmd>FzfLua lsp_definitions<cr>',
         desc = "Goto Definition",
         has = "definition",
       }
 
       keys[#keys + 1] = {
         "gi",
-        function()
-          require("telescope.builtin").lsp_implementations()
-        end,
+        '<cmd>FzfLua lsp_implementations<cr>',
         desc = "Goto Implementation",
       }
 
