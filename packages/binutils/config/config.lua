@@ -107,4 +107,9 @@ return {
 			},
 		},
 	},
+
+  shell_caching = {
+    source = "~/src/github/hjdivad/dotfiles/packages/zsh/",
+    destination = "~/src/github/hjdivad/dotfiles/packages/zsh/dist",
+  }
 }
