@@ -25,8 +25,9 @@ if [[ -r "$HOME/.cargo/env" ]]; then
 fi
 
 # TODO: add this to template/zshrc
-path_add "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
 path_add "$HOME/src/github/hjdivad/dotfiles/local-packages/crates/global/target/debug"
+path_add "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
+path_add "$HOME/src/github/malleatus/shared_binutils/global/target/debug"
 path_add "$HOME/.local/bin"
 
 

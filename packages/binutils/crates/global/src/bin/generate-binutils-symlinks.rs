@@ -13,7 +13,7 @@ fn main() -> Result<()> {
 
     let crate_root = latest_bin::get_crate_root()?;
     debug!("crate_root: {}", crate_root.display());
-    binutils::build_utils::generate_symlinks(Some(crate_root))?;
+    global::build_utils::generate_symlinks(Some(crate_root))?;
 
     Ok(())
 }
