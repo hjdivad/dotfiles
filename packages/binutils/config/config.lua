@@ -47,6 +47,12 @@ return {
 					},
 
 					{
+						name = "local-packages",
+						path = "~/src/nas/hjdivad/local-dotfiles/",
+						command = "nvim",
+					},
+
+					{
 						name = "rwjblue/dotfiles",
 						path = "~/src/github/rwjblue/dotfiles",
 						command = "nvim",
