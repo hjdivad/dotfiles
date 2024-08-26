@@ -75,26 +75,36 @@ snippet use:default "default use preamble"
   // insta = { version = "1.36.1", features = ["yaml", "toml"] }
 
 snippet do:cli "CLI scaffolding"
-	use clap::Parser;
+  use clap::Parser;
+  use anyhow::{anyhow, Context, Result};
+  use tracing::{debug, info, trace};
+  use tracing_subscriber::EnvFilter;
 
-	#[derive(Parser, Debug)]
-	#[command(version, about, long_about = None)]
-	struct CommandArgs {
-			#[arg(long)]
-			dry_run: bool,
+  #[derive(Parser, Debug)]
+  #[command(version, about, long_about = None)]
+  struct CommandArgs {
+      #[arg(long)]
+      dry_run: bool,
 
-			/// Print debugging information
-			#[arg(long)]
-			debug: bool,
-	}
+      /// Print debugging information
+      #[arg(long)]
+      debug: bool,
+  }
 
-	pub fn main() {
-			let options = CommandArgs::parse();
+  fn main() -> Result<()> {
+      // Initialize tracing, but only if RUST_LOG is set
+      tracing_subscriber::fmt()
+          .with_env_filter(
+              EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off")),
+          )
+          .init();
 
-			if options.debug {
-					println!("hello");
-			}
-	}
+      latest_bin::ensure_latest_bin()?;
+
+      let options = CommandArgs::parse();
+
+      Ok(())
+  }
 
 snippet do:exec "exec a command (replace process)"
   use std::process::Command;
