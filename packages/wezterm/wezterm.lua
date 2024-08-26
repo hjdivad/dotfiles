@@ -34,6 +34,37 @@ for i = 1, 9 do
 	})
 end
 
+table.insert(config.keys, {
+	key = '`',
+	mods = "CTRL",
+	action = wezterm.action.Multiple({
+    -- vim sees this as <f25>
+		wezterm.action.SendKey({ key = "F1", mods = "CTRL" }),
+	}),
+})
+table.insert(config.keys, {
+	key = ":",
+	mods = "SHIFT|SUPER",
+	action = wezterm.action.Multiple({
+    -- vim sees this as <f26>
+		wezterm.action.SendKey({ key = "F2", mods = "CTRL" }),
+	}),
+})
+table.insert(config.keys, {
+	key = ';',
+	mods = "SUPER",
+	action = wezterm.action.Multiple({
+		wezterm.action.SendKey({ key = ";", mods = "ALT" }),
+	}),
+})
+table.insert(config.keys, {
+	key = "'",
+	mods = "SUPER",
+	action = wezterm.action.Multiple({
+		wezterm.action.SendKey({ key = "'", mods = "ALT" }),
+	}),
+})
+
 -- Use hyper-n to go to window n in tmux
 table.insert(config.keys, {
 	key = '!',

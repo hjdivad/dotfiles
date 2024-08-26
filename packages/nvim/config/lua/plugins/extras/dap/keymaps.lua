@@ -219,8 +219,8 @@ return {
           -- dap.restart_frame
           keymap.set("n", "<M-;>", dap.step_into, { desc = "(chrome) step into fn" })
           keymap.set("n", "<M-'>", dap.step_over, { desc = "(chrome) step over fn" })
-          -- kitty.conf maps ⌘⇧-; to <f12>
-          keymap.set("n", "<F12>", dap.step_out, { desc = "(chrome) step out" })
+          -- wezterm.lua maps ⌘⇧-; to <f26>
+          keymap.set("n", "<F26>", dap.step_out, { desc = "(chrome) step out" })
           -- dap.continue           <leader>dc
           -- dap.run_to_cursor      <leader>dC
           -- dap.toggle_breakpoint  <leader>db
@@ -229,7 +229,8 @@ return {
             return dap.toggle_breakpoint(nil, nil, vim.fn.input({ prompt = "> ", cancelreturn = nil }), nil)
           end, { desc = "logpoint" })
 
-          keymap.set("n", "<c-`>", function()
+          -- wezterm.lua maps <c-1> to <F25>
+          keymap.set("n", "<F25>", function()
             dapui.float_element("repl", { width = 200, height = 200, enter = true, title = "REPL" })
           end, { desc = "(chrome) repl" })
           keymap.set("n", "<leader>dR", function()
