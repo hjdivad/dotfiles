@@ -986,6 +986,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "todos"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "cargo_metadata",
+ "clap",
+ "insta",
+ "latest_bin",
+ "nix",
+ "rand",
+ "regex",
+ "shellexpand",
+ "temp-env",
+ "tempfile",
+ "test_utils",
+ "toml 0.8.19",
+ "tracing",
+ "tracing-subscriber",
+ "walkdir",
+]
+
+[[package]]
 name = "toml"
 version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
