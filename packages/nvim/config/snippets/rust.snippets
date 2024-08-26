@@ -6,7 +6,7 @@ snippet tests "tests module for unit tests"
 			#[test]
 			fn ${1:it_works}() -> Result<()> {
         ${0}
-        assert_eq!(1, 1, "Pretty sure 1==1")
+        assert_eq!(1, 1, "Pretty sure 1==1");
 
         Ok(())
 			}
@@ -16,7 +16,7 @@ snippet test "a test"
   #[test]
     fn ${1:it_works}() -> Result<()> {
       ${0}
-      assert_eq!(1, 1, "Pretty sure 1==1")
+      assert_eq!(1, 1, "Pretty sure 1==1");
 
       Ok(())
     }
@@ -86,22 +86,31 @@ snippet do:cli "CLI scaffolding"
       #[arg(long)]
       dry_run: bool,
 
-      /// Print debugging information
-      #[arg(long)]
-      debug: bool,
+      /// Print more logging.  Can be specified up to 3 times.
+      #[arg(short, long, action = clap::ArgAction::Count)]
+      pub verbose: u8,
   }
 
   fn main() -> Result<()> {
-      // Initialize tracing, but only if RUST_LOG is set
-      tracing_subscriber::fmt()
-          .with_env_filter(
-              EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off")),
-          )
-          .init();
+    let options = CommandArgs::parse();
 
-      latest_bin::ensure_latest_bin()?;
+    let mut env_filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
 
-      let options = CommandArgs::parse();
+    if options.verbose > 0 {
+        let level = match options.verbose {
+            1 => "info",
+            2 => "debug",
+            _ => "trace",
+        };
+
+        env_filter = env_filter
+            .add_directive(format!("${0:my_crate}={}", level).parse()?)
+            .add_directive(format!("latest_bin={}", level).parse()?);
+    }
+    tracing_subscriber::fmt().with_env_filter(env_filter).init();
+
+    latest_bin::ensure_latest_bin()?;
 
       Ok(())
   }
