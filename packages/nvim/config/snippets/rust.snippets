@@ -139,7 +139,7 @@ snippet do:sys "spawn a comamnd (sync)"
   command.current_dir(&"${3}");
 
   let output = command.output();
-  let cmd_fail_error = || format!("Error running command: {:?}", command);
+  let cmd_fail_error = || format!("Running command: {:?}", command);
   let output = output.with_context(cmd_fail_error)?;
   let output = String::from_utf8(output.stdout)?;
   let output = output.trim();
@@ -191,3 +191,27 @@ snippet do:mkdir_p "mkdir -p"
   if let Some(parent) = path.parent() {
       fs::create_dir_all(parent)?;
   }
+
+snippet do:fixturify "use fixturify to create test directory"
+    // Cargo.toml
+    //
+    // [dev-dependencies]
+    // fixturify = { git = "https://github.com/malleatus/shared_binutils.git" }
+
+    use std::collections::BTreeMap;
+    use fixturify;
+
+    let dir = tempdir()?;
+    let file_map = BTreeMap::from([
+        ("test.txt".to_string(), r#"
+          File contents
+        "#.to_string()),
+        ("a/foo.txt".to_string(), r#"
+          a/foo contents
+        "#.to_string()),
+        ("a/bar.txt".to_string(), r#"
+          a/bar contents
+        "#.to_string()),
+    ]);
+
+    fixturify::write(dir.path(), file_map)?;
