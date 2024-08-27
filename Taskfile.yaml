@@ -1,0 +1,24 @@
+# see <https://taskfile.dev/usage/>
+
+version: '3'
+
+vars:
+  CRATES_ROOT: "packages/binutils"
+
+tasks:
+  default:
+    desc: "List all tasks"
+    cmds:
+      - task --list-all
+
+  lint:
+    desc: "Run linters"
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo clippy
+
+  lint:fix:
+    desc: "Run lint fixers"
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo clippy --fix
