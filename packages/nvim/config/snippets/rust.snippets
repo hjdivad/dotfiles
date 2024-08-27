@@ -183,3 +183,11 @@ snippet do:walk "walk a tree"
 
 snippet do:anyhow:err "create an anyhow error"
   Err(anyhow!(format!("${0}")));
+
+snippet do:mkdir_p "mkdir -p"
+  use std::path::Path;
+
+  let path = Path::new(${0:&path});
+  if let Some(parent) = path.parent() {
+      fs::create_dir_all(parent)?;
+  }
