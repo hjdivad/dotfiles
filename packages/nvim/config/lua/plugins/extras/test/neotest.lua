@@ -11,7 +11,17 @@ return {
       -- ---@type neotest.Config.diagnostic
       -- diagnostic = { enabled = true, severity = vim.diagnostic.severity.ERROR },
       ---@type neotest.Config.output
-      output = { enabled = true, open_on_run = false },
+      output = {
+        enabled = true,
+        open_on_run = false,
+      },
+      output_panel = {
+        -- TODO: get this behaviour how i want it
+        --  - only load the floating output, not the window at the bottom
+        --  - autoload it on short test runs (the default actually)
+        enabled = false,
+        open_on_run = false,
+      },
       ---@type neotest.Adapter[]
       adapters = {
         -- Can't just require it here because of load-order issues, but it's
@@ -33,17 +43,17 @@ return {
       {
         "<leader>tr",
         function()
-          require("neotest").summary.run_marked()
-        end,
-        desc = "Run Marked",
-      },
-      {
-        "<leader>tR",
-        function()
           require("neotest").run.run()
-          require("neotest").output.open({ enter = true, auto_close = true, last_run = true })
         end,
         desc = "Run Nearest",
+      },
+      {
+        "<leader>tl",
+        function()
+          require("neotest").run.run_last()
+          -- require("neotest").output.open({ enter = true, auto_close = true, last_run=true })
+        end,
+        desc = "Run Last",
       },
       {
         "<leader>tS",
