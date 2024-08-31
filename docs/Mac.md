@@ -15,6 +15,7 @@
 - `brave://settings` -> set up sync
 - install [rustup](https://www.rust-lang.org/tools/install)
 
+
 ```bash
 brew install \
   kitty \
@@ -32,7 +33,8 @@ brew install \
   sd \
   hyperfine \
   git-delta \
-  tldr
+  tldr \
+  wezterm
 
 volta install node
 brew install cask font-hasklug-nerd-font
@@ -49,6 +51,7 @@ cd hjdivad/dotfiles
 ./install.zsh
 ```
 
+- set up [wezterm terminfo](https://wezfurlong.org/wezterm/faq.html#how-do-i-enable-undercurl-curly-underlines)
 - install [berkeley mono font](https://berkeleygraphics.com/typefaces/berkeley-mono/)
 - install [nonicons font](https://github.com/yamatsum/nonicons/blob/master/dist/nonicons.ttf)
 - restart kitty
