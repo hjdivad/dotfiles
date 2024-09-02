@@ -214,12 +214,18 @@ mod tests {
         let initial_local_file_map = BTreeMap::from([
             ("alpha/a.md".to_string(), "alpha/a".to_string()),
             ("alpha/b.md".to_string(), "alpha/b".to_string()),
+            ("bravo/a.md".to_string(), "bravo/a".to_string()),
+            ("bravo/b.md".to_string(), "bravo/b".to_string()),
             ("bravo/c.md".to_string(), "bravo/c".to_string()),
             ("bravo/d.md".to_string(), "bravo/d".to_string()),
+            ("bravo/e.md".to_string(), "bravo/e".to_string()),
         ]);
         let initial_remote_file_map = BTreeMap::from([
+            ("a.md".to_string(), "bravo/a".to_string()),
+            ("b.md".to_string(), "bravo/b".to_string()),
             ("c.md".to_string(), "bravo/c".to_string()),
             ("d.md".to_string(), "bravo/d".to_string()),
+            ("e.md".to_string(), "bravo/e".to_string()),
         ]);
 
         in_dir!(&config.git_remote_path, {
@@ -242,11 +248,14 @@ mod tests {
             sh!("ls")?;
 
             let modifications_file_map = BTreeMap::from([
-                ("bravo/c.md".to_string(), "bravo/c UPDATED".to_string()),
-                ("bravo/e.md".to_string(), "bravo/e".to_string()),
+                ("alpha/a.md".to_string(), "alpha/a local UPDATED".to_string()),
+                ("alpha/c.md".to_string(), "alpha/c local NEW".to_string()),
+                ("bravo/a.md".to_string(), "bravo/a local UPDATED".to_string()),
+                ("bravo/f.md".to_string(), "bravo/f local NEW".to_string()),
+                ("charlie/a.md".to_string(), "charlie/a local NEW".to_string()),
             ]);
             fixturify::write(vadnu_dir, &modifications_file_map)?;
-            fs::remove_file(vadnu_dir.join("bravo/d.md"))?;
+            fs::remove_file(vadnu_dir.join("bravo/b.md"))?;
 
             Ok(())
         })?;
@@ -273,10 +282,15 @@ mod tests {
         assert_debug_snapshot!(files, @r###"
         Ok(
             {
-                "alpha/a.md": "alpha/a",
+                "alpha/a.md": "alpha/a local UPDATED",
                 "alpha/b.md": "alpha/b",
-                "bravo/c.md": "bravo/c UPDATED",
+                "alpha/c.md": "alpha/c local NEW",
+                "bravo/a.md": "bravo/a local UPDATED",
+                "bravo/c.md": "bravo/c",
+                "bravo/d.md": "bravo/d",
                 "bravo/e.md": "bravo/e",
+                "bravo/f.md": "bravo/f local NEW",
+                "charlie/a.md": "charlie/a local NEW",
             },
         )
         "###);
@@ -285,8 +299,11 @@ mod tests {
         assert_debug_snapshot!(files, @r###"
         Ok(
             {
-                "c.md": "bravo/c UPDATED",
+                "a.md": "bravo/a local UPDATED",
+                "c.md": "bravo/c",
+                "d.md": "bravo/d",
                 "e.md": "bravo/e",
+                "f.md": "bravo/f local NEW",
             },
         )
         "###);
@@ -294,14 +311,84 @@ mod tests {
         Ok(())
     }
 
-    // TODO: impl
+    #[test]
     fn test_sync_remote_changes_no_conflicts() -> Result<()> {
+        let config = test_config()?;
+        setup_test(&config)?;
+
+        let modifications_file_map = BTreeMap::from([
+            ("alpha/a.md".to_string(), "bravo/alpha/a remote NEW".to_string()),
+            ("c.md".to_string(), "bravo/c remote UPDATED".to_string()),
+            ("g.md".to_string(), "bravo/g remote NEW".to_string()),
+        ]);
+        fixturify::write(&config.vadnu_config.rsync_dir, &modifications_file_map)?;
+        fs::remove_file(config.vadnu_config.rsync_dir.join("d.md"))?;
+
+        sync(&config.vadnu_config)?;
+
+        in_dir!(&config.vadnu_config.vadnu_dir, {
+            assert_eq!(sh!("git status -s")?.trim(), "", "git is clean");
+            Ok(())
+        })?;
+
+        let files = fixturify::read(&config.vadnu_config.vadnu_dir);
+
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "alpha/a.md": "alpha/a local UPDATED",
+                "alpha/b.md": "alpha/b",
+                "alpha/c.md": "alpha/c local NEW",
+                "bravo/a.md": "bravo/a local UPDATED",
+                "bravo/alpha/a.md": "bravo/alpha/a remote NEW",
+                "bravo/c.md": "bravo/c remote UPDATED",
+                "bravo/e.md": "bravo/e",
+                "bravo/f.md": "bravo/f local NEW",
+                "bravo/g.md": "bravo/g remote NEW",
+                "charlie/a.md": "charlie/a local NEW",
+            },
+        )
+        "###);
+
+        let files = fixturify::read(&config.vadnu_config.rsync_dir);
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "a.md": "bravo/a local UPDATED",
+                "alpha/a.md": "bravo/alpha/a remote NEW",
+                "c.md": "bravo/c remote UPDATED",
+                "e.md": "bravo/e",
+                "f.md": "bravo/f local NEW",
+                "g.md": "bravo/g remote NEW",
+            },
+        )
+        "###);
+
         Ok(())
     }
 
-    // TODO: impl
+    #[test]
     fn test_sync_remote_changes_with_conflicts() -> Result<()> {
-        todo!();
+        let config = test_config()?;
+        setup_test(&config)?;
+
+        // TODO: remote has conflicting changes, local wins
+        sync(&config.vadnu_config)?;
+
+        in_dir!(&config.vadnu_config.vadnu_dir, {
+            assert_eq!(sh!("git status -s")?.trim(), "", "git is clean");
+            Ok(())
+        })?;
+
+        let files = fixturify::read(&config.vadnu_config.vadnu_dir);
+
+        assert_debug_snapshot!(files, @r"");
+
+        let files = fixturify::read(&config.vadnu_config.rsync_dir);
+        assert_debug_snapshot!(files, @r"");
+
         Ok(())
     }
+
+    // TODO: impl mirror tests from PoV of the pseudo-external
 }
