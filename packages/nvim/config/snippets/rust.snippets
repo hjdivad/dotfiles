@@ -134,18 +134,19 @@ snippet do:sys "spawn a comamnd (sync)"
   use anyhow::{anyhow, Context, Result};
 
   let mut command = Command::new("${1}");
-  command.args(vec![${2}]);
+  command.current_dir(&"${2}");
   command.env("HELLO", 1);
-  command.current_dir(&"${3}");
+  command.args(vec![${3}]);
 
   let output = command.output();
-  let cmd_fail_error = || format!("Running command: {:?}", command);
-  let output = output.with_context(cmd_fail_error)?;
-  let output = String::from_utf8(output.stdout)?;
-  let output = output.trim();
+  let output = output.context(format!("cmd: {:?}", command))?;
 
   if !output.status.success() {
-      Err(anyhow!(cmd_fail_error()))
+      let mut stdout = String::from_utf8(output.stdout)?;
+      stdout = stdout.trim().to_string();
+      let mut stderr = String::from_utf8(output.stderr)?;
+      stderr = stderr.trim().to_string();
+      anyhow::bail!("Cmd: {:?}\nstdout: {}\nstderr: {}", command, stdout, stderr);
   } else {
       ${0:Ok(())}
   }
