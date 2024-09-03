@@ -23,6 +23,7 @@ struct VadnuConfig {
     rsync_dir: PathBuf,
     sync_path: Option<String>,
 }
+// TODO: generate plist; see <https://chatgpt.com/c/37dbb44c-639d-458c-a94d-06a0fb481db4>
 fn main() -> Result<()> {
     tracing_subscriber::fmt()
         .with_env_filter(
@@ -55,7 +56,21 @@ impl VadnuConfig {
     }
 }
 
+/// Sync local vadnu (or a subpath of it) with some rsync.
+///
+/// Creates three commits
+///
+///     - local snapshot
+///     - remote snapshot
+///     - local cherry-pick (trump remote changes)
+///
+/// The three commits are always created so might be empty.
+///
+/// The idea is that syncing should be scheduled to be done "soon after the end of the work period"
+/// which means the most recent changes are local.  There should generally not be conflicts if
+/// syncing is done regularly.
 fn sync(config: &VadnuConfig) -> Result<()> {
+    // TODO: add more logging & add file logging
     debug!("sync {:?}", &config);
 
     let vadnu_sync_dir = config.vadnu_sync_path();
@@ -83,10 +98,24 @@ fn sync(config: &VadnuConfig) -> Result<()> {
         sh!(r#"git commit --no-gpg-sign --allow-empty -m "remote: snapshot""#)?;
         remote_snapshot_sha = sh!(r#"git rev-parse --short HEAD"#)?;
 
+        // we now have local snapshot and remote snapshot
+        // cherry-pick the local snapshot and make sure it wins all conflicts
+        sh!(r#"git cherry-pick --no-commit --strategy ort -X theirs HEAD~1"#)?;
+
+        // TODO: make sure all the conflict possibilities are tested
+        //
+        // A           U    unmerged, added by us
+        // A           A    unmerged, both added
+        // U           A    unmerged, added by them
+        // D           U    unmerged, deleted by us
+        // U           U    unmerged, both modified
+
+        // DD, UD will still conflict even with -s ort -X theirs
+        // But resolving is easy -- just delete the file harder
+        resolve_cherry_pick_conflicts(config);
+
         Ok(())
     })?;
-
-    rebase_swap_local_remote(&local_snapshot_sha, &remote_snapshot_sha, config)?;
 
     in_dir!(&config.vadnu_dir, {
         sh!(r#"git push"#)?;
@@ -105,51 +134,11 @@ fn sync(config: &VadnuConfig) -> Result<()> {
     Ok(())
 }
 
-fn rebase_swap_local_remote(
-    local_snapshot_sha: &str,
-    remote_snapshot_sha: &str,
-    config: &VadnuConfig,
-) -> Result<()> {
-    let mut command = Command::new("git");
-    // skip $HOME/.gitconfig to ensure we get the default rebase format
-    command.env("GIT_CONFIG_GLOBAL", "/tmp/nope");
-    // Use a sequence editor to swap the "pick local" and "pick remote" lines
-    // Relies on `sd` being installed
-    command.env(
-        "GIT_SEQUENCE_EDITOR",
-        format!(
-            r#"sd -f sm "^(.*)$" "pick {}\npick {}\n""#,
-            remote_snapshot_sha, local_snapshot_sha
-        ),
-    );
-    // -X theirs --empty keep is to make the rebase automatic
-    // --rebase-merges is pointless but jenny wanted it
-    command.args(vec![
-        "rebase",
-        "--interactive",
-        "--rebase-merges",
-        "-X",
-        "theirs",
-        "--empty",
-        "keep",
-        "HEAD~2",
-    ]);
-    command.current_dir(&config.vadnu_dir);
-    trace!("{:?}", command);
-
-    let output = command.output();
-    let output = output.context(format!("cmd: {:?}", command))?;
-
-    if !output.status.success() {
-        let mut stdout = String::from_utf8(output.stdout)?;
-        stdout = stdout.trim().to_string();
-        let mut stderr = String::from_utf8(output.stderr)?;
-        stderr = stderr.trim().to_string();
-        anyhow::bail!("Cmd: {:?}\nstdout: {}\nstderr: {}", command, stdout, stderr);
-    } else {
-        Ok(())
-    }
+fn resolve_cherry_pick_conflicts(config: &VadnuConfig) {
+    // TODO: git status --short | rg '^\wD (.*)$' '$1'
+    // rm each of those files in_dir &vadnu
 }
+
 
 // #!/usr/bin/env bash
 // # vim:ft=bash
@@ -248,11 +237,20 @@ mod tests {
             sh!("ls")?;
 
             let modifications_file_map = BTreeMap::from([
-                ("alpha/a.md".to_string(), "alpha/a local UPDATED".to_string()),
+                (
+                    "alpha/a.md".to_string(),
+                    "alpha/a local UPDATED".to_string(),
+                ),
                 ("alpha/c.md".to_string(), "alpha/c local NEW".to_string()),
-                ("bravo/a.md".to_string(), "bravo/a local UPDATED".to_string()),
+                (
+                    "bravo/a.md".to_string(),
+                    "bravo/a local UPDATED".to_string(),
+                ),
                 ("bravo/f.md".to_string(), "bravo/f local NEW".to_string()),
-                ("charlie/a.md".to_string(), "charlie/a local NEW".to_string()),
+                (
+                    "charlie/a.md".to_string(),
+                    "charlie/a local NEW".to_string(),
+                ),
             ]);
             fixturify::write(vadnu_dir, &modifications_file_map)?;
             fs::remove_file(vadnu_dir.join("bravo/b.md"))?;
@@ -317,7 +315,10 @@ mod tests {
         setup_test(&config)?;
 
         let modifications_file_map = BTreeMap::from([
-            ("alpha/a.md".to_string(), "bravo/alpha/a remote NEW".to_string()),
+            (
+                "alpha/a.md".to_string(),
+                "bravo/alpha/a remote NEW".to_string(),
+            ),
             ("c.md".to_string(), "bravo/c remote UPDATED".to_string()),
             ("g.md".to_string(), "bravo/g remote NEW".to_string()),
         ]);
@@ -372,7 +373,20 @@ mod tests {
         let config = test_config()?;
         setup_test(&config)?;
 
-        // TODO: remote has conflicting changes, local wins
+        let modifications_file_map = BTreeMap::from([
+            // modified by local
+            ("a.md".to_string(), "bravo/a remote UPDATED".to_string()),
+            // added by local
+            ("f.md".to_string(), "bravo/f remote NEW".to_string()),
+            // deleted by local
+            ("b.md".to_string(), "bravo/b remote UPDATED".to_string()),
+            // doesn't conflict
+            ("e.md".to_string(), "bravo/e remote UPDATED".to_string()),
+        ]);
+        fixturify::write(&config.vadnu_config.rsync_dir, &modifications_file_map)?;
+        // rm c does not conflict
+        fs::remove_file(config.vadnu_config.rsync_dir.join("c.md"))?;
+
         sync(&config.vadnu_config)?;
 
         in_dir!(&config.vadnu_config.vadnu_dir, {
