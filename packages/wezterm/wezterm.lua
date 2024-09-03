@@ -20,6 +20,11 @@ config.debug_key_events = true
 
 config.keys = {}
 
+
+-- assumes a terminfo is installed;
+-- see <https://wezfurlong.org/wezterm/faq.html#how-do-i-enable-undercurl-curly-underlines>
+config.term = "wezterm"
+
 -- Use ⌘-n to go to tab n in neovim
 for i = 1, 9 do
 	-- {
