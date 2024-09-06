@@ -71,7 +71,7 @@ return {
     },
   },
   {
-    "MagickDuck/grug-far.nvim",
+    "MagicDuck/grug-far.nvim",
     keys = {
       { "<leader>/", "<cmd>GrugFar<cr>", desc = "Search with GrugFar" },
     },
