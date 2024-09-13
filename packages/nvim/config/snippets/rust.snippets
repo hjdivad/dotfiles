@@ -44,12 +44,11 @@ snippet do:init:log "init logger"
   // tracing = "0.1.40"
   // tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 
-  // Initialize tracing, but only if RUST_LOG=<level> info | debug | trace
-  tracing_subscriber::fmt()
-      .with_env_filter(
-          EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off")),
-      )
-      .init();
+  let mut env_filter =
+      EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
+
+  env_filter = env_filter.add_directive(format!("${0:my_crate}={}", "trace").parse()?);
+  tracing_subscriber::fmt().with_env_filter(env_filter).init();
 
 snippet use:anyhow "use anyhow (result.context('foo'))"
   use anyhow::{anyhow, Context, Result};
