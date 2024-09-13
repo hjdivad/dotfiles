@@ -33,6 +33,8 @@ fn main() -> Result<()> {
 
     latest_bin::ensure_latest_bin()?;
 
+    trace!("main()");
+
     let options = CommandArgs::parse();
 
     // TODO: read from config?
@@ -77,6 +79,7 @@ fn sync(config: &VadnuConfig) -> Result<()> {
     let mut local_snapshot_sha = "".to_string();
     let mut remote_snapshot_sha = "".to_string();
 
+    debug!("git commit: local snapshot");
     in_dir!(&config.vadnu_dir, {
         sh!(r#"git add ."#)?;
         sh!(r#"git commit --no-gpg-sign --allow-empty -m "local: snapshot""#)?;
@@ -85,19 +88,21 @@ fn sync(config: &VadnuConfig) -> Result<()> {
         Ok(())
     })?;
 
-    // rsync from remote
+    debug!("rsync from remote");
     sh!(&format!(
         r#"rsync --delete --recursive --links --safe-links --perms --executability --times --exclude ".git" "{}/" "{}""#,
         &config.rsync_dir.to_string_lossy(),
         vadnu_sync_dir.to_string_lossy(),
     ))?;
-    // TODO: copy .pws linkedin/ -> / specifically
 
     in_dir!(&config.vadnu_dir, {
+        debug!("git commit: remote snapshot");
+
         sh!(r#"git add ."#)?;
         sh!(r#"git commit --no-gpg-sign --allow-empty -m "remote: snapshot""#)?;
         remote_snapshot_sha = sh!(r#"git rev-parse --short HEAD"#)?;
 
+        debug!("git cherry-pick local commit");
         // we now have local snapshot and remote snapshot
         // cherry-pick the local snapshot and make sure it wins all conflicts
         sh!(r#"git cherry-pick --no-commit --strategy ort -X theirs HEAD~1"#)?;
@@ -114,6 +119,8 @@ fn sync(config: &VadnuConfig) -> Result<()> {
         // But resolving is easy -- just delete the file harder
         resolve_cherry_pick_conflicts(config);
 
+        sh!(r#"git commit --no-gpg-sign --allow-empty -m "local: overwrite conflicts with remote""#)?;
+
         Ok(())
     })?;
 
@@ -129,16 +136,15 @@ fn sync(config: &VadnuConfig) -> Result<()> {
         vadnu_sync_dir.to_string_lossy(),
         &config.rsync_dir.to_string_lossy()
     ))?;
-    // TODO: copy .pws / -> /linkedin specifically
 
     Ok(())
 }
 
 fn resolve_cherry_pick_conflicts(config: &VadnuConfig) {
+    debug!("resolve git conflicts");
     // TODO: git status --short | rg '^\wD (.*)$' '$1'
     // rm each of those files in_dir &vadnu
 }
-
 
 // #!/usr/bin/env bash
 // # vim:ft=bash
@@ -186,16 +192,18 @@ mod tests {
         })
     }
 
-    fn init_log() {
-        tracing_subscriber::fmt()
-            .with_env_filter(
-                EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off")),
-            )
-            .init();
+    fn init_log() -> Result<()> {
+        let mut env_filter =
+            EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
+
+        env_filter = env_filter.add_directive(format!("vadnu_sync={}", "trace").parse()?);
+        tracing_subscriber::fmt().with_env_filter(env_filter).init();
+
+        Ok(())
     }
 
     fn setup_test(config: &TestConfig) -> Result<()> {
-        init_log();
+        init_log()?;
 
         let vadnu_dir = &config.vadnu_config.vadnu_dir;
         let sync_dir = &config.vadnu_config.rsync_dir;
@@ -228,7 +236,7 @@ mod tests {
                 "git remote add origin {}",
                 &config.git_remote_path.to_string_lossy()
             ))?;
-            sh!("git commit --allow-empty -m 'root'")?;
+            sh!("git commit --no-gpg-sign --allow-empty -m 'root'")?;
             sh!("git push -u origin +master")?;
 
             fixturify::write(vadnu_dir, &initial_local_file_map)?;
