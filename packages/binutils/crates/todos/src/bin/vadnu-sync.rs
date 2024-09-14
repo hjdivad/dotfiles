@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{bail, Context, Result};
 use clap::Parser;
 use shell::*;
 use std::path::PathBuf;
@@ -23,6 +23,7 @@ struct VadnuConfig {
     rsync_dir: PathBuf,
     sync_path: Option<String>,
 }
+// TODO: run daily; see ⬇️
 // TODO: generate plist; see <https://chatgpt.com/c/37dbb44c-639d-458c-a94d-06a0fb481db4>
 fn main() -> Result<()> {
     tracing_subscriber::fmt()
@@ -72,7 +73,6 @@ impl VadnuConfig {
 /// which means the most recent changes are local.  There should generally not be conflicts if
 /// syncing is done regularly.
 fn sync(config: &VadnuConfig) -> Result<()> {
-    // TODO: add more logging & add file logging
     debug!("sync {:?}", &config);
 
     let vadnu_sync_dir = config.vadnu_sync_path();
@@ -105,21 +105,44 @@ fn sync(config: &VadnuConfig) -> Result<()> {
         debug!("git cherry-pick local commit");
         // we now have local snapshot and remote snapshot
         // cherry-pick the local snapshot and make sure it wins all conflicts
-        sh!(r#"git cherry-pick --no-commit --strategy ort -X theirs HEAD~1"#)?;
 
-        // TODO: make sure all the conflict possibilities are tested
-        //
-        // A           U    unmerged, added by us
-        // A           A    unmerged, both added
-        // U           A    unmerged, added by them
-        // D           U    unmerged, deleted by us
-        // U           U    unmerged, both modified
+        let mut command = Command::new("git");
+        command.current_dir(&config.vadnu_dir);
+        command.args(vec![
+            "cherry-pick",
+            "--no-commit",
+            "--strategy",
+            "ort",
+            "-X",
+            "theirs",
+            "HEAD~1",
+        ]);
 
-        // DD, UD will still conflict even with -s ort -X theirs
-        // But resolving is easy -- just delete the file harder
-        resolve_cherry_pick_conflicts(config);
+        let output = command.output();
+        let output = output.context(format!("cmd: {:?}", command))?;
 
-        sh!(r#"git commit --no-gpg-sign --allow-empty -m "local: overwrite conflicts with remote""#)?;
+        // if cherry-pick had a conflict from DD, UD, resolve those conflicts
+        if !output.status.success() {
+            let mut stderr = String::from_utf8(output.stderr)?;
+            stderr = stderr.trim().to_string();
+
+            if stderr.contains("CONFLICT") || stderr.contains("conflicts") {
+                resolve_cherry_pick_conflicts(config)?;
+            } else {
+                let mut stdout = String::from_utf8(output.stdout)?;
+                stdout = stdout.trim().to_string();
+                bail!(
+                    "cmd: {:?}\n\nout:\n\n{}\n\nerr:\n\n{}",
+                    "git cherry-pick --no-commit --strategy ort -X theirs HEAD~1",
+                    stdout,
+                    stderr
+                );
+            }
+        }
+
+        sh!(
+            r#"git commit --no-gpg-sign --allow-empty -m "local: overwrite conflicts with remote""#
+        )?;
 
         Ok(())
     })?;
@@ -140,10 +163,26 @@ fn sync(config: &VadnuConfig) -> Result<()> {
     Ok(())
 }
 
-fn resolve_cherry_pick_conflicts(config: &VadnuConfig) {
+fn resolve_cherry_pick_conflicts(config: &VadnuConfig) -> Result<()> {
+    //
+    // A           U    unmerged, added by us
+    // A           A    unmerged, both added
+    // U           A    unmerged, added by them
+    // D           U    unmerged, deleted by us
+    // U           U    unmerged, both modified
+
+    // DD, UD will still conflict even with -s ort -X theirs
+    // But resolving is easy -- just delete the file harder
     debug!("resolve git conflicts");
-    // TODO: git status --short | rg '^\wD (.*)$' '$1'
-    // rm each of those files in_dir &vadnu
+    in_dir!(&config.vadnu_dir, {
+        let file_paths = sh!(r#"git status --short | rg '^\wD (.*)$' -r '$1'"#)?;
+        let file_paths = file_paths.trim().split("\n");
+        for file_path in file_paths {
+            trace!("git rm {}", file_path);
+            sh!(&format!("git rm {}", file_path))?;
+        }
+        Ok(())
+    })
 }
 
 // #!/usr/bin/env bash
@@ -404,10 +443,32 @@ mod tests {
 
         let files = fixturify::read(&config.vadnu_config.vadnu_dir);
 
-        assert_debug_snapshot!(files, @r"");
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "alpha/a.md": "alpha/a local UPDATED",
+                "alpha/b.md": "alpha/b",
+                "alpha/c.md": "alpha/c local NEW",
+                "bravo/a.md": "bravo/a local UPDATED",
+                "bravo/d.md": "bravo/d",
+                "bravo/e.md": "bravo/e remote UPDATED",
+                "bravo/f.md": "bravo/f local NEW",
+                "charlie/a.md": "charlie/a local NEW",
+            },
+        )
+        "###);
 
         let files = fixturify::read(&config.vadnu_config.rsync_dir);
-        assert_debug_snapshot!(files, @r"");
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "a.md": "bravo/a local UPDATED",
+                "d.md": "bravo/d",
+                "e.md": "bravo/e remote UPDATED",
+                "f.md": "bravo/f local NEW",
+            },
+        )
+        "###);
 
         Ok(())
     }
