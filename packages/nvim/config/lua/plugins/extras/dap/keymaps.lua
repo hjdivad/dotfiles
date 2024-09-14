@@ -223,8 +223,8 @@ return {
           keymap.set("n", "<F26>", dap.step_out, { desc = "(chrome) step out" })
 
           -- TODO: test these
-          keymap.set("n", "<M-J>", dap.step_into, { desc = "(dap) step into fn" })
-          keymap.set("n", "<M-j>", dap.step_over, { desc = "(dap) step over fn" })
+          keymap.set("n", "<M-j>", dap.step_into, { desc = "(dap) step into fn" })
+          keymap.set("n", "<M-J>", dap.step_over, { desc = "(dap) step over fn" })
           keymap.set("n", "<M-k>", dap.step_out, { desc = "(dap) step out" })
 
           -- dap.continue           <leader>dc

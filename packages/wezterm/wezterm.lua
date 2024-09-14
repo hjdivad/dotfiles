@@ -69,6 +69,27 @@ table.insert(config.keys, {
 		wezterm.action.SendKey({ key = "'", mods = "ALT" }),
 	}),
 })
+table.insert(config.keys, {
+	key = 'j',
+	mods = "SUPER",
+	action = wezterm.action.Multiple({
+		wezterm.action.SendKey({ key = "j", mods = "ALT" }),
+	}),
+})
+table.insert(config.keys, {
+	key = 'J',
+	mods = "SUPER",
+	action = wezterm.action.Multiple({
+		wezterm.action.SendKey({ key = "J", mods = "ALT" }),
+	}),
+})
+table.insert(config.keys, {
+	key = "k",
+	mods = "SUPER",
+	action = wezterm.action.Multiple({
+		wezterm.action.SendKey({ key = "k", mods = "ALT" }),
+	}),
+})
 
 -- Use hyper-n to go to window n in tmux
 table.insert(config.keys, {
