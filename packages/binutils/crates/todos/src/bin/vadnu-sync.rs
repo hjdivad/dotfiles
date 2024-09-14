@@ -38,9 +38,8 @@ fn main() -> Result<()> {
 
     let options = CommandArgs::parse();
 
-    // TODO: read from config?
     let config = VadnuConfig {
-        // TODO: crib ~/ support from start-tmux;  then it's ~/docs/vadnu
+        // TODO: make these args with defaults that use $HOME
         vadnu_dir: "/Users/hjdivad/docs/vadnu".into(),
         rsync_dir: "/Volumes/hjdivad.j/docs/vadnu".into(),
         sync_path: Some("linkedin".into()),
@@ -148,6 +147,10 @@ fn sync(config: &VadnuConfig) -> Result<()> {
     })?;
 
     in_dir!(&config.vadnu_dir, {
+        // TODO: don't push when syncing on the work machine; maybe add a CLI arg that's just
+        // different when installing the plist
+        // alternatively; check for a remote before pushing
+        // git remote .trim().size > 0 then push
         sh!(r#"git push"#)?;
 
         Ok(())
@@ -213,20 +216,34 @@ mod tests {
 
     struct TestConfig {
         vadnu_config: VadnuConfig,
-        git_remote_path: PathBuf,
+        git_remote_path: Option<PathBuf>,
     }
 
-    fn test_config() -> Result<TestConfig> {
+    fn home_test_config() -> Result<TestConfig> {
         let remote_dir = tempfile::tempdir()?;
         let vadnu_dir = tempdir()?;
         let rsync_dir = tempdir()?;
 
         Ok(TestConfig {
-            git_remote_path: remote_dir.into_path(),
+            git_remote_path: Some(remote_dir.into_path()),
             vadnu_config: VadnuConfig {
                 vadnu_dir: vadnu_dir.into_path(),
                 rsync_dir: rsync_dir.into_path(),
                 sync_path: Some("bravo".into()),
+            },
+        })
+    }
+
+    fn work_test_config() -> Result<TestConfig> {
+        let vadnu_dir = tempdir()?;
+        let rsync_dir = tempdir()?;
+
+        Ok(TestConfig {
+            git_remote_path: None,
+            vadnu_config: VadnuConfig {
+                vadnu_dir: vadnu_dir.into_path(),
+                rsync_dir: rsync_dir.into_path(),
+                sync_path: None,
             },
         })
     }
@@ -241,11 +258,47 @@ mod tests {
         Ok(())
     }
 
-    fn setup_test(config: &TestConfig) -> Result<()> {
+    /// Sets up tests for syncing from home.
+    ///
+    /// This means that the local view is the entire repo and the remote view is scoped to the sync
+    /// directory.
+    ///
+    /// The starting tree is:
+    ///
+    /// - alpha/
+    ///     - a.md
+    ///     - b.md
+    /// - bravo/
+    ///     - a.md
+    ///     - b.md
+    ///     - c.md
+    ///     - d.md
+    ///     - e.md
+    ///
+    /// And the local changes transform the tree to:
+    ///
+    /// - alpha/
+    ///     - a.md      local UPDATED
+    ///     - b.md
+    ///     - c.md      local NEW
+    /// - bravo/
+    ///     - a.md      local UPDATED
+    ///     - ~~b.md~~  local DELETED
+    ///     - c.md
+    ///     - d.md
+    ///     - e.md
+    ///     - f.md      local NEW
+    /// - charlie/
+    ///     - a.md    local NEW
+    fn setup_home_test(config: &TestConfig) -> Result<()> {
         init_log()?;
 
         let vadnu_dir = &config.vadnu_config.vadnu_dir;
         let sync_dir = &config.vadnu_config.rsync_dir;
+        let git_remote_path = config
+            .git_remote_path
+            .clone()
+            .ok_or(anyhow::anyhow!("setup_home_test requires git_remote_path"))?;
 
         let initial_local_file_map = BTreeMap::from([
             ("alpha/a.md".to_string(), "alpha/a".to_string()),
@@ -264,7 +317,7 @@ mod tests {
             ("e.md".to_string(), "bravo/e".to_string()),
         ]);
 
-        in_dir!(&config.git_remote_path, {
+        in_dir!(&git_remote_path, {
             sh!("git init --bare")?;
             Ok(())
         })?;
@@ -273,7 +326,7 @@ mod tests {
             sh!("git init")?;
             sh!(&format!(
                 "git remote add origin {}",
-                &config.git_remote_path.to_string_lossy()
+                &git_remote_path.to_string_lossy()
             ))?;
             sh!("git commit --no-gpg-sign --allow-empty -m 'root'")?;
             sh!("git push -u origin +master")?;
@@ -281,7 +334,6 @@ mod tests {
             fixturify::write(vadnu_dir, &initial_local_file_map)?;
             sh!("git add .")?;
             sh!("git commit --no-gpg-sign -m 'starting point'")?;
-            sh!("ls")?;
 
             let modifications_file_map = BTreeMap::from([
                 (
@@ -310,10 +362,76 @@ mod tests {
         Ok(())
     }
 
+    /// Sets up tests for syncing from work.
+    ///
+    /// This means that the local view is scoped to the sync dir.  The remote view is also just the
+    /// sync dir.
+    ///
+    /// The starting tree is:
+    ///
+    /// - a.md
+    /// - b.md
+    /// - c.md
+    /// - d.md
+    /// - e.md
+    ///
+    /// And the local changes transform the tree to:
+    ///
+    /// - a.md      local UPDATED
+    /// - ~~b.md~~  local DELETED
+    /// - c.md
+    /// - d.md
+    /// - e.md
+    /// - f.md      local NEW
+    fn setup_work_test(config: &TestConfig) -> Result<()> {
+        init_log()?;
+
+        let vadnu_dir = &config.vadnu_config.vadnu_dir;
+        let sync_dir = &config.vadnu_config.rsync_dir;
+        assert!(config.git_remote_path.is_none());
+
+        let initial_local_file_map = BTreeMap::from([
+            ("a.md".to_string(), "bravo/a".to_string()),
+            ("b.md".to_string(), "bravo/b".to_string()),
+            ("c.md".to_string(), "bravo/c".to_string()),
+            ("d.md".to_string(), "bravo/d".to_string()),
+            ("e.md".to_string(), "bravo/e".to_string()),
+        ]);
+        let initial_remote_file_map = BTreeMap::from([
+            ("a.md".to_string(), "bravo/a".to_string()),
+            ("b.md".to_string(), "bravo/b".to_string()),
+            ("c.md".to_string(), "bravo/c".to_string()),
+            ("d.md".to_string(), "bravo/d".to_string()),
+            ("e.md".to_string(), "bravo/e".to_string()),
+        ]);
+
+        in_dir!(&vadnu_dir, {
+            sh!("git init")?;
+            sh!("git commit --no-gpg-sign --allow-empty -m 'root'")?;
+
+            fixturify::write(vadnu_dir, &initial_local_file_map)?;
+            sh!("git add .")?;
+            sh!("git commit --no-gpg-sign -m 'starting point'")?;
+
+            let modifications_file_map = BTreeMap::from([
+                ("a.md".to_string(), "bravo/a local UPDATED".to_string()),
+                ("f.md".to_string(), "bravo/f local NEW".to_string()),
+            ]);
+            fixturify::write(vadnu_dir, &modifications_file_map)?;
+            fs::remove_file(vadnu_dir.join("b.md"))?;
+
+            Ok(())
+        })?;
+
+        fixturify::write(sync_dir, &initial_remote_file_map)?;
+
+        Ok(())
+    }
+
     #[test]
-    fn test_sync_no_remote_changes() -> Result<()> {
-        let config = test_config()?;
-        setup_test(&config)?;
+    fn test_home_sync_no_remote_changes() -> Result<()> {
+        let config = home_test_config()?;
+        setup_home_test(&config)?;
 
         sync(&config.vadnu_config)?;
 
@@ -357,9 +475,9 @@ mod tests {
     }
 
     #[test]
-    fn test_sync_remote_changes_no_conflicts() -> Result<()> {
-        let config = test_config()?;
-        setup_test(&config)?;
+    fn test_home_sync_remote_changes_no_conflicts() -> Result<()> {
+        let config = home_test_config()?;
+        setup_home_test(&config)?;
 
         let modifications_file_map = BTreeMap::from([
             (
@@ -416,9 +534,9 @@ mod tests {
     }
 
     #[test]
-    fn test_sync_remote_changes_with_conflicts() -> Result<()> {
-        let config = test_config()?;
-        setup_test(&config)?;
+    fn test_home_sync_remote_changes_with_conflicts() -> Result<()> {
+        let config = home_test_config()?;
+        setup_home_test(&config)?;
 
         let modifications_file_map = BTreeMap::from([
             // modified by local
@@ -473,5 +591,47 @@ mod tests {
         Ok(())
     }
 
-    // TODO: impl mirror tests from PoV of the pseudo-external
+    #[test]
+    fn test_work_sync_no_remote_changes() -> Result<()> {
+        let config = work_test_config()?;
+        setup_work_test(&config)?;
+
+        sync(&config.vadnu_config)?;
+
+        in_dir!(&config.vadnu_config.vadnu_dir, {
+            assert_eq!(sh!("git status -s")?.trim(), "", "git is clean");
+            Ok(())
+        })?;
+
+        let files = fixturify::read(&config.vadnu_config.vadnu_dir);
+
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "bravo/a.md": "bravo/a local UPDATED",
+                "bravo/c.md": "bravo/c",
+                "bravo/d.md": "bravo/d",
+                "bravo/e.md": "bravo/e",
+                "bravo/f.md": "bravo/f local NEW",
+            },
+        )
+        "###);
+
+        let files = fixturify::read(&config.vadnu_config.rsync_dir);
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "a.md": "bravo/a local UPDATED",
+                "c.md": "bravo/c",
+                "d.md": "bravo/d",
+                "e.md": "bravo/e",
+                "f.md": "bravo/f local NEW",
+            },
+        )
+        "###);
+
+        Ok(())
+    }
+    // TODO: work sync changes, no conflicts
+    // TODO: work sync changes, with conflicts
 }
