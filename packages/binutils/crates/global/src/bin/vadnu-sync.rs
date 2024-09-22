@@ -1,7 +1,8 @@
 use anyhow::{bail, Context, Result};
 use clap::Parser;
+use nix::libc::printf;
 use shell::*;
-use std::path::PathBuf;
+use std::{env, path::PathBuf};
 use std::process::Command;
 use tracing::{debug, trace};
 use tracing_subscriber::EnvFilter;
@@ -9,12 +10,9 @@ use tracing_subscriber::EnvFilter;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct CommandArgs {
-    #[arg(long)]
-    dry_run: bool,
-
-    /// Print debugging information
-    #[arg(long)]
-    debug: bool,
+    /// Print logging
+    #[arg(long, short = 'v', action = clap::ArgAction::Count)]
+    verbose: u8,
 }
 
 #[derive(Debug)]
@@ -26,22 +24,32 @@ struct VadnuConfig {
 // TODO: run daily; see ⬇️
 // TODO: generate plist; see <https://chatgpt.com/c/37dbb44c-639d-458c-a94d-06a0fb481db4>
 fn main() -> Result<()> {
-    tracing_subscriber::fmt()
-        .with_env_filter(
-            EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off")),
-        )
-        .init();
+    let options = CommandArgs::parse();
+
+
+    let mut env_filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
+
+    let log_level = match options.verbose {
+        1 => Some("info"),
+        2 => Some("debug"),
+        3 => Some("trace"),
+        _ => None
+    };
+
+    if let Some(log_level) = log_level {
+        env_filter = env_filter.add_directive(format!("vadnu_sync={}", log_level).parse()?);
+    }
+    tracing_subscriber::fmt().with_env_filter(env_filter).init();
 
     latest_bin::ensure_latest_bin()?;
 
     trace!("main()");
 
-    let options = CommandArgs::parse();
-
+    let home = env::var("HOME").context("No $HOME - no idea what to do")?;
     let config = VadnuConfig {
-        // TODO: make these args with defaults that use $HOME
-        vadnu_dir: "/Users/hjdivad/docs/vadnu".into(),
-        rsync_dir: "/Volumes/hjdivad.j/docs/vadnu".into(),
+        vadnu_dir: format!("{}/docs/vadnu", home).into(),
+        rsync_dir: "/Volumes/hjdivad.j/docs/vadnu/linkedin".into(),
         sync_path: Some("linkedin".into()),
     };
     sync(&config)
