@@ -70,6 +70,14 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead" }, {
+  pattern = "Taskfile.yml",
+  group = ft_group,
+  callback = function()
+    require("luasnip").filetype_extend("yaml", { "taskfile" })
+  end,
+})
+
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "vite.config.ts",
   group = ft_group,

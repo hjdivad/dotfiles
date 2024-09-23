@@ -1,0 +1,38 @@
+snippet default "default taskfile starting point"
+  # yaml-language-server: $schema=https://taskfile.dev/schema.json
+  #
+  # see https://taskfile.dev/usage/
+  #
+  version: '3'
+
+
+  tasks:
+    default:
+      cmds:
+        - echo $'To list all tasks run:\n\n\t task --list-all\n'
+        - task --list --sort=none
+      silent: true
+
+    ##############################################################################
+    # Top-level tasks.  These are listed when the user runs `task`.
+    #
+    #   1. They are shown in source-order, so be mindful of the ordering.
+    #   2. Every one must have a `desc` field
+    ##############################################################################
+
+    setup:
+      desc: Set up local environment (install dependencies, fetch secrets &c.)
+      cmds:
+        - "echo TODO: setup"
+
+    start:
+      desc: Run local server(s)
+      cmds:
+        - "echo TODO: start"
+
+    ##############################################################################
+    # Non-default tasks; these should not have a `desc` and will not be listed
+    # When the user runs `task`, but *will* be listed when the user runs
+    # `task --list-all`
+    ##############################################################################
+
