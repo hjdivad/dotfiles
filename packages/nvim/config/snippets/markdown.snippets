@@ -45,18 +45,6 @@ snippet docusaurus-info "info callout in docusaurus"
 	${0}
 	:::
 
-snippet release:controlled-release-readme
-
-	## Releasing
-
-	This MP uses [controlled-releases](https://go/controlled-release). This means that merged PRs are not automatically published. To publish a new version, do the following:
-
-	Add A PR that:
-
-	1. Updates the version in ``package.json``
-	2. Updates the version in ``product-spec.json``
-	3. Updates [CHANGELOG](./CHANGELOG.md) with all the user-relevant changes since the last release. If it's a major version bump, be sure to include the list of breaking changes and migration instructions.
-
 snippet release:notes "notes for a new release"
 	## ${1:version} (${2:date})
 
