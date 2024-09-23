@@ -1,15 +1,17 @@
 use anyhow::{bail, Context, Result};
-use clap::Parser;
+use clap::{Parser, Subcommand};
+use serde::Serialize;
 use shell::*;
-use xdg::BaseDirectories;
-use std::fs::{self, OpenOptions};
+use std::fs::{self, File, OpenOptions};
 use std::path::Path;
 use std::process::Command;
 use std::{env, path::PathBuf};
-use tracing::{info, debug, trace};
-use tracing_subscriber::EnvFilter;
-use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
+use tracing::field::debug;
+use tracing::{debug, info, trace};
 use tracing_subscriber::fmt::time;
+use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
+use tracing_subscriber::EnvFilter;
+use xdg::BaseDirectories;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -29,6 +31,33 @@ struct CommandArgs {
     /// Print logging
     #[arg(long, short = 'v', action = clap::ArgAction::Count)]
     verbose: u8,
+
+    #[command(subcommand)]
+    subcommand: VadnuCommand,
+}
+
+#[derive(Subcommand, Debug)]
+enum VadnuCommand {
+    /// Sync vadnu
+    Sync,
+    /// Inspect or modify daemon for auto-syncinc
+    Daemon(DaemonArgs),
+}
+
+#[derive(Parser, Debug)]
+struct DaemonArgs {
+    #[command(subcommand)]
+    subcommand: DaemonCommand,
+}
+
+#[derive(Subcommand, Debug)]
+enum DaemonCommand {
+    /// Check whether the daemon is installed
+    Show,
+    /// Install the daemon
+    Install,
+    /// Uninstall the daemon
+    Uninstall,
 }
 
 #[derive(Debug)]
@@ -40,26 +69,50 @@ struct VadnuConfig {
 // TODO: run daily; see ⬇️
 // TODO: generate plist; see <https://chatgpt.com/c/37dbb44c-639d-458c-a94d-06a0fb481db4>
 fn main() -> Result<()> {
-    let options = CommandArgs::parse();
+    let args = CommandArgs::parse();
 
-    init_logging(&options)?;
+    init_logging(&args)?;
 
-    let home = env::var("HOME").context("No $HOME - no idea what to do")?;
+    let home = env_home()?;
 
     latest_bin::ensure_latest_bin()?;
 
     trace!("main()");
 
-    let vadnu_dir = options.vadnu_dir.unwrap_or(format!("{}/docs/vadnu", home));
-    let rsync_dir = options.rsync_dir.unwrap_or("/Volumes/hjdivad.j/docs/vadnu/linkedin".to_string());
-    let sync_path = options.sync_path;
+    let vadnu_dir = args
+        .vadnu_dir
+        .clone()
+        .unwrap_or(format!("{}/docs/vadnu", home));
+    let rsync_dir = args
+        .rsync_dir
+        .clone()
+        .unwrap_or("/Volumes/hjdivad.j/docs/vadnu/linkedin".to_string());
+    let sync_path = args.sync_path.clone();
 
     let config = VadnuConfig {
         vadnu_dir: vadnu_dir.into(),
         rsync_dir: rsync_dir.into(),
         sync_path,
     };
-    sync(&config)
+
+    match &args.subcommand {
+        VadnuCommand::Sync => sync(&config),
+        VadnuCommand::Daemon(daemon_args) => daemon(daemon_args, &args),
+    }
+}
+
+fn xdg_log_path() -> Result<PathBuf> {
+    let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
+    xdg_dirs
+        .place_state_file("vadnu-sync.log")
+        .context("tried to compute XDG_STATE log path")
+}
+
+fn xdg_error_path() -> Result<PathBuf> {
+    let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
+    xdg_dirs
+        .place_state_file("vadnu-sync.err")
+        .context("tried to compute XDG_STATE error log path")
 }
 
 fn init_logging(options: &CommandArgs) -> Result<()> {
@@ -77,8 +130,7 @@ fn init_logging(options: &CommandArgs) -> Result<()> {
         env_filter = env_filter.add_directive(format!("vadnu_sync={}", log_level).parse()?);
     }
 
-    let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
-    let log_file_path = xdg_dirs.place_state_file("vadnu-sync.log")?;
+    let log_file_path = xdg_log_path()?;
 
     let path = Path::new(&log_file_path);
     if let Some(parent) = path.parent() {
@@ -111,6 +163,125 @@ impl VadnuConfig {
     }
 }
 
+fn env_home() -> Result<String> {
+    env::var("HOME").context("No $HOME - no idea what to do")
+}
+
+fn daemon(args: &DaemonArgs, global_args: &CommandArgs) -> Result<()> {
+    let plist_file_path: PathBuf = format!(
+        "{}/Library/LaunchAgents/gg.hamilton.vadnu_sync.plist",
+        env_home()?
+    )
+    .into();
+
+    match args.subcommand {
+        DaemonCommand::Show => show_daemon(),
+        DaemonCommand::Install => install_daemon(&plist_file_path, global_args),
+        DaemonCommand::Uninstall => uninstall_daemon(&plist_file_path),
+    }
+}
+
+/// Represents the `StartCalendarInterval` section in the plist.
+#[derive(Serialize)]
+#[serde(rename_all = "PascalCase")]
+struct StartCalendarInterval {
+    hour: u32,
+    minute: u32,
+}
+
+/// Represents the entire plist structure.
+#[derive(Serialize)]
+#[serde(rename_all = "PascalCase")]
+struct LaunchdPlist {
+    label: String,
+    program_arguments: Vec<String>,
+    start_calendar_interval: StartCalendarInterval,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    standard_out_path: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    standard_error_path: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    run_at_load: Option<bool>,
+}
+
+fn show_daemon() -> Result<()> {
+    let in_launchctl = sh_q!(r#"launchctl list | rg gg.hamilton.vadnu_sync"#)?;
+    if in_launchctl {
+        println!("gg.hamilton.vadnu_sync loaded in launchctl");
+    } else {
+        println!("gg.hamilton.vadnu_sync not found in launchctl");
+    }
+
+    Ok(())
+}
+
+fn install_daemon(plist_file_path: &Path, args: &CommandArgs) -> Result<()> {
+    write_plist(plist_file_path, args)?;
+
+    debug!(
+        "bootstrapping {} in launchctl",
+        &plist_file_path.to_string_lossy()
+    );
+    // FIXME: This doesn't work
+    // see <man launchd.plist>
+    //
+    // plutil -lint ~/Library/LaunchAgents/gg.hamilton.vadnu_sync.plist
+    // seems okay; not clear on what the issue is, only error is "input/output error"
+    //
+    // 1. check man page
+    // 2. try without the calendar interval & incrementally add it back
+    sh!(&format!(
+        "launchctl bootstrap user/$(id -u) {}",
+        &plist_file_path.to_string_lossy()
+    ))?;
+
+    println!("daemon installed");
+
+    Ok(())
+}
+
+fn uninstall_daemon(plist_file_path: &Path) -> Result<()> {
+    Ok(())
+}
+
+fn write_plist(plist_file_path: &Path, args: &CommandArgs) -> Result<()> {
+    debug!("Writing plist: {}", &plist_file_path.to_string_lossy());
+
+    let label = "gg.hamilton.vadnu_sync";
+    let binary_path = std::env::current_exe()?;
+    // TODO: set args from `args`
+    let args = vec!["-vv"];
+    let hour = 2;
+    let minute = 0;
+    let stdout_path = xdg_log_path()?;
+    let stderr_path = xdg_error_path()?;
+    let run_at_load = Some(false);
+
+    let mut program_args = Vec::new();
+    program_args.push(binary_path.to_string_lossy().to_string());
+    for arg in args {
+        program_args.push(arg.to_string());
+    }
+
+    let launch_config = LaunchdPlist {
+        label: label.to_string(),
+        program_arguments: program_args,
+        start_calendar_interval: StartCalendarInterval { hour, minute },
+        standard_out_path: stdout_path.to_string_lossy().to_string().into(),
+        standard_error_path: stderr_path.to_string_lossy().to_string().into(),
+        run_at_load,
+    };
+
+    let file = OpenOptions::new()
+        .create(true)
+        .truncate(true)
+        .write(true)
+        .open(plist_file_path)?;
+    plist::to_writer_xml(file, &launch_config).context("Writing plist XML")?;
+
+    Ok(())
+}
+
 /// Sync local vadnu (or a subpath of it) with some rsync.
 ///
 /// Creates three commits
@@ -126,6 +297,8 @@ impl VadnuConfig {
 /// syncing is done regularly.
 fn sync(config: &VadnuConfig) -> Result<()> {
     info!("sync {:?}", &config);
+
+    // TODO: pre-flight check: do both dirs exist? (e.g. remote may not be mounted)
 
     let vadnu_sync_dir = config.vadnu_sync_path();
     let mut local_snapshot_sha = "".to_string();
