@@ -1,15 +1,31 @@
 use anyhow::{bail, Context, Result};
 use clap::Parser;
-use nix::libc::printf;
 use shell::*;
-use std::{env, path::PathBuf};
+use xdg::BaseDirectories;
+use std::fs::{self, OpenOptions};
+use std::path::Path;
 use std::process::Command;
-use tracing::{debug, trace};
+use std::{env, path::PathBuf};
+use tracing::{info, debug, trace};
 use tracing_subscriber::EnvFilter;
+use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
+use tracing_subscriber::fmt::time;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct CommandArgs {
+    /// The vadnu directory.  Defaults to `$HOME/docs/vadnu`.
+    #[arg(long)]
+    vadnu_dir: Option<String>,
+
+    /// The sync path within `vadnu`.
+    #[arg(long)]
+    sync_path: Option<String>,
+
+    /// The rsync directory.  Defaults to `/Volumes/hjdivad.j/docs/vadnu/linkedin`.
+    #[arg(long)]
+    rsync_dir: Option<String>,
+
     /// Print logging
     #[arg(long, short = 'v', action = clap::ArgAction::Count)]
     verbose: u8,
@@ -26,7 +42,27 @@ struct VadnuConfig {
 fn main() -> Result<()> {
     let options = CommandArgs::parse();
 
+    init_logging(&options)?;
 
+    let home = env::var("HOME").context("No $HOME - no idea what to do")?;
+
+    latest_bin::ensure_latest_bin()?;
+
+    trace!("main()");
+
+    let vadnu_dir = options.vadnu_dir.unwrap_or(format!("{}/docs/vadnu", home));
+    let rsync_dir = options.rsync_dir.unwrap_or("/Volumes/hjdivad.j/docs/vadnu/linkedin".to_string());
+    let sync_path = options.sync_path;
+
+    let config = VadnuConfig {
+        vadnu_dir: vadnu_dir.into(),
+        rsync_dir: rsync_dir.into(),
+        sync_path,
+    };
+    sync(&config)
+}
+
+fn init_logging(options: &CommandArgs) -> Result<()> {
     let mut env_filter =
         EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
 
@@ -34,25 +70,34 @@ fn main() -> Result<()> {
         1 => Some("info"),
         2 => Some("debug"),
         3 => Some("trace"),
-        _ => None
+        _ => None,
     };
 
     if let Some(log_level) = log_level {
         env_filter = env_filter.add_directive(format!("vadnu_sync={}", log_level).parse()?);
     }
-    tracing_subscriber::fmt().with_env_filter(env_filter).init();
 
-    latest_bin::ensure_latest_bin()?;
+    let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
+    let log_file_path = xdg_dirs.place_state_file("vadnu-sync.log")?;
 
-    trace!("main()");
+    let path = Path::new(&log_file_path);
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    let file = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open(log_file_path)?;
+    let log_writer = BoxMakeWriter::new(file);
+    let log_writer = log_writer.and(std::io::stdout);
 
-    let home = env::var("HOME").context("No $HOME - no idea what to do")?;
-    let config = VadnuConfig {
-        vadnu_dir: format!("{}/docs/vadnu", home).into(),
-        rsync_dir: "/Volumes/hjdivad.j/docs/vadnu/linkedin".into(),
-        sync_path: Some("linkedin".into()),
-    };
-    sync(&config)
+    tracing_subscriber::fmt()
+        .with_env_filter(env_filter)
+        .with_writer(log_writer)
+        .with_timer(time::ChronoLocal::rfc_3339())
+        .init();
+
+    Ok(())
 }
 
 impl VadnuConfig {
@@ -80,7 +125,7 @@ impl VadnuConfig {
 /// which means the most recent changes are local.  There should generally not be conflicts if
 /// syncing is done regularly.
 fn sync(config: &VadnuConfig) -> Result<()> {
-    debug!("sync {:?}", &config);
+    info!("sync {:?}", &config);
 
     let vadnu_sync_dir = config.vadnu_sync_path();
     let mut local_snapshot_sha = "".to_string();
