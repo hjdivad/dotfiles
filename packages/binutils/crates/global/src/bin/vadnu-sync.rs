@@ -404,6 +404,10 @@ fn resolve_cherry_pick_conflicts(config: &VadnuConfig) -> Result<()> {
     // But resolving is easy -- just delete the file harder
     debug!("resolve git conflicts");
     in_dir!(&config.vadnu_dir, {
+        // TODO: disregard exit code 1 (i.e. no results, as compared to 2 -- error)
+        // probably want a sh_e! that returns a (stdout, stderr, code) tuple
+        //
+        // TODO: also handle DU deleted by us
         let file_paths = sh!(r#"git status --short | rg '^\wD (.*)$' -r '$1'"#)?;
         let file_paths = file_paths.trim().split("\n");
         for file_path in file_paths {
