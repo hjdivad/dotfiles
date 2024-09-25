@@ -1,5 +1,4 @@
 use anyhow::{Context, Result};
-use clap::Parser;
 use std::fs::{self, OpenOptions};
 use std::path::Path;
 use std::{env, path::PathBuf};

@@ -77,7 +77,7 @@ fn get_plist_file_path() -> Result<PathBuf> {
     Ok(plist_file_path)
 }
 
-fn write_plist(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()> {
+fn write_plist(plist_file_path: &Path, _vadnu_config: &VadnuConfig) -> Result<()> {
     debug!("Writing plist: {}", &plist_file_path.to_string_lossy());
 
     let label = "gg.hamilton.vadnu_sync";
