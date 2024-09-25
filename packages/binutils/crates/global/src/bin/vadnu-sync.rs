@@ -1,21 +1,11 @@
-use anyhow::{bail, Context, Result};
+use anyhow::Result;
 use binutils::vadnu::daemon::{install_daemon, show_daemon, uninstall_daemon};
 use binutils::vadnu::sync::sync;
 use binutils::vadnu::util::{env_home, init_logging, LoggingOptions};
 use binutils::vadnu::VadnuConfig;
 use clap::{Parser, Subcommand};
-use serde::Serialize;
-use shell::*;
-use std::fs::{self, File, OpenOptions};
-use std::path::Path;
-use std::process::Command;
-use std::{env, path::PathBuf};
-use tracing::field::debug;
-use tracing::{debug, info, trace};
-use tracing_subscriber::fmt::time;
-use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
-use tracing_subscriber::EnvFilter;
-use xdg::BaseDirectories;
+use std::path::PathBuf;
+use tracing::trace;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]

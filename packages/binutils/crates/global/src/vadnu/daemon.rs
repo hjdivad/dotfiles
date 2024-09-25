@@ -1,17 +1,9 @@
-use anyhow::{bail, Context, Result};
-use clap::{Parser, Subcommand};
+use anyhow::{Context, Result};
 use serde::Serialize;
 use shell::*;
-use std::fs::{self, File, OpenOptions};
+use std::fs::{OpenOptions};
 use std::path::Path;
-use std::process::Command;
-use std::{env, path::PathBuf};
-use tracing::field::debug;
-use tracing::{debug, info, trace};
-use tracing_subscriber::fmt::time;
-use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
-use tracing_subscriber::EnvFilter;
-use xdg::BaseDirectories;
+use tracing::debug;
 
 use crate::vadnu::util::xdg_error_path;
 

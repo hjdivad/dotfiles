@@ -3,19 +3,7 @@ pub mod daemon;
 // TODO: can do this without pub mod?
 pub mod util;
 
-use anyhow::{bail, Context, Result};
-use clap::{Parser, Subcommand};
-use serde::Serialize;
-use shell::*;
-use std::fs::{self, File, OpenOptions};
-use std::path::Path;
-use std::process::Command;
-use std::{env, path::PathBuf};
-use tracing::field::debug;
-use tracing::{debug, info, trace};
-use tracing_subscriber::fmt::time;
-use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
-use tracing_subscriber::EnvFilter;
+use std::path::PathBuf;
 
 #[derive(Debug)]
 pub struct VadnuConfig {
