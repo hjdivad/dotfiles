@@ -1,6 +1,5 @@
 pub mod sync;
 pub mod daemon;
-// TODO: can do this without pub mod?
 pub mod util;
 
 use std::path::PathBuf;

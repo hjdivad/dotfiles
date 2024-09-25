@@ -4,7 +4,6 @@ use binutils::vadnu::sync::sync;
 use binutils::vadnu::util::{env_home, init_logging, LoggingOptions};
 use binutils::vadnu::VadnuConfig;
 use clap::{Parser, Subcommand};
-use std::path::PathBuf;
 use tracing::trace;
 
 #[derive(Parser, Debug)]
@@ -38,23 +37,25 @@ enum VadnuCommand {
     Daemon(DaemonArgs),
 }
 
+
 #[derive(Parser, Debug)]
 struct DaemonArgs {
+    // TODO: default the subcommand to its default, i.e. DaemonCommand::default()
     #[command(subcommand)]
     subcommand: DaemonCommand,
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(Subcommand, Debug, Default)]
 enum DaemonCommand {
     /// Check whether the daemon is installed
+    #[default]
     Show,
     /// Install the daemon
     Install,
     /// Uninstall the daemon
     Uninstall,
 }
-// TODO: run daily; see ⬇️
-// TODO: generate plist; see <https://chatgpt.com/c/37dbb44c-639d-458c-a94d-06a0fb481db4>
+
 fn main() -> Result<()> {
     let args = CommandArgs::parse();
 
@@ -97,15 +98,9 @@ fn config_from_args(args: &CommandArgs) -> Result<VadnuConfig> {
 
 
 fn daemon(args: &DaemonArgs, vadnu_config: &VadnuConfig) -> Result<()> {
-    let plist_file_path: PathBuf = format!(
-        "{}/Library/LaunchAgents/gg.hamilton.vadnu_sync.plist",
-        env_home()?
-    )
-    .into();
-
     match args.subcommand {
         DaemonCommand::Show => show_daemon(),
-        DaemonCommand::Install => install_daemon(&plist_file_path, vadnu_config),
-        DaemonCommand::Uninstall => uninstall_daemon(&plist_file_path),
+        DaemonCommand::Install => install_daemon( vadnu_config),
+        DaemonCommand::Uninstall => uninstall_daemon(),
     }
 }

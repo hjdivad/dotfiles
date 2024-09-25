@@ -1,13 +1,11 @@
 use anyhow::{Context, Result};
 use serde::Serialize;
 use shell::*;
-use std::fs::{OpenOptions};
-use std::path::Path;
+use std::fs::OpenOptions;
+use std::path::{Path, PathBuf};
 use tracing::debug;
 
-use crate::vadnu::util::xdg_error_path;
-
-use super::util::{xdg_log_path};
+use super::util::{env_home, xdg_error_path, xdg_log_path};
 use super::VadnuConfig;
 
 /// Represents the `StartCalendarInterval` section in the plist.
@@ -44,23 +42,17 @@ pub fn show_daemon() -> Result<()> {
     Ok(())
 }
 
-pub fn install_daemon(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()> {
-    write_plist(plist_file_path, vadnu_config)?;
+pub fn install_daemon( vadnu_config: &VadnuConfig) -> Result<()> {
+    let plist_file_path = get_plist_file_path()?;
+
+    write_plist(&plist_file_path, vadnu_config)?;
 
     debug!(
         "bootstrapping {} in launchctl",
         &plist_file_path.to_string_lossy()
     );
-    // FIXME: This doesn't work
-    // see <man launchd.plist>
-    //
-    // plutil -lint ~/Library/LaunchAgents/gg.hamilton.vadnu_sync.plist
-    // seems okay; not clear on what the issue is, only error is "input/output error"
-    //
-    // 1. check man page
-    // 2. try without the calendar interval & incrementally add it back
     sh!(&format!(
-        "launchctl bootstrap user/$(id -u) {}",
+        "launchctl bootstrap gui/$(id -u) {}",
         &plist_file_path.to_string_lossy()
     ))?;
 
@@ -69,8 +61,20 @@ pub fn install_daemon(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Res
     Ok(())
 }
 
-pub fn uninstall_daemon(plist_file_path: &Path) -> Result<()> {
+pub fn uninstall_daemon() -> Result<()> {
+    // let plist_file_path = get_plist_file_path()?;
+
     Ok(())
+}
+
+fn get_plist_file_path() -> Result<PathBuf> {
+    let plist_file_path: PathBuf = format!(
+        "{}/Library/LaunchAgents/gg.hamilton.vadnu_sync.plist",
+        env_home()?
+    )
+    .into();
+
+    Ok(plist_file_path)
 }
 
 fn write_plist(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()> {
@@ -78,7 +82,7 @@ fn write_plist(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()>
 
     let label = "gg.hamilton.vadnu_sync";
     let binary_path = std::env::current_exe()?;
-    // TODO: set args from `args`
+    // TODO: set args from `vadnu_config`
     let args = vec!["sync", "-vv"];
     let hour = 2;
     let minute = 0;

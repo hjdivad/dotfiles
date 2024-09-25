@@ -1,7 +1,7 @@
 use anyhow::{bail, Context, Result};
 use shell::*;
-use std::process::Command;
 use std::path::PathBuf;
+use std::process::Command;
 use tracing::{debug, info, trace};
 
 use super::VadnuConfig;
@@ -147,6 +147,7 @@ mod tests {
     use insta::assert_debug_snapshot;
     use std::{collections::BTreeMap, fs};
     use tempfile::tempdir;
+    use tracing_subscriber::EnvFilter;
 
     use super::*;
 
