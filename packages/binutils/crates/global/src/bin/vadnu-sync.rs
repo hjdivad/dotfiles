@@ -1,5 +1,5 @@
 use anyhow::Result;
-use binutils::vadnu::daemon::{install_daemon, show_daemon, uninstall_daemon};
+use binutils::vadnu::agent::{install_agent, show_agent, uninstall_agent};
 use binutils::vadnu::sync::sync;
 use binutils::vadnu::util::{env_home, init_logging, LoggingOptions};
 use binutils::vadnu::VadnuConfig;
@@ -33,26 +33,26 @@ struct CommandArgs {
 enum VadnuCommand {
     /// Sync vadnu
     Sync,
-    /// Inspect or modify daemon for auto-syncing
-    Daemon(DaemonArgs),
+    /// Inspect or modify agent for auto-syncing
+    Agent(AgentArgs),
 }
 
 
 #[derive(Parser, Debug)]
-struct DaemonArgs {
-    // TODO: default the subcommand to its default, i.e. DaemonCommand::default()
+struct AgentArgs {
+    // TODO: default the subcommand to its default, i.e. AgentCommand::default()
     #[command(subcommand)]
-    subcommand: DaemonCommand,
+    subcommand: AgentCommand,
 }
 
 #[derive(Subcommand, Debug, Default)]
-enum DaemonCommand {
-    /// Check whether the daemon is installed
+enum AgentCommand {
+    /// Check whether the agent is installed
     #[default]
     Show,
-    /// Install the daemon
+    /// Install the agent
     Install,
-    /// Uninstall the daemon
+    /// Uninstall the agent
     Uninstall,
 }
 
@@ -71,7 +71,7 @@ fn main() -> Result<()> {
 
     match &args.subcommand {
         VadnuCommand::Sync => sync(&config),
-        VadnuCommand::Daemon(daemon_args) => daemon(daemon_args, &config),
+        VadnuCommand::Agent(agent_args) => agent(agent_args, &config),
     }
 }
 
@@ -97,10 +97,10 @@ fn config_from_args(args: &CommandArgs) -> Result<VadnuConfig> {
 }
 
 
-fn daemon(args: &DaemonArgs, vadnu_config: &VadnuConfig) -> Result<()> {
+fn agent(args: &AgentArgs, vadnu_config: &VadnuConfig) -> Result<()> {
     match args.subcommand {
-        DaemonCommand::Show => show_daemon(),
-        DaemonCommand::Install => install_daemon( vadnu_config),
-        DaemonCommand::Uninstall => uninstall_daemon(),
+        AgentCommand::Show => show_agent(),
+        AgentCommand::Install => install_agent( vadnu_config),
+        AgentCommand::Uninstall => uninstall_agent(),
     }
 }

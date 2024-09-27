@@ -1,5 +1,5 @@
 pub mod sync;
-pub mod daemon;
+pub mod agent;
 pub mod util;
 
 use std::path::PathBuf;
