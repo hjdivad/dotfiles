@@ -2,7 +2,7 @@ use anyhow::{bail, Context, Result};
 use shell::*;
 use std::path::PathBuf;
 use std::process::Command;
-use tracing::{debug, info, trace};
+use tracing::{debug, info, trace, warn};
 
 use super::VadnuConfig;
 
@@ -128,19 +128,39 @@ fn resolve_cherry_pick_conflicts(config: &VadnuConfig) -> Result<()> {
     // But resolving is easy -- just delete the file harder
     debug!("resolve git conflicts");
     in_dir!(&config.vadnu_dir, {
-        // TODO: disregard exit code 1 (i.e. no results, as compared to 2 -- error)
-        // probably want a sh_e! that returns a (stdout, stderr, code) tuple
-        //
-        // TODO: also handle DU deleted by us
-        let file_paths = sh!(r#"git status --short | rg '^\wD (.*)$' -r '$1'"#)?;
-        let file_paths = file_paths.trim().split("\n");
-        for file_path in file_paths {
-            trace!("git rm {}", file_path);
-            sh!(&format!("git rm {}", file_path))?;
+        let git_status = sh!(r#"git status --short"#)?;
+        trace!("git status:\n{}", git_status);
+
+        // DU bravo/a.md
+        // D  bravo/b.md
+        // A  bravo/f.md
+        for line in git_status.lines() {
+            let status = &line[..2];
+            let file_path = line[3..].trim();
+
+            trace!("git status: '{}' path: '{}'", status, file_path);
+
+            match status {
+                "DU" => {
+                    trace!("git add {}", file_path);
+                    sh!(&format!("git add {}", file_path))?;
+                }
+                "UD" => {
+                    trace!("git rm {}", file_path);
+                    sh!(&format!("git rm {}", file_path))?;
+                }
+                "AU" | "UA" | "UU" => {
+                    warn!("cherry-pick unhandled: '{}' '{}'", status, file_path);
+                }
+                _ => {
+                    trace!("noop {}", file_path);
+                }
+            }
         }
         Ok(())
     })
 }
+
 
 #[cfg(test)]
 mod tests {
@@ -520,6 +540,55 @@ mod tests {
                 "a.md": "bravo/a local UPDATED",
                 "d.md": "bravo/d",
                 "e.md": "bravo/e remote UPDATED",
+                "f.md": "bravo/f local NEW",
+            },
+        )
+        "###);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_home_sync_remote_changes_with_conflict_deleted_by_us() -> Result<()> {
+        let config = home_test_config()?;
+        setup_home_test(&config)?;
+
+        // local updated a.md, remote deleted a.md
+        fs::remove_file(config.vadnu_config.rsync_dir.join("a.md"))?;
+
+        sync(&config.vadnu_config)?;
+
+        in_dir!(&config.vadnu_config.vadnu_dir, {
+            assert_eq!(sh!("git status -s")?.trim(), "", "git is clean");
+            Ok(())
+        })?;
+
+        let files = fixturify::read(&config.vadnu_config.vadnu_dir);
+
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "alpha/a.md": "alpha/a local UPDATED",
+                "alpha/b.md": "alpha/b",
+                "alpha/c.md": "alpha/c local NEW",
+                "bravo/a.md": "bravo/a local UPDATED",
+                "bravo/c.md": "bravo/c",
+                "bravo/d.md": "bravo/d",
+                "bravo/e.md": "bravo/e",
+                "bravo/f.md": "bravo/f local NEW",
+                "charlie/a.md": "charlie/a local NEW",
+            },
+        )
+        "###);
+
+        let files = fixturify::read(&config.vadnu_config.rsync_dir);
+        assert_debug_snapshot!(files, @r###"
+        Ok(
+            {
+                "a.md": "bravo/a local UPDATED",
+                "c.md": "bravo/c",
+                "d.md": "bravo/d",
+                "e.md": "bravo/e",
                 "f.md": "bravo/f local NEW",
             },
         )
