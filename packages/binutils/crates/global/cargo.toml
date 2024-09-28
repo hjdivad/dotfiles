@@ -26,6 +26,7 @@ chrono = "0.4.38"
 serde = "1.0.197"
 xml_serde = "1.4.1"
 plist = "1.7.0"
+clap_complete = "4.5.29"
 
 [dev-dependencies]
 insta = { version = "1.36.1", features = ["yaml", "toml"] }

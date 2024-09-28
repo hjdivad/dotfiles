@@ -1,9 +1,12 @@
+use std::io;
+
 use anyhow::Result;
 use binutils::vadnu::agent::{install_agent, show_agent, uninstall_agent};
 use binutils::vadnu::sync::sync;
 use binutils::vadnu::util::{env_home, init_logging, LoggingOptions};
 use binutils::vadnu::VadnuConfig;
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, CommandFactory};
+use clap_complete::generate;
 use tracing::trace;
 
 #[derive(Parser, Debug)]
@@ -35,6 +38,9 @@ enum VadnuCommand {
     Sync,
     /// Inspect or modify agent for auto-syncing
     Agent(AgentArgs),
+
+    /// Generate shell completions for vadnu-sync
+    Completions(CompletionArgs),
 }
 
 
@@ -43,6 +49,14 @@ struct AgentArgs {
     // TODO: default the subcommand to its default, i.e. AgentCommand::default()
     #[command(subcommand)]
     subcommand: AgentCommand,
+}
+
+#[derive(Parser, Debug)]
+struct CompletionArgs {
+    // TODO: make this arg required
+    /// Shell to generate completions for
+    #[arg(long, required=true)]
+    shell: Option<clap_complete::Shell>,
 }
 
 #[derive(Subcommand, Debug, Default)]
@@ -70,6 +84,11 @@ fn main() -> Result<()> {
     let config = config_from_args(&args)?;
 
     match &args.subcommand {
+        VadnuCommand::Completions(args) => {
+            let shell = args.shell.unwrap();
+            generate(shell, &mut CommandArgs::command(), "vadnu-sync", &mut io::stdout());
+            Ok(())
+        },
         VadnuCommand::Sync => sync(&config),
         VadnuCommand::Agent(agent_args) => agent(agent_args, &config),
     }
