@@ -15,6 +15,13 @@ pub fn xdg_log_path() -> Result<PathBuf> {
         .context("tried to compute XDG_STATE log path")
 }
 
+pub fn xdg_out_path() -> Result<PathBuf> {
+    let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
+    xdg_dirs
+        .place_state_file("vadnu-sync.out")
+        .context("tried to compute XDG_STATE error log path")
+}
+
 pub fn xdg_error_path() -> Result<PathBuf> {
     let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
     xdg_dirs

@@ -5,7 +5,9 @@ use std::fs::OpenOptions;
 use std::path::{Path, PathBuf};
 use tracing::debug;
 
-use super::util::{env_home, xdg_error_path, xdg_log_path};
+use crate::vadnu::util::xdg_out_path;
+
+use super::util::{env_home, xdg_error_path};
 use super::VadnuConfig;
 
 /// Represents the `StartCalendarInterval` section in the plist.
@@ -93,7 +95,7 @@ fn write_plist(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()>
 
     let label = "gg.hamilton.vadnu_sync";
     let binary_path = std::env::current_exe()?;
-    let mut args = vec!["sync".to_string(), "-vv".to_string()];
+    let mut args = vec!["-vv".to_string(), "sync".to_string()];
     let maybe_args = vec![
         (
             "--vadnu-dir".to_string(),
@@ -115,7 +117,7 @@ fn write_plist(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()>
 
     let hour = 2;
     let minute = 0;
-    let stdout_path = xdg_log_path()?;
+    let stdout_path = xdg_out_path()?;
     let stderr_path = xdg_error_path()?;
     let run_at_load = Some(false);
 
