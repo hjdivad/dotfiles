@@ -38,7 +38,7 @@ pub fn init_logging(options: &LoggingOptions) -> Result<()> {
     };
 
     if let Some(log_level) = log_level {
-        env_filter = env_filter.add_directive(format!("vadnu_sync={}", log_level).parse()?);
+        env_filter = env_filter.add_directive(format!("binutils::vadnu={}", log_level).parse()?);
     }
 
     let log_file_path = xdg_log_path()?;

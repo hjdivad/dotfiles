@@ -209,7 +209,7 @@ mod tests {
         let mut env_filter =
             EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
 
-        env_filter = env_filter.add_directive(format!("vadnu_sync={}", "trace").parse()?);
+        env_filter = env_filter.add_directive("binutils::vadnu=trace".parse()?);
         tracing_subscriber::fmt().with_env_filter(env_filter).init();
 
         Ok(())
