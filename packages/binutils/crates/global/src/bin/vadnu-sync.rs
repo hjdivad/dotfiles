@@ -24,7 +24,7 @@ struct CommandArgs {
     #[arg(long)]
     rsync_dir: Option<String>,
 
-    /// Print logging
+    /// Print more. Can be specified up to 3 times (-vvv).
     #[arg(long, short = 'v', action = clap::ArgAction::Count)]
     verbose: u8,
 
