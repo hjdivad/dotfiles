@@ -113,7 +113,7 @@ fn write_plist(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()>
 
     let label = "gg.hamilton.vadnu_sync";
     let binary_path = std::env::current_exe()?;
-    let mut args = vec!["-vv".to_string(), "sync".to_string()];
+    let mut args = vec!["-vv".to_string()];
     let maybe_args = vec![
         (
             "--vadnu-dir".to_string(),
@@ -132,6 +132,8 @@ fn write_plist(plist_file_path: &Path, vadnu_config: &VadnuConfig) -> Result<()>
             args.push(value);
         }
     }
+
+    args.push("sync".to_string());
 
     let hour = 2;
     let minute = 0;
@@ -211,7 +213,6 @@ mod tests {
         	<key>ProgramArguments</key>
         	<array>
         		<string>$BIN</string>
-        		<string>sync</string>
         		<string>-vv</string>
         		<string>--vadnu-dir</string>
         		<string>/Users/foo/docs/vadnu</string>
@@ -219,6 +220,7 @@ mod tests {
         		<string>bar</string>
         		<string>--rsync-dir</string>
         		<string>/Volumes/foo/sync</string>
+        		<string>sync</string>
         	</array>
         	<key>StartCalendarInterval</key>
         	<dict>
@@ -228,7 +230,7 @@ mod tests {
         		<integer>0</integer>
         	</dict>
         	<key>StandardOutPath</key>
-        	<string>$HOME/.local/state/binutils/vadnu-sync.log</string>
+        	<string>$HOME/.local/state/binutils/vadnu-sync.out</string>
         	<key>StandardErrorPath</key>
         	<string>$HOME/.local/state/binutils/vadnu-sync.err</string>
         	<key>RunAtLoad</key>
@@ -265,12 +267,12 @@ mod tests {
         	<key>ProgramArguments</key>
         	<array>
         		<string>$BIN</string>
-        		<string>sync</string>
         		<string>-vv</string>
         		<string>--vadnu-dir</string>
         		<string>/Users/foo/docs/vadnu</string>
         		<string>--rsync-dir</string>
         		<string>/Volumes/foo/sync</string>
+        		<string>sync</string>
         	</array>
         	<key>StartCalendarInterval</key>
         	<dict>
@@ -280,7 +282,7 @@ mod tests {
         		<integer>0</integer>
         	</dict>
         	<key>StandardOutPath</key>
-        	<string>$HOME/.local/state/binutils/vadnu-sync.log</string>
+        	<string>$HOME/.local/state/binutils/vadnu-sync.out</string>
         	<key>StandardErrorPath</key>
         	<string>$HOME/.local/state/binutils/vadnu-sync.err</string>
         	<key>RunAtLoad</key>
