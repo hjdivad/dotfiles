@@ -105,8 +105,7 @@ fn main() -> Result<()> {
 fn config_from_args(args: &CommandArgs) -> Result<VadnuConfig> {
     let home = env_home()?;
 
-    // TODO: config rather than default; copy from shared-binutils to make a generic config
-    // (configmaker<struct>)
+    // TODO: update to use shared-binutils crate for lua config
     let vadnu_dir = args
         .vadnu_dir
         .clone()

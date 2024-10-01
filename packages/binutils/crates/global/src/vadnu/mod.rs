@@ -1,5 +1,5 @@
-pub mod sync;
 pub mod agent;
+pub mod sync;
 pub mod util;
 
 use std::path::PathBuf;
@@ -21,4 +21,3 @@ impl VadnuConfig {
         }
     }
 }
-

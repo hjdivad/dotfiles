@@ -11,7 +11,7 @@ use super::util::{env_home, xdg_error_path};
 use super::VadnuConfig;
 
 pub struct ShowAgentOptions {
-    pub print_plist: bool
+    pub print_plist: bool,
 }
 
 /// Represents the `StartCalendarInterval` section in the plist.
