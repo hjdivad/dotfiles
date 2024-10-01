@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use serde::Serialize;
 use shell::*;
-use std::fs::OpenOptions;
+use std::fs::{self, OpenOptions};
 use std::path::{Path, PathBuf};
 use tracing::debug;
 
@@ -9,6 +9,10 @@ use crate::vadnu::util::xdg_out_path;
 
 use super::util::{env_home, xdg_error_path};
 use super::VadnuConfig;
+
+pub struct ShowAgentOptions {
+    pub print_plist: bool
+}
 
 /// Represents the `StartCalendarInterval` section in the plist.
 #[derive(Serialize)]
@@ -33,13 +37,27 @@ struct LaunchdPlist {
     run_at_load: Option<bool>,
 }
 
-pub fn show_agent() -> Result<()> {
+pub fn show_agent(show_args: ShowAgentOptions) -> Result<()> {
     let in_launchctl = sh_q!(r#"launchctl list | rg gg.hamilton.vadnu_sync"#)?;
     if in_launchctl {
         println!("gg.hamilton.vadnu_sync loaded in launchctl");
+
+        if show_args.print_plist {
+            print_plist()?;
+        }
     } else {
         println!("gg.hamilton.vadnu_sync not found in launchctl");
     }
+
+    Ok(())
+}
+
+pub fn print_plist() -> Result<()> {
+    let file_path = get_plist_file_path()?;
+
+    let contents = fs::read_to_string(&file_path)?;
+
+    print!("{}", contents);
 
     Ok(())
 }

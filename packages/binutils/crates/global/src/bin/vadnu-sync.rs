@@ -1,11 +1,11 @@
 use std::io;
 
 use anyhow::Result;
-use binutils::vadnu::agent::{install_agent, show_agent, uninstall_agent};
+use binutils::vadnu::agent::{install_agent, show_agent, uninstall_agent, ShowAgentOptions};
 use binutils::vadnu::sync::sync;
 use binutils::vadnu::util::{env_home, init_logging, LoggingOptions};
 use binutils::vadnu::VadnuConfig;
-use clap::{Parser, Subcommand, CommandFactory};
+use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::generate;
 use tracing::trace;
 
@@ -43,7 +43,6 @@ enum VadnuCommand {
     Completions(CompletionArgs),
 }
 
-
 #[derive(Parser, Debug)]
 struct AgentArgs {
     // TODO: default the subcommand to its default, i.e. AgentCommand::default()
@@ -53,21 +52,25 @@ struct AgentArgs {
 
 #[derive(Parser, Debug)]
 struct CompletionArgs {
-    // TODO: make this arg required
-    /// Shell to generate completions for
-    #[arg(long, required=true)]
+    #[arg(long, required = true)]
     shell: Option<clap_complete::Shell>,
 }
 
-#[derive(Subcommand, Debug, Default)]
+#[derive(Subcommand, Debug)]
 enum AgentCommand {
     /// Check whether the agent is installed
-    #[default]
-    Show,
+    Show(AgentShowArgs),
     /// Install the agent
     Install,
     /// Uninstall the agent
     Uninstall,
+}
+
+#[derive(Parser, Debug)]
+struct AgentShowArgs {
+    /// Print the entire plist if the daemon is loaded
+    #[arg(long, short = 'p')]
+    plist: bool,
 }
 
 fn main() -> Result<()> {
@@ -83,21 +86,27 @@ fn main() -> Result<()> {
 
     let config = config_from_args(&args)?;
 
-    match &args.subcommand {
+    match args.subcommand {
         VadnuCommand::Completions(args) => {
             let shell = args.shell.unwrap();
-            generate(shell, &mut CommandArgs::command(), "vadnu-sync", &mut io::stdout());
+            generate(
+                shell,
+                &mut CommandArgs::command(),
+                "vadnu-sync",
+                &mut io::stdout(),
+            );
             Ok(())
-        },
+        }
         VadnuCommand::Sync => sync(&config),
         VadnuCommand::Agent(agent_args) => agent(agent_args, &config),
     }
 }
 
 fn config_from_args(args: &CommandArgs) -> Result<VadnuConfig> {
-
     let home = env_home()?;
 
+    // TODO: config rather than default; copy from shared-binutils to make a generic config
+    // (configmaker<struct>)
     let vadnu_dir = args
         .vadnu_dir
         .clone()
@@ -115,11 +124,12 @@ fn config_from_args(args: &CommandArgs) -> Result<VadnuConfig> {
     })
 }
 
-
-fn agent(args: &AgentArgs, vadnu_config: &VadnuConfig) -> Result<()> {
+fn agent(args: AgentArgs, vadnu_config: &VadnuConfig) -> Result<()> {
     match args.subcommand {
-        AgentCommand::Show => show_agent(),
-        AgentCommand::Install => install_agent( vadnu_config),
+        AgentCommand::Show(show_args) => show_agent(ShowAgentOptions {
+            print_plist: show_args.plist,
+        }),
+        AgentCommand::Install => install_agent(vadnu_config),
         AgentCommand::Uninstall => uninstall_agent(),
     }
 }
