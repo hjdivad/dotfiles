@@ -11,7 +11,10 @@ alias ifconfig-active="ifconfig | rg --color=never -U '^[^\t:]+:([^\n]|\n\t)*sta
 alias ssh-no-agent-forwarding='ssh -o "ForwardAgent no"'
 alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 
-alias path="echo $PATH | rg : -r $'\n'"
+function __path() {
+  echo $PATH | rg : -r $'\n'
+}
+alias path=__path
 
 # use eza if it exists
 # https://github.com/eza-community/eza (replacement for https://github.com/ogham/exa)
