@@ -2,9 +2,21 @@ use anyhow::{bail, Context, Result};
 use shell::*;
 use std::path::PathBuf;
 use std::process::Command;
+use thiserror::Error;
 use tracing::{debug, info, trace, warn};
 
 use super::VadnuConfig;
+
+#[derive(Debug, Error)]
+pub enum Error {
+    /// (vadnu_dir, msg) error tuple
+    #[error("vadnu-dir {0} is not readable: {1}")]
+    UnreadableVadnuDir(String, String),
+
+    /// (vadnu_dir, msg) error tuple
+    #[error("rsync-dir {0} is not readable: {1}")]
+    UnreadableRsyncDir(String, String),
+}
 
 /// Sync local vadnu (or a subpath of it) with some rsync.
 ///
@@ -22,7 +34,7 @@ use super::VadnuConfig;
 pub fn sync(config: &VadnuConfig) -> Result<()> {
     info!("sync {:?}", &config);
 
-    // TODO: pre-flight check: do both dirs exist? (e.g. remote may not be mounted)
+    preflight_check(config)?;
 
     let vadnu_sync_dir = config.vadnu_sync_path();
     let mut local_snapshot_sha = "".to_string();
@@ -113,6 +125,43 @@ pub fn sync(config: &VadnuConfig) -> Result<()> {
         &config.rsync_dir.to_string_lossy()
     ))?;
 
+    debug!("sync complete");
+
+    Ok(())
+}
+
+pub fn preflight_check(config: &VadnuConfig) -> Result<()> {
+    let vadnu_dir = &config.vadnu_dir;
+    let rsync_dir = &config.rsync_dir;
+
+    if !vadnu_dir.exists() {
+        return Err(anyhow::Error::new(Error::UnreadableVadnuDir(
+            vadnu_dir.to_string_lossy().to_string(),
+            "path does not exist".to_string(),
+        )));
+    }
+
+    if vadnu_dir.read_dir().is_err() {
+        return Err(anyhow::Error::new(Error::UnreadableVadnuDir(
+            vadnu_dir.to_string_lossy().to_string(),
+            "dir exists but cannot be read".to_string(),
+        )));
+    }
+
+    if !rsync_dir.exists() {
+        return Err(anyhow::Error::new(Error::UnreadableRsyncDir(
+            rsync_dir.to_string_lossy().to_string(),
+            "path does not exist".to_string(),
+        )));
+    }
+
+    if rsync_dir.read_dir().is_err() {
+        return Err(anyhow::Error::new(Error::UnreadableRsyncDir(
+            rsync_dir.to_string_lossy().to_string(),
+            "dir exists but cannot be read".to_string(),
+        )));
+    }
+
     Ok(())
 }
 
@@ -161,9 +210,9 @@ fn resolve_cherry_pick_conflicts(config: &VadnuConfig) -> Result<()> {
     })
 }
 
-
 #[cfg(test)]
 mod tests {
+    use core::panic;
     use insta::assert_debug_snapshot;
     use std::{collections::BTreeMap, fs};
     use tempfile::tempdir;
@@ -744,6 +793,50 @@ mod tests {
             },
         )
         "###);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_preflight_vadnu_dir_missing() -> Result<()> {
+        let config = home_test_config()?;
+
+        fs::remove_dir(&config.vadnu_config.vadnu_dir)?;
+        let result = sync(&config.vadnu_config);
+
+        let Err(err) = result else {
+            panic!("Expected sync() to error");
+        };
+
+        let Some(err) = err.downcast_ref::<crate::vadnu::sync::Error>() else {
+            panic!("Unexpected error: {:?}", err);
+        };
+
+        let Error::UnreadableVadnuDir(_, _) = err else {
+            panic!("Unexpected error: {:?}", err);
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_preflight_missing_rsync_dir() -> Result<()> {
+        let config = home_test_config()?;
+
+        fs::remove_dir(&config.vadnu_config.rsync_dir)?;
+        let result = sync(&config.vadnu_config);
+
+        let Err(err) = result else {
+            panic!("Expected sync() to error");
+        };
+
+        let Some(err) = err.downcast_ref::<crate::vadnu::sync::Error>() else {
+            panic!("Unexpected error: {:?}", err);
+        };
+
+        let Error::UnreadableRsyncDir(_, _) = err else {
+            panic!("Unexpected error: {:?}", err);
+        };
 
         Ok(())
     }

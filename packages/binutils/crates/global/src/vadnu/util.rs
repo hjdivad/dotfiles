@@ -7,7 +7,6 @@ use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
 use tracing_subscriber::EnvFilter;
 use xdg::BaseDirectories;
 
-
 pub fn xdg_log_path() -> Result<PathBuf> {
     let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
     xdg_dirs
@@ -30,7 +29,7 @@ pub fn xdg_error_path() -> Result<PathBuf> {
 }
 
 pub struct LoggingOptions {
-    pub verbose: u8
+    pub verbose: u8,
 }
 
 pub fn init_logging(options: &LoggingOptions) -> Result<()> {
