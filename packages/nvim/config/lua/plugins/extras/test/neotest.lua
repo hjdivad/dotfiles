@@ -31,6 +31,7 @@ return {
       },
     },
     keys = {
+      { "<leader>t", false },
       { "<leader>tt", false },
       { "<leader>ts", false },
       {
