@@ -118,7 +118,11 @@ ls.add_snippets("all", {
   }),
   s("::today-short::", {
     d(1, function ()
-      return sn(nil, t(os.date('%e %b')))
+      -- see man strftime
+      local date_str =  os.date('%e %b')
+    ---@diagnostic disable-next-line: param-type-mismatch
+      local trimmed_date_str = date_str:gsub("^%s*(.-)%s*$", "%1")
+      return sn(nil, t(trimmed_date_str))
     end)
   }),
 
