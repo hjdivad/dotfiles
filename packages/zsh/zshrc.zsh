@@ -17,7 +17,7 @@ function __path_add() {
 function __path_remove() {
   case ":$PATH:" in
     *:"$1":*)
-      PATH=$(echo ":$PATH:" | sed "s,:$1:,," | sed 's/^://;s/:$//')
+      PATH=$(echo ":$PATH:" | sd ":$1:" ":" | sd '^:' '' | sd ':$' '')
       ;;
   esac
   export PATH
@@ -332,6 +332,7 @@ alias tsj=__ts_journal
 # another file that contains a conflicting path.  The order is incorrect which
 # is why I must force a duplication of /opt/homebrew/bin onto PATH.
 __path_remove "/opt/homebrew/bin"
+__path_remove "/usr/local/Homebrew/bin"
 __path_add "/opt/homebrew/bin"
 __path_add "/opt/homebrew/sbin"
 # TODO: add this to template/zshrc
