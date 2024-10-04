@@ -36,6 +36,11 @@ return {
         "shfmt",
         "stylua",
       },
+      setup = {
+        rust_analyzer = function()
+          return true
+        end,
+      },
     },
   },
   {
