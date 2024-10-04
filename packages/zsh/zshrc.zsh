@@ -14,7 +14,13 @@ function path_add() {
   export PATH
 }
 
-path_add "/opt/homebrew/bin"
+# This is infuriating. However, /etc/zprofile invokes path_helper which reads
+# /etc/paths.d/ which contains a file that includes /opt/homebrew/bin and
+# another file that contains a conflicting path.  The order is incorrect which
+# is why I must force a duplication of /opt/homebrew/bin onto PATH.
+#
+# path_add "/opt/homebrew/bin"
+export PATH="/opt/homebrew/bin:$PATH"
 path_add "/opt/homebrew/sbin"
 
 export VOLTA_HOME="$HOME/.volta"
