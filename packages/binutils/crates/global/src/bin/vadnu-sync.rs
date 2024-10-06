@@ -2,17 +2,19 @@ use std::io;
 
 use anyhow::Result;
 use binutils::vadnu::agent::{install_agent, show_agent, uninstall_agent, ShowAgentOptions};
+use binutils::vadnu::config::{config_from_args, VadnuSyncConfig};
 use binutils::vadnu::sync::sync;
-use binutils::vadnu::util::{env_home, init_logging, LoggingOptions};
+use binutils::vadnu::util::{init_logging, LoggingOptions};
 use binutils::vadnu::VadnuConfig;
 use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::generate;
 use tracing::trace;
 
+/// Sync the vadnu dir against rsync. Unspecified args are read from $HOME/.config/vadnu-sync.lua.
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct CommandArgs {
-    /// The vadnu directory.  Defaults to `$HOME/docs/vadnu`.
+    /// The vadnu directory.
     #[arg(long)]
     vadnu_dir: Option<String>,
 
@@ -20,7 +22,7 @@ struct CommandArgs {
     #[arg(long)]
     sync_path: Option<String>,
 
-    /// The rsync directory.  Defaults to `/Volumes/hjdivad.j/docs/vadnu/linkedin`.
+    /// The rsync directory.
     #[arg(long)]
     rsync_dir: Option<String>,
 
@@ -36,8 +38,12 @@ struct CommandArgs {
 enum VadnuCommand {
     /// Sync vadnu
     Sync,
+
     /// Inspect or modify agent for auto-syncing
     Agent(AgentArgs),
+
+    /// Show the resolved config
+    Config,
 
     /// Generate shell completions for vadnu-sync
     Completions(CompletionArgs),
@@ -45,7 +51,6 @@ enum VadnuCommand {
 
 #[derive(Parser, Debug)]
 struct AgentArgs {
-    // TODO: default the subcommand to its default, i.e. AgentCommand::default()
     #[command(subcommand)]
     subcommand: AgentCommand,
 }
@@ -74,17 +79,21 @@ struct AgentShowArgs {
 }
 
 fn main() -> Result<()> {
+    latest_bin::ensure_latest_bin()?;
+
     let args = CommandArgs::parse();
 
     init_logging(&LoggingOptions {
         verbose: args.verbose,
     })?;
 
-    latest_bin::ensure_latest_bin()?;
-
     trace!("main()");
 
-    let config = config_from_args(&args)?;
+    let config = config_from_args(VadnuSyncConfig {
+        vadnu_dir: args.vadnu_dir.clone(),
+        rsync_dir: args.rsync_dir.clone(),
+        sync_path: args.sync_path.clone(),
+    })?;
 
     match args.subcommand {
         VadnuCommand::Completions(args) => {
@@ -97,30 +106,10 @@ fn main() -> Result<()> {
             );
             Ok(())
         }
+        VadnuCommand::Config => show_config(&config),
         VadnuCommand::Sync => sync(&config),
         VadnuCommand::Agent(agent_args) => agent(agent_args, &config),
     }
-}
-
-fn config_from_args(args: &CommandArgs) -> Result<VadnuConfig> {
-    let home = env_home()?;
-
-    // TODO: update to use shared-binutils crate for lua config
-    let vadnu_dir = args
-        .vadnu_dir
-        .clone()
-        .unwrap_or(format!("{}/docs/vadnu", home));
-    let rsync_dir = args
-        .rsync_dir
-        .clone()
-        .unwrap_or("/Volumes/hjdivad.j/docs/vadnu/linkedin".to_string());
-    let sync_path = args.sync_path.clone();
-
-    Ok(VadnuConfig {
-        vadnu_dir: vadnu_dir.into(),
-        rsync_dir: rsync_dir.into(),
-        sync_path,
-    })
 }
 
 fn agent(args: AgentArgs, vadnu_config: &VadnuConfig) -> Result<()> {
@@ -131,4 +120,10 @@ fn agent(args: AgentArgs, vadnu_config: &VadnuConfig) -> Result<()> {
         AgentCommand::Install => install_agent(vadnu_config),
         AgentCommand::Uninstall => uninstall_agent(),
     }
+}
+
+fn show_config(config: &VadnuConfig) -> Result<()> {
+    print!("{:#?}", config);
+
+    Ok(())
 }
