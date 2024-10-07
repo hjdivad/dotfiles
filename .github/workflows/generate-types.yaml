@@ -20,7 +20,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
 
-      - run: cargo run --bin generate-lua-types -- --input crates/global/src/vadnu/config.rs --output crates/global/vadnu-sync.lua
+      - run: |
+          cargo \
+            run \
+            --manifest-path packages/binutils/Cargo.toml \
+            --bin generate-lua-types \
+            -- \
+            --input packages/binutils/crates/global/src/vadnu/config.rs \
+            --output packages/binutils/crates/global/vadnu-sync.lua
 
 
       - name: Commit and push changes
