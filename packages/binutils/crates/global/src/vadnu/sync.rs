@@ -18,6 +18,12 @@ pub enum Error {
     UnreadableRsyncDir(String, String),
 }
 
+macro_rules! git_commit {
+    ($args:expr) => {
+        sh!(&format!(r#"git commit --author="vadnu-sync[bot] <vadnu-sync@david.hamilton.gg>" --no-gpg-sign --allow-empty {}"#, $args))
+    };
+}
+
 /// Sync local vadnu (or a subpath of it) with some rsync.
 ///
 /// Creates three commits
@@ -43,7 +49,7 @@ pub fn sync(config: &VadnuConfig) -> Result<()> {
     debug!("git commit: local snapshot");
     in_dir!(&config.vadnu_dir, {
         sh!(r#"git add ."#)?;
-        sh!(r#"git commit --no-gpg-sign --allow-empty -m "local: snapshot""#)?;
+        git_commit!(r#"-m "local: snapshot""#)?;
         local_snapshot_sha = sh!(r#"git rev-parse --short HEAD"#)?;
 
         Ok(())
@@ -60,7 +66,7 @@ pub fn sync(config: &VadnuConfig) -> Result<()> {
         debug!("git commit: remote snapshot");
 
         sh!(r#"git add ."#)?;
-        sh!(r#"git commit --no-gpg-sign --allow-empty -m "remote: snapshot""#)?;
+        git_commit!(r#"-m "remote: snapshot""#)?;
         remote_snapshot_sha = sh!(r#"git rev-parse --short HEAD"#)?;
 
         debug!("git cherry-pick local commit");
@@ -101,9 +107,7 @@ pub fn sync(config: &VadnuConfig) -> Result<()> {
             }
         }
 
-        sh!(
-            r#"git commit --no-gpg-sign --allow-empty -m "local: overwrite conflicts with remote""#
-        )?;
+        git_commit!(r#"-m "local: overwrite conflicts with remote""#)?;
 
         Ok(())
     })?;
@@ -334,12 +338,12 @@ mod tests {
                 "git remote add origin {}",
                 &git_remote_path.to_string_lossy()
             ))?;
-            sh!("git commit --no-gpg-sign --allow-empty -m 'root'")?;
+            git_commit!("-m 'root'")?;
             sh!("git push -u origin +master")?;
 
             fixturify::write(vadnu_dir, &initial_local_file_map)?;
             sh!("git add .")?;
-            sh!("git commit --no-gpg-sign -m 'starting point'")?;
+            git_commit!("-m 'starting point'")?;
 
             let modifications_file_map = BTreeMap::from([
                 (
@@ -413,11 +417,11 @@ mod tests {
 
         in_dir!(&vadnu_dir, {
             sh!("git init")?;
-            sh!("git commit --no-gpg-sign --allow-empty -m 'root'")?;
+            git_commit!("--allow-empty -m 'root'")?;
 
             fixturify::write(vadnu_dir, &initial_local_file_map)?;
             sh!("git add .")?;
-            sh!("git commit --no-gpg-sign -m 'starting point'")?;
+            git_commit!("-m 'starting point'")?;
 
             let modifications_file_map = BTreeMap::from([
                 ("a.md".to_string(), "bravo/a local UPDATED".to_string()),

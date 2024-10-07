@@ -1,0 +1,38 @@
+name: "Update Types"
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - "master"
+    paths:
+      - "packages/binutils/crates/global/src/vadnu/config.rs"
+      - "packages/binutils/crates/global/src/bin/generate-lua-types.rs"
+      - ".github/workflows/generate-types.yaml"
+  workflow_dispatch:
+
+jobs:
+  update-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - run: cargo run --bin generate-lua-types -- --input crates/global/src/vadnu/config.rs --output crates/global/vadnu-sync.lua
+
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m 'Update vadnu-sync Lua types'
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

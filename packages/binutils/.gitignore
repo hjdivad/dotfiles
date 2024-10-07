@@ -2,3 +2,4 @@
 codegen/
 target/
 Cargo.lock
+/crates/global/vadnu-sync.lua

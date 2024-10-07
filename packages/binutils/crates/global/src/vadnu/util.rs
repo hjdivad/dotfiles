@@ -7,6 +7,13 @@ use tracing_subscriber::fmt::writer::{BoxMakeWriter, MakeWriterExt};
 use tracing_subscriber::EnvFilter;
 use xdg::BaseDirectories;
 
+pub fn xdg_config_path() -> Result<PathBuf> {
+    BaseDirectories::new()
+        .context("initializing XDG")?
+        .place_config_file("vadnu-sync.lua")
+        .context("computing XDG_CONFIG config path")
+}
+
 pub fn xdg_log_path() -> Result<PathBuf> {
     let xdg_dirs = BaseDirectories::with_prefix("binutils")?;
     xdg_dirs
