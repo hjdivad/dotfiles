@@ -1,12 +1,75 @@
 local function __dirname()
-  local fullpath = debug.getinfo(1,"S").source:sub(2)
-  local dirname, filename = fullpath:match('^(.*/)([^/]-)$')
+  local fullpath = debug.getinfo(1, "S").source:sub(2)
+  local dirname, filename = fullpath:match("^(.*/)([^/]-)$")
 
   return dirname, filename
 end
 
 ---@type LazyPluginSpec[]
 return {
+  -- TODO: doesn't support luasnip
+  --  lua snippets like ::today
+  --  or textmate style snippets
+  -- TODO: path completion is kinda buggy but probably easy to upstream a fix
+  {
+    "saghen/blink.cmp",
+    lazy = false, -- lazy loading handled internally
+
+    -- use a release tag to download pre-built binaries
+    version = "v0.*",
+    -- OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+    -- build = 'cargo build --release',
+
+    -- see <https://github.com/Saghen/blink.cmp>
+    opts = {
+      keymap = {
+        show = "<C-l>",
+        accept = "<C-k>",
+
+        select_next = { "<Up>", "<C-n>" },
+        select_prev = { "<Up>", "<C-p>" },
+
+        snippet_forward = { "<C-k>" },
+        snippet_backward = { "<C-j>" },
+
+        -- show_documentation = { "<C-k>" },
+      },
+      highlight = {
+        -- sets the fallback highlight groups to nvim-cmp's highlight groups
+        -- useful for when your theme doesn't support blink.cmp
+        -- will be removed in a future release, assuming themes add support
+        use_nvim_cmp_as_default = true,
+      },
+      -- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+      -- adjusts spacing to ensure icons are aligned
+      nerd_font_variant = "normal",
+
+      -- experimental auto-brackets support
+      -- accept = { auto_brackets = { enabled = true } }
+
+      -- experimental signature help support
+      -- trigger = { signature_help = { enabled = true } }
+
+      signature_help = {
+        enabled = true,
+      },
+
+      sources = {
+        providers = {
+          -- grouping are processed in-order; subsequent groups are fallbacks
+          {
+            { "blink.cmp.sources.lsp" },
+            { "blink.cmp.sources.path" },
+            { "blink.cmp.sources.snippets", score_offset = -3 },
+          },
+          {
+            { "blink.cmp.sources.buffer" },
+          }
+        },
+      },
+    },
+  },
+
   -- see https://www.lazyvim.org/plugins/coding
   -- completion
   {
@@ -15,6 +78,7 @@ return {
     --  cache (watch neotree for invalidation or maybe fswatch)
     --  Fix #88
     "hjdivad/cmp-nvim-wikilinks",
+    enabled = false,
     opts = {
       -- log_level = 'trace',
       -- log_to_file = true,
@@ -27,6 +91,7 @@ return {
   -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/coding.lua
   {
     "hrsh7th/nvim-cmp",
+    enabled = false,
     version = false, -- last release is way too old
     event = "InsertEnter",
     dependencies = {
@@ -158,7 +223,7 @@ return {
 
       local snippets_paths = {
         "~/.config/nvim/snippets",
-        __dirname() .. "/../../../../../local-packages/nvim/config/snippets"
+        __dirname() .. "/../../../../../local-packages/nvim/config/snippets",
       }
       require("luasnip.loaders.from_snipmate").lazy_load({
         paths = snippets_paths,
