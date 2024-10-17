@@ -6,25 +6,7 @@
 # zshenv
 #   zshrc
 
-function __path_add() {
-  case ":$PATH:" in
-    *:"$1":*) ;;
-    *) PATH="$1${PATH+:$PATH}" ;;
-  esac
-  export PATH
-}
-
-function __path_remove() {
-  if which sd > /dev/null 2>&1; then
-    case ":$PATH:" in
-      *:"$1":*)
-        PATH=$(echo ":$PATH:" | sd ":$1:" ":" | sd '^:' '' | sd ':$' '')
-        ;;
-    esac
-    export PATH
-  fi
-}
-
+export ZSH_PATHRC="$(dirname "${(%):-%x}")/path.zsh"
 
 export VOLTA_HOME="$HOME/.volta"
 
@@ -328,24 +310,7 @@ alias tsr=__ts_reference
 alias tsj=__ts_journal
 
 
-if [ -z "$PATH_INIT" ]; then
-  __path_add "$VOLTA_HOME/bin"
-  # This is infuriating. However, /etc/zprofile invokes path_helper which reads 
-  # /etc/paths.d/ which contains a file that includes /opt/homebrew/bin and
-  # another file that contains a conflicting path.  The order is incorrect which
-  # is why I must force a duplication of /opt/homebrew/bin onto PATH.
-  __path_remove "/opt/homebrew/bin"
-  __path_remove "/usr/local/Homebrew/bin"
-  __path_add "/opt/homebrew/bin"
-  __path_add "/opt/homebrew/sbin"
-  # TODO: add this to template/zshrc
-  __path_add "$HOME/src/github/malleatus/shared_binutils/global/target/debug"
-  __path_add "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
-  __path_add "$HOME/src/github/hjdivad/dotfiles/local-packages/crates/global/target/debug"
-  __path_add "$HOME/.local/bin"
-
-  export PATH_INIT=1
-fi
+source $ZSH_PATHRC
 
 
 # set up zsh completions
