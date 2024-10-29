@@ -23,6 +23,7 @@
     "plugins.extras.d2.lang",
     "plugins.extras.dap.keymaps",
     "plugins.extras.editor.fzf",
+    "plugins.extras.editor.open-browser",
     "plugins.extras.lang.markdown",
     "plugins.extras.test.neotest"
   ],
