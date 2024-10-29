@@ -111,7 +111,7 @@ local tt_states = {
 local tt_state = tt_states.start
 
 ls.add_snippets("all", {
-  s("::today::", {
+  s("::today-long::", {
     d(1, function ()
       return sn(nil, t(os.date('%e %b %Y (%A)')))
     end)

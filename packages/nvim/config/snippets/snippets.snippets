@@ -8,3 +8,12 @@ snippet v
 	{VISUAL}
 snippet $
 	${${1:1}:${0:text}}
+snippet person
+	snippet ${1:first_name} "@${2:slack_handle} ${1} ${3:last_name}"
+		@${2}
+
+	snippet @${1} "@${2} ${1} ${3}"
+		@${2}
+
+	snippet @${2} "@${2} ${1} ${3}"
+		@${2}
