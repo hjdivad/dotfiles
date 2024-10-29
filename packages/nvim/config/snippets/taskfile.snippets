@@ -1,5 +1,5 @@
 snippet default "default taskfile starting point"
-  # yaml-language-server: $schema=https://taskfile.dev/schema.json
+  # yaml-language-server: \$schema=https://taskfile.dev/schema.json
   #
   # see https://taskfile.dev/usage/
   #
@@ -14,10 +14,10 @@ snippet default "default taskfile starting point"
       silent: true
 
     ##############################################################################
-    # Top-level tasks.  These are listed when the user runs `task`.
+    # Top-level tasks.  These are listed when the user runs \`task\`.
     #
     #   1. They are shown in source-order, so be mindful of the ordering.
-    #   2. Every one must have a `desc` field
+    #   2. Every one must have a \`desc\` field
     ##############################################################################
 
     setup:
@@ -31,8 +31,8 @@ snippet default "default taskfile starting point"
         - "echo TODO: start"
 
     ##############################################################################
-    # Non-default tasks; these should not have a `desc` and will not be listed
-    # When the user runs `task`, but *will* be listed when the user runs
-    # `task --list-all`
+    # Non-default tasks; these should not have a \`desc\` and will not be listed
+    # When the user runs \`task\`, but *will* be listed when the user runs
+    # \`task --list-all\`
     ##############################################################################
 
