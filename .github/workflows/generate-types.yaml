@@ -33,9 +33,20 @@ jobs:
             --input packages/binutils/crates/global/src/vadnu/config.rs \
             --output packages/binutils/crates/global/vadnu-sync.lua
 
+      - name: Commit New Types
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add -f packages/binutils/crates/global/vadnu-sync.lua
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m 'Update vadnu-sync Lua types'
+          fi
+
       - name: Create Pull Request
         # see <https://github.com/peter-evans/create-pull-request#action-inputs>
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: 'chore(bot): Update vadnu-sync Lua types'
           title: 'Update vadnu-sync Lua types'
@@ -45,5 +56,4 @@ jobs:
           author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
           token: ${{ secrets.GITHUB_TOKEN }}
           delete-branch: true
-          auto-merge: true
-          merge-method: merge
+          draft: false
