@@ -41,7 +41,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m 'Update vadnu-sync Lua types'
+          git commit -m 'chore(bot): Update vadnu-sync Lua types'
           fi
 
       - name: Create Pull Request
