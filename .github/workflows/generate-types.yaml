@@ -60,6 +60,6 @@ jobs:
 
       - name: Automerge PR
         run: |
-          gh pr merge --merge --auto
+          gh pr merge --merge --auto gha/update-lua-types
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
