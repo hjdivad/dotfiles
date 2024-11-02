@@ -57,3 +57,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           delete-branch: true
           draft: false
+
+      - name: Automerge PR
+        run: |
+          gh pr merge --merge --auto
