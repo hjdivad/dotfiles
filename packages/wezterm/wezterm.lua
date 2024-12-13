@@ -177,5 +177,6 @@ config.initial_rows = 90
 config.initial_cols = 300
 
 config.audible_bell = "Disabled"
+config.window_close_confirmation = "NeverPrompt"
 
 return config
