@@ -4,10 +4,6 @@
 
 local LazyVimUtil = require("lazyvim.util")
 
-local function show_wikilinks_log()
-  require("cmp_nvim_wikilinks").show_logs()
-end
-
 local ks = vim.keymap.set
 local existing_keymaps_lhs = {}
 local kd = function(mode, lhs)
@@ -167,7 +163,7 @@ ks(
   { desc = "Redraw / clear hlsearch / checktime / diff update" }
 )
 
-local lazyterm = function()
+local terminal = function()
   LazyVimUtil.terminal(nil, {
     cwd = LazyVimUtil.root(),
     border = "rounded",
@@ -178,7 +174,7 @@ local lazyterm = function()
   })
 end
 -- TODO: need another one that opens at &pwd
-ks("n", "<c-t>", lazyterm, { desc = "Terminal (root dir)" })
+ks("n", "<c-t>", terminal, { desc = "Terminal (root dir)" })
 
 local clipboard_reg
 if vim.fn.has("clipboard") then
@@ -210,7 +206,6 @@ ks("t", "<c-w><c-v>", [[<c-\><c-n><c-w>v<Cmd>terminal<cr>]], { desc = "win new (
 ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
-ks("n", "<leader>ulw", show_wikilinks_log, { desc = "show logs (cmp-wikilinks)" })
 ks("n", "<leader>uld", "<Cmd>DapShowLog<Cr>", { desc = "show logs (DAP)" })
 ks("n", "<leader>uL", function()
   LazyVimUtil.news.changelog()
