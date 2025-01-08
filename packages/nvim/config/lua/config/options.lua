@@ -17,6 +17,9 @@ vim.opt.spellfile =
 
 vim.opt.swapfile = false
 
+-- disable animations that cause slowness in things like `G`, `gg`, &c.
+vim.g.snacks_animate = false
+
 -- remote terminal, yank to client clipboard.
 -- Requires client to have configured remote port forwarding for ssh and agent forwarding
 -- Requires server config to have a host configuration named "client"

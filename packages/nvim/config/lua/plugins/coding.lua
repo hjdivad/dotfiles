@@ -27,7 +27,6 @@ return {
       })
     end,
   },
-
   { "rafamadriz/friendly-snippets", enabled = false },
   -- TODO: disable lsp snippets
   {
