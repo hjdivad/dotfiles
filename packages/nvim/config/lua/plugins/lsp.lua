@@ -37,11 +37,31 @@ return {
         "stylua",
       },
       setup = {
+        -- skip mason setup; rely on rust_analyzer from rustacean (which uses rustup)
         rust_analyzer = function()
           return true
         end,
       },
     },
+  },
+  {
+    "mrcjkb/rustaceanvim",
+    -- These opts get merged into vim.g.rustaceanvim
+    -- in ~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/lang/rust.lua
+    opts = {
+      ---@type rustaceanvim.lsp.ClientOpts
+      server = {
+        default_settings = {
+          ['rust-analyzer'] = {
+            diagnostics = {
+              -- see <https://rust-analyzer.github.io/manual.html#diagnostics>
+              disabled = { "proc-macro-disabled" }
+            }
+          }
+        }
+      }
+
+    }
   },
   {
     -- see https://www.lazyvim.org/plugins/lsp
