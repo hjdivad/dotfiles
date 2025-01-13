@@ -15,6 +15,14 @@ return {
       },
       { "<leader>/", false },
       {
+        "<leader>ff",
+        function()
+          local query = vim.g.fzf_default_query_files
+          require("fzf-lua").files({ query = query })
+        end,
+        desc = "find files (root dir, default query)",
+      },
+      {
         "<leader>fl",
         function()
           require("fzf-lua").blines()
