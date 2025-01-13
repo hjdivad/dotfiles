@@ -1,0 +1,18 @@
+snippet java:default "default java lazyvim setup"
+  return {
+      {
+          -- wider window to handle long java paths
+          "nvim-neo-tree/neo-tree.nvim",
+          opts = {
+              window = {
+                  width = 60
+              }
+          }
+      },
+      -- disable lsp; would love to have it but it just doesn't work
+      {
+          "mfussenegger/nvim-jdtls",
+          enabled = false,
+      }
+  }
+    

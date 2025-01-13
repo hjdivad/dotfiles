@@ -47,6 +47,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = ".lazy.lua",
+  group = ft_group,
+  callback = function()
+    require("luasnip").filetype_extend("lua", { "lazyvim" })
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = ".markdownlintrc",
   group = ft_group,
   callback = function()
