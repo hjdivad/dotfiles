@@ -314,7 +314,7 @@ impl<'a> Tree<'a> {
         trace!("    traverse from {:?}, i={}, k={}", path_end, i, k);
 
         if i == 0 || j == 0 {
-            return (path_end, active_point);
+            return  (path_end, active_point);
         }
 
         // traverse from active_point and update path_end
