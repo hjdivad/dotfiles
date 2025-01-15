@@ -164,16 +164,8 @@ ks(
 )
 
 local terminal = function()
-  LazyVimUtil.terminal(nil, {
-    cwd = LazyVimUtil.root(),
-    border = "rounded",
-    size = {
-      height = 0.9,
-      width = 0.9,
-    },
-  })
+  require('snacks').terminal()
 end
--- TODO: need another one that opens at &pwd
 ks("n", "<c-t>", terminal, { desc = "Terminal (root dir)" })
 
 local clipboard_reg
