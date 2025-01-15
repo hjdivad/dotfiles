@@ -111,7 +111,7 @@ return {
                 local osv = require("osv")
                 if osv.is_running() then
                   osv.stop()
-                  print("server stopped")
+                  vim.print("server stopped")
                 else
                   osv.launch({ port = 8086 })
                 end
