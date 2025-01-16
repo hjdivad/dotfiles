@@ -224,6 +224,13 @@ return {
         },
         {
           filter = {
+            event = "notify",
+            kind = "warn",
+          },
+          view = "mini",
+        },
+        {
+          filter = {
             kind = "emsg",
           },
           view = "mini",
