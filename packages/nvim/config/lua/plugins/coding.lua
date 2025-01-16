@@ -1,10 +1,11 @@
 local function __dirname()
-  local fullpath = debug.getinfo(1,"S").source:sub(2)
-  local dirname, filename = fullpath:match('^(.*/)([^/]-)$')
+  local fullpath = debug.getinfo(1, "S").source:sub(2)
+  local dirname, filename = fullpath:match("^(.*/)([^/]-)$")
 
   return dirname, filename
 end
 
+---@module 'lazyvim.types'
 ---@type LazyPluginSpec[]
 return {
   {
@@ -28,7 +29,80 @@ return {
     end,
   },
   { "rafamadriz/friendly-snippets", enabled = false },
-  -- TODO: disable lsp snippets
+  -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/coding/blink.lua>
+  -- TODO: where does the ai completion come from?
+  {
+    "saghen/blink.cmp",
+    dependencies = { "L3MON4D3/LuaSnip", version = "v2.*" },
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      completion = {
+        list = {
+          selection = {
+            -- When navigating items with <c-n>, <c-p>, just show the ghost
+            -- text, don't actually insert changes until the selectdion is
+            -- accepted
+            auto_insert = false,
+          },
+        },
+        menu = { border = "single" },
+        documentation = { window = { border = "single" } },
+      },
+      signature = { window = { border = "single" } },
+      sources = {
+        -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/ai/copilot.lua> for copilot configuration
+        -- the copilot completion has a +100 offset which is why it's always the first suggestion
+        --
+        -- Set default to a function to return a hardcoded list and prevent
+        -- lazyvim from deep merging.  This is how to remove sources (e.g.
+        -- copilot or buffer)
+        --
+        -- default = function()
+        --   return { "lsp", "path", "snippets", "buffer" }
+        -- end,
+        providers = {
+          buffer = {
+            -- deprioritize buffer completions, mainly to always get them below
+            -- snippet completions
+            score_offset = -100,
+          },
+        },
+      },
+      keymap = {
+        -- prevent <cr> from selecting a completion
+        preset = "none",
+        -- see <https://cmp.saghen.dev/configuration/keymap#commands>
+        -- lazyvim uses <c-y> "yup" which also seems fine
+        ["<c-l>"] = { "show" },
+        ["<c-y>"] = { "select_and_accept" },
+        ["<c-n>"] = { "select_next" },
+        ["<c-p>"] = { "select_prev" },
+        ["<m-y>"] = { "select_and_accept" },
+        ["<m-j>"] = { "select_next" },
+        ["<m-k>"] = { "select_prev" },
+        ["<c-j>"] = { "snippet_forward" },
+        ["<c-k>"] = { "snippet_backward" },
+      },
+      snippets = {
+        preset = "luasnip",
+        expand = function(snippet)
+          require("luasnip").lsp_expand(snippet)
+        end,
+
+        active = function(filter)
+          if filter and filter.direction then
+            return require("luasnip").jumpable(filter.direction)
+          end
+          return require("luasnip").in_snippet()
+        end,
+
+        jump = function(direction)
+          require("luasnip").jump(direction)
+        end,
+      },
+    },
+  },
   {
     "L3MON4D3/LuaSnip",
     -- I use snippets everywhere so
@@ -41,7 +115,7 @@ return {
 
       local snippets_paths = {
         "~/.config/nvim/snippets",
-        __dirname() .. "/../../../../../local-packages/nvim/config/snippets"
+        __dirname() .. "/../../../../../local-packages/nvim/config/snippets",
       }
       require("luasnip.loaders.from_snipmate").lazy_load({
         paths = snippets_paths,
@@ -56,23 +130,5 @@ return {
       history = true,
       delete_check_events = "TextChanged",
     },
-    keys = function()
-      return {
-        {
-          "<C-k>",
-          function()
-            require("luasnip").jump(1)
-          end,
-          mode = { "i", "s" },
-        },
-        {
-          "<C-j>",
-          function()
-            require("luasnip").jump(-1)
-          end,
-          mode = { "i", "s" },
-        },
-      }
-    end,
   },
 }
