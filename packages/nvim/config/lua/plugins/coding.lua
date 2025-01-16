@@ -122,7 +122,7 @@ return {
       })
       require("luasnip.loaders.from_lua").lazy_load({ paths = snippets_paths })
 
-      vim.api.nvim_create_user_command("HiEditSnippets", function()
+      vim.api.nvim_create_user_command("EditSnippets", function()
         require("luasnip.loaders").edit_snippet_files({})
       end, { desc = "Edit snippets used in this buffer" })
     end,
