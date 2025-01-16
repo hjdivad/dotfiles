@@ -30,7 +30,6 @@ return {
   },
   { "rafamadriz/friendly-snippets", enabled = false },
   -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/coding/blink.lua>
-  -- TODO: where does the ai completion come from?
   {
     "saghen/blink.cmp",
     dependencies = { "L3MON4D3/LuaSnip", version = "v2.*" },
