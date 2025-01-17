@@ -32,7 +32,10 @@ return {
   -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/coding/blink.lua>
   {
     "saghen/blink.cmp",
-    dependencies = { "L3MON4D3/LuaSnip", version = "v2.*" },
+    dependencies = {
+      { "L3MON4D3/LuaSnip", version = "v2.*" },
+      { "moyiz/blink-emoji.nvim" },
+    },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -58,9 +61,15 @@ return {
         -- copilot or buffer)
         --
         -- default = function()
-        --   return { "lsp", "path", "snippets", "buffer" }
+        --   return { "lsp", "path", "snippets", "emoji", "buffer" }
         -- end,
+        default = { "emoji" },
         providers = {
+          emoji = {
+            module = "blink-emoji",
+            name = "emoji",
+            opts = { insert = true },
+          },
           buffer = {
             -- deprioritize buffer completions, mainly to always get them below
             -- snippet completions
