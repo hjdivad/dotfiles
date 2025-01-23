@@ -1,6 +1,6 @@
 local M = {}
 
-M.debug_nvim = function()
+function M.debug_nvim()
   local osv = require("osv")
   if osv.is_running() then
     osv.stop()
