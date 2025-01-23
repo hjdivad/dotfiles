@@ -251,7 +251,7 @@ return {
       -- "scroll forward/backward"
       { "<c-f>", false },
       { "<c-b>", false },
-      -- TODO: update the description on toggle (the way <leader>ua &c. do)
+      -- TODO: update the description on toggle (the way <leader>ua &c. do); use snacks.toggle maybe
       {"<leader>udn", function() vim.g.debug_messages = not vim.g.debug_messages end, desc = "toggle noice message debug logging"}
     },
   },
