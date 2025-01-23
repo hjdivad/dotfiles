@@ -191,6 +191,34 @@ snippet do:mkdir_p "mkdir -p"
       fs::create_dir_all(parent)?;
   }
 
+snippet do:snapshot:debug "use inline snapshot fixtures against Debug"
+    // Cargo.toml
+    //
+    // [dev-dependencies]
+    // insta = { version = "1.42.0", features = ["yaml", "toml"] }
+    //
+    // [profile.dev.package]
+    // insta.opt-level = 3
+    // similar.opt-level = 3
+
+    use insta::assert_debug_snapshot;
+
+    assert_debug_snapshot!("actual", @r###""###)
+
+snippet do:snapshot:string "use inline snapshot fixtures against a string"
+    // Cargo.toml
+    //
+    // [dev-dependencies]
+    // insta = { version = "1.42.0", features = ["yaml", "toml"] }
+    //
+    // [profile.dev.package]
+    // insta.opt-level = 3
+    // similar.opt-level = 3
+
+    use insta::assert_snapshot;
+
+    assert_snapshot!("actual", @r###""###)
+
 snippet do:fixturify "use fixturify to create test directory"
     // Cargo.toml
     //
