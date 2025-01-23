@@ -55,7 +55,7 @@ return {
             local saved_splitright = vim.opt.splitright
 
             vim.opt.splitright = true
-            gf.grug_far({ prefills = { paths = node.path } })
+            gf.open({ prefills = { paths = node.path } })
             vim.opt.splitright = saved_splitright
           end,
           -- open file & close neotree
