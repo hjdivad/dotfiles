@@ -70,6 +70,10 @@ return {
             name = "emoji",
             opts = { insert = true },
           },
+          snippets = {
+            score_offset = 10,
+          },
+
           buffer = {
             -- deprioritize buffer completions, mainly to always get them below
             -- snippet completions
