@@ -39,13 +39,13 @@ return {
     event = "VeryLazy",
     opts = {
       plugins = {
-        spelling = true
+        spelling = true,
       },
       win = {
         -- show the which-key window on the left
         -- see <https://github.com/folke/which-key.nvim/blob/1f8d414f61e0b05958c342df9b6a4c89ce268766/lua/which-key/view.lua#L420>
-        col = 2
-      }
+        col = 2,
+      },
     },
     config = function(_, opts)
       local wk = require("which-key")
