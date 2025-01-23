@@ -69,7 +69,6 @@ return {
         { "<leader>n", group = "+notifications" },
         { "<leader>u", group = "+ui" },
         { "<leader>ud", group = "+ui/debug" },
-        { "<leader>ul", group = "+ui/show logs" },
         { "<leader>un", group = "+notifications" },
       })
     end,
