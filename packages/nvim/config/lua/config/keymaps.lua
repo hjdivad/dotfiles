@@ -198,6 +198,11 @@ ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
 
 ks("n", "<leader>uld", "<Cmd>DapShowLog<Cr>", { desc = "show logs (DAP)" })
+-- <c-w>o "only this window" by default closes all other windows, which I find useless
+-- OTOH, toggling window zoom is very useful
+Snacks.toggle.zoom():map("<c-w>o"):map("<leader>uZ")
+
+
 ks("n", "<leader>uL", function()
   LazyVimUtil.news.changelog()
 end, { desc = "LazyVim Changelog" })
