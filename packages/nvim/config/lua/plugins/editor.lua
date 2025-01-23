@@ -25,9 +25,10 @@ return {
       { "<leader>fe", false },
       { "<leader>fE", false },
       { "<leader>E", false },
-      { "<leader>e", "<cmd>Neotree reveal_force_cwd<cr>", desc = "Open filesystem tree", remap = true },
+      { "<leader>ee", "<cmd>Neotree reveal=false<cr>", desc = "Show filesystem tree", remap = true },
+      { "<leader>ef", "<cmd>Neotree reveal_force_cwd<cr>", desc = "Open filesystem tree (sync to buffer)", remap = true },
       {
-        "<leader>E",
+        "<leader>eE",
         ":Neotree action=focus source=filesystem dir=",
         desc = "Open filesystem tree at <dir>",
         remap = true,
@@ -71,6 +72,9 @@ return {
       filesystem = {
         group_empty_dirs = true,
         scan_mode = "deep",
+        follow_current_file = {
+          enabled = false
+        }
       },
     },
   },
