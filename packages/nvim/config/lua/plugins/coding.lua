@@ -70,6 +70,9 @@ return {
             name = "emoji",
             opts = { insert = true },
           },
+          lsp = {
+            score_offset = 50,
+          },
           snippets = {
             score_offset = 10,
           },
