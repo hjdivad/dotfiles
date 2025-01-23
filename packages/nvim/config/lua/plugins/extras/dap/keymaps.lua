@@ -177,7 +177,12 @@ return {
       { "<leader>dw", false },
       { "<leader>dr", false },
 
-      { "<leader>dL", debugger.debug_nvim, { desc = "debug nvim (toggle OSV; debugee server)" } },
+      {
+        "<leader>dL",
+        debugger.debug_nvim,
+        desc = "debug nvim (toggle OSV; debugee server)",
+        mode = "n",
+      },
       {
         "<leader>de",
         function()
