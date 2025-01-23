@@ -110,10 +110,12 @@ return {
     ---@type snacks.Config
     opts = {
       -- Don't show the dashboard when starting nvim
-      dashboard = {
-        enabled = false,
+      dashboard = { enabled = false },
+      toggle = {
+        which_key = false,
       },
     },
+    -- see <https://github.com/folke/snacks.nvim#-usage>
   },
 
   -- changes how prompts are rendered and gives a lot more control over toast, popups &c.
