@@ -36,7 +36,9 @@ jobs:
   test-nvim:
     name: test nvim
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    # installing fzf can take ~1m
+    # testing binutils can take ~1m
+    timeout-minutes: 4
     steps:
 
       - name: Environment information

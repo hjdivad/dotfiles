@@ -1,5 +1,4 @@
 local tmux = require("hjdivad_util.tmux")
---TODO: review :he fzf-lua
 
 ---@type LazySpec[]
 return {
@@ -36,6 +35,8 @@ return {
         end,
         desc = "find vim :help",
       },
+      { "<leader>ff", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      { "<leader>fF", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
       {
         "<leader>fs",
         function()

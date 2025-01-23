@@ -1,128 +1,13 @@
 local function __dirname()
-  local fullpath = debug.getinfo(1,"S").source:sub(2)
-  local dirname, filename = fullpath:match('^(.*/)([^/]-)$')
+  local fullpath = debug.getinfo(1, "S").source:sub(2)
+  local dirname, filename = fullpath:match("^(.*/)([^/]-)$")
 
   return dirname, filename
 end
 
+---@module 'lazyvim.types'
 ---@type LazyPluginSpec[]
 return {
-  -- see https://www.lazyvim.org/plugins/coding
-  -- completion
-  {
-    -- TODO: too slow
-    --  configure path (i.e. something more narrow than &path)
-    --  cache (watch neotree for invalidation or maybe fswatch)
-    --  Fix #88
-    "hjdivad/cmp-nvim-wikilinks",
-    opts = {
-      -- log_level = 'trace',
-      -- log_to_file = true,
-      glob_suffixes = {
-        "*",
-        "*/*",
-      },
-    },
-  },
-  -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/coding.lua
-  {
-    "hrsh7th/nvim-cmp",
-    version = false, -- last release is way too old
-    event = "InsertEnter",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lsp-signature-help",
-      "hrsh7th/cmp-emoji",
-      "hrsh7th/cmp-path",
-      "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-cmdline",
-      "hjdivad/cmp-nvim-wikilinks",
-      "hrsh7th/cmp-nvim-lua", -- vim's API; would be nicer to get from lsp
-    },
-    keys = {
-      { "<c-l>", desc = "completion" },
-      -- disable imap tab from LazyVim
-      { "<tab>", false },
-    },
-    opts = function()
-      local cmp = require("cmp")
-      return {
-        completion = {
-          completeopt = "menu,menuone,noinsert",
-        },
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<c-l>"] = function()
-            if cmp.visible() then
-              cmp.confirm({ select = true })
-            else
-              cmp.complete()
-            end
-          end,
-          ["<c-c>"] = cmp.mapping.abort(),
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-        }),
-        sources = cmp.config.sources({
-          -- TODO: getting weird buffer keyword completion after lsp initializes
-          --  `nvim packages/nvim/config/lua/chronic/init.lua`
-          --    :tbldeep
-          --  will complete `tbl_deep_extend`
-          --    :inspi
-          --  will complete Inspired (from a comment)
-          --  see https://github.com/hrsh7th/cmp-nvim-lsp/blob/0e6b2ed705ddcff9738ec4ea838141654f12eeef/lua/cmp_nvim_lsp/init.lua#L37-L83
-          --  This seems to be an issue with the lua lsp specifically
-          { name = "nvim_lsp" },
-          { name = "nvim_lsp_signature_help" },
-          -- { name = "nvim_lua" }, -- nvim api; would rather get from lsp
-          { name = "luasnip" },
-          { name = "path" }, -- complete ./ &c.
-          { name = "wikilinks" }, -- complete [[foo]] &c.
-          { name = "emoji" }, -- complete :emoji:
-        }),
-        formatting = {
-          format = function(_, item)
-            local icons = require("lazyvim.config").icons.kinds
-            if icons[item.kind] then
-              item.kind = icons[item.kind] .. item.kind
-            end
-            return item
-          end,
-        },
-        experimental = {
-          ghost_text = {
-            hl_group = "LspCodeLens",
-          },
-        },
-      }
-    end,
-    config = function(_, opts)
-      local cmp = require("cmp")
-      cmp.setup(opts)
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline({
-          ["<c-l>"] = {
-            c = function()
-              if cmp.visible() then
-                cmp.confirm({ select = true })
-              else
-                cmp.complete()
-              end
-            end,
-          },
-        }),
-        sources = cmp.config.sources({
-          { name = "cmdline" },
-          { name = "path" },
-        }),
-      })
-    end,
-  },
-
   {
     -- https://github.com/kylechui/nvim-surround#package-installation
     "kylechui/nvim-surround",
@@ -143,9 +28,93 @@ return {
       })
     end,
   },
-
   { "rafamadriz/friendly-snippets", enabled = false },
-  -- TODO: disable lsp snippets
+  -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/coding/blink.lua>
+  {
+    "saghen/blink.cmp",
+    dependencies = {
+      { "L3MON4D3/LuaSnip", version = "v2.*" },
+      { "moyiz/blink-emoji.nvim" },
+    },
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      completion = {
+        list = {
+          selection = {
+            -- When navigating items with <c-n>, <c-p>, just show the ghost
+            -- text, don't actually insert changes until the selectdion is
+            -- accepted
+            auto_insert = false,
+          },
+        },
+        menu = { border = "single" },
+        documentation = { window = { border = "single" } },
+      },
+      signature = { window = { border = "single" } },
+      sources = {
+        -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/ai/copilot.lua> for copilot configuration
+        -- the copilot completion has a +100 offset which is why it's always the first suggestion
+        --
+        -- Set default to a function to return a hardcoded list and prevent
+        -- lazyvim from deep merging.  This is how to remove sources (e.g.
+        -- copilot or buffer)
+        --
+        -- default = function()
+        --   return { "lsp", "path", "snippets", "emoji", "buffer" }
+        -- end,
+        default = { "emoji" },
+        providers = {
+          emoji = {
+            module = "blink-emoji",
+            name = "emoji",
+            opts = { insert = true },
+          },
+          snippets = {
+            score_offset = 10,
+          },
+
+          buffer = {
+            -- deprioritize buffer completions, mainly to always get them below
+            -- snippet completions
+            score_offset = -100,
+          },
+        },
+      },
+      keymap = {
+        -- prevent <cr> from selecting a completion
+        preset = "none",
+        -- see <https://cmp.saghen.dev/configuration/keymap#commands>
+        -- lazyvim uses <c-y> "yup" which also seems fine
+        ["<c-l>"] = { "show" },
+        ["<c-y>"] = { "select_and_accept" },
+        ["<c-n>"] = { "select_next" },
+        ["<c-p>"] = { "select_prev" },
+        ["<m-y>"] = { "select_and_accept" },
+        ["<m-j>"] = { "select_next" },
+        ["<m-k>"] = { "select_prev" },
+        ["<c-j>"] = { "snippet_forward" },
+        ["<c-k>"] = { "snippet_backward" },
+      },
+      snippets = {
+        preset = "luasnip",
+        expand = function(snippet)
+          require("luasnip").lsp_expand(snippet)
+        end,
+
+        active = function(filter)
+          if filter and filter.direction then
+            return require("luasnip").jumpable(filter.direction)
+          end
+          return require("luasnip").in_snippet()
+        end,
+
+        jump = function(direction)
+          require("luasnip").jump(direction)
+        end,
+      },
+    },
+  },
   {
     "L3MON4D3/LuaSnip",
     -- I use snippets everywhere so
@@ -158,14 +127,14 @@ return {
 
       local snippets_paths = {
         "~/.config/nvim/snippets",
-        __dirname() .. "/../../../../../local-packages/nvim/config/snippets"
+        __dirname() .. "/../../../../../local-packages/nvim/config/snippets",
       }
       require("luasnip.loaders.from_snipmate").lazy_load({
         paths = snippets_paths,
       })
       require("luasnip.loaders.from_lua").lazy_load({ paths = snippets_paths })
 
-      vim.api.nvim_create_user_command("HiEditSnippets", function()
+      vim.api.nvim_create_user_command("EditSnippets", function()
         require("luasnip.loaders").edit_snippet_files({})
       end, { desc = "Edit snippets used in this buffer" })
     end,
@@ -173,23 +142,5 @@ return {
       history = true,
       delete_check_events = "TextChanged",
     },
-    keys = function()
-      return {
-        {
-          "<C-k>",
-          function()
-            require("luasnip").jump(1)
-          end,
-          mode = { "i", "s" },
-        },
-        {
-          "<C-j>",
-          function()
-            require("luasnip").jump(-1)
-          end,
-          mode = { "i", "s" },
-        },
-      }
-    end,
   },
 }

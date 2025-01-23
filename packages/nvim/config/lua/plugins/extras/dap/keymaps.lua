@@ -1,14 +1,15 @@
-local hjdivad_util = require('hjdivad_util')
+local hjdivad_util = require("hjdivad_util")
 local hjdivad_os = require("hjdivad_util.os")
 local ft_keymaps = vim.api.nvim_create_augroup("nvim_dap_keymaps", { clear = true })
+local debugger = require("hjdivad_util.debugger")
 
 local args_list = hjdivad_util.args_list
 local ConfigurationsPath = hjdivad_os.cache_path("dap-configurations.json")
 
 local function load_configurations()
-  local config_file = io.open(ConfigurationsPath, 'r')
+  local config_file = io.open(ConfigurationsPath, "r")
   if config_file then
-    local config_json_str = config_file:read('*a')
+    local config_json_str = config_file:read("*a")
     return vim.json.decode(config_json_str)
   else
     return {}
@@ -18,12 +19,12 @@ end
 ---@param config DapConfiguration
 local function save_configuration(config)
   local configs = load_configurations()
-  configs[#configs+1] = config
+  configs[#configs + 1] = config
 
   local config_json = vim.json.encode(configs)
 
-  os.execute('mkdir -p $(dirname ' .. ConfigurationsPath .. ')')
-  local config_file = assert(io.open(ConfigurationsPath, 'w'))
+  os.execute("mkdir -p $(dirname " .. ConfigurationsPath .. ")")
+  local config_file = assert(io.open(ConfigurationsPath, "w"))
   config_file:write(config_json)
 end
 
@@ -91,7 +92,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
                     args[#args + 1] = words[i]
                   end
 
-                  local name = upstream_config.name .. ' (' .. variant_name .. ')'
+                  local name = upstream_config.name .. " (" .. variant_name .. ")"
                   local config = venv.dap_configuration(name, upstream_config.program, args)
                   save_configuration(config)
                 end
@@ -175,6 +176,13 @@ return {
       { "<leader>dO", false },
       { "<leader>dw", false },
       { "<leader>dr", false },
+
+      {
+        "<leader>dL",
+        debugger.debug_nvim,
+        desc = "debug nvim (toggle OSV; debugee server)",
+        mode = "n",
+      },
       {
         "<leader>de",
         function()
@@ -222,9 +230,9 @@ return {
           -- wezterm.lua maps ⌘⇧-; to <f26>
           keymap.set("n", "<F26>", dap.step_out, { desc = "(chrome) step out" })
 
-          keymap.set("n", "<M-j>", dap.step_into, { desc = "(dap) step into fn" })
-          keymap.set("n", "<M-J>", dap.step_over, { desc = "(dap) step over fn" })
-          keymap.set("n", "<M-k>", dap.step_out, { desc = "(dap) step out" })
+          keymap.set("n", "<M-j>", dap.step_over, { desc = "(dap) step over fn" })
+          keymap.set("n", "<M-J>", dap.step_into, { desc = "(dap) step into fn" })
+          keymap.set("n", "<M-K>", dap.step_out, { desc = "(dap) step out" })
 
           -- dap.continue           <leader>dc
           -- dap.run_to_cursor      <leader>dC
