@@ -1,5 +1,4 @@
 local tmux = require("hjdivad_util.tmux")
---TODO: review :he fzf-lua
 
 ---@type LazySpec[]
 return {
