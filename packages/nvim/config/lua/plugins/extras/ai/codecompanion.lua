@@ -1,3 +1,46 @@
+local LualineCodeCompanionSpinner = require("lualine.component"):extend()
+local spinner_symbols = {
+  "⠋",
+  "⠙",
+  "⠹",
+  "⠸",
+  "⠼",
+  "⠴",
+  "⠦",
+  "⠧",
+  "⠇",
+  "⠏",
+}
+
+function LualineCodeCompanionSpinner:init(options)
+  LualineCodeCompanionSpinner.super.init(self, options)
+  self.spinner_index = 1
+
+  local group = vim.api.nvim_create_augroup("CodeCompanionHooks", {})
+
+  vim.api.nvim_create_autocmd({ "User" }, {
+    pattern = "CodeCompanionRequest*",
+    group = group,
+    callback = function(request)
+      if request.match == "CodeCompanionRequestStarted" then
+        self.processing = true
+      elseif request.match == "CodeCompanionRequestFinished" then
+        self.processing = false
+      end
+    end,
+  })
+end
+
+-- Function that runs every time statusline is updated
+function LualineCodeCompanionSpinner:update_status()
+  if self.processing then
+    self.spinner_index = (self.spinner_index % #spinner_symbols) + 1
+    return [[CodeCompanion ]] .. spinner_symbols[self.spinner_index]
+  else
+    return nil
+  end
+end
+
 ---@module 'lazy.types'
 ---@type LazyPluginSpec[]
 return {
@@ -67,6 +110,22 @@ return {
       --     show_default_prompt_library = false,
       --   }
       -- }
+
+      -- logs in $HOME/.local/state/nvim/codecompanion.log
+      -- log_level = "TRACE", -- TRACE|DEBUG|ERROR|INFO
+    },
+  },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = {
+      sections = {
+        lualine_y = {
+          { LualineCodeCompanionSpinner },
+          { "progress", separator = " ", padding = { left = 1, right = 0 } },
+          { "location", padding = { left = 0, right = 1 } },
+        },
+      },
     },
   },
 
