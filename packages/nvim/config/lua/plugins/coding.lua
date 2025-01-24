@@ -5,7 +5,7 @@ local function __dirname()
   return dirname, filename
 end
 
----@module 'lazyvim.types'
+---@module 'lazy.types'
 ---@type LazyPluginSpec[]
 return {
   {
