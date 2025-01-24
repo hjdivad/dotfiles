@@ -1,39 +1,8 @@
 vim.g.debug_messages = false
 
+---@module 'lazy.types'
+---@type LazyPluginSpec[]
 return {
-  -- active indent guide and indent text objects
-  {
-    "echasnovski/mini.indentscope",
-    opts = {
-      draw = {
-        -- don't animate the indent scope highlighting
-        delay = 0,
-      },
-    },
-  },
-
-  -- Disable this growl/toast distraction
-  -- use show notifications; show-last notification instead
-  {
-    "rcarriga/nvim-notify",
-    enabled = false,
-    keys = {
-      {
-        "<leader>un",
-        false,
-      },
-    },
-    opts = {
-      timeout = 3000,
-      max_height = function()
-        return math.floor(vim.o.lines * 0.75)
-      end,
-      max_width = function()
-        return math.floor(vim.o.columns * 0.75)
-      end,
-    },
-  },
-
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
@@ -74,7 +43,6 @@ return {
     end,
   },
 
-  -- bufferline
   {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",

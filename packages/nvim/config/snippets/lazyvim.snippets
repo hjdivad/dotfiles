@@ -15,4 +15,12 @@ snippet java:default "default java lazyvim setup"
           enabled = false,
       }
   }
-    
+
+snippet specs "empty lazyspecs"
+	---@module 'lazy.types'
+	---@type LazyPluginSpec[]
+	return {
+		{
+			"${0:gh-repo}"
+		}
+	}

@@ -1,5 +1,6 @@
 -- see https://github.com/dustinblackman/oatmeal.nvim#lazy-nvim
----@type LazySpec[]
+---@module 'lazy.types'
+---@type LazyPluginSpec[]
 return {
   {
     "dustinblackman/oatmeal.nvim",

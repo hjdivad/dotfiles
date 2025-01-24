@@ -5,7 +5,7 @@ local function __dirname()
   return dirname, filename
 end
 
----@module 'lazyvim.types'
+---@module 'lazy.types'
 ---@type LazyPluginSpec[]
 return {
   {
@@ -96,8 +96,8 @@ return {
         ["<m-y>"] = { "select_and_accept" },
         ["<m-j>"] = { "select_next" },
         ["<m-k>"] = { "select_prev" },
-        ["<c-j>"] = { "snippet_forward" },
-        ["<c-k>"] = { "snippet_backward" },
+        ["<c-k>"] = { "snippet_forward" },
+        ["<c-j>"] = { "snippet_backward" },
       },
       snippets = {
         preset = "luasnip",

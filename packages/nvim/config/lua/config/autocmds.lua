@@ -24,12 +24,12 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   group = ft_group,
   callback = function()
     -- TODO: need to configure null-ls to pass `--parser=json` to prettier for this buffer (or like, always?)
-    vim.bo.filetype = 'json'
+    vim.bo.filetype = "json"
   end,
 })
 
 vim.api.nvim_create_autocmd({ "BufRead" }, {
-  pattern = {  ".swcrc" },
+  pattern = { ".swcrc" },
   group = ft_group,
   callback = function()
     -- TODO: need to configure null-ls to pass `--parser=json` to prettier for this buffer (or like, always?)
@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = ".lazy.lua",
+  pattern = { ".lazy.lua", "**/nvim/config/lua/plugins/**/*.lua" },
   group = ft_group,
   callback = function()
     require("luasnip").filetype_extend("lua", { "lazyvim" })
@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = ".markdownlintrc",
   group = ft_group,
   callback = function()
-    vim.bo.filetype = 'json'
+    vim.bo.filetype = "json"
   end,
 })
 
@@ -90,7 +90,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "vite.config.ts",
   group = ft_group,
   callback = function()
-    require('luasnip').filetype_extend('typescript', { 'vite-config' })
+    require("luasnip").filetype_extend("typescript", { "vite-config" })
   end,
 })
 
@@ -98,7 +98,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*_spec.lua",
   group = ft_group,
   callback = function()
-    require('luasnip').filetype_extend('lua', { 'plenary' })
+    require("luasnip").filetype_extend("lua", { "plenary" })
   end,
 })
 
@@ -106,7 +106,7 @@ vim.api.nvim_create_autocmd("FileType", {
   group = ft_group,
   pattern = { "typescriptreact" },
   callback = function()
-    require('luasnip').filetype_extend('typescriptreact', { 'typescript' })
+    require("luasnip").filetype_extend("typescriptreact", { "typescript" })
   end,
 })
 
