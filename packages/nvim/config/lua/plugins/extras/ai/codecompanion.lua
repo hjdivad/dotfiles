@@ -51,19 +51,13 @@ return {
     keys = {
       { "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
       {
-        "<leader>aA",
+        "<leader>af",
         "<cmd>CodeCompanionActions<cr>",
         mode = { "n", "v" },
         desc = "Prompt Actions (CodeCompanion)",
       },
       { "<leader>aa", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, desc = "Toggle (CodeCompanion)" },
       { "<leader>ac", "<cmd>CodeCompanionChat Add<cr>", mode = "v", desc = "Add code to CodeCompanion" },
-      {
-        "<leader>ap",
-        "<cmd>CodeCompanion<cr>",
-        mode = "n",
-        desc = "Inline prompt (CodeCompanion)",
-      },
     },
 
     opts = {
@@ -118,15 +112,22 @@ return {
 
   {
     "nvim-lualine/lualine.nvim",
-    opts = {
-      sections = {
-        lualine_y = {
-          { LualineCodeCompanionSpinner },
-          { "progress", separator = " ", padding = { left = 1, right = 0 } },
-          { "location", padding = { left = 0, right = 1 } },
-        },
-      },
-    },
+    -- opts = {
+    --   sections = {
+    --     lualine_y = {
+    --       { LualineCodeCompanionSpinner },
+    --       { "progress", separator = " ", padding = { left = 1, right = 0 } },
+    --       { "location", padding = { left = 0, right = 1 } },
+    --     },
+    --   },
+    -- },
+    opts = function(_, opts)
+      opts.sections = opts.sections or {}
+      opts.sections.lualine_y = vim.list_extend(opts.sections.lualine_y or {}, {
+        { LualineCodeCompanionSpinner },
+      })
+      return opts
+    end,
   },
 
   {
