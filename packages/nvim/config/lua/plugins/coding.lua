@@ -71,7 +71,7 @@ return {
             opts = { insert = true },
           },
           lsp = {
-            score_offset = 50,
+            score_offset = 100,
           },
           snippets = {
             score_offset = 10,
