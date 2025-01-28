@@ -113,22 +113,22 @@ local tt_state = tt_states.start
 local ONE_DAY_SECS = 86400
 
 ls.add_snippets("all", {
-  s("::today-long::", {
+  s("@today-long", {
     d(1, function ()
       return sn(nil, t(os.date('%e %b %Y (%A)')))
     end)
   }),
-  s("::yestesrday-long::", {
+  s("@yestesrday-long", {
     d(1, function ()
       return sn(nil, t(os.date('%e %b %Y (%A)', os.time() - ONE_DAY_SECS)))
     end)
   }),
-  s("::tomorrow-long::", {
+  s("@tomorrow-long", {
     d(1, function ()
       return sn(nil, t(os.date('%e %b %Y (%A)', os.time() + ONE_DAY_SECS)))
     end)
   }),
-  s("::today-short::", {
+  s("@today-short", {
     d(1, function ()
       -- see man strftime
       local date_str =  os.date('%e %b')
@@ -144,7 +144,7 @@ ls.add_snippets("all", {
   --  2. return sn with inputs (date + format)
   --  3. on exit, mv state to 1 and run again
   --    4. this time return the computed date
-  s("::date::", {
+  s("@date", {
     d(1, function(_args, snip)
       if tt_state == tt_states.start then
         return sn(nil, {
