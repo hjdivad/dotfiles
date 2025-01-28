@@ -110,10 +110,22 @@ local tt_states = {
 }
 local tt_state = tt_states.start
 
+local ONE_DAY_SECS = 86400
+
 ls.add_snippets("all", {
   s("::today-long::", {
     d(1, function ()
       return sn(nil, t(os.date('%e %b %Y (%A)')))
+    end)
+  }),
+  s("::yestesrday-long::", {
+    d(1, function ()
+      return sn(nil, t(os.date('%e %b %Y (%A)', os.time() - ONE_DAY_SECS)))
+    end)
+  }),
+  s("::tomorrow-long::", {
+    d(1, function ()
+      return sn(nil, t(os.date('%e %b %Y (%A)', os.time() + ONE_DAY_SECS)))
     end)
   }),
   s("::today-short::", {
