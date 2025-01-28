@@ -82,6 +82,18 @@ return {
       toggle = {
         which_key = false,
       },
+      terminal = {
+        win = {
+          keys = {
+            -- see <https://github.com/LazyVim/LazyVim/blob/f0d2629bd859eeac343999b0fe145f9beb227c4a/lua/lazyvim/plugins/util.lua#L22-L25>
+            -- and <https://github.com/folke/snacks.nvim/blob/e7d609b544d4e83dd940aa7c5884e9b3690ae2e6/lua/snacks/win.lua#L261-L295>
+            nav_h = false,
+            nav_j = false,
+            nav_k = false,
+            nav_l = false,
+          },
+        },
+      },
     },
     -- see <https://github.com/folke/snacks.nvim#-usage>
   },
