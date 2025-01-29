@@ -73,6 +73,9 @@ return {
           lsp = {
             score_offset = 100,
           },
+          path = {
+            score_offset = 90,
+          },
           snippets = {
             score_offset = 10,
           },
