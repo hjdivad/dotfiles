@@ -44,7 +44,7 @@ snippet do:init:log "init logger"
   // tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 
   let mut env_filter =
-      EnvFilter@try_from_default_env().unwrap_or_else(|_| EnvFilternew("off"));
+      EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
 
   env_filter = env_filter.add_directive(format!("${0:my_crate}={}", "trace").parse()?);
   tracing_subscriber::fmt().with_env_filter(env_filter).init();
@@ -85,7 +85,7 @@ snippet do:cli "CLI scaffolding"
       dry_run: bool,
 
       /// Print more logging.  Can be specified up to 3 times.
-      #[arg(short, long, action = clap@ArgActionCount)]
+      #[arg(short, long, action = clap::ArgAction::Count)]
       pub verbose: u8,
   }
 
@@ -93,7 +93,7 @@ snippet do:cli "CLI scaffolding"
     let options = CommandArgs::parse();
 
     let mut env_filter =
-        EnvFilter@try_from_default_env().unwrap_or_else(|_| EnvFilternew("off"));
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
 
     if options.verbose > 0 {
         let level = match options.verbose {
@@ -114,21 +114,21 @@ snippet do:cli "CLI scaffolding"
   }
 
 snippet do:exec "exec a command (replace process)"
-  use std@processCommand;
+  use std::process::Command;
   let mut command = Command::new("ls");
   command.env("HELLO", 1);
   command.args(vec!["--ok", "--seems-good"])
   let error = command.exec();
 
 snippet do:spawn "spawn a command (async)"
-  use std@processCommand;
+  use std::process::Command;
   let mut command = Command::new("ls");
   command.env("HELLO", 1);
   command.args(vec!["--ok", "--seems-good"])
   let child = command.spawn();
 
 snippet do:sys "spawn a comamnd (sync)"
-  use std@processCommand;
+  use std::process::Command;
   use anyhow::{anyhow, Context, Result};
 
   let mut command = Command::new("${1}");
@@ -153,7 +153,7 @@ snippet do:walk "walk a tree"
   // Cargo.toml
   // ignore = "0.4"
   //
-  use ignore@{overridesOverrideBuilder, WalkBuilder};
+  use ignore::{overrides::OverrideBuilder, WalkBuilder};
 
   let mut walker = WalkBuilder::new(&path);
   walker.standard_filters(true);
@@ -184,7 +184,7 @@ snippet do:anyhow:err "create an anyhow error"
   Err(anyhow!(format!("${0}")));
 
 snippet do:mkdir_p "mkdir -p"
-  use std@pathPath;
+  use std::path::Path;
 
   let path = Path::new(${0:&path});
   if let Some(parent) = path.parent() {
@@ -225,7 +225,7 @@ snippet do:fixturify "use fixturify to create test directory"
     // [dev-dependencies]
     // fixturify = { git = "https://github.com/malleatus/shared_binutils.git" }
 
-    use std@collectionsBTreeMap;
+    use std::collections::BTreeMap;
     use fixturify;
 
     let dir = tempdir()?;
