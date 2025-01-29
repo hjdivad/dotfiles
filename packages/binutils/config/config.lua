@@ -8,35 +8,10 @@
 --   }
 -- }
 
-
-
 ---@type Config
 return {
 	tmux = {
 		sessions = {
-			{
-				name = "📋 todos",
-				windows = {
-					{
-						name = "todos",
-						path = "~/docs/vadnu/home",
-						command = "nvim",
-					},
-
-					{
-						name = "reference",
-						path = "~/docs/vadnu/home/ref",
-						command = "nvim",
-					},
-
-					{
-						name = "journal",
-						path = "~/docs/vadnu/home/journal",
-						command = "nvim",
-					},
-				},
-			},
-
 			{
 				name = "🟡 dotfiles",
 				windows = {
@@ -123,11 +98,45 @@ return {
 					},
 				},
 			},
+
+			{
+				name = "🧩 sandbox",
+				windows = {
+					{
+						name = "sandbox-go",
+						path = "~/src/nas/hjdivad/sandbox-go/",
+						command = "nvim",
+					},
+				},
+			},
+
+			{
+				name = "📋 todos",
+				windows = {
+					{
+						name = "todos",
+						path = "~/docs/vadnu/home",
+						command = "nvim",
+					},
+
+					{
+						name = "reference",
+						path = "~/docs/vadnu/home/ref",
+						command = "nvim",
+					},
+
+					{
+						name = "journal",
+						path = "~/docs/vadnu/home/journal",
+						command = "nvim",
+					},
+				},
+			},
 		},
 	},
 
-  shell_caching = {
-    source = "~/src/github/hjdivad/dotfiles/packages/zsh/",
-    destination = "~/src/github/hjdivad/dotfiles/packages/zsh/dist",
-  }
+	shell_caching = {
+		source = "~/src/github/hjdivad/dotfiles/packages/zsh/",
+		destination = "~/src/github/hjdivad/dotfiles/packages/zsh/dist",
+	},
 }
