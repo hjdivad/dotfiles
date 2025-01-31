@@ -52,9 +52,11 @@ jobs:
         run: sudo apt-get -y install fzf
 
       - name: Download Neovim
+        env:
+          APPIMG_NIGHTLY: https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.appimage
         run: |
           mkdir -p /tmp/nvim
-          wget -q https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage -O /tmp/nvim/nvim.appimage
+          wget -q ${APPIMG_NIGHTLY} -O /tmp/nvim/nvim.appimage
           cd /tmp/nvim
           chmod a+x ./nvim.appimage
           ./nvim.appimage --appimage-extract
