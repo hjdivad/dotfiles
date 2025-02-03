@@ -266,18 +266,6 @@ function __ts_journal {
   fi
 }
 
-function __ts_reference {
-  tmux select-window -t "${TODOS}:reference"
-
-  t_current_session=$(tmux display -p '#S')
-  t_current_session=${t_current_session%\n}
-  if [[ "$t_current_session" != "${TODOS}" ]]; then
-    # switch to "last" (ie last used) session
-    # switch to the todos session
-    tmux switch-client -t "${TODOS}"
-  fi
-}
-
 if which fd > /dev/null 2>&1; then
   function __ts_go_source {
     local to_dir=$(
@@ -306,7 +294,6 @@ alias t='tmux'
 alias tss='tmux display-popup -E -w 100% -h 100% nvim -c "lua require('"'"'hjdivad_util.tmux'"'"').goto_fzf_tmux_session({ quit_on_selection=true })"'
 alias tst='tmux switch-client -l'
 alias tsd=__ts_todos
-alias tsr=__ts_reference
 alias tsj=__ts_journal
 
 

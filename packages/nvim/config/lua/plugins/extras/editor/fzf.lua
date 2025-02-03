@@ -52,13 +52,6 @@ return {
         desc = "tmux -> todos",
       },
       {
-        "<leader>tsr",
-        function()
-          tmux.goto_tmux_session("📋 todos", "reference")
-        end,
-        desc = "tmux -> reference",
-      },
-      {
         "<leader>tsj",
         function()
           tmux.goto_tmux_session("📋 todos", "journal")

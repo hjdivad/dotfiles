@@ -120,12 +120,6 @@ return {
 					},
 
 					{
-						name = "reference",
-						path = "~/docs/vadnu/home/ref",
-						command = "nvim",
-					},
-
-					{
 						name = "journal",
 						path = "~/docs/vadnu/home/journal",
 						command = "nvim",
