@@ -68,7 +68,6 @@ return {
           emoji = {
             module = "blink-emoji",
             name = "emoji",
-            opts = { insert = true },
           },
           lsp = {
             score_offset = 100,
