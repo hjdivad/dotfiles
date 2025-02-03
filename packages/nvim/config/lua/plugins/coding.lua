@@ -70,7 +70,7 @@ return {
             name = "emoji",
           },
           lsp = {
-            score_offset = 100,
+            score_offset = 1000,
           },
           path = {
             score_offset = 90,
