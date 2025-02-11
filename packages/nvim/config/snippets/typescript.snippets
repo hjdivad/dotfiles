@@ -1,40 +1,40 @@
-snippet ts-ignore
+snippet @ts-ignore
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 
-snippet eslint-ignore
+snippet @eslint-ignore
 	// eslint-disable-next-line ${0:rule-name}
 
-snippet eslint-disable
+snippet @eslint-disable
 	// eslint-disable-next-line ${0:rule-name}
 
-snippet af "arrow-function"
+snippet @af "arrow-function"
 	(${1:args}) => {
 		$0
 	}
 
-snippet aaf "async arrow-function"
+snippet @aaf "async arrow-function"
 	async (${1:args}) => {
 		$0
 	}
 
-snippet afi "arrow-function inline"
+snippet @afi "arrow-function inline"
 	(${1:args}) => $0
 
-snippet aafi "arrow-function inline"
+snippet @aafi "arrow-function inline"
 	async (${1:args}) => $0
 
-snippet /** "docs"
+snippet @docs "docs"
 	/**
 		${0}
 	 */
 
-snippet forof "for of"
+snippet @forof "for of"
 	for (let $1 of $2) {
 		$0
 	}
 
-snippet noop-tagged-template-literal
+snippet @noop-tagged-template-literal
 	export function ${0}(strings: TemplateStringsArray, ...values: any[]) {
 		let result = '';
 		strings.forEach((str, i) => {
@@ -43,7 +43,7 @@ snippet noop-tagged-template-literal
 		return result;
 	}
 
-snippet inlineStr
+snippet @inline-str
 	function inlineStr(strings: TemplateStringsArray, ...values: any[]): string {
 		let result = '';
 
@@ -79,7 +79,7 @@ snippet inlineStr
 		return result;
 	}
 
-snippet words
+snippet @words
 	function w(strings: TemplateStringsArray, ...values: any[]): string[] {
 		// Combine the strings and values into a single string
 		const rawString = strings.reduce(
@@ -93,16 +93,16 @@ snippet words
 		return wordArray;
 	}
 
-snippet type-exhaustion-check
+snippet @type-exhaustion-check
 	const check: never = ${0}
 	throw new Error(\`Types not exhausted: \${check as any}\`);
 
-snippet __filename
+snippet @__filename
 	import { fileURLToPath } from 'node:url';
 
 	const __filename = fileURLToPath(import.meta.url);
 
-snippet __dirname
+snippet @__dirname
 	import { fileURLToPath } from 'node:url';
 	import path from 'node:path';
 
@@ -110,7 +110,7 @@ snippet __dirname
 	const __dirname = path.dirname(__filename)
 	const __basename = path.basename(__filename)
 
-snippet cli
+snippet @main-cli
 	#!/usr/bin/env tsx
 
 	// TODO: add package.json and use typescript-cli snippet
@@ -171,7 +171,7 @@ snippet cli
 		await main(process.argv);
 	}
 
-snippet mainTest
+snippet @main-test
 	import { fileURLToPath } from 'node:url';
 	import { describe, test } from "node:test";
 	import nodeAssert from "node:assert/strict";
@@ -191,7 +191,7 @@ snippet mainTest
 		await main();
 	}
 
-snippet exec
+snippet @exec
 	import { exec as execNode} from 'node:child_process';
 
 	async function exec(
@@ -212,7 +212,7 @@ snippet exec
 		});
 	}
 
-snippet spawn
+snippet @spawn
 	import { spawn as nativeSpawn, SpawnOptions } from "child_process";
 	export const spawn = (
 		command: string,
