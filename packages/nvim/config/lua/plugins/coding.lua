@@ -76,13 +76,13 @@ return {
             score_offset = 90,
           },
           snippets = {
-            score_offset = 10,
+            score_offset = -1000,
           },
 
           buffer = {
             -- deprioritize buffer completions, mainly to always get them below
             -- snippet completions
-            score_offset = -100,
+            score_offset = -10000,
           },
         },
       },
