@@ -181,6 +181,7 @@ export NODE_BIGMEM="--max-old-space-size=16384" # mb
 # Update dependencies interactively
 alias npm-check-updates='npx npm-check-updates -i'
 alias nr='npm run'
+alias create-turborepo='npx create-turbo@latest --example https://github.com/hjdivad/turborepo-template'
 
 
 # pyenv is _sooooo_ slow so we only want to run it when we actually need it
