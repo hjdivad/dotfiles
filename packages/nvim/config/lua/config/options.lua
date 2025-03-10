@@ -13,7 +13,7 @@ vim.opt.splitright = false
 
 vim.opt.spelllang = { "sv", "en_gb", "en_us" }
 vim.opt.spellfile =
-  { ".vimspell.utf.8", "~/.local/share/.nvim/spell/en.utf-8.add", "~/.local/share/.nvim/spell/sv.utf-8.add" }
+  { ".vimspell.utf.8", "~/.local/share/nvim/spell/en.utf-8.add", "~/.local/share/nvim/spell/sv.utf-8.add" }
 
 vim.opt.swapfile = false
 
