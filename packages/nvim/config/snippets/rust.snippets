@@ -1,4 +1,4 @@
-snippet tests "tests module for unit tests"
+snippet @tests "tests module for unit tests"
   #[cfg(test)]
   mod tests {
       use super::*;
@@ -11,7 +11,7 @@ snippet tests "tests module for unit tests"
       }
   }
 
-snippet test "a test"
+snippet @test "a test"
   #[test]
     fn ${1:it_works}() -> Result<()> {
       ${0}
@@ -20,23 +20,23 @@ snippet test "a test"
       Ok(())
     }
 
-snippet dd "derive macro"
+snippet @dd "derive macro"
 	#[derive($0)]
 
-snippet derive "derive macro"
+snippet @derive "derive macro"
 	#[derive($0)]
 
-snippet allow "allow(clippy::) -> lint disable"
+snippet @allow "allow(clippy::) -> lint disable"
 	#[allow(clippy::${0})]
 
-snippet use:log "use logger"
+snippet @use:log "use logger"
   use tracing::{debug, info, trace};
   // cargo.toml
   //
   // tracing = "0.1.40"
   // tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 
-snippet do:init:log "init logger"
+snippet @do:init:log "init logger"
   use tracing_subscriber::EnvFilter;
   // cargo.toml
   //
@@ -49,10 +49,10 @@ snippet do:init:log "init logger"
   env_filter = env_filter.add_directive(format!("${0:my_crate}={}", "trace").parse()?);
   tracing_subscriber::fmt().with_env_filter(env_filter).init();
 
-snippet use:anyhow "use anyhow (result.context('foo'))"
+snippet @use:anyhow "use anyhow (result.context('foo'))"
   use anyhow::{anyhow, Context, Result};
 
-snippet use:default "default use preamble"
+snippet @use:default "default use preamble"
   use clap::Parser;
   use insta::{assert_debug_snapshot, assert_yaml_snapshot};
   use tracing::{debug, info, trace};
@@ -72,7 +72,7 @@ snippet use:default "default use preamble"
   // [dev-dependencies]
   // insta = { version = "1.36.1", features = ["yaml", "toml"] }
 
-snippet do:cli "CLI scaffolding"
+snippet @do:cli "CLI scaffolding"
   use clap::Parser;
   use anyhow::{anyhow, Context, Result};
   use tracing::{debug, info, trace};
@@ -113,21 +113,21 @@ snippet do:cli "CLI scaffolding"
       Ok(())
   }
 
-snippet do:exec "exec a command (replace process)"
+snippet @do:exec "exec a command (replace process)"
   use std::process::Command;
   let mut command = Command::new("ls");
   command.env("HELLO", 1);
   command.args(vec!["--ok", "--seems-good"])
   let error = command.exec();
 
-snippet do:spawn "spawn a command (async)"
+snippet @do:spawn "spawn a command (async)"
   use std::process::Command;
   let mut command = Command::new("ls");
   command.env("HELLO", 1);
   command.args(vec!["--ok", "--seems-good"])
   let child = command.spawn();
 
-snippet do:sys "spawn a comamnd (sync)"
+snippet @do:sys "spawn a comamnd (sync)"
   use std::process::Command;
   use anyhow::{anyhow, Context, Result};
 
@@ -149,7 +149,7 @@ snippet do:sys "spawn a comamnd (sync)"
       ${0:Ok(())}
   }
 
-snippet do:walk "walk a tree"
+snippet @do:walk "walk a tree"
   // Cargo.toml
   // ignore = "0.4"
   //
@@ -180,10 +180,10 @@ snippet do:walk "walk a tree"
     }
   }
 
-snippet do:anyhow:err "create an anyhow error"
+snippet @do:anyhow:err "create an anyhow error"
   Err(anyhow!(format!("${0}")));
 
-snippet do:mkdir_p "mkdir -p"
+snippet @do:mkdir_p "mkdir -p"
   use std::path::Path;
 
   let path = Path::new(${0:&path});
@@ -191,7 +191,7 @@ snippet do:mkdir_p "mkdir -p"
       fs::create_dir_all(parent)?;
   }
 
-snippet do:snapshot:debug "use inline snapshot fixtures against Debug"
+snippet @do:snapshot:debug "use inline snapshot fixtures against Debug"
     // Cargo.toml
     //
     // [dev-dependencies]
@@ -205,7 +205,7 @@ snippet do:snapshot:debug "use inline snapshot fixtures against Debug"
 
     assert_debug_snapshot!("actual", @r###""###)
 
-snippet do:snapshot:string "use inline snapshot fixtures against a string"
+snippet @do:snapshot:string "use inline snapshot fixtures against a string"
     // Cargo.toml
     //
     // [dev-dependencies]
@@ -219,7 +219,7 @@ snippet do:snapshot:string "use inline snapshot fixtures against a string"
 
     assert_snapshot!("actual", @r###""###)
 
-snippet do:fixturify "use fixturify to create test directory"
+snippet @do:fixturify "use fixturify to create test directory"
     // Cargo.toml
     //
     // [dev-dependencies]
@@ -243,9 +243,9 @@ snippet do:fixturify "use fixturify to create test directory"
 
     fixturify::write(dir.path(), file_map)?;
 
-snippet rok "return Ok(())"
+snippet @rok "return Ok(())"
   return Ok(())
 
-snippet fr "function returns Result<>"
+snippet @fr "function returns Result<>"
   -> Result<${1:()}>$0
 
