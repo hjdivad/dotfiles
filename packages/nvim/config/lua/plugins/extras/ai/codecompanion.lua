@@ -96,6 +96,34 @@ return {
           },
         },
       },
+      slash_commands = {
+        ["buffer"] = {
+          opts = {
+            provider = "snacks",
+          },
+        },
+        ["help"] = {
+          opts = {
+            provider = "snacks",
+            max_lines = 1000,
+          },
+        },
+        ["file"] = {
+          opts = {
+            provider = "snacks",
+          },
+        },
+        ["symbols"] = {
+          opts = {
+            provider = "snacks",
+          },
+        },
+        ["workspace"] = {
+          opts = {
+            provider = "snacks",
+          },
+        },
+      },
 
       -- see <https://codecompanion.olimorris.dev/configuration/action-palette.html>
       -- action_palette = {
@@ -140,5 +168,17 @@ return {
         },
       },
     },
+  },
+
+  -- TODO: workaround for a codecompanion + blink bug
+  -- see <https://github.com/olimorris/codecompanion.nvim/issues/968#issuecomment-2672905893>
+  -- see <https://github.com/Saghen/blink.cmp/issues/1303>
+  {
+    "saghen/blink.cmp",
+    optional = true,
+    tag = "v0.12.2",
+    opts = function(_, opts)
+      opts.completion.accept.dot_repeat = false
+    end,
   },
 }
