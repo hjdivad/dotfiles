@@ -34,7 +34,8 @@ brew install \
   hyperfine \
   git-delta \
   tldr \
-  wezterm
+  wezterm \
+  mise
 
 volta install node
 brew install cask font-hasklug-nerd-font
