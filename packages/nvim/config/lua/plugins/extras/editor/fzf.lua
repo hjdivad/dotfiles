@@ -1,5 +1,7 @@
 local tmux = require("hjdivad_util.tmux")
 
+-- TODO: maybe switch to Snacks.picker?
+
 ---@type LazySpec[]
 return {
   -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/editor/fzf.lua>
@@ -14,14 +16,6 @@ return {
       },
       { "<leader>/", false },
       {
-        "<leader>ff",
-        function()
-          local query = vim.g.fzf_default_query_files
-          require("fzf-lua").files({ query = query })
-        end,
-        desc = "find files (root dir, default query)",
-      },
-      {
         "<leader>fl",
         function()
           require("fzf-lua").blines()
@@ -35,7 +29,14 @@ return {
         end,
         desc = "find vim :help",
       },
-      { "<leader>ff", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      {
+        "<leader>ff",
+        function()
+          local query = vim.g.fzf_default_query_files
+          require("fzf-lua").files({ query = query })
+        end,
+        desc = "find files (root dir, default query)",
+      },
       { "<leader>fF", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
       {
         "<leader>fs",
