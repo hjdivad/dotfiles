@@ -131,9 +131,10 @@ return {
       require("luasnip").setup(opts)
 
       local snippets_paths = {
-        "~/.config/nvim/snippets",
-        __dirname() .. "/../../../../../local-packages/nvim/config/snippets",
+        vim.fn.stdpath("config") .. "/snippets",
+        "~/src/github/hjdivad/dotfiles/local-packages/nvim/config/snippets/"
       }
+
       require("luasnip.loaders.from_snipmate").lazy_load({
         paths = snippets_paths,
       })

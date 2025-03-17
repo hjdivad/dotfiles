@@ -17,28 +17,6 @@
 
 
 ```bash
-brew install \
-  kitty \
-  neovim \
-  tmux \
-  fzf \
-  z \
-  rbenv \
-  gh \
-  volta \
-  bat \
-  ripgrep \
-  fd \
-  sheldon \
-  sd \
-  hyperfine \
-  git-delta \
-  tldr \
-  wezterm \
-  mise
-
-volta install node
-brew install cask font-hasklug-nerd-font
 
 cd $HOME
 ln -s Downloads tmp
@@ -55,7 +33,6 @@ cd hjdivad/dotfiles
 - set up [wezterm terminfo](https://wezfurlong.org/wezterm/faq.html#how-do-i-enable-undercurl-curly-underlines)
 - install [berkeley mono font](https://berkeleygraphics.com/typefaces/berkeley-mono/)
 - install [nonicons font](https://github.com/yamatsum/nonicons/blob/master/dist/nonicons.ttf)
-- restart kitty
 
 **Installation round 2**
 

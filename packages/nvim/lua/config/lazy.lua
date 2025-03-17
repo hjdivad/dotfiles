@@ -7,8 +7,8 @@ end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 local function is_buffer_in_git_subdir()
-    local buf_path = vim.fn.bufname('%')
-    return (buf_path:match('^%.git/') ~= nil) or  (buf_path:match('/%.git/') ~= nil)
+  local buf_path = vim.fn.bufname("%")
+  return (buf_path:match("^%.git/") ~= nil) or (buf_path:match("/%.git/") ~= nil)
 end
 
 -- Don't attempt to install missing plugins when editing a .git/ file, i.e.
@@ -23,6 +23,10 @@ require("lazy").setup({
       import = "lazyvim.plugins",
     },
     { import = "plugins" },
+    -- NOTE: local_config is symlinked in from local-dotfiles to allow for local
+    -- system specific customizations
+    -- see: https://github.com/malleatus/shared_binutils/blob/master/global/src/bin/setup-local-dotfiles.rs
+    { import = "local_config.plugins" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
@@ -36,7 +40,7 @@ require("lazy").setup({
   -- TODO: configure tokyonight? https://github.com/folke/tokyonight.nvim#%EF%B8%8F-configuration
   install = {
     missing = install_missing_plugins,
-    colorscheme = { "tokyonight", "habamax" }
+    colorscheme = { "tokyonight", "habamax" },
   },
   checker = {
     -- disable automatic plugin updating.

@@ -3,3 +3,4 @@
 dist/
 .cargo/
 /local-packages
+/.task

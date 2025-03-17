@@ -10,6 +10,16 @@ end
 return {
   {
     "williamboman/mason.nvim",
+    dependencies = { "Zeioth/mason-extra-cmds", opts = {} },
+    cmd = {
+      "Mason",
+      "MasonInstall",
+      "MasonUninstall",
+      "MasonUninstallAll",
+      "MasonLog",
+      "MasonUpdate",
+      "MasonUpdateAll", -- this cmd is provided by mason-extra-cmds
+    },
     opts = {
       ensure_installed = {
         -- lsp
@@ -52,16 +62,15 @@ return {
       ---@type rustaceanvim.lsp.ClientOpts
       server = {
         default_settings = {
-          ['rust-analyzer'] = {
+          ["rust-analyzer"] = {
             diagnostics = {
               -- see <https://rust-analyzer.github.io/manual.html#diagnostics>
-              disabled = { "proc-macro-disabled" }
-            }
-          }
-        }
-      }
-
-    }
+              disabled = { "proc-macro-disabled" },
+            },
+          },
+        },
+      },
+    },
   },
   {
     -- see https://www.lazyvim.org/plugins/lsp
@@ -86,20 +95,20 @@ return {
       -- add missing
       keys[#keys + 1] = {
         "gt",
-        '<cmd>FzfLua lsp_typedefs<cr>',
+        "<cmd>FzfLua lsp_typedefs<cr>",
         desc = "Goto [T]ype Definition",
       }
 
       keys[#keys + 1] = {
         "gd",
-        '<cmd>FzfLua lsp_definitions<cr>',
+        "<cmd>FzfLua lsp_definitions<cr>",
         desc = "Goto Definition",
         has = "definition",
       }
 
       keys[#keys + 1] = {
         "gi",
-        '<cmd>FzfLua lsp_implementations<cr>',
+        "<cmd>FzfLua lsp_implementations<cr>",
         desc = "Goto Implementation",
       }
 

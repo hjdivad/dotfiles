@@ -112,3 +112,9 @@ vim.api.nvim_create_autocmd("FileType", {
 
 term.setup()
 fold.setup()
+
+
+-- NOTE: local_config is symlinked in from local-dotfiles to allow for local
+-- system specific customizations
+-- see: https://github.com/malleatus/shared_binutils/blob/master/global/src/bin/setup-local-dotfiles.rs
+require("local_config.config.autocmds")

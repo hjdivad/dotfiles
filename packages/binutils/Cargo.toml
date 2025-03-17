@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["*crates/*"]
+members = ["crates/*"]
 
 [workspace.package]
 edition = "2021"
@@ -23,12 +23,13 @@ cargo_metadata = "0.18.1"
 chrono = "0.4.38"
 clap = { version = "4.5.19", features = ["derive"] }
 clap_complete = "4.5.29"
-config = { git = "https://github.com/malleatus/shared_binutils.git" }
-fixturify = { git = "https://github.com/malleatus/shared_binutils.git" }
-global = { git = "https://github.com/malleatus/shared_binutils.git" }
+config = { path = "../../../../malleatus/shared_binutils/config" }
+dirs = "6.0.0"
+fixturify = { path = "../../../../malleatus/shared_binutils/fixturify" }
+global = { path = "../../../../malleatus/shared_binutils/global" }
 insta = { version = "1.36.1", features = ["yaml", "toml"] }
-latest_bin = { git = "https://github.com/malleatus/shared_binutils.git" }
-lua_config_utils = { git = "https://github.com/malleatus/shared_binutils.git" }
+latest_bin = { path = "../../../../malleatus/shared_binutils/latest_bin" }
+lua_config_utils = { path = "../../../../malleatus/shared_binutils/lua_config_utils" }
 nix = { version = "0.29.0", default-features = false, features = ["process"] }
 plist = "1.7.0"
 rand = "0.8.5"
@@ -36,11 +37,11 @@ regex = "1.10.6"
 schemars = "0.8.21"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.122"
-shell = { git = "https://github.com/malleatus/shared_binutils.git" }
+shell = { path = "../../../../malleatus/shared_binutils/shell" }
 shellexpand = "3.1.0"
 temp-env = "0.3.6"
 tempfile = "3.10.1"
-test_utils = { git = "https://github.com/malleatus/shared_binutils.git" }
+test_utils = { path = "../../../../malleatus/shared_binutils/test_utils" }
 thiserror = "1.0.64"
 toml = "0.8.12"
 tracing = "0.1.40"

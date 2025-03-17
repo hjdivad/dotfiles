@@ -84,6 +84,7 @@ function ni(...)
   require("noice").redirect(...)
 end
 
--- add ~/.config/nvim/lua/config/local_options.lua for machine-specific configuration
--- e.g. vim.g.github_enterprise_urls = ["https://example.com"]
-pcall(require, "config/local_options")
+-- NOTE: local_config is symlinked in from local-dotfiles to allow for local
+-- system specific customizations
+-- see: https://github.com/malleatus/shared_binutils/blob/master/global/src/bin/setup-local-dotfiles.rs
+require("local_config.config.options")
