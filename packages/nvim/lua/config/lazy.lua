@@ -23,10 +23,10 @@ require("lazy").setup({
       import = "lazyvim.plugins",
     },
     { import = "plugins" },
-    -- NOTE: local_config is symlinked in from local-dotfiles to allow for local
+    -- NOTE: local_nvim is symlinked in from local-dotfiles to allow for local
     -- system specific customizations
     -- see: https://github.com/malleatus/shared_binutils/blob/master/global/src/bin/setup-local-dotfiles.rs
-    { import = "local_config.plugins" },
+    { import = "local_nvim.plugins" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.

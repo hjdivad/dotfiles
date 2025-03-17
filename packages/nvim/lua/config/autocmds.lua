@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = { ".lazy.lua", "**/nvim/config/lua/plugins/**/*.lua" },
+  pattern = { ".lazy.lua", "**/nvim/lua/plugins/**/*.lua" },
   group = ft_group,
   callback = function()
     require("luasnip").filetype_extend("lua", { "lazyvim" })
@@ -114,7 +114,7 @@ term.setup()
 fold.setup()
 
 
--- NOTE: local_config is symlinked in from local-dotfiles to allow for local
+-- NOTE: local_nvim is symlinked in from local-dotfiles to allow for local
 -- system specific customizations
 -- see: https://github.com/malleatus/shared_binutils/blob/master/global/src/bin/setup-local-dotfiles.rs
-require("local_config.config.autocmds")
+require("local_nvim.config.autocmds")

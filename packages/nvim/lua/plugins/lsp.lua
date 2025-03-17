@@ -131,7 +131,7 @@ return {
       servers = {
         ---@diagnostic disable-next-line: missing-fields
         lua_ls = {
-          --TODO: mv this to  packages/nvim/config/lua/plugins/extras/dap/keymaps.lua
+          --TODO: mv this to  packages/nvim/lua/plugins/extras/dap/keymaps.lua
           --in lua autocmd
           keys = {
             {

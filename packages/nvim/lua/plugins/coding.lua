@@ -132,7 +132,7 @@ return {
 
       local snippets_paths = {
         vim.fn.stdpath("config") .. "/snippets",
-        "~/src/github/hjdivad/dotfiles/local-packages/nvim/config/snippets/"
+        "~/src/github/hjdivad/dotfiles/local-packages/nvim/snippets/"
       }
 
       require("luasnip.loaders.from_snipmate").lazy_load({
