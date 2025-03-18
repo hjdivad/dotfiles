@@ -34,5 +34,5 @@ __ensure_first_path "$CARGO_HOME/bin"
 # TODO: add this to template/zshrc
 __ensure_first_path "$HOME/src/github/malleatus/shared_binutils/global/target/debug"
 __ensure_first_path "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
-__ensure_first_path "$HOME/src/github/hjdivad/dotfiles/local-packages/crates/global/target/debug"
+# org global added in $HOME/.zshrc.local
 __ensure_first_path "$HOME/.local/bin"

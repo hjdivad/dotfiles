@@ -312,3 +312,4 @@ fpath=( "$HOME/.zsh/completions" $fpath )
 autoload -Uz compinit
 compinit
 
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

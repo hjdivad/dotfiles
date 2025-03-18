@@ -7,8 +7,6 @@ vars:
   SHARED_BINUTILS_PATH: '{{env "HOME"}}/src/github/malleatus/shared_binutils'
   BINUTILS: '{{.DOTFILES}}/packages/binutils'
   LOCAL_BINUTILS: '{{.LOCAL_DOTFILES_PATH}}/binutils'
-  # TODO: remove this and remove the option from setup-local-dotfiles
-  LOCAL_CRATES_TARGET_PATH: "{{.DOTFILES}}/packages/binutils/local-crates"
 
 tasks:
   install:
@@ -19,8 +17,6 @@ tasks:
       - task: setup-local-dotfiles
       - task: build:binutils
       - task: build:local-binutils
-        # TODO: make sure generate-binutils-symlinks works for binutils & local-binutils
-        # might need to re-run in different cwd or something, unsure
       - task: setup-symlinks
 
   clone-shared-binutils:
@@ -61,7 +57,6 @@ tasks:
       - |
         "{{.SHARED_BINUTILS_PATH}}/target/debug/setup-local-dotfiles" \
           --local-dotfiles-path "{{.LOCAL_DOTFILES_PATH}}" \
-          --local-crates-target-path "{{.LOCAL_CRATES_TARGET_PATH}}"
 
   build:binutils:
     internal: true
