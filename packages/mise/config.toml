@@ -1,0 +1,27 @@
+#:schema https://mise.jdx.dev/schema/mise.json
+
+[tools]
+
+# core tools
+go = "latest"
+node = "latest"
+ruby = "latest"
+rust = { version = "latest", components = "rust-analyzer,clippy" }
+python = "latest"
+uv = "latest"
+
+# software verification (see https://mise.jdx.dev/tips-and-tricks.html#software-verification)
+slsa-verifier = "latest"
+cosign = "latest"
+
+# provides completion and parsing support for tasks see:
+# https://mise.jdx.dev/tasks/file-tasks.html#arguments
+usage = "latest"
+
+"npm:mcp-hub" = "latest"
+
+[settings]
+experimental = true
+vpython.uv_venv_auto = true
+vpipx.uvx = true
+
