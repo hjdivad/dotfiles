@@ -21,33 +21,10 @@ tasks:
       DEST: "{{.DEST}}"
     cmds:
       - |
-        SRC_PATH="{{.DOTFILES_DIR}}/{{.SRC}}"
-        DEST_PATH="{{.DEST}}"
-
-        # Create parent directory if it doesn't exist
-        mkdir -p "$(dirname "$DEST_PATH")"
-
-        # If FORCE is true, remove the target
         if [ "{{.FORCE}}" = "true" ]; then
-          rm -rf "$DEST_PATH"
-        fi
-
-        if [ -L "$DEST_PATH" ]; then
-          current=$(readlink "$DEST_PATH")
-
-          # Check if it's a broken symlink
-          if [ ! -e "$current" ]; then
-            echo "$DEST_PATH is a broken symlink, replacing it"
-            rm "$DEST_PATH"
-            ln -s "$SRC_PATH" "$DEST_PATH"
-          elif [ "$current" != "$SRC_PATH" ]; then
-            echo "$DEST_PATH already exists and is symlinked to $current"
-          fi
-        elif [ -e "$DEST_PATH" ]; then
-          echo "$DEST_PATH already exists and is not a symlink"
+          ./scripts/link_dotfile.sh --dotfiles-dir "{{.DOTFILES_DIR}}" --src "{{.SRC}}" --dest "{{.DEST}}" --force
         else
-          echo "creating link for $DEST_PATH"
-          ln -s "$SRC_PATH" "$DEST_PATH"
+          ./scripts/link_dotfile.sh --dotfiles-dir "{{.DOTFILES_DIR}}" --src "{{.SRC}}" --dest "{{.DEST}}"
         fi
 
   copy_dotfile:
@@ -88,14 +65,14 @@ tasks:
       - task: utils:ensure_dirs
       - task: utils:link_dotfiles
       - task: utils:copy_dotfiles
-      - task: shell:update
+      - task: shell:install
 
   utils:ensure_dirs:
     internal: true
     cmds:
-      - mkdir -p ~/bin
-      - mkdir -p ~/.ssh
-      - mkdir -p ~/.cargo
+      - mkdir -p "$HOME/.local/bin"
+      - mkdir -p "$HOME/.ssh"
+      - mkdir -p "$HOME/.cargo"
 
   utils:link_dotfiles:
     internal: true
@@ -108,15 +85,17 @@ tasks:
         - "packages/nvim|$HOME/.config/nvim"
         - "packages-dist/starship/default.toml|$HOME/.config/starship.toml"
         - "packages/starship/|$HOME/.config/starship"
+        - "packages/shell/inputrc|$HOME/.inputrc"
         - "packages-dist/bash/bashrc|$HOME/.bashrc"
-        - "packages-dist/zsh/|$HOME/.zsh"
         - "packages-dist/fish/|$HOME/.config/fish"
+        - "packages-dist/zsh/|$HOME/.zsh"
         - "packages-dist/zsh/zshenv|$HOME/.zshenv"
         - "packages-dist/zsh/zprofile|$HOME/.zprofile"
+        - "packages-dist/zsh/zlogin|$HOME/.zlogin"
         - "packages-dist/zsh/zshrc|$HOME/.zshrc"
         - "packages/atuin|$HOME/.config/atuin"
-        - "packages/git/gitconfig|$HOME/.gitconfig"
-        - "packages/git/gitignore_global|$HOME/.gitignore_global"
+        - "packages/git/config|$HOME/.config/git/config"
+        - "packages/git/ignore|$HOME/.config/git/ignore"
         - "packages/gh/config.yml|$HOME/.config/gh/config.yml"
         - "packages/tmux/tmux.conf|$HOME/.tmux.conf"
         - "packages/cargo/config.toml|$HOME/.cargo/config.toml"
@@ -176,7 +155,7 @@ tasks:
     internal: true
     vars:
       COPY_DOTFILES:
-        - "packages/shells/dist/zsh/zshrc.local|$HOME/.zshrc.local"
+        - "packages-dist/zsh/zshrc.local|$HOME/.zshrc.local"
         - "packages/git/gitconfig.local|$HOME/.gitconfig.local"
         - "packages/tmux/tmux.local.conf|$HOME/.tmux.local.conf"
     cmds:

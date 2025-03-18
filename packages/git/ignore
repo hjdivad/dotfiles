@@ -35,3 +35,26 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+
+# Compiled sources
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# log files
+*.log
+
+# local databases
+*.sqlite
+
+# mise local config
+.mise/config.local.toml
+.mise.local.toml
+mise.local.toml
+
+# package-local env (often used for secrets)
+.env

@@ -1,6 +1,0 @@
-[include]
-  path = #$PKG/config.git
-[safe]
-  directory = #$DOTFILES
-
-# vim:ft=gitconfig:

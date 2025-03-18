@@ -1,0 +1,4 @@
+# This is copied on install and not overwritten on subsequent calls to install.
+# This is where to put:
+#   1. host-specific configuration and
+#   2. secrets that can't be checked in (e.g. API keys)

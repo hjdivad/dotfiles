@@ -1,0 +1,9 @@
+# vim:ft=gitconfig:
+#
+# This is copied on install and not overwritten on subsequent calls to install.
+# This is where to put:
+#   1. host-specific configuration
+
+[user]
+	name = David J. Hamilton
+	email = git@david.hamilton.gg

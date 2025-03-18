@@ -6,12 +6,41 @@ includes:
     taskfile: ./binutils.yml
     internal: true
 
+vars:
+  DOTFILES: "{{.ROOT_DIR}}"
+  SHARED_BINUTILS_PATH: '{{env "HOME"}}/src/github/malleatus/shared_binutils'
+
 tasks:
-  update:
+  install:
     desc: Refreshes shell environment by updating startup cache and clearing completion cache
     cmds:
-      - task: binutils:cache-shell-startup
+      - task: cache-shell-startup
       - task: rebuild-completion-cache
+
+  cache-shell-startup:
+    desc: Run `cache-shell-startup` for each shell
+    deps:
+      - binutils:clone-shared-binutils
+      - binutils:build:shared-binutils
+    # NOTE: the leading slash here is a bit annoying, but required due to a bug
+    # in go-task see https://github.com/go-task/task/issues/828
+    dir: "/{{.DOTFILES}}"
+    vars:
+      PACKAGES:
+        - zsh
+        - fish
+        - bash
+        - starship
+
+    cmds:
+        - for: { var: PACKAGES }
+          cmd: |
+            if [ -d '{{.DOTFILES}}/packages/{{.ITEM}}' ]; then
+              {{.SHARED_BINUTILS_PATH}}/target/debug/cache-shell-startup \
+                --config-file='{{.DOTFILES}}/packages/binutils/config/config.lua' \
+                --source='{{.DOTFILES}}/packages/{{.ITEM}}' \
+                --destination='{{.DOTFILES}}/packages-dist/{{.ITEM}}'
+            fi
 
   rebuild-completion-cache:
     internal: true

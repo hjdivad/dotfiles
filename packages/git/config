@@ -102,7 +102,7 @@
   sort = -committerdate
 
 [core]
-	editor = /usr/bin/vim
+	editor = nvim
   pager = delta
 
 [color]
@@ -146,6 +146,7 @@
   default = upstream
   followTags = true
   recurseSubmodules = on-demand
+  autoSetupRemote = true
 
 [rebase]
   abbreviateCommands = true
@@ -188,5 +189,8 @@
   # see https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view
   ignoreRevsFile = .git-blame-ignore-revs
 
-# vim:ft=gitconfig:
+[include]
+  path = "~/.gitconfig.local"
 
+
+# vim:ft=gitconfig:

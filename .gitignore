@@ -1,6 +1,6 @@
 /.tests/
 /.lazy
-dist/
+/packages-dist/
 .cargo/
 /local-packages
 /.task
