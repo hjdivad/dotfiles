@@ -42,4 +42,6 @@ tasks:
       - task: system:install
       - task: binutils:install
       - task: dot:install
-      - task: nvim:restore
+      # TODO: 🤔 this seems okay but it kinda relies on OOB automatic updates
+      #   The big issue there is that lazyvim updates can bring in key mappings i don't want
+      # - task: nvim:restore

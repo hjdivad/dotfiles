@@ -24,7 +24,7 @@ tasks:
     cmds:
       - task: install:requirements
       - task: setup:gh
-        # TODO:setup vadnu
+      - task: setup:vadnu
 
   install:requirements:
     internal: true
@@ -45,6 +45,25 @@ tasks:
       - gh auth status
     cmds:
       - gh auth login
+
+  setup:vadnu:
+    internal: true
+    status:
+      - test -d $HOME/docs/vadnu
+    cmds:
+      - mkdir -p $HOME/docs/vadnu/{ARCHIVE,attachments,docs,journal,projects,ref,someday,templates}
+      - |
+        cat > $HOME/docs/vadnu/todo.md << 'EOF'
+        # nu
+
+        **📆 dates:**
+
+        - [ ] set up vadnu syncing (e.g. $HOME/.config/vadnu-sync.lua)
+
+        ## Areas of Responsibilty
+
+        ## Commitments and Goals
+        EOF
 
   ####### Linux Tools #######
   install:linux_tools:
