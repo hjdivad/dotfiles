@@ -19,9 +19,13 @@ cosign = "latest"
 usage = "latest"
 
 "npm:mcp-hub" = "latest"
+# mise hangs installing this
+# "npm:prettier" = "latest"
+
+"gem:pws" = "latest"
 
 [settings]
 experimental = true
-vpython.uv_venv_auto = true
-vpipx.uvx = true
+python.uv_venv_auto = true
+pipx.uvx = true
 

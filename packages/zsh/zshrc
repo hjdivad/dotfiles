@@ -11,8 +11,6 @@
 # /etc/paths.d
 export ZSH_PATHRC="$HOME/.zsh/path.zsh"
 
-export VOLTA_HOME="$HOME/.volta"
-
 
 # set up rust
 if [[ -r "$HOME/.cargo/env" ]]; then
@@ -187,36 +185,6 @@ alias nr='npm run'
 alias create-turborepo='npx create-turbo@latest --example https://github.com/hjdivad/turborepo-template'
 
 
-# pyenv is _sooooo_ slow so we only want to run it when we actually need it
-function pyenv_init() {
-  export PYENV_ROOT="$HOME/.pyenv"
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-
-  unalias pyenv
-
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-
-  echo "pyenv initialized; re-run your command"
-}
-alias pyenv=pyenv_init
-
-function rbenv_init {
-  eval "$(rbenv init -)"
-
-  unalias gem
-  unalias ruby
-  unalias pws
-  unfunction rbenv_init
-
-  echo "rbenv init ran; re-run your command"
-}
-
-alias gem=rbenv_init
-alias ruby=rbenv_init
-alias pws=rbenv_init
-
-
 # setup wsl
 if [ $(umask) = "0000" ]; then
   # set a sane umask for wsl
@@ -302,6 +270,11 @@ alias tsj=__ts_journal
 
 
 source $ZSH_PATHRC
+
+# this is not using the `# CMD:` system because it captures `$PATH` at the time
+# it is ran, and we don't want to do that (it needs to be capturing `$PATH` at
+# shell startup time not when we build packages-dist)
+eval "$(mise activate zsh)"
 
 
 # set up zsh completions
