@@ -28,8 +28,8 @@ return {
 					},
 
 					{
-						name = "binutils",
-						path = "~/src/github/hjdivad/dotfiles/packages/binutils",
+						name = "local-packages",
+						path = "~/src/github/hjdivad/dotfiles/local-packages/binutils/",
 						command = "nvim",
 					},
 
@@ -40,20 +40,8 @@ return {
 					},
 
 					{
-						name = "local-packages",
-						path = "~/src/nas/hjdivad/local-dotfiles/",
-						command = "nvim",
-					},
-
-					{
 						name = "rwjblue/dotfiles",
 						path = "~/src/github/rwjblue/dotfiles",
-						command = "nvim",
-					},
-
-					{
-						name = "rwjblue/dotvim",
-						path = "~/src/github/rwjblue/dotvim",
 						command = "nvim",
 					},
 				},
@@ -89,6 +77,17 @@ return {
 			},
 
 			{
+				name = "🧩 sandbox",
+				windows = {
+					{
+						name = "sandbox-go",
+						path = "~/src/nas/hjdivad/sandbox-go/",
+						command = "nvim",
+					},
+				},
+			},
+
+			{
 				name = "🦾 montoya",
 				windows = {
 					{
@@ -100,17 +99,6 @@ return {
 					{
 						name = "montoya2",
 						path = "~/src/github/malleatus/montoya.nvim",
-						command = "nvim",
-					},
-				},
-			},
-
-			{
-				name = "🧩 sandbox",
-				windows = {
-					{
-						name = "sandbox-go",
-						path = "~/src/nas/hjdivad/sandbox-go/",
 						command = "nvim",
 					},
 				},
