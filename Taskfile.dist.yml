@@ -28,6 +28,7 @@ includes:
 tasks:
   default:
     cmd: task -l
+    cmd: task --list-all
     silent: true
 
   install:

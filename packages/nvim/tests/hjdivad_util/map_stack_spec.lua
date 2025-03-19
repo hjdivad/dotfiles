@@ -1,6 +1,5 @@
 describe("map_stack", function()
 	local assert = require("luassert")
-	local pp = vim.print
 	---@type MapStack
 	local map_stack = require("hjdivad_util/map_stack")
 
