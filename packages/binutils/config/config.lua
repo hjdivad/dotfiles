@@ -121,8 +121,8 @@ return {
 
 					{
 						name = "journal",
-						path = "~/docs/vadnu/home/journal",
-						command = "nvim",
+						path = "~/docs/vadnu/home",
+						command = "nvim +EditToday",
 					},
 				},
 			},
