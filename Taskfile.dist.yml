@@ -1,6 +1,9 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: 3
 
+vars:
+  CRATES_ROOT: "packages/binutils"
+
 includes:
   binutils:
     taskfile: ./taskfiles/binutils.yml
@@ -27,7 +30,6 @@ includes:
 
 tasks:
   default:
-    cmd: task -l
     cmd: task --list-all
     silent: true
 
@@ -46,3 +48,47 @@ tasks:
       # TODO: 🤔 this seems okay but it kinda relies on OOB automatic updates
       #   The big issue there is that lazyvim updates can bring in key mappings i don't want
       # - task: nvim:restore
+
+  lint:
+    desc: "Run linters"
+    cmds:
+      - task: lint:clippy
+      - task: lint:fmt
+
+  lint:fix:
+    desc: "Run lint fixers"
+    cmds:
+      - task: lint:fix:clippy
+      - task: lint:fix:fmt
+
+  ######################################################################## 
+
+  lint:clippy:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    env:
+      RUSTFLAGS: "-D warnings"
+    cmds:
+      - cargo check --all-targets
+
+  lint:fmt:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo fmt --check
+
+  lint:fix:clippy:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo clippy --fix --allow-dirty --allow-staged
+
+  lint:fix:fmt:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo fmt
