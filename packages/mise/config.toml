@@ -18,8 +18,11 @@ cosign = "latest"
 # https://mise.jdx.dev/tasks/file-tasks.html#arguments
 usage = "latest"
 
-"npm:mcp-hub" = "latest"
-# mise hangs installing this
+# FIXME: mise hangs frequently when trying to install from npm
+# see <https://github.com/jdx/mise/issues/4302>
+# see <https://github.com/jdx/mise/discussions/4275>
+#
+# "npm:mcp-hub" = "latest"
 # "npm:prettier" = "latest"
 
 "gem:pws" = "latest"
