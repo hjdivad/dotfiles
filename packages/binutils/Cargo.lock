@@ -121,7 +121,6 @@ dependencies = [
  "clap_complete",
  "config",
  "fixturify",
- "global",
  "insta",
  "latest_bin",
  "lua_config_utils",
@@ -132,6 +131,7 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
+ "shared_global",
  "shell",
  "shellexpand",
  "temp-env",
@@ -530,25 +530,6 @@ name = "glob"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8d1add55171497b4705a648c6b583acafb01d58050a51727785f0b2c8e0a2b2"
-
-[[package]]
-name = "global"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "cargo_metadata 0.19.2",
- "clap",
- "config",
- "latest_bin",
- "regex",
- "shellexpand",
- "tempfile",
- "toml 0.8.20",
- "tracing",
- "tracing-subscriber",
- "ureq",
- "walkdir",
-]
 
 [[package]]
 name = "globset"
@@ -1354,6 +1335,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6"
 dependencies = [
  "lazy_static",
+]
+
+[[package]]
+name = "shared_global"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "cargo_metadata 0.19.2",
+ "clap",
+ "config",
+ "latest_bin",
+ "regex",
+ "shellexpand",
+ "tempfile",
+ "toml 0.8.20",
+ "tracing",
+ "tracing-subscriber",
+ "ureq",
+ "walkdir",
 ]
 
 [[package]]

@@ -17,7 +17,7 @@ toml = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 walkdir = { workspace = true }
-global = { workspace = true }
+shared_global = { workspace = true }
 config = { workspace = true }
 latest_bin = { workspace = true }
 shell = { workspace = true }

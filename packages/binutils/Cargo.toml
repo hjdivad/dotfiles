@@ -26,7 +26,7 @@ clap_complete = "4.5.29"
 config = { path = "../../../../malleatus/shared_binutils/config" }
 dirs = "6.0.0"
 fixturify = { path = "../../../../malleatus/shared_binutils/fixturify" }
-global = { path = "../../../../malleatus/shared_binutils/global" }
+shared_global = { path = "../../../../malleatus/shared_binutils/global" }
 insta = { version = "1.36.1", features = ["yaml", "toml"] }
 latest_bin = { path = "../../../../malleatus/shared_binutils/latest_bin" }
 lua_config_utils = { path = "../../../../malleatus/shared_binutils/lua_config_utils" }

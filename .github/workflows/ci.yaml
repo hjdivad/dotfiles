@@ -16,20 +16,46 @@ on:
 
 jobs:
   lint:
+    env:
+      DOTFILES_PATH: "hjdivad/dotfiles"
+      BINUTILS_PATH: "hjdivad/dotfiles/packages/binutils"
+      SHARED_BINUTILS_PATH: "malleatus/shared_binutils"
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: ${{ env.DOTFILES_PATH }}
+
+      - uses: actions/checkout@v4
+        with:
+          repository: "malleatus/shared_binutils"
+          path: ${{ env.SHARED_BINUTILS_PATH }}
+
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt,clippy
 
-      - name: cargo fmt
-        uses: actions-rust-lang/rustfmt@v1
+      - name: Setup upterm session
+        env:
+          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
+        if: ${{ env.DEBUG_SSH == 'true' }}
+        uses: lhotari/action-upterm@v1
         with:
-          manifest-path: packages/binutils/Cargo.toml
+          ## limits ssh access and adds the ssh public key for the user which triggered the workflow
+          # limit-access-to-actor: true
+          ## limits ssh access and adds the ssh public keys of the listed GitHub users
+          limit-access-to-users: hjdivad,rwjblue
+
+      # TODO: autoformat is nicer
+      - name: cargo fmt
+        # uses: actions-rust-lang/rustfmt@v1
+        # with:
+        #   manifest-path: packages/binutils/Cargo.toml
+        run: "cd $BINUTILS_PATH && cargo fmt --check"
 
       - name: cargo clippy
-        run: "cd packages/binutils && cargo clippy -- -D warnings"
+        run: "cd $BINUTILS_PATH && cargo clippy -- -D warnings"
 
   test-nvim:
     name: test nvim
@@ -71,6 +97,9 @@ jobs:
   test-binutils:
     name: test binutils
     env:
+      DOTFILES_PATH: "hjdivad/dotfiles"
+      BINUTILS_PATH: "hjdivad/dotfiles/packages/binutils"
+      SHARED_BINUTILS_PATH: "malleatus/shared_binutils"
       RUST_LOG: trace
 
     runs-on: ubuntu-latest
@@ -88,6 +117,14 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - uses: actions/checkout@v4
+        with:
+          path: ${{ env.DOTFILES_PATH }}
+
+      - uses: actions/checkout@v4
+        with:
+          repository: "malleatus/shared_binutils"
+          path: ${{ env.SHARED_BINUTILS_PATH }}
+
       - uses: actions-rust-lang/setup-rust-toolchain@v1
       - uses: taiki-e/install-action@v2
         with:
@@ -95,4 +132,4 @@ jobs:
 
       - run: sudo apt-get update && sudo apt-get install -y zsh
 
-      - run: cd packages/binutils && cargo nextest run --workspace --no-fail-fast
+      - run: "cd ${{ env.BINUTILS_PATH }} && cargo nextest run --workspace --no-fail-fast"
