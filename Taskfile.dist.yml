@@ -1,0 +1,94 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: 3
+
+vars:
+  CRATES_ROOT: "packages/binutils"
+
+includes:
+  binutils:
+    taskfile: ./taskfiles/binutils.yml
+
+  brew:
+    taskfile: ./taskfiles/brew.yml
+
+  dotfiles:
+    aliases:
+      - dot
+    taskfile: ./taskfiles/dotfiles.yml
+
+  mise:
+    taskfile: ./taskfiles/mise.yml
+
+  nvim:
+    taskfile: ./taskfiles/nvim.yml
+
+  shell:
+    taskfile: ./taskfiles/shell.yml
+
+  system:
+    taskfile: ./taskfiles/system.yml
+
+tasks:
+  default:
+    cmd: task --list-all
+    silent: true
+
+  install:
+    desc: Complete system setup - installs dependencies, builds utilities, configures dotfiles, and sets up Neovim
+    summary: |
+      Performs a full system setup by:
+      1. Installing all system dependencies (tools, languages, and utilities)
+      2. Building binutils and setting up symlinks
+      3. Installing and configuring all dotfiles
+      4. Restoring Neovim plugins to the state specified in lazy-lock.json
+    cmds:
+      - task: system:install
+      - task: binutils:install
+      - task: dot:install
+      # TODO: 🤔 this seems okay but it kinda relies on OOB automatic updates
+      #   The big issue there is that lazyvim updates can bring in key mappings i don't want
+      # - task: nvim:restore
+
+  lint:
+    desc: "Run linters"
+    cmds:
+      - task: lint:clippy
+      - task: lint:fmt
+
+  lint:fix:
+    desc: "Run lint fixers"
+    cmds:
+      - task: lint:fix:clippy
+      - task: lint:fix:fmt
+
+  ######################################################################## 
+
+  lint:clippy:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    env:
+      RUSTFLAGS: "-D warnings"
+    cmds:
+      - cargo check --all-targets
+
+  lint:fmt:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo fmt --check
+
+  lint:fix:clippy:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo clippy --fix --allow-dirty --allow-staged
+
+  lint:fix:fmt:
+    internal: true
+    silent: true
+    dir: "{{.CRATES_ROOT}}"
+    cmds:
+      - cargo fmt

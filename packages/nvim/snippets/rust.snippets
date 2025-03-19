@@ -1,0 +1,251 @@
+snippet @tests "tests module for unit tests"
+  #[cfg(test)]
+  mod tests {
+      use super::*;
+
+      #[test]
+      fn it_works() -> Result<()> {
+          assert_eq!(1, 1, "Pretty sure 1==1");
+          $0
+          Ok(())
+      }
+  }
+
+snippet @test "a test"
+  #[test]
+    fn ${1:it_works}() -> Result<()> {
+      ${0}
+      assert_eq!(1, 1, "Pretty sure 1==1");
+
+      Ok(())
+    }
+
+snippet @dd "derive macro"
+	#[derive($0)]
+
+snippet @derive "derive macro"
+	#[derive($0)]
+
+snippet @allow "allow(clippy::) -> lint disable"
+	#[allow(clippy::${0})]
+
+snippet @use:log "use logger"
+  use tracing::{debug, info, trace};
+  // cargo.toml
+  //
+  // tracing = "0.1.40"
+  // tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+
+snippet @do:init:log "init logger"
+  use tracing_subscriber::EnvFilter;
+  // cargo.toml
+  //
+  // tracing = "0.1.40"
+  // tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+
+  let mut env_filter =
+      EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
+
+  env_filter = env_filter.add_directive(format!("${0:my_crate}={}", "trace").parse()?);
+  tracing_subscriber::fmt().with_env_filter(env_filter).init();
+
+snippet @use:anyhow "use anyhow (result.context('foo'))"
+  use anyhow::{anyhow, Context, Result};
+
+snippet @use:default "default use preamble"
+  use clap::Parser;
+  use insta::{assert_debug_snapshot, assert_yaml_snapshot};
+  use tracing::{debug, info, trace};
+  use tracing_subscriber::EnvFilter;
+  use anyhow::{Context, Result};
+
+  // cargo.toml
+  //
+  // [dependencies]
+  // # Augment errors with additional context
+  // # https://github.com/dtolnay/anyhow
+  // anyhow = "1.0.79"
+  // chrono = "0.4.38"
+  // clap = {version = "4.5.3", features = ["derive"]}
+  // dirs = "5.0.1"
+  //
+  // [dev-dependencies]
+  // insta = { version = "1.36.1", features = ["yaml", "toml"] }
+
+snippet @do:cli "CLI scaffolding"
+  use clap::Parser;
+  use anyhow::{anyhow, Context, Result};
+  use tracing::{debug, info, trace};
+  use tracing_subscriber::EnvFilter;
+
+  #[derive(Parser, Debug)]
+  #[command(version, about, long_about = None)]
+  struct CommandArgs {
+      #[arg(long)]
+      dry_run: bool,
+
+      /// Print more logging.  Can be specified up to 3 times.
+      #[arg(short, long, action = clap::ArgAction::Count)]
+      pub verbose: u8,
+  }
+
+  fn main() -> Result<()> {
+    let options = CommandArgs::parse();
+
+    let mut env_filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("off"));
+
+    if options.verbose > 0 {
+        let level = match options.verbose {
+            1 => "info",
+            2 => "debug",
+            _ => "trace",
+        };
+
+        env_filter = env_filter
+            .add_directive(format!("${0:my_crate}={}", level).parse()?)
+            .add_directive(format!("latest_bin={}", level).parse()?);
+    }
+    tracing_subscriber::fmt().with_env_filter(env_filter).init();
+
+    latest_bin::ensure_latest_bin()?;
+
+      Ok(())
+  }
+
+snippet @do:exec "exec a command (replace process)"
+  use std::process::Command;
+  let mut command = Command::new("ls");
+  command.env("HELLO", 1);
+  command.args(vec!["--ok", "--seems-good"])
+  let error = command.exec();
+
+snippet @do:spawn "spawn a command (async)"
+  use std::process::Command;
+  let mut command = Command::new("ls");
+  command.env("HELLO", 1);
+  command.args(vec!["--ok", "--seems-good"])
+  let child = command.spawn();
+
+snippet @do:sys "spawn a comamnd (sync)"
+  use std::process::Command;
+  use anyhow::{anyhow, Context, Result};
+
+  let mut command = Command::new("${1}");
+  command.current_dir(&"${2}");
+  command.env("HELLO", 1);
+  command.args(vec![${3}]);
+
+  let output = command.output();
+  let output = output.context(format!("cmd: {:?}", command))?;
+
+  if !output.status.success() {
+      let mut stdout = String::from_utf8(output.stdout)?;
+      stdout = stdout.trim().to_string();
+      let mut stderr = String::from_utf8(output.stderr)?;
+      stderr = stderr.trim().to_string();
+      anyhow::bail!("Cmd: {:?}\nstdout: {}\nstderr: {}", command, stdout, stderr);
+  } else {
+      ${0:Ok(())}
+  }
+
+snippet @do:walk "walk a tree"
+  // Cargo.toml
+  // ignore = "0.4"
+  //
+  use ignore::{overrides::OverrideBuilder, WalkBuilder};
+
+  let mut walker = WalkBuilder::new(&path);
+  walker.standard_filters(true);
+
+  let globs = vec!["*.acl"];
+  if !globs.is_empty() {
+    let mut overrides = OverrideBuilder::new(&path);
+    for glob in globs {
+        overrides.add(glob)?;
+    }
+
+    walker.overrides(overrides.build()?);
+  }
+
+  for entry in walker.build() {
+    match entry {
+      Ok(entry) => {
+        let path = entry.path();
+        if path.is_file() {
+          ${0:todo!()}
+        }
+      },
+      Err(err) => return Err(err).context(format!("Error walking: {}", ${1:&path}.to_string_lossy()))
+    }
+  }
+
+snippet @do:anyhow:err "create an anyhow error"
+  Err(anyhow!(format!("${0}")));
+
+snippet @do:mkdir_p "mkdir -p"
+  use std::path::Path;
+
+  let path = Path::new(${0:&path});
+  if let Some(parent) = path.parent() {
+      fs::create_dir_all(parent)?;
+  }
+
+snippet @do:snapshot:debug "use inline snapshot fixtures against Debug"
+    // Cargo.toml
+    //
+    // [dev-dependencies]
+    // insta = { version = "1.42.0", features = ["yaml", "toml"] }
+    //
+    // [profile.dev.package]
+    // insta.opt-level = 3
+    // similar.opt-level = 3
+
+    use insta::assert_debug_snapshot;
+
+    assert_debug_snapshot!("actual", @r###""###)
+
+snippet @do:snapshot:string "use inline snapshot fixtures against a string"
+    // Cargo.toml
+    //
+    // [dev-dependencies]
+    // insta = { version = "1.42.0", features = ["yaml", "toml"] }
+    //
+    // [profile.dev.package]
+    // insta.opt-level = 3
+    // similar.opt-level = 3
+
+    use insta::assert_snapshot;
+
+    assert_snapshot!("actual", @r###""###)
+
+snippet @do:fixturify "use fixturify to create test directory"
+    // Cargo.toml
+    //
+    // [dev-dependencies]
+    // fixturify = { git = "https://github.com/malleatus/shared_binutils.git" }
+
+    use std::collections::BTreeMap;
+    use fixturify;
+
+    let dir = tempdir()?;
+    let file_map = BTreeMap::from([
+        ("test.txt".to_string(), r#"
+          File contents
+        "#.to_string()),
+        ("a/foo.txt".to_string(), r#"
+          a/foo contents
+        "#.to_string()),
+        ("a/bar.txt".to_string(), r#"
+          a/bar contents
+        "#.to_string()),
+    ]);
+
+    fixturify::write(dir.path(), file_map)?;
+
+snippet @rok "return Ok(())"
+  return Ok(())
+
+snippet @fr "function returns Result<>"
+  -> Result<${1:()}>$0
+

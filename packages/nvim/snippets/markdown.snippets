@@ -1,0 +1,60 @@
+snippet @table
+	| ${1:Column} | ${2:CenteredColumn} | ${3:RightAlignedColumn} |
+	| ------- | :-------------: | -------------------: |
+	| ${4:r1c1}    |      ${5:r1c2}       |                 ${6:r1c3} |
+
+snippet @link:ref
+	[${1}][]${0}
+
+snippet @link:inline
+	[${1}](${2})${0}
+
+snippet @ref
+	[${1}]: ${0}
+
+snippet @footnote:ref "footnote reference"
+	[^${1:1}]
+
+snippet @footnote:definition "footnote definition"
+	[^${1:1}]: ${0:Body of the footnote}
+
+snippet @gh:warn "A github-style warning callout"
+	> **Warning**
+	> ${0}
+
+snippet @gh:note "A github-style note callout"
+	> **Note**
+	> ${0}
+
+snippet @gh:info "A github-style note callout"
+	> **Note**
+	> ${0}
+	
+snippet @docusaurus:tip "tip callout in docusaurus"
+	:::tip
+	${0}
+	:::
+	
+snippet @docusaurus:warn "warning callout in docusaurus"
+	:::warning
+	${0}
+	:::
+	
+snippet @docusaurus:info "info callout in docusaurus"
+	:::info
+	${0}
+	:::
+
+snippet @release:notes "notes for a new release"
+	## ${1:version} (${2:date})
+
+	### :boom: Breaking Change
+	
+	### :rocket: Enhancement
+	
+	### :bug: Bug Fix
+	
+	### :house: Internal
+	
+	### Committers: 1
+	- David J. Hamilton ([@hjdivad](https://github.com/hjdivad))

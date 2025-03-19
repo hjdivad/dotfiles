@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# see https://github.com/folke/lazy.nvim/blob/v11.16.2/lua/lazy/minit.lua#L101-L163
+
+cd packages/nvim && nvim -l tests/minit.lua --minitest
+

@@ -1,0 +1,60 @@
+# By default, ignore project-specific vimrc
+/.vimrc
+/.vimrc.lua
+/.vim
+/.nvim.lua
+/.lazy.lua
+
+# node
+/node_modules
+
+# Mac osx ignores
+
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+## Icon must end with two \r
+Icon
+
+## Thumbnails
+._*
+
+## Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+## Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+
+# Compiled sources
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# log files
+*.log
+
+# local databases
+*.sqlite
+
+# mise local config
+.mise/config.local.toml
+.mise.local.toml
+mise.local.toml
+
+# package-local env (often used for secrets)
+.env

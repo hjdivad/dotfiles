@@ -1,0 +1,91 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: 3
+
+vars:
+  DOTFILES: "{{.ROOT_DIR}}"
+  LOCAL_DOTFILES_PATH: "{{.DOTFILES}}/local-packages"
+  SHARED_BINUTILS_PATH: '{{env "HOME"}}/src/github/malleatus/shared_binutils'
+  BINUTILS: '{{.DOTFILES}}/packages/binutils'
+  LOCAL_BINUTILS: '{{.LOCAL_DOTFILES_PATH}}/binutils'
+
+tasks:
+  install:
+    desc: Build binutils and set up symlinks
+    cmds:
+      - task: clone-shared-binutils
+      - task: build:shared-binutils
+      - task: setup-local-dotfiles
+      - task: build:binutils
+      - task: build:local-packages-binutils
+      - task: setup-symlinks
+
+  clone-shared-binutils:
+    internal: true
+    desc: Clone the shared_binutils repository if it doesn't exist
+    status:
+      - test -d "{{.SHARED_BINUTILS_PATH}}"
+    cmds:
+      - git clone https://github.com/malleatus/shared_binutils.git "{{.SHARED_BINUTILS_PATH}}"
+
+  build:
+    desc: "Build shared_binutils and local binutils"
+    run: once
+    deps:
+      - build:binutils
+      - build:shared-binutils
+
+  build:shared-binutils:
+    internal: true
+    desc: Build the shared_binutils project
+    # NOTE: the leading slash here is a bit annoying, but required due to a bug
+    # in go-task see https://github.com/go-task/task/issues/828
+    dir: "/{{.SHARED_BINUTILS_PATH}}"
+    sources:
+      - "{{.SHARED_BINUTILS_PATH}}/src/**/*.rs"
+      - "{{.SHARED_BINUTILS_PATH}}/Cargo.toml"
+      - "{{.SHARED_BINUTILS_PATH}}/Cargo.lock"
+    generates:
+      - "{{.SHARED_BINUTILS_PATH}}/target/debug/setup-local-dotfiles"
+      - "{{.SHARED_BINUTILS_PATH}}/target/debug/generate-binutils-symlinks"
+    cmds:
+      - cargo build
+
+  setup-local-dotfiles:
+    internal: true
+    desc: Set up local dotfiles using shared_binutils
+    deps: [build:shared-binutils]
+    cmds:
+      - |
+        "{{.SHARED_BINUTILS_PATH}}/target/debug/setup-local-dotfiles" \
+          --local-dotfiles-path "{{.LOCAL_DOTFILES_PATH}}" \
+
+  build:binutils:
+    internal: true
+    desc: Build the binutils project
+    dir: "/{{.BINUTILS}}"
+    cmds:
+      - cargo build
+
+  build:local-packages-binutils:
+    internal: true
+    desc: Build the binutils project
+    dir: "/{{.LOCAL_BINUTILS}}"
+    status:
+       - |
+         # If find returns at least one directory inside `crates`, exit 1 => run the task
+         # Otherwise, exit 0 => skip the task
+         if [ "$(find crates -mindepth 1 -maxdepth 1 -type d | wc -l)" -gt 0 ]; then
+           exit 1
+         else
+           exit 0
+         fi
+    cmds:
+      - cargo build
+
+  setup-symlinks:
+    internal: true
+    desc: Set up binutils symlinks
+    deps: [build:shared-binutils]
+    cmds:
+      - "{{.SHARED_BINUTILS_PATH}}/target/debug/generate-binutils-symlinks"
+

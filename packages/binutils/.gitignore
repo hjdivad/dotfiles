@@ -1,5 +1,6 @@
 /target
 codegen/
 target/
-Cargo.lock
+
+# generated lua types for $HOME/.config/vadnu-sync.lua
 /crates/global/vadnu-sync.lua

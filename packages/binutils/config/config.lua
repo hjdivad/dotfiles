@@ -10,6 +10,12 @@
 
 ---@type Config
 return {
+  crate_locations = {
+    "~/src/github/hjdivad/dotfiles/packages/binutils/",
+    "~/src/github/hjdivad/dotfiles/local-packages/binutils/",
+    "~/src/github/malleatus/shared_binutils/"
+  },
+
 	tmux = {
 		sessions = {
 			{

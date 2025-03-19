@@ -1,0 +1,169 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: 3
+
+vars:
+  DOTFILES_DIR:
+    sh: pwd
+  # Get FORCE from environment or default to false
+  FORCE: '{{env "FORCE"}}'
+
+includes:
+  shell:
+    taskfile: ./shell.yml
+    internal: true
+
+tasks:
+  link_dotfile:
+    internal: true
+    silent: true
+    vars:
+      SRC: "{{.SRC}}"
+      DEST: "{{.DEST}}"
+    cmds:
+      - |
+        if [ "{{.FORCE}}" = "true" ]; then
+          ./scripts/link_dotfile.sh --dotfiles-dir "{{.DOTFILES_DIR}}" --src "{{.SRC}}" --dest "{{.DEST}}" --force
+        else
+          ./scripts/link_dotfile.sh --dotfiles-dir "{{.DOTFILES_DIR}}" --src "{{.SRC}}" --dest "{{.DEST}}"
+        fi
+
+  copy_dotfile:
+    internal: true
+    silent: true
+    vars:
+      SRC: "{{.SRC}}"
+      DEST: "{{.DEST}}"
+    cmds:
+      - |
+        SRC_PATH="{{.DOTFILES_DIR}}/{{.SRC}}"
+        DEST_PATH="{{.DEST}}"
+
+        # Create parent directory if it doesn't exist
+        mkdir -p "$(dirname "$DEST_PATH")"
+
+        # Check if target already exists
+        if [ -e "$DEST_PATH" ]; then
+          echo "$DEST_PATH already exists"
+        else
+          echo "creating $DEST_PATH"
+          cp "$SRC_PATH" "$DEST_PATH"
+        fi
+
+  install:
+    desc: Install dotfiles
+    summary: |
+      Install dotfiles
+
+      This task will install and configure all dotfiles.
+    cmds:
+      - task: setup:config
+
+  setup:config:
+    desc: Setup configuration files
+    internal: true
+    cmds:
+      - task: utils:ensure_dirs
+      - task: utils:link_dotfiles
+      - task: utils:copy_dotfiles
+      - task: shell:install
+
+  utils:ensure_dirs:
+    internal: true
+    cmds:
+      - mkdir -p "$HOME/.local/bin"
+      - mkdir -p "$HOME/.ssh"
+      - mkdir -p "$HOME/.cargo"
+
+  utils:link_dotfiles:
+    internal: true
+    deps:
+      - task: utils:link_macos_dotfiles
+      - task: utils:link_linux_dotfiles
+
+    vars:
+      DOTFILES:
+        - "packages/nvim|$HOME/.config/nvim"
+        - "packages-dist/starship/default.toml|$HOME/.config/starship.toml"
+        - "packages/starship/|$HOME/.config/starship"
+        - "packages/shell/inputrc|$HOME/.inputrc"
+        - "packages-dist/bash/bashrc|$HOME/.bashrc"
+        - "packages-dist/fish/|$HOME/.config/fish"
+        - "packages-dist/zsh/|$HOME/.zsh"
+        - "packages-dist/zsh/zshenv|$HOME/.zshenv"
+        - "packages-dist/zsh/zprofile|$HOME/.zprofile"
+        - "packages-dist/zsh/zlogin|$HOME/.zlogin"
+        - "packages-dist/zsh/zshrc|$HOME/.zshrc"
+        - "packages/atuin|$HOME/.config/atuin"
+        - "packages/git/config|$HOME/.config/git/config"
+        - "packages/git/ignore|$HOME/.config/git/ignore"
+        - "packages/gh/config.yml|$HOME/.config/gh/config.yml"
+        - "packages/tmux/tmux.conf|$HOME/.tmux.conf"
+        - "packages/cargo/config.toml|$HOME/.cargo/config.toml"
+        - "packages/binutils/config/|$HOME/.config/binutils"
+        - "packages/wezterm/|$HOME/.config/wezterm"
+        - "packages/ghostty/|$HOME/.config/ghostty"
+        - "packages/ssh/rc|$HOME/.ssh/rc"
+        - "packages/mise/|$HOME/.config/mise"
+        - "packages/mcp/|$HOME/.config/mcp"
+        - "packages/hammerspoon/|$HOME/.hammerspoon"
+
+    cmds:
+      - for:
+          var: DOTFILES
+          as: DOTFILE
+        task: link_dotfile
+        vars:
+          SRC: '{{splitList "|" .DOTFILE | first}}'
+          DEST: '{{splitList "|" .DOTFILE | last}}'
+
+  utils:link_macos_dotfiles:
+    internal: true
+    platforms: [darwin]
+    vars:
+      MACOS_DOTFILES:
+        - "packages/vscode/settings.json|$HOME/Library/Application Support/Code/User/settings.json"
+        - "packages/vscode/keybindings.json|$HOME/Library/Application Support/Code/User/keybindings.json"
+        - "packages/vscode/snippets|$HOME/Library/Application Support/Code/User/snippets"
+        - "packages/tealdeer/config.toml|$HOME/Library/Application Support/tealdeer/config.toml"
+        - "packages/jj/|$HOME/Library/Application Support/jj"
+        - "packages/alfred/snippets|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/snippets"
+    cmds:
+      - for:
+          var: MACOS_DOTFILES
+          as: DOTFILE
+        task: link_dotfile
+        vars:
+          SRC: '{{splitList "|" .DOTFILE | first}}'
+          DEST: '{{splitList "|" .DOTFILE | last}}'
+
+  utils:link_linux_dotfiles:
+    internal: true
+    platforms: [linux]
+    vars:
+      LINUX_DOTFILES:
+        - "packages/jj/|$HOME/.config/jj"
+    cmds:
+      - for:
+          var: LINUX_DOTFILES
+          as: DOTFILE
+        task: link_dotfile
+        vars:
+          SRC: '{{splitList "|" .DOTFILE | first}}'
+          DEST: '{{splitList "|" .DOTFILE | last}}'
+
+  utils:copy_dotfiles:
+    internal: true
+    vars:
+      COPY_DOTFILES:
+        - "packages-dist/zsh/zshrc.local|$HOME/.zshrc.local"
+        - "packages/git/gitconfig.local|$HOME/.gitconfig.local"
+        - "packages/tmux/tmux.local.conf|$HOME/.tmux.local.conf"
+    cmds:
+      - for:
+          var: COPY_DOTFILES
+          as: DOTFILE
+        task: copy_dotfile
+        vars:
+          SRC: '{{splitList "|" .DOTFILE | first}}'
+          DEST: '{{splitList "|" .DOTFILE | last}}'
+          FORCE: "false"

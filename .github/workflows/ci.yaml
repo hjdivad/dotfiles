@@ -1,6 +1,4 @@
 # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
-#
-# see https://github.com/folke/lazy.nvim/blob/main/.github/workflows/ci.yml
 name: CI
 
 on:
@@ -9,7 +7,7 @@ on:
     branches:
       - master
     tags:
-      - '*'
+      - "*"
   workflow_run:
     workflows:
       - "Update Types"
@@ -18,65 +16,25 @@ on:
 
 jobs:
   lint:
+    env:
+      DOTFILES_PATH: "hjdivad/dotfiles"
+      BINUTILS_PATH: "hjdivad/dotfiles/packages/binutils"
+      SHARED_BINUTILS_PATH: "malleatus/shared_binutils"
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: ${{ env.DOTFILES_PATH }}
+
+      - uses: actions/checkout@v4
+        with:
+          repository: "malleatus/shared_binutils"
+          path: ${{ env.SHARED_BINUTILS_PATH }}
+
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt,clippy
-
-      - name: cargo fmt
-        uses: actions-rust-lang/rustfmt@v1
-        with:
-          manifest-path: packages/binutils/Cargo.toml
-
-      - name: cargo clippy
-        run: "cd packages/binutils && cargo clippy -- -D warnings"
-
-  test-nvim:
-    name: test nvim
-    runs-on: ubuntu-latest
-    # installing fzf can take ~1m
-    # testing binutils can take ~1m
-    timeout-minutes: 4
-    steps:
-
-      - name: Environment information
-        run: |
-          uname
-          uname -a
-
-      - uses: actions/checkout@v4
-
-      - name: Install fzf
-        run: sudo apt-get -y install fzf
-
-      - name: Download Neovim
-        env:
-          APPIMG_NIGHTLY: https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.appimage
-        run: |
-          mkdir -p /tmp/nvim
-          wget -q ${APPIMG_NIGHTLY} -O /tmp/nvim/nvim.appimage
-          cd /tmp/nvim
-          chmod a+x ./nvim.appimage
-          ./nvim.appimage --appimage-extract
-          echo "/tmp/nvim/squashfs-root/usr/bin/" >> $GITHUB_PATH
-
-      - name: Install python3
-        uses: actions/setup-python@v4
-        env:
-          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
-        if: ${{ env.DEBUG_SSH == 'true' }}
-        with:
-          python-version: '3.x'
-            # architecture: 'x64' #defaults to x64
-
-      - name: Install python neovim module
-        env:
-          DEBUG_SSH: ${{ secrets.DEBUG_SSH }}
-        if: ${{ env.DEBUG_SSH == 'true' }}
-        run: |
-          pip3 install neovim
 
       - name: Setup upterm session
         env:
@@ -89,14 +47,59 @@ jobs:
           ## limits ssh access and adds the ssh public keys of the listed GitHub users
           limit-access-to-users: hjdivad,rwjblue
 
-      - name: test
+      # TODO: autoformat is nicer
+      - name: cargo fmt
+        # uses: actions-rust-lang/rustfmt@v1
+        # with:
+        #   manifest-path: packages/binutils/Cargo.toml
+        run: "cd $BINUTILS_PATH && cargo fmt --check"
+
+      - name: cargo clippy
+        run: "cd $BINUTILS_PATH && cargo clippy -- -D warnings"
+
+  test-nvim:
+    name: test nvim
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Environment information
+        run: |
+          uname
+          uname -a
+
+      - uses: actions/checkout@v4
+
+      # https://github.com/folke/github/blob/main/neovim/action.yml
+      - uses: folke/github/neovim@main
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libreadline-dev
+
+      - name: Test Cache
+        uses: actions/cache@v4
+        with:
+          path: .tests
+          key: ${{ runner.os }}-tests-${{ hashFiles('tests/minit.lua', 'scripts/test') }}
+      - name: Run Tests
+        run: ./scripts/test
+
+      - name: Setup upterm session
         env:
-          DEBUG: ${{ secrets.Debug }}
-        run: tests/run
+          DEBUG_SSH: ${{ secrets.DebugSSH }}
+        if: ${{ env.DEBUG_SSH == 'true' }}
+        uses: lhotari/action-upterm@v1
+        with:
+          # limits ssh access and adds the ssh public key for the user which triggered the workflow
+          limit-access-to-actor: true
+          # limits ssh access and adds the ssh public keys of the listed GitHub users
+          # limit-access-to-users: hjdivad,rwjblue
 
   test-binutils:
     name: test binutils
     env:
+      DOTFILES_PATH: "hjdivad/dotfiles"
+      BINUTILS_PATH: "hjdivad/dotfiles/packages/binutils"
+      SHARED_BINUTILS_PATH: "malleatus/shared_binutils"
       RUST_LOG: trace
 
     runs-on: ubuntu-latest
@@ -114,6 +117,14 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - uses: actions/checkout@v4
+        with:
+          path: ${{ env.DOTFILES_PATH }}
+
+      - uses: actions/checkout@v4
+        with:
+          repository: "malleatus/shared_binutils"
+          path: ${{ env.SHARED_BINUTILS_PATH }}
+
       - uses: actions-rust-lang/setup-rust-toolchain@v1
       - uses: taiki-e/install-action@v2
         with:
@@ -121,5 +132,4 @@ jobs:
 
       - run: sudo apt-get update && sudo apt-get install -y zsh
 
-      - run: cd packages/binutils && cargo nextest run --workspace --no-fail-fast
-
+      - run: "cd ${{ env.BINUTILS_PATH }} && cargo nextest run --workspace --no-fail-fast"

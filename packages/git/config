@@ -1,0 +1,196 @@
+[alias]
+  c = checkout
+  cb = "!f() { git checkout $(git branch | sed 's/^.\\{2\\}//' | fzf -m --bind 'ctrl-h:clear-query'); }; f"
+  backup = "!f() { local name=`git name-rev HEAD | cut -d' ' -f 2`; git branch -D \"backup/$name\" 2> /dev/null; git branch \"backup/$name\"; }; f"
+	ff = merge --ff-only
+
+  b = branch -vv --sort=committerdate
+  br = "!f() { git branch -r -l 'origin/*'| egrep -v '(HEAD|master|dependabot/)' | xargs git branch -r --sort=committerdate --format='  %(refname:lstrip=3) %(color:white)%(objectname:short)' -l --; }; f"
+
+  delete-merged-branches = !git branch --merged | egrep -v \"(^\\*|master|main)\" | xargs -n 1 git branch -d && git remote prune origin
+
+  branch-current = "!f() { git branch --no-color | grep '*' | grep -v '(no branch)' | cut -c 3-; }; f"
+
+  tags = tag -l --sort=-v:refname
+
+  fo = fetch --prune origin
+  fa = fetch --prune --all
+
+  rr = !sh -c 'git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD)'
+  rro = rebase -i refs/remotes/origin/HEAD
+  rc = rebase --continue
+
+  ap = add --patch
+
+  # commit all
+  ca = "!f() { git add -A && git commit -a \"$@\"; }; f"
+  # commit all amend
+  cam = "!f() { git add -A && git commit -a --amend \"$@\"; }; f"
+  # commit all amend leave message alone
+  camm = "!f() { git add -A && git commit -a --amend -CHEAD \"$@\"; }; f"
+
+  # amend
+  cm = commit --amend
+  # amend leave message alone
+  cmm = commit --amend -CHEAD
+
+  pu = push --force-with-lease
+
+  h = help
+
+  wc = whatchanged -p -w -B
+  wcw = whatchanged -p -w --color-words
+  wcwb = whatchanged -p -w --color-words origin/HEAD..
+
+  log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!(dependabot|svc-))'"
+  log-sans-botm =  "!f() { git log --no-merges \"$@\"; }; f -P --author='^(?!dependabot)'"
+  log-since-last-release = "!f() { git log --no-merges \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot)'"
+  lg = log-sans-bot --stat
+  logb = log-sans-bot origin/HEAD..
+  logr = log-sans-bot ..origin/HEAD
+  lgb = log-sans-bot --no-merges --stat origin/HEAD..
+  lgr = log-sans-bot --no-merges --stat ..origin/HEAD
+
+  todo = diff origin/HEAD -G'TO\\s?DO\\s*:' --no-prefix
+
+  dc = diff --cached
+  dcw = diff --cached --ignore-all-space --color-words
+  dw = diff --ignore-all-space --color-words
+  diff-files-changed = "!git --no-pager diff --name-status origin/HEAD"
+  ls-files-changed = "!git --no-pager diff --name-status origin/HEAD"
+
+  st = status -sb -uall
+
+  gl = log --decorate --cherry-mark --oneline --graph --boundary
+
+  yuno = check-ignore -nv
+
+  head = show 
+  ; these options don't make sense when using delta
+  ; head = show -w --color-words HEAD
+  head-msg = log --pretty="%s%n%n%b" -n 1
+  # show list of all committers, with commit counts + email
+  count = shortlog -sne
+  who-commits = shortlog -sne
+  name-of = name-rev --name-only
+  commit-show-message = show -s --format='%s%n%n%b'
+
+  setup-blame-ignore-revs = "!f() { [[ ! -f .git-blame-ignore-revs ]] && { touch .git-blame-ignore-revs && echo '.git-blame-ignore-revs' >> .git/info/exclude; }; }; f"
+
+  off-my-lawn = "!f() { echo '\
+    _____ _____ _____   _________________    \n\
+   |  __ \\_   _|_   _| |  _  |  ___|  ___|   \n\
+   | |  \\/ | |   | |   | | | | |_  | |_      \n\
+   | | __  | |   | |   | | | |  _| |  _|     \n\
+   | |_\\ \\_| |_  | |   \\ \\_/ / |   | |       \n\
+    \\____/\\___/  \\_/    \\___/\\_|   \\_|       \n\
+                                             \n\
+ ___  ____   __  _       ___  _    _ _   _ _ \n\
+ |  \\/  \\ \\ / / | |     / _ \\| |  | | \\ | | |\n\
+ | .  . |\\ V /  | |    / /_\\ \\ |  | |  \\| | |\n\
+ | |\\/| | \\ /   | |    |  _  | |/\\| | . ` | |\n\
+ | |  | | | |   | |____| | | \\  /\\  / |\\  |_|\n\
+ \\_|  |_/ \\_/   \\_____/\\_| |_/\\/  \\/\\_| \\_(_)';};f"
+
+[advice]
+  detachedHead = false
+
+[branch]
+  # always rebase to tracked branches on pull, for branches created by
+  # `git branch` or `git checkout`, i.e. non-master.
+  autoSetupRebase = always
+  sort = -committerdate
+
+[core]
+	editor = nvim
+  pager = delta
+
+[color]
+  grep = true
+  branch = true
+  interactive = true
+  pager = true
+  showbranch = true
+  status = true
+  ui = true
+
+# override red colours as the gruvbox terminal defaults don't look good in dark
+# mode
+[color "status"]
+  changed = "#d54e53"
+  untracked = "#d54e53"
+  nobranch = "#ff3334"
+[color "diff"]
+  meta = "#83a598"
+[color "decorate"]
+  tag = "#83a598"
+
+[diff]
+  renames = true
+
+[fetch]
+  prune = true
+  pruneTags = true
+
+[log]
+  follow = true
+  decorate = true
+
+[mergetool]
+  keepBackup = false
+
+[pager]
+  branch =  false
+
+[push]
+  default = upstream
+  followTags = true
+  recurseSubmodules = on-demand
+  autoSetupRemote = true
+
+[rebase]
+  abbreviateCommands = true
+  # use explicit drop rather than deleting lines for dropping commits from a rebase
+  missingCommitsCheck = error
+
+[rerere]
+  enabled = true
+  autoUpdate = true
+
+[tag]
+  sort = -v:refname
+
+[init]
+	defaultBranch = master
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  side-by-side = true
+  line-numbers = true
+  features = "tokyonight"
+  true-color = always
+  # https://github.com/folke/tokyonight.nvim/blob/v3.0.1/extras/delta/tokyonight_night.gitconfig
+  minus-style                   = syntax "#37222c"
+  minus-non-emph-style          = syntax "#37222c"
+  minus-emph-style              = syntax "#713137"
+  minus-empty-line-marker-style = syntax "#37222c"
+  line-numbers-minus-style      = "#b2555b"
+  plus-style                    = syntax "#20303b"
+  plus-non-emph-style           = syntax "#20303b"
+  plus-emph-style               = syntax "#2c5a66"
+  plus-empty-line-marker-style  = syntax "#20303b"
+  line-numbers-plus-style       = "#266d6a"
+  line-numbers-zero-style       = "#3b4261"
+
+[blame]
+  # Use GitHub's default file for ignoring blame revs
+  # see https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view
+  ignoreRevsFile = .git-blame-ignore-revs
+
+[include]
+  path = "~/.gitconfig.local"
+
+
+# vim:ft=gitconfig:

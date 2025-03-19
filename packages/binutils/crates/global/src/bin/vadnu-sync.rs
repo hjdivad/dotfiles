@@ -89,26 +89,28 @@ fn main() -> Result<()> {
 
     trace!("main()");
 
-    let config = config_from_args(VadnuSyncConfig {
-        vadnu_dir: args.vadnu_dir.clone(),
-        rsync_dir: args.rsync_dir.clone(),
-        sync_path: args.sync_path.clone(),
-    })?;
+    if let VadnuCommand::Completions(args) = args.subcommand {
+        let shell = args.shell.unwrap();
+        generate(
+            shell,
+            &mut CommandArgs::command(),
+            "vadnu-sync",
+            &mut io::stdout(),
+        );
+        Ok(())
+    } else {
+        let config = config_from_args(VadnuSyncConfig {
+            vadnu_dir: args.vadnu_dir.clone(),
+            rsync_dir: args.rsync_dir.clone(),
+            sync_path: args.sync_path.clone(),
+        })?;
 
-    match args.subcommand {
-        VadnuCommand::Completions(args) => {
-            let shell = args.shell.unwrap();
-            generate(
-                shell,
-                &mut CommandArgs::command(),
-                "vadnu-sync",
-                &mut io::stdout(),
-            );
-            Ok(())
+        match args.subcommand {
+            VadnuCommand::Config => show_config(&config),
+            VadnuCommand::Sync => sync(&config),
+            VadnuCommand::Agent(agent_args) => agent(agent_args, &config),
+            _ => panic!("unreachable"),
         }
-        VadnuCommand::Config => show_config(&config),
-        VadnuCommand::Sync => sync(&config),
-        VadnuCommand::Agent(agent_args) => agent(agent_args, &config),
     }
 }
 
