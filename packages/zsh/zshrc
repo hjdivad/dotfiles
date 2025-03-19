@@ -87,7 +87,7 @@ alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 function __path() {
   echo $PATH | rg : -r $'\n'
 }
-alias path=__path
+alias expand-path=__path
 
 # use eza if it exists
 # https://github.com/eza-community/eza (replacement for https://github.com/ogham/exa)
