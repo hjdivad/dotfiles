@@ -127,6 +127,41 @@ tasks:
         - "packages/tealdeer/config.toml|$HOME/Library/Application Support/tealdeer/config.toml"
         - "packages/jj/|$HOME/Library/Application Support/jj"
         - "packages/alfred/snippets|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/snippets"
+        - "packages/alfred/preferences/features/clipboard|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/clipboard"
+        - "packages/alfred/preferences/features/contacts|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/contacts"
+        - "packages/alfred/preferences/features/defaultresults|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/defaultresults"
+        - "packages/alfred/preferences/features/filesearch|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/filesearch"
+        - "packages/alfred/preferences/features/system|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/system"
+        - "packages/alfred/preferences/features/webbookmarks|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/webbookmarks"
+        - "packages/alfred/preferences/features/websearch/amazon|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/amazon"
+        - "packages/alfred/preferences/features/websearch/applemaps|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/applemaps"
+        - "packages/alfred/preferences/features/websearch/ask|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/ask"
+        - "packages/alfred/preferences/features/websearch/bing|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/bing"
+        - "packages/alfred/preferences/features/websearch/duckduckgo|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/duckduckgo"
+        - "packages/alfred/preferences/features/websearch/ebay|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/ebay"
+        - "packages/alfred/preferences/features/websearch/facebook|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/facebook"
+        - "packages/alfred/preferences/features/websearch/flickr|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/flickr"
+        - "packages/alfred/preferences/features/websearch/gmail|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/gmail"
+        - "packages/alfred/preferences/features/websearch/gmailsearch|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/gmailsearch"
+        - "packages/alfred/preferences/features/websearch/google|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/google"
+        - "packages/alfred/preferences/features/websearch/images|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/images"
+        - "packages/alfred/preferences/features/websearch/imdb|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/imdb"
+        - "packages/alfred/preferences/features/websearch/linkedin|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/linkedin"
+        - "packages/alfred/preferences/features/websearch/lucky|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/lucky"
+        - "packages/alfred/preferences/features/websearch/maps|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/maps"
+        - "packages/alfred/preferences/features/websearch/pinterest|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/pinterest"
+        - "packages/alfred/preferences/features/websearch/rottentomatoes|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/rottentomatoes"
+        - "packages/alfred/preferences/features/websearch/twitter|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/twitter"
+        - "packages/alfred/preferences/features/websearch/twittersearch|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/twittersearch"
+        - "packages/alfred/preferences/features/websearch/twitteruser|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/twitteruser"
+        - "packages/alfred/preferences/features/websearch/urls|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/urls"
+        - "packages/alfred/preferences/features/websearch/weather|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/weather"
+        - "packages/alfred/preferences/features/websearch/wiki|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/wiki"
+        - "packages/alfred/preferences/features/websearch/wolfram|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/wolfram"
+        - "packages/alfred/preferences/features/websearch/wunderground|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/wunderground"
+        - "packages/alfred/preferences/features/websearch/yahoo|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yahoo"
+        - "packages/alfred/preferences/features/websearch/youtube|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/youtube"
+        - "packages/alfred/preferences/features/websearch/yubnub|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yubnub"
     cmds:
       - for:
           var: MACOS_DOTFILES
@@ -153,11 +188,28 @@ tasks:
 
   utils:copy_dotfiles:
     internal: true
+    deps:
+      - task: utils:copy_macos_dotfiles
     vars:
       COPY_DOTFILES:
         - "packages-dist/zsh/zshrc.local|$HOME/.zshrc.local"
         - "packages/git/gitconfig.local|$HOME/.gitconfig.local"
         - "packages/tmux/tmux.local.conf|$HOME/.tmux.local.conf"
+    cmds:
+      - for:
+          var: COPY_DOTFILES
+          as: DOTFILE
+        task: copy_dotfile
+        vars:
+          SRC: '{{splitList "|" .DOTFILE | first}}'
+          DEST: '{{splitList "|" .DOTFILE | last}}'
+          FORCE: "false"
+
+  utils:copy_macos_dotfiles:
+    internal: true
+    vars:
+      COPY_DOTFILES:
+        - "packages/alfred/preferences/features/websearch/prefs.plist|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/prefs.plist"
     cmds:
       - for:
           var: COPY_DOTFILES

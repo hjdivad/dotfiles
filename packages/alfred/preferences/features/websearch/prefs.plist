@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>customSites</key>
+	<dict>
+		<key>47B298D5-1BEF-49B5-898C-E54D38A0D6E3</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>ety</string>
+			<key>text</key>
+			<string>etymology</string>
+			<key>url</key>
+			<string>https://www.etymonline.com/search?q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>4AA78F06-4D56-4910-8974-0351925F279F</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>emo</string>
+			<key>text</key>
+			<string>emoji search</string>
+			<key>url</key>
+			<string>https://emojipedia.org/search/?q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>55FB3F26-5F26-41E5-9ED4-DF4A88A5DD72</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>npms</string>
+			<key>text</key>
+			<string>npm package source</string>
+			<key>url</key>
+			<string>https://njt.vercel.app/jump?from=alfred&amp;to={query} u</string>
+		</dict>
+		<key>8441151F-3B1A-4587-AA1F-62B5DA22768B</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>pip</string>
+			<key>text</key>
+			<string>pip</string>
+			<key>url</key>
+			<string>https://pypi.org/search/?q={query}&amp;o=</string>
+		</dict>
+		<key>8A2FD29D-2193-4601-85CD-11119E7F8E76</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>npmc</string>
+			<key>text</key>
+			<string>npm package changelog</string>
+			<key>url</key>
+			<string>https://njt.vercel.app/jump?from=alfred&amp;to={query} c</string>
+		</dict>
+		<key>A46AD42E-A655-4DF7-8F29-1E137BED0EA1</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>u</string>
+			<key>text</key>
+			<string>unicode</string>
+			<key>url</key>
+			<string>https://www.compart.com/en/unicode/search?q={query}</string>
+		</dict>
+		<key>BD68B8FA-B88A-4D4B-98B5-6047F5F9CD34</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>cs</string>
+			<key>text</key>
+			<string>crates.io</string>
+			<key>url</key>
+			<string>https://crates.io/search?q={query}</string>
+		</dict>
+		<key>C9018ACE-6EAB-4DE2-8A07-C3D711FB7918</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>gif</string>
+			<key>text</key>
+			<string>gify</string>
+			<key>url</key>
+			<string>https://giphy.com/search/{query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>CA2BA3DB-19E8-4DCC-BA5F-9A01F946E363</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>npmg</string>
+			<key>text</key>
+			<string>npm package github</string>
+			<key>url</key>
+			<string>https://njt.vercel.app/jump?from=alfred&amp;to={query} g</string>
+		</dict>
+		<key>D57B9C17-F672-4366-8A54-62C410E503BB</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>sv</string>
+			<key>text</key>
+			<string>Folkets Lexikon</string>
+			<key>url</key>
+			<string>https://folkets-lexikon.csc.kth.se/folkets/#lookup&amp;{query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>E1899D61-3FA7-4DDC-AB77-B42DE57ABE04</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>gb</string>
+			<key>text</key>
+			<string>brave search</string>
+			<key>url</key>
+			<string>https://search.brave.com/search?q={query}</string>
+		</dict>
+		<key>E727CA6A-4413-4D55-87FC-FD0D985669D5</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>gh</string>
+			<key>text</key>
+			<string>GitHub</string>
+			<key>url</key>
+			<string>https://github.com/search?q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>F28B2DDE-425E-4D4E-A1A1-F9BC4EABFA1B</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>gs</string>
+			<key>text</key>
+			<string>GitHub (⭐️)</string>
+			<key>url</key>
+			<string>https://github.com/hjdivad?page=1&amp;tab=stars&amp;utf8=%E2%9C%93&amp;q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>onlyShowEnabledInPrefs</key>
+	<true/>
+</dict>
+</plist>
