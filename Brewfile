@@ -103,6 +103,7 @@ cask "hammerspoon"
 cask "iterm2"
 # Noise cancelling application
 cask "krisp"
+cask "obsidian"
 # Get up and running with large language models locally
 cask "ollama"
 # Open-source code editor
