@@ -4,7 +4,6 @@ local config = wezterm.config_builder()
 config.color_scheme = "Tokyo Night"
 
 config.font = wezterm.font({ family = "Berkeley Mono" })
--- config.font = wezterm.font({ family = "Hasklug Nerd Font" })
 
 config.font_size = 14.0
 
