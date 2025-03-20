@@ -109,13 +109,13 @@ return {
 				windows = {
 					{
 						name = "todos",
-						path = "~/docs/vadnu/home",
+						path = "~/src/vadnu/home",
 						command = "nvim",
 					},
 
 					{
 						name = "journal",
-						path = "~/docs/vadnu/home",
+						path = "~/src/vadnu/home",
 						command = "nvim +EditToday",
 					},
 				},

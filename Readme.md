@@ -36,7 +36,7 @@ bash -c "$(curl --location https://raw.githubusercontent.com/hjdivad/dotfiles/re
 ```sh
 
 # Set up some dirs
-mkdir -p ~/docs/vadnu
+mkdir -p ~/src/vadnu
 mkdir -p ~/src/github/hjdivad
 (cd ~ && ln -s Downloads tmp)
 

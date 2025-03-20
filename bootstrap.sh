@@ -3,7 +3,7 @@
 set -e
 
 # set up directory structure
-mkdir -p ~/docs/vadnu
+mkdir -p ~/src/vadnu
 mkdir -p ~/src/github/hjdivad
 (cd ~ && ln -s Downloads tmp)
 
