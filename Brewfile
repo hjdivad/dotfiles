@@ -112,11 +112,25 @@ brew "zsh"
 brew "rwjblue/tap/cal"
 # Command-line interface for 1Password
 cask "1password-cli"
+# Application launcher and productivity software
+cask "alfred"
+# Web browser focusing on privacy
+cask "brave-browser"
+# Voice and text chat software
+cask "discord"
+# Application window manager focusing on simplicity
+cask "divvy"
+# Remote pair programming and team collaboration tool
+cask "drovio"
+# Screen colour temperature controller
+cask "flux"
 cask "font-hasklug-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Desktop automation application
 cask "hammerspoon"
+# System monitoring app
+cask "istat-menus"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
 # Noise cancelling application
@@ -125,6 +139,8 @@ cask "krisp"
 cask "obsidian"
 # Get up and running with large language models locally
 cask "ollama"
+# Notepad with a built-in calculator
+cask "soulver"
 # Open-source code editor
 cask "visual-studio-code"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
