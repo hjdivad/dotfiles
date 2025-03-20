@@ -46,7 +46,7 @@ tasks:
           echo "$DEST_PATH already exists"
         else
           echo "creating $DEST_PATH"
-          cp "$SRC_PATH" "$DEST_PATH"
+          cp -r "$SRC_PATH" "$DEST_PATH"
         fi
 
   install:
