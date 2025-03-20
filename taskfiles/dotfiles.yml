@@ -210,6 +210,7 @@ tasks:
     vars:
       COPY_DOTFILES:
         - "packages/alfred/preferences/features/websearch/prefs.plist|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/prefs.plist"
+        - "packages/alfred/workflows/user.workflow.62AC781A-A348-4994-8DA8-0000DA8D3893|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/workflows/user.workflow.62AC781A-A348-4994-8DA8-0000DA8D3893"
     cmds:
       - for:
           var: COPY_DOTFILES
