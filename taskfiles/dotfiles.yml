@@ -162,6 +162,7 @@ tasks:
         - "packages/alfred/preferences/features/websearch/yahoo|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yahoo"
         - "packages/alfred/preferences/features/websearch/youtube|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/youtube"
         - "packages/alfred/preferences/features/websearch/yubnub|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yubnub"
+        - "packages/divvy/com.mizage.Divvy.plist|$HOME/Library/Preferences/com.mizage.Divvy.plist"
     cmds:
       - for:
           var: MACOS_DOTFILES
