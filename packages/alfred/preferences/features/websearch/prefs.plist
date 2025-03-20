@@ -90,7 +90,7 @@
 			<key>enabled</key>
 			<true/>
 			<key>keyword</key>
-			<string>gif</string>
+			<string>gify</string>
 			<key>text</key>
 			<string>gify</string>
 			<key>url</key>
@@ -135,7 +135,7 @@
 		</dict>
 		<key>E727CA6A-4413-4D55-87FC-FD0D985669D5</key>
 		<dict>
-			<key>enabled</key>
+			<key>disabled</key>
 			<true/>
 			<key>keyword</key>
 			<string>gh</string>
