@@ -1,4 +1,5 @@
 tap "homebrew/bundle"
+tap "homebrew/services"
 tap "jesseduffield/lazygit"
 tap "rwjblue/tap"
 # Record and share terminal sessions
@@ -15,6 +16,8 @@ brew "bat"
 brew "bazelisk"
 # GNU internationalization (i18n) and localization (l10n) library
 brew "gettext"
+# Versatile and fast Unicode/ASCII/ANSI graphics renderer
+brew "chafa"
 # Cross-platform make
 brew "cmake"
 # Cryptographic recipes and primitives for Python
@@ -23,6 +26,8 @@ brew "cryptography", link: false
 brew "curl"
 # Modern diagram scripting language that turns text to diagrams
 brew "d2"
+# Reference implementation for the Development Containers specification
+brew "devcontainer"
 # Modern, maintained replacement for ls
 brew "eza"
 # Simple, fast and user-friendly alternative to find
@@ -45,26 +50,38 @@ brew "git-lfs"
 brew "gnu-sed"
 # GNU Pretty Good Privacy (PGP) package
 brew "gnupg"
+# Task is a task runner/build tool that aims to be simpler and easier to use
+brew "go-task"
+# Make JSON greppable
+brew "gron"
 # Like cURL, but for gRPC
 brew "grpcurl"
-# OpenType text shaping engine
-brew "harfbuzz"
 # Post-modern modal text editor
 brew "helix"
+# User-friendly cURL replacement (command-line HTTP client)
+brew "httpie"
 # Command-line benchmarking tool
 brew "hyperfine"
+# Json incremental digger
+brew "jid"
 # Git-compatible distributed version control system
 brew "jj"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Simple terminal UI for git commands
+brew "lazygit"
 # Generic library support script
 brew "libtool"
-# YAML Parser
-brew "libyaml"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# Swiss-army knife of markup format conversion
+brew "pandoc"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
+# Modern replacement for ps written in Rust
+brew "procs"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Intuitive find & replace CLI
@@ -79,6 +96,8 @@ brew "temporal"
 brew "tmux"
 # Program that allows you to count code, quickly
 brew "tokei"
+# Simple terminal image viewer written in Rust
+brew "viu"
 # Execute commands when watched files change
 brew "watchexec"
 # Watch files and take action when they change
@@ -89,12 +108,11 @@ brew "zellij"
 brew "zoxide"
 # UNIX shell (command interpreter)
 brew "zsh"
-# A simple terminal UI for git commands, written in Go
-brew "jesseduffield/lazygit/lazygit"
 # Simple command line calendar, written in Rust
 brew "rwjblue/tap/cal"
 # Command-line interface for 1Password
 cask "1password-cli"
+cask "font-hasklug-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Desktop automation application
@@ -103,6 +121,7 @@ cask "hammerspoon"
 cask "iterm2"
 # Noise cancelling application
 cask "krisp"
+# Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
 # Get up and running with large language models locally
 cask "ollama"
@@ -114,9 +133,12 @@ cask "wezterm"
 cask "windsurf"
 # Multiplayer code editor
 cask "zed"
+vscode "batisteo.vscode-django"
 vscode "charliermarsh.ruff"
 vscode "davidanson.vscode-markdownlint"
 vscode "dbaeumer.vscode-eslint"
+vscode "donjayamanne.python-environment-manager"
+vscode "donjayamanne.python-extension-pack"
 vscode "eamodio.gitlens"
 vscode "editorconfig.editorconfig"
 vscode "esbenp.prettier-vscode"
@@ -124,7 +146,13 @@ vscode "github.copilot"
 vscode "github.copilot-chat"
 vscode "graphql.vscode-graphql"
 vscode "graphql.vscode-graphql-syntax"
+vscode "kevinrose.vsc-python-indent"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-python.black-formatter"
 vscode "ms-python.debugpy"
+vscode "ms-python.flake8"
+vscode "ms-python.isort"
+vscode "ms-python.mypy-type-checker"
 vscode "ms-python.python"
 vscode "ms-python.vscode-pylance"
 vscode "ms-toolsai.jupyter"
@@ -133,3 +161,14 @@ vscode "ms-toolsai.jupyter-renderers"
 vscode "ms-toolsai.vscode-jupyter-cell-tags"
 vscode "ms-toolsai.vscode-jupyter-slideshow"
 vscode "ms-vscode-remote.remote-containers"
+vscode "njpwerner.autodocstring"
+vscode "redhat.java"
+vscode "visualstudioexptteam.intellicode-api-usage-examples"
+vscode "visualstudioexptteam.vscodeintellicode"
+vscode "vscjava.vscode-gradle"
+vscode "vscjava.vscode-java-debug"
+vscode "vscjava.vscode-java-dependency"
+vscode "vscjava.vscode-java-pack"
+vscode "vscjava.vscode-java-test"
+vscode "vscjava.vscode-maven"
+vscode "wholroyd.jinja"
