@@ -5,6 +5,7 @@
 # core tools
 go = "latest"
 node = "latest"
+lua = "latest"
 ruby = "latest"
 rust = { version = "latest", components = "rust-analyzer,clippy" }
 python = "latest"
