@@ -4,12 +4,16 @@ version: 3
 vars:
   DOTFILES_DIR:
     sh: pwd
+  SHARED_BINUTILS_PATH: '{{env "HOME"}}/src/github/malleatus/shared_binutils'
   # Get FORCE from environment or default to false
   FORCE: '{{env "FORCE"}}'
 
 includes:
   shell:
     taskfile: ./shell.yml
+    internal: true
+  binutils:
+    taskfile: ./binutils.yml
     internal: true
 
 tasks:
@@ -65,6 +69,7 @@ tasks:
       - task: utils:ensure_dirs
       - task: utils:link_dotfiles
       - task: utils:copy_dotfiles
+      - task: setup-local-dotfiles
       - task: shell:install
 
   utils:ensure_dirs:
@@ -221,3 +226,12 @@ tasks:
           SRC: '{{splitList "|" .DOTFILE | first}}'
           DEST: '{{splitList "|" .DOTFILE | last}}'
           FORCE: "false"
+
+  setup-local-dotfiles:
+    internal: true
+    desc: Set up local dotfiles using shared_binutils
+    deps: [binutils:build:shared-binutils]
+    cmds:
+      - |
+        "{{.SHARED_BINUTILS_PATH}}/target/debug/setup-local-dotfiles" \
+          --local-dotfiles-path "{{.LOCAL_DOTFILES_PATH}}" \
