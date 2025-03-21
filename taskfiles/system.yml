@@ -49,11 +49,11 @@ tasks:
   setup:vadnu:
     internal: true
     status:
-      - test -d $HOME/docs/vadnu
+      - test -d $HOME/src/vadnu
     cmds:
-      - mkdir -p $HOME/docs/vadnu/{ARCHIVE,attachments,docs,journal,projects,ref,someday,templates}
+      - mkdir -p $HOME/src/vadnu/{ARCHIVE,attachments,docs,journal,projects,ref,someday,templates}
       - |
-        cat > $HOME/docs/vadnu/todo.md << 'EOF'
+        cat > $HOME/src/vadnu/todo.md << 'EOF'
         # nu
 
         **📆 dates:**
