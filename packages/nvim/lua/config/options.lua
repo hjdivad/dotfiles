@@ -8,12 +8,20 @@ vim.g.maplocalleader = ","
 -- Disable LazyVim format-on-save
 vim.g.autoformat = false
 
+-- https://gpanders.com/blog/whats-new-in-neovim-0-11/#virtual-lines
+vim.o.winborder = "rounded"
+vim.diagnostic.config({
+  virtual_lines = true,
+})
+
 -- disable right-splitting from lazyvim
 vim.opt.splitright = false
 
 vim.opt.spelllang = { "sv", "en_gb", "en_us" }
-vim.opt.spellfile =
-  { ".vimspell.utf.8", "~/.local/share/nvim/spell/en.utf-8.add", "~/.local/share/nvim/spell/sv.utf-8.add" }
+--FIXME: this broke in 0.11
+--
+-- vim.opt.spellfile =
+--   { ".vimspell.utf.8", "~/.local/share/nvim/spell/en.utf-8.add", "~/.local/share/nvim/spell/sv.utf-8.add" }
 
 vim.opt.swapfile = false
 
