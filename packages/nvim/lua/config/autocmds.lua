@@ -3,7 +3,6 @@
 -- Add any additional autocmds here
 
 local term = require("config/auto/terminal")
-local fold = require("config/auto/folding")
 
 local function augroup(name)
   return vim.api.nvim_create_augroup("hjd_" .. name, { clear = true })
@@ -111,7 +110,6 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 term.setup()
-fold.setup()
 
 
 -- NOTE: local_nvim is symlinked in from local-dotfiles to allow for local
