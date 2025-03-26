@@ -49,7 +49,7 @@ snippet stylua-ignore "don't format the next line"
 
 snippet local-snippets "create project local snippets setup in .nvim.lua"
 	-- .nvim.lua
-	-- TODO: mkdir -p .nvim/snippets && touch .nvim/snippets/${0}_local
+	-- TODO: mkdir -p .nvim/snippets && touch .nvim/snippets/${0}_local.snippets
 	local ls = require("luasnip")
 
 	require('luasnip.loaders.from_snipmate').load({paths={vim.fn.getcwd() .. "/.nvim/snippets"}})
