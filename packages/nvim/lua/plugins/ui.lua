@@ -117,6 +117,9 @@ return {
         lsp_doc_border = false,
       },
       views = {
+        cmdline_popup = {
+          border = { style = "none" }
+        },
         minileft = {
           backend = "mini",
           relative = "editor",
