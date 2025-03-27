@@ -45,7 +45,7 @@
   log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!(dependabot|svc-))'"
   log-sans-botm =  "!f() { git log --no-merges \"$@\"; }; f -P --author='^(?!dependabot)'"
   log-since-last-release = "!f() { git log --no-merges \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot)'"
-  lg = log-sans-bot --stat
+  lg = log-sans-bot --stat --show-signature
   logb = log-sans-bot origin/HEAD..
   logr = log-sans-bot ..origin/HEAD
   lgb = log-sans-bot --no-merges --stat origin/HEAD..
@@ -188,6 +188,23 @@
   # Use GitHub's default file for ignoring blame revs
   # see https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view
   ignoreRevsFile = .git-blame-ignore-revs
+
+
+# Relies on
+#   user.signingkey = ~/.ssh/id_something.pub
+# The signers file populated via
+#   cat "git@david.hamilton.gg $(cat ~/.ssh/id_something.pub)" > ~/.ssh/allowed_signers
+[commit]
+  gpgSign = true
+
+[tag]
+  gpgSign = true
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
 
 [include]
   path = "~/.gitconfig.local"

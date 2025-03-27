@@ -3,7 +3,13 @@
 # This is copied on install and not overwritten on subsequent calls to install.
 # This is where to put:
 #   1. host-specific configuration
+#
+# For the rest of the git config see
+#   ~/.config/git/config
 
 [user]
 	name = David J. Hamilton
 	email = git@david.hamilton.gg
+  ; TODO: create an ssh key
+  ; signingkey = /Users/hjdivad/.ssh/id_something.pub
+  ; TODO: cat "git@david.hamilton.gg $(cat ~/.ssh/id_something.pub)" > ~/.ssh/allowed_signers
