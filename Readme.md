@@ -78,7 +78,6 @@ Open `brave://settings` in brave and set up sync.
   - set up [gif search](https://alfred.app/workflows/rknightuk/gif-search/)
   - set up [devtoys](https://alfred.app/workflows/cagechung/devtoys/)
   - set up [lorem ipsum](https://alfred.app/workflows/alexchantastic/lorem-ipsum/)
-  - set up [qr codes](https://alfred.app/workflows/torreybetts/qr-code/)
 - set up obsidian
   - open local vault in `~/src/vadnu/${vault}`
   - connect it to remote vault
