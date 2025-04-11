@@ -26,8 +26,6 @@ usage = "latest"
 # "npm:mcp-hub" = "latest"
 # "npm:prettier" = "latest"
 
-"gem:pws" = "latest"
-
 [settings]
 experimental = true
 python.uv_venv_auto = true
