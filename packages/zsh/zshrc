@@ -285,6 +285,8 @@ alias tst='tmux switch-client -l'
 alias tsd=__ts_todos
 alias tsj=__ts_journal
 
+alias mr='mise run'
+
 
 source $ZSH_PATHRC
 
