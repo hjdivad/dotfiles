@@ -20,7 +20,6 @@
     "lazyvim.plugins.extras.test.core",
     "lazyvim.plugins.extras.util.mini-hipatterns",
     "plugins.extras.ai.codecompanion",
-    "plugins.extras.d2.lang",
     "plugins.extras.dap.keymaps",
     "plugins.extras.editor.fzf",
     "plugins.extras.editor.open-browser",
