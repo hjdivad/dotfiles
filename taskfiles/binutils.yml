@@ -50,6 +50,7 @@ tasks:
     cmds:
       - cargo build
 
+  # FIXME: we don't ensure there's a crates directory when we set up local-packages
   build:local-packages-binutils:
     internal: true
     desc: Build the binutils project
