@@ -27,38 +27,55 @@ set -o vi
 
 
 # set up fzf
-# c.f. <https://github.com/rwjblue/dotfiles/blob/master/zsh/plugins/fzf.zsh>
-if [ -f ~/.fzf.zsh ]; then
-  source ~/.fzf.zsh
 
-  if which fd > /dev/null 2>&1; then
-    function __pick_dir {
-      fd --type directory | fzf
-    }
+if [[ "$OSTYPE" == darwin* ]]; then
+  # Auto-completion
+  [[ $- == *i* ]] && source "/opt/homeberw/opt/fzf/shell/completion.zsh" 2> /dev/null
 
-    function __pick_file {
-      fd . | fzf
-    }
-
-    function __go_to_dir {
-      local to_dir=$(__pick_dir)
-
-      if [[ -d "${to_dir}" ]]; then
-        cd ${to_dir}
-      fi
-    }
-
-    # "go directory (with fzf)
-    alias gd='__go_to_dir'
-    alias pd='__pick_dir'
-    alias pf='__pick_file'
+  # Key bindings
+  source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+else
+  if [[ ! "$PATH" == */$HOME/.fzf/bin* ]]; then
+    export PATH="$PATH:$HOME/.fzf/bin"
   fi
 
-  function __pick_branch {
-    git branch | sed 's/^.\{2\}//' | fzf -m --bind 'ctrl-h:clear-query'
-  }
-  alias pb='__pick_branch'
+  # Auto-completion
+  # ---------------
+  [[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.zsh" 2> /dev/null
+
+  # Key bindings
+  # ------------
+  source "$HOME/.fzf/shell/key-bindings.zsh"
 fi
+
+
+if which fd > /dev/null 2>&1; then
+  function __pick_dir {
+    fd --type directory | fzf
+  }
+
+  function __pick_file {
+    fd . | fzf
+  }
+
+  function __go_to_dir {
+    local to_dir=$(__pick_dir)
+
+    if [[ -d "${to_dir}" ]]; then
+      cd ${to_dir}
+    fi
+  }
+
+  # "go directory (with fzf)
+  alias gd='__go_to_dir'
+  alias pd='__pick_dir'
+  alias pf='__pick_file'
+fi
+
+function __pick_branch {
+  git branch | sed 's/^.\{2\}//' | fzf -m --bind 'ctrl-h:clear-query'
+}
+alias pb='__pick_branch'
 
 
 # set up unixy defaults
