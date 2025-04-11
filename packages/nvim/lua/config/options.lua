@@ -17,7 +17,7 @@ vim.diagnostic.config({
 -- disable right-splitting from lazyvim
 vim.opt.splitright = false
 
-vim.opt.spelllang = { "sv", "en_gb", "en_us" }
+vim.opt.spelllang = { "en_us", "sv", "en_gb" }
 --FIXME: this broke in 0.11
 --
 -- vim.opt.spellfile =
