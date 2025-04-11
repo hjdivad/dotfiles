@@ -206,6 +206,24 @@
 [gpg "ssh"]
 	allowedSignersFile = ~/.ssh/allowed_signers
 
+[feature]
+  # https://www.git-tower.com/blog/git-performance/
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-featuremanyFiles
+  #
+  # Configures the following settings:
+  #
+  # index.skipHash=true
+  # index.version=4
+  # core.untrackedCache=true
+  #
+  manyFiles = true
+
+[maintenance]
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-maintenanceauto
+  auto = false
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-maintenancestrategy
+  strategy = incremental
+
 [include]
   path = "~/.gitconfig.local"
 
