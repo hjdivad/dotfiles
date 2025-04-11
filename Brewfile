@@ -1,5 +1,3 @@
-tap "homebrew/bundle"
-tap "homebrew/services"
 tap "jesseduffield/lazygit"
 tap "rwjblue/tap"
 # Record and share terminal sessions
