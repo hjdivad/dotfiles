@@ -54,8 +54,8 @@ return {
       options = {
         mode = "tabs",
         indicator = {
-          style = "underline"
-        }
+          style = "underline",
+        },
       },
     },
   },
@@ -118,7 +118,7 @@ return {
       },
       views = {
         cmdline_popup = {
-          border = { style = "none" }
+          border = { style = "none" },
         },
         minileft = {
           backend = "mini",
@@ -154,6 +154,12 @@ return {
           },
         },
       },
+
+      ---TODO: redirecting to popup (e.g. for <c-g> no longer working)
+      -- redirect = {
+      --   view = "popup",
+      -- },
+
       -- interesting views here are
       -- popup
       -- virtualtext

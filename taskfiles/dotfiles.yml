@@ -82,6 +82,7 @@ tasks:
   utils:link_dotfiles:
     internal: true
     deps:
+      # TODO: preferentially link from local-packages?
       - task: utils:link_macos_dotfiles
       - task: utils:link_linux_dotfiles
 
