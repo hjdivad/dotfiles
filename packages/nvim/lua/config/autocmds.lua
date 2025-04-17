@@ -109,6 +109,14 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.har",
+  group = ft_group,
+  callback = function()
+    vim.bo.filetype = "json"
+  end,
+})
+
 term.setup()
 
 
