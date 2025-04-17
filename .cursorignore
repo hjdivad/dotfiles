@@ -1,0 +1,7 @@
+# vim:ft=gitignore
+# see https://docs.cursor.com/context/ignore-files
+#
+# Environment dot files are more likely to contain sensitive data
+**/.*
+# Even if test data, don't want to risk a real one getting indexed
+**/*.pem
