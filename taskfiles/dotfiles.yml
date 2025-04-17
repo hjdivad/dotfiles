@@ -168,6 +168,7 @@ tasks:
         - "packages/alfred/preferences/features/websearch/yubnub|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yubnub"
         - "packages/divvy/com.mizage.Divvy.plist|$HOME/Library/Preferences/com.mizage.Divvy.plist"
         - "packages/divvy/com.mizage.Divvy.plist|$HOME/Library/Preferences/com.mizage.direct.Divvy.plist"
+        - "local-packages/claude/claude_desktop_config.json|$HOME/Library/Application Support/Claude/claude_desktop_config.json"
         - "packages/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
         - "local-packages/cursor/settings.json|$HOME/Library/Application Support/Cursor/User/settings.json"
         - "local-packages/cursor/mcp.json|$HOME/.cursor/mcp.json"
