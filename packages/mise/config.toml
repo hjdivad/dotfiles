@@ -19,15 +19,14 @@ cosign = "latest"
 # https://mise.jdx.dev/tasks/file-tasks.html#arguments
 usage = "latest"
 
-# FIXME: mise hangs frequently when trying to install from npm
-# see <https://github.com/jdx/mise/issues/4302>
-# see <https://github.com/jdx/mise/discussions/4275>
-#
-# "npm:mcp-hub" = "latest"
-# "npm:prettier" = "latest"
+"npm:@openai/codex" = "latest"
+"npm:prettier" = "latest"
+"npm:mcp-hub" = "latest"
+"npm:@anthropic-ai/claude-code" = "latest"
 
 [settings]
 experimental = true
-python.uv_venv_auto = true
+# Disabled due to <https://github.com/jdx/mise/issues/4600>
+# python.uv_venv_auto = true
 pipx.uvx = true
 
