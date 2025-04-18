@@ -137,6 +137,15 @@ ls.add_snippets("all", {
       return sn(nil, t(trimmed_date_str))
     end)
   }),
+  s("@now", {
+    d(1, function ()
+      -- see man strftime
+      local datetime_str =  os.date('%Y-%m-%d %H:%M')
+    ---@diagnostic disable-next-line: param-type-mismatch
+      local trimmed_datetime_str = datetime_str:gsub("^%s*(.-)%s*$", "%1")
+      return sn(nil, t(trimmed_datetime_str))
+    end)
+  }),
 
   -- see https://github.com/L3MON4D3/LuaSnip/wiki/Misc#dynamicnode-with-user-input
   -- plan is to
