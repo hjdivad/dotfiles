@@ -77,6 +77,21 @@ function __pick_branch {
 }
 alias pb='__pick_branch'
 
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=~/.zsh_history
+
+# enabled shared history across zsh shells
+setopt SHARE_HISTORY
+setopt INC_APPEND_HISTORY
+# don't store duplicate entries
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+# don't store command that start with a space
+setopt HIST_IGNORE_SPACE
+
+
 
 # set up unixy defaults
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
