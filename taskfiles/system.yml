@@ -51,14 +51,16 @@ tasks:
     status:
       - test -d $HOME/src/vadnu
     cmds:
-      - mkdir -p $HOME/src/vadnu/{ARCHIVE,attachments,docs,journal,projects,ref,someday,templates}
+      - mkdir -p $HOME/src/vadnu/global/
+      - mkdir -p $HOME/src/vadnu/local-vault/{ARCHIVE,attachments,docs,journal,projects,ref,someday,templates}
       - |
-        cat > $HOME/src/vadnu/todo.md << 'EOF'
+        cat > $HOME/src/vadnu/local-vault/todo.md << 'EOF'
         # nu
 
         **📆 dates:**
 
-        - [ ] set up vadnu syncing (e.g. $HOME/.config/vadnu-sync.lua)
+        - [ ] create a local-vault and rename $HOME/src/vadnu/local-vault
+        - [ ] open & sync $HOME/src/vadnu/global shared vault
 
         ## Areas of Responsibilty
 
