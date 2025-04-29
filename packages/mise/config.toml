@@ -23,6 +23,7 @@ usage = "latest"
 "npm:prettier" = "latest"
 "npm:mcp-hub" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
+"npm:jwt-cli" = "latest"
 
 [settings]
 experimental = true
