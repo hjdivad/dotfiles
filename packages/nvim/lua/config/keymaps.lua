@@ -123,16 +123,6 @@ kd("n", "<leader><Tab>[") -- previous tab
 -- add keymaps
 
 -- tab navigation
-ks("n", "<leader>1", "1gt", { desc = "go to tab 1" })
-ks("n", "<leader>2", "2gt", { desc = "go to tab 2" })
-ks("n", "<leader>3", "3gt", { desc = "go to tab 3" })
-ks("n", "<leader>4", "4gt", { desc = "go to tab 4" })
-ks("n", "<leader>5", "5gt", { desc = "go to tab 5" })
-ks("n", "<leader>6", "6gt", { desc = "go to tab 6" })
-ks("n", "<leader>7", "7gt", { desc = "go to tab 7" })
-ks("n", "<leader>8", "8gt", { desc = "go to tab 8" })
-ks("n", "<leader>9", "9gt", { desc = "go to tab 9" })
-ks("n", "<leader>0", "0gt", { desc = "go to tab 10" })
 ks({"n","t"}, "<F1>", "<Cmd>tabn 1<cr>", { desc = "go to tab 1" })
 ks({"n","t"}, "<F2>", "<Cmd>tabn 2<cr>", { desc = "go to tab 2" })
 ks({"n","t"}, "<F3>", "<Cmd>tabn 3<cr>", { desc = "go to tab 3" })

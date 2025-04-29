@@ -3,6 +3,7 @@
     "lazyvim.plugins.extras.dap.core",
     "lazyvim.plugins.extras.dap.nlua",
     "lazyvim.plugins.extras.editor.fzf",
+    "lazyvim.plugins.extras.editor.harpoon2",
     "lazyvim.plugins.extras.editor.inc-rename",
     "lazyvim.plugins.extras.lang.docker",
     "lazyvim.plugins.extras.lang.go",
@@ -22,6 +23,7 @@
     "plugins.extras.ai.codecompanion",
     "plugins.extras.dap.keymaps",
     "plugins.extras.editor.fzf",
+    "plugins.extras.editor.harpoon2",
     "plugins.extras.editor.open-browser",
     "plugins.extras.lang.markdown",
     "plugins.extras.test.neotest"
