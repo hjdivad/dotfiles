@@ -112,26 +112,28 @@ local tt_state = tt_states.start
 
 local ONE_DAY_SECS = 86400
 
+local DATE_FORMAT_LONG = '%Y-%m-%d (%A)'
+local DATE_FORMAT_SHORT = '%Y-%m-%d'
 ls.add_snippets("all", {
   s("@today-long", {
     d(1, function ()
-      return sn(nil, t(os.date('%e %b %Y (%A)')))
+      return sn(nil, t(os.date(DATE_FORMAT_LONG)))
     end)
   }),
   s("@yestesrday-long", {
     d(1, function ()
-      return sn(nil, t(os.date('%e %b %Y (%A)', os.time() - ONE_DAY_SECS)))
+      return sn(nil, t(os.date(DATE_FORMAT_LONG, os.time() - ONE_DAY_SECS)))
     end)
   }),
   s("@tomorrow-long", {
     d(1, function ()
-      return sn(nil, t(os.date('%e %b %Y (%A)', os.time() + ONE_DAY_SECS)))
+      return sn(nil, t(os.date(DATE_FORMAT_LONG, os.time() + ONE_DAY_SECS)))
     end)
   }),
   s("@today-short", {
     d(1, function ()
       -- see man strftime
-      local date_str =  os.date('%Y-%m-%d')
+      local date_str =  os.date(DATE_FORMAT_SHORT)
     ---@diagnostic disable-next-line: param-type-mismatch
       local trimmed_date_str = date_str:gsub("^%s*(.-)%s*$", "%1")
       return sn(nil, t(trimmed_date_str))
