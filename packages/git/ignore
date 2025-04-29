@@ -58,3 +58,4 @@ mise.local.toml
 
 # package-local env (often used for secrets)
 .env
+.env.*
