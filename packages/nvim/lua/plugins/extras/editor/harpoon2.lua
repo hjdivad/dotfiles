@@ -6,6 +6,20 @@ return {
   keys = function()
     local keys = {
       {
+        "<leader>ha",
+        function()
+          require("harpoon"):list():add()
+        end,
+        desc = "Harpoon add file",
+      },
+      {
+        "<leader>hr",
+        function()
+          require("harpoon"):list():remove()
+        end,
+        desc = "Harpoon remove file",
+      },
+      {
         "<leader>ht",
         function()
           local h = require("harpoon"):list()
