@@ -45,6 +45,21 @@ return {
         "fixjson",
         "shfmt",
         "stylua",
+        "gofumpt",
+        -- goimports requires per-project configuration in .lazy.lua
+        -- return {
+        --  {
+        --  	"stevearc/conform.nvim",
+        --  	opts = {
+        --  		formatters = {
+        --  			goimports = {
+        --  				args = { "--local", "github.com/my/local/package" },
+        --  			},
+        --  		},
+        --  	},
+        --  },
+        -- }
+        "goimports"
       },
       setup = {
         -- skip mason setup; rely on rust_analyzer from rustacean (which uses rustup)
