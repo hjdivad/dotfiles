@@ -25,8 +25,19 @@ return {
       { "<leader>fe", false },
       { "<leader>fE", false },
       { "<leader>E", false },
+      {
+        "<leader>eg",
+        "<cmd>Neotree git_status git_base=origin/HEAD reveal=true<cr>",
+        desc = "Show git status tree",
+        remap = true,
+      },
       { "<leader>ee", "<cmd>Neotree reveal=false<cr>", desc = "Show filesystem tree", remap = true },
-      { "<leader>ef", "<cmd>Neotree reveal_force_cwd<cr>", desc = "Open filesystem tree (sync to buffer)", remap = true },
+      {
+        "<leader>ef",
+        "<cmd>Neotree reveal_force_cwd<cr>",
+        desc = "Open filesystem tree (sync to buffer)",
+        remap = true,
+      },
       {
         "<leader>eE",
         ":Neotree action=focus source=filesystem dir=",
@@ -73,8 +84,8 @@ return {
         group_empty_dirs = true,
         scan_mode = "deep",
         follow_current_file = {
-          enabled = false
-        }
+          enabled = false,
+        },
       },
     },
   },
