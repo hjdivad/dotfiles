@@ -48,10 +48,10 @@ return {
             auto_insert = false,
           },
         },
-        menu = { border = "single" },
-        documentation = { window = { border = "single" } },
+        menu = { border = "rounded" },
+        documentation = { window = { border = "rounded" } },
       },
-      signature = { window = { border = "single" } },
+      signature = { window = { border = "rounded" } },
       sources = {
         -- see <~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/ai/copilot.lua> for copilot configuration
         -- the copilot completion has a +100 offset which is why it's always the first suggestion
