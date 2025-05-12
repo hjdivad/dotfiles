@@ -303,6 +303,16 @@ alias tsj=__ts_journal
 alias mr='mise run'
 
 
+# Enable proxyman to capture node http traffic
+# see <https://docs.proxyman.com/debug-devices/nodejs#id-1.-new-automatic-solution-v4.7.0-or-later>
+# Proxyman -> Setup -> Manual -> copy code
+function setup_proxyman {
+  set -a && source "/Users/hjdivad/Library/Application Support/com.proxyman.NSProxy/app-data/proxyman_env_automatic_setup.sh" && set +a
+}
+alias proxyman_setup=setup_proxyman
+
+
+
 source $ZSH_PATHRC
 
 
