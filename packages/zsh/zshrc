@@ -305,10 +305,6 @@ alias mr='mise run'
 
 source $ZSH_PATHRC
 
-# this is not using the `# CMD:` system because it captures `$PATH` at the time
-# it is ran, and we don't want to do that (it needs to be capturing `$PATH` at
-# shell startup time not when we build packages-dist)
-eval "$(mise activate zsh)"
 
 
 # set up zsh completions

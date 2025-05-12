@@ -37,3 +37,9 @@ __ensure_first_path "$HOME/src/github/malleatus/shared_binutils/global/target/de
 __ensure_first_path "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
 # org global added in $HOME/.zshrc.local
 __ensure_first_path "$HOME/.local/bin"
+
+
+# this is not using the `# CMD:` system because it captures `$PATH` at the time
+# it is ran, and we don't want to do that (it needs to be capturing `$PATH` at
+# shell startup time not when we build packages-dist)
+eval "$(mise activate zsh)"
