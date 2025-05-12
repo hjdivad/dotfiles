@@ -1,115 +1,123 @@
 // Place your key bindings in this file to override the defaults
 [
-    {
-        "key": "ctrl+`",
-        "command": "-workbench.action.terminal.toggleTerminal",
-        "when": "terminal.active"
-    },
-    {
-        "key": "ctrl+`",
-        "command": "workbench.debug.action.toggleRepl",
-        "when": "workbench.panel.repl.view.active"
-    },
-    {
-        "key": "shift+cmd+y",
-        "command": "-workbench.debug.action.toggleRepl",
-        "when": "workbench.panel.repl.view.active"
-    },
-    {
-        "key": "cmd+k",
-        "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
-        "when": "inFilesPicker && inQuickOpen"
-    },
-    {
-        "key": "shift+cmd+p",
-        "command": "-workbench.action.quickOpenNavigatePreviousInFilePicker",
-        "when": "inFilesPicker && inQuickOpen"
-    },
-    {
-        "key": "cmd+k",
-        "command": "workbench.action.showCommands"
-    },
-    {
-        "key": "shift+cmd+p",
-        "command": "-workbench.action.showCommands"
-    },
-    {
-        "key": "cmd+f cmd+f",
-        "command": "workbench.action.quickOpen"
-    },
-    {
-        "key": "cmd+p",
-        "command": "-workbench.action.quickOpen"
-    },
-    {
-        "key": "cmd+j",
-        "command": "workbench.action.debug.stepInto",
-        "when": "debugState != 'inactive'"
-    },
-    {
-        "key": "f11",
-        "command": "-workbench.action.debug.stepInto",
-        "when": "debugState != 'inactive'"
-    },
-    {
-        "key": "cmd+k",
-        "command": "workbench.action.debug.stepOut",
-        "when": "debugState == 'stopped'"
-    },
-    {
-        "key": "shift+f11",
-        "command": "-workbench.action.debug.stepOut",
-        "when": "debugState == 'stopped'"
-    },
-    {
-        "key": "shift+cmd+j",
-        "command": "workbench.action.debug.stepOver",
-        "when": "debugState == 'stopped'"
-    },
-    {
-        "key": "f10",
-        "command": "-workbench.action.debug.stepOver",
-        "when": "debugState == 'stopped'"
-    },
-    {
-        "key": "cmd+d cmd+c",
-        "command": "workbench.action.debug.continue",
-        "when": "debugState == 'stopped'"
-    },
-    {
-        "key": "f5",
-        "command": "-workbench.action.debug.continue",
-        "when": "debugState == 'stopped'"
-    },
-    {
-        "key": "ctrl+j",
-        "command": "workbench.action.debug.callStackDown"
-    },
-    {
-        "key": "ctrl+k",
-        "command": "workbench.action.debug.callStackUp"
-    },
-    {
-        "key": "cmd+k",
-        "command": "-workbench.debug.panel.action.clearReplAction",
-        "when": "focusedView == 'workbench.panel.repl.view'"
-    },
-    {
-        "key": "f9",
-        "command": "-editor.debug.action.toggleBreakpoint",
-        "when": "debuggersAvailable && disassemblyViewFocus || debuggersAvailable && editorTextFocus"
-    },
-    {
-        "key": "space",
-        "command": "-debug.toggleBreakpoint",
-        "when": "breakpointsFocused && !inputFocus"
-    },
-    {
-        "key": "cmd+b",
-        "command": "-workbench.action.toggleSidebarVisibility"
-    },
-    {
-        "key": "cmd+b",
-        "command": "editor.debug.action.toggleBreakpoint"
-    }
+  {
+    "key": "ctrl+`",
+    "command": "-workbench.action.terminal.toggleTerminal",
+    "when": "terminal.active"
+  },
+  {
+    "key": "ctrl+`",
+    "command": "workbench.debug.action.toggleRepl",
+    "when": "workbench.panel.repl.view.active"
+  },
+  {
+    "key": "shift+cmd+y",
+    "command": "-workbench.debug.action.toggleRepl",
+    "when": "workbench.panel.repl.view.active"
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
+    "when": "inFilesPicker && inQuickOpen"
+  },
+  {
+    "key": "shift+cmd+p",
+    "command": "-workbench.action.quickOpenNavigatePreviousInFilePicker",
+    "when": "inFilesPicker && inQuickOpen"
+  },
+  {
+    "key": "cmd+p",
+    "command": "workbench.action.showCommands"
+  },
+  {
+    "key": "shift+cmd+p",
+    "command": "-workbench.action.showCommands"
+  },
+  {
+    "key": "cmd+f cmd+f",
+    "command": "workbench.action.quickOpen"
+  },
+  {
+    "key": "cmd+p",
+    "command": "-workbench.action.quickOpen"
+  },
+  {
+    "key": "shift+cmd+j",
+    "command": "workbench.action.debug.stepInto",
+    "when": "debugState != 'inactive'"
+  },
+  {
+    "key": "f11",
+    "command": "-workbench.action.debug.stepInto",
+    "when": "debugState != 'inactive'"
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.debug.stepOut",
+    "when": "debugState == 'stopped'"
+  },
+  {
+    "key": "shift+f11",
+    "command": "-workbench.action.debug.stepOut",
+    "when": "debugState == 'stopped'"
+  },
+  {
+    "key": "cmd+j",
+    "command": "workbench.action.debug.stepOver",
+    "when": "debugState == 'stopped'"
+  },
+  {
+    "key": "f10",
+    "command": "-workbench.action.debug.stepOver",
+    "when": "debugState == 'stopped'"
+  },
+  {
+    "key": "cmd+d cmd+c",
+    "command": "workbench.action.debug.continue",
+    "when": "debugState == 'stopped'"
+  },
+  {
+    "key": "f5",
+    "command": "-workbench.action.debug.continue",
+    "when": "debugState == 'stopped'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.debug.callStackDown"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.debug.callStackUp"
+  },
+  {
+    "key": "cmd+k",
+    "command": "-workbench.debug.panel.action.clearReplAction",
+    "when": "focusedView == 'workbench.panel.repl.view'"
+  },
+  {
+    "key": "f9",
+    "command": "-editor.debug.action.toggleBreakpoint",
+    "when": "debuggersAvailable && disassemblyViewFocus || debuggersAvailable && editorTextFocus"
+  },
+  {
+    "key": "space",
+    "command": "-debug.toggleBreakpoint",
+    "when": "breakpointsFocused && !inputFocus"
+  },
+  {
+    "key": "cmd+b",
+    "command": "-workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "cmd+b",
+    "command": "editor.debug.action.toggleBreakpoint"
+  },
+  {
+    "key": "shift+cmd+b",
+    "command": "debug.enableOrDisableBreakpoint"
+  },
+  {
+    "key": "alt+cmd+b",
+    "command": "editor.debug.action.conditionalBreakpoint"
+  }
 ]
