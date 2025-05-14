@@ -16,7 +16,7 @@
   fo = fetch --prune origin
   fa = fetch --prune --all
 
-  rr = !sh -c 'git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD)'
+  rr = "!f() { if git rev-parse --verify refs/remotes/origin/HEAD >/dev/null 2>&1; then git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD); else git rebase -i $(git merge-base HEAD refs/remotes/upstream/HEAD); fi; }; f"
   rro = rebase -i refs/remotes/origin/HEAD
   rc = rebase --continue
 
