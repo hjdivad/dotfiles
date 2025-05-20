@@ -77,6 +77,24 @@ function __pick_branch {
 }
 alias pb='__pick_branch'
 
+function __goto_root {
+  local current_dir="$PWD"
+  local root_markers=(".git" ".nvim.lua" ".lazy.lua")
+  
+  while [[ "$current_dir" != "/" ]]; do
+    for marker in "${root_markers[@]}"; do
+      if [[ -e "$current_dir/$marker" ]]; then
+        cd "$current_dir"
+        return 0
+      fi
+    done
+    current_dir="$(dirname "$current_dir")"
+  done
+  
+  return 1
+}
+alias gr=__goto_root
+
 HISTSIZE=50000
 SAVEHIST=50000
 HISTFILE=~/.zsh_history
