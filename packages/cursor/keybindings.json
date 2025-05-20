@@ -87,5 +87,15 @@
   {
     "key": "shift+cmd+b",
     "command": "debug.enableOrDisableBreakpoint"
+  },
+  {
+    "key": "cmd+d cmd+s",
+    "command": "workbench.action.debug.start",
+    "when": "debuggersAvailable && debugState == 'inactive'"
+  },
+  {
+    "key": "f5",
+    "command": "-workbench.action.debug.start",
+    "when": "debuggersAvailable && debugState == 'inactive'"
   }
 ]
