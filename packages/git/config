@@ -1,6 +1,7 @@
 [alias]
   c = checkout
   cb = "!f() { git checkout $(git branch | sed 's/^.\\{2\\}//' | fzf -m --bind 'ctrl-h:clear-query'); }; f"
+  cbm = "!f() { git show-ref --verify --quiet refs/heads/master && git checkout master || git checkout main; }; f"
   backup = "!f() { local name=`git name-rev HEAD | cut -d' ' -f 2`; git branch -D \"backup/$name\" 2> /dev/null; git branch \"backup/$name\"; }; f"
 	ff = merge --ff-only
 
@@ -16,7 +17,7 @@
   fo = fetch --prune origin
   fa = fetch --prune --all
 
-  rr = "!f() { if git rev-parse --verify refs/remotes/origin/HEAD >/dev/null 2>&1; then git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD); else git rebase -i $(git merge-base HEAD refs/remotes/upstream/HEAD); fi; }; f"
+  rr = "!f() { if git rev-parse --verify refs/remotes/upstream/HEAD >/dev/null 2>&1; then git rebase -i $(git merge-base HEAD refs/remotes/upstream/HEAD); else git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD); fi; }; f"
   rro = rebase -i refs/remotes/origin/HEAD
   rc = rebase --continue
 
@@ -46,7 +47,7 @@
   log-sans-botm =  "!f() { git log --no-merges \"$@\"; }; f -P --author='^(?!dependabot)'"
   log-since-last-release = "!f() { git log --no-merges \"$@\" $(git tag --sort=-v:refname | head -n 1)..; }; f -P --author='^(?!dependabot)'"
   lg = log-sans-bot --stat --show-signature
-  logb = log-sans-bot origin/HEAD..
+  logb = "!f() { if git rev-parse --verify refs/remotes/upstream/HEAD >/dev/null 2>&1; then git log-sans-bot upstream/HEAD..; else git log-sans-bot origin/HEAD..; fi; }; f"
   logr = log-sans-bot ..origin/HEAD
   lgb = log-sans-bot --no-merges --stat origin/HEAD..
   lgr = log-sans-bot --no-merges --stat ..origin/HEAD
