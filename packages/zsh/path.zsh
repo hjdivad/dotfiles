@@ -28,10 +28,6 @@ export CARGO_HOME="$HOME/.cargo"
 
 __ensure_first_path "/opt/homebrew/bin"
 __ensure_first_path "/opt/homebrew/sbin"
-if command -v volta > /dev/null 2>&1; then
-  export VOLTA_HOME="$HOME/.volta"
-  __ensure_first_path "$VOLTA_HOME/bin"
-fi
 __ensure_first_path "$CARGO_HOME/bin"
 __ensure_first_path "$HOME/src/github/malleatus/shared_binutils/global/target/debug"
 __ensure_first_path "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
