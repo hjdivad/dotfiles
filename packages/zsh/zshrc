@@ -134,6 +134,12 @@ alias lsof-tcp='lsof -iTCP'
 # List only active network devices
 alias ifconfig-active="ifconfig | rg --color=never -U '^[^\t:]+:([^\n]|\n\t)*status: active'"
 
+
+if [[ "$OSTYPE" == darwin* ]]; then
+  # see <https://chatgpt.com/share/683774b6-5a94-8007-bf8c-18f6e846a5a2>
+  alias ls-protocol-handlers='defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers'
+fi
+
 alias ssh-no-agent-forwarding='ssh -o "ForwardAgent no"'
 alias ssh-copy-auth-sock='echo -n $SSH_AUTH_SOCK | pbcopy'
 
