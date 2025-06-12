@@ -4,13 +4,13 @@ return {
   -- Show context of the current function
   {
     "nvim-treesitter/nvim-treesitter-context",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     event = "LazyFile",
-    enabled = true,
-    opts = { mode = "cursor", max_lines = 3 },
-    config = function (_, opts)
-      require('nvim-treesitter.configs').setup(opts)
-      local overrides = require('hjdivad_util.ts_overrides')
+    opts = { enable = true, mode = "cursor", max_lines = 3 },
+    config = function(_, opts)
+      local overrides = require("hjdivad_util.ts_overrides")
       overrides.load_ts_query_overrides()
+      require("treesitter-context").setup(opts)
     end,
     keys = {
       {
