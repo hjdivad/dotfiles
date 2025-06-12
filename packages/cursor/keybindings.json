@@ -97,5 +97,13 @@
     "key": "f5",
     "command": "-workbench.action.debug.start",
     "when": "debuggersAvailable && debugState == 'inactive'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.debug.callStackDown"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.debug.callStackUp"
   }
 ]
