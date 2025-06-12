@@ -30,6 +30,8 @@
   # commit all amend leave message alone
   camm = "!f() { git add -A && git commit -a --amend -CHEAD \"$@\"; }; f"
 
+  wip = ca --allow-empty -m "WIP"
+
   # amend
   cm = commit --amend
   # amend leave message alone
