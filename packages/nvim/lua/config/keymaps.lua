@@ -166,7 +166,7 @@ else
 end
 
 ks("n", "<leader>yf", function()
-  vim.fn.setreg(clipboard_reg, vim.fn.expand("%"))
+  vim.fn.setreg(clipboard_reg, vim.fn.expand("%:."))
 end, { desc = "yank path (buf) to clipboard" })
 ks("n", "<leader>yF", function()
   vim.fn.setreg(clipboard_reg, vim.fn.expand("%:p"))
