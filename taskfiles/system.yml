@@ -105,7 +105,7 @@ tasks:
     status:
       - which {{.BINARY}}
     cmds:
-      - cargo binstall --locked --no-confirm {{.TOOL}}
+      - cargo install --locked --no-confirm {{.TOOL}}
 
   install:linux_fzf:
     internal: true
