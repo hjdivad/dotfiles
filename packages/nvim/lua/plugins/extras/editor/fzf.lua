@@ -52,13 +52,6 @@ return {
         end,
         desc = "tmux -> todos",
       },
-      {
-        "<leader>tsj",
-        function()
-          tmux.goto_tmux_session("📋 todos", "journal")
-        end,
-        desc = "tmux -> journal",
-      },
       { "<leader>tst", "<Cmd>silent !tmux switch-client -l<cr>", desc = "tmux -> toggle" },
       {
         "<leader>tss",
