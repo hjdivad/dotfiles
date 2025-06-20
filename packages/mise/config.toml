@@ -27,6 +27,7 @@ usage = "latest"
 "go:golang.org/x/tools/cmd/goimports" = "latest"
 golangci-lint = "latest"
 "npm:sort-package-json" = "latest"
+pnpm = "latest"
 
 [settings]
 experimental = true
