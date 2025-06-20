@@ -105,5 +105,41 @@
   {
     "key": "ctrl+k",
     "command": "workbench.action.debug.callStackUp"
+  },
+  {
+    "key": "cmd+f cmd+l",
+    "command": "actions.find",
+    "when": "editorFocus || editorIsOpen"
+  },
+  {
+    "key": "cmd+f",
+    "command": "-actions.find",
+    "when": "editorFocus || editorIsOpen"
+  },
+  {
+    "key": "cmd+d cmd+l",
+    "command": "testing.debugLastRun"
+  },
+  {
+    "key": "cmd+; cmd+l",
+    "command": "-testing.debugLastRun"
+  },
+  {
+    "key": "cmd+t cmd+d",
+    "command": "testing.debugAtCursor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+; cmd+c",
+    "command": "-testing.debugAtCursor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+s cmd+s",
+    "command": "workbench.action.showAllSymbols"
+  },
+  {
+    "key": "cmd+t",
+    "command": "-workbench.action.showAllSymbols"
   }
 ]
