@@ -1,3 +1,28 @@
-snippet schema:tsconfig "schema for tsconfig.json"
+snippet @schema:tsconfig "schema for tsconfig.json"
 	"$$schema": "https://json.schemastore.org/tsconfig.json",
 
+snippet @default:tsconfig:node
+  {
+    "$$schema": "https://json.schemastore.org/tsconfig.json",
+    "include": ["./src"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+      "target": "es2017",
+      "module": "nodenext",
+      "lib": ["es2022"],
+      "rootDir": "./src",
+      "outDir": "./build",
+      "declaration": true,
+      "declarationMap": true,
+      "sourceMap": true,
+      "moduleResolution": "nodenext",
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "strict": true,
+      "checkJs": true,
+      "allowJs": true,
+      "skipLibCheck": true,
+      "baseUrl": ".",
+      "paths": {}
+    }
+  }
