@@ -28,6 +28,7 @@ usage = "latest"
 golangci-lint = "latest"
 "npm:sort-package-json" = "latest"
 pnpm = "latest"
+"npm:claude" = "latest"
 
 [settings]
 experimental = true
