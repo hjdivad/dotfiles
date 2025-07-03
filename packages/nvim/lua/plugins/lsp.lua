@@ -26,7 +26,7 @@ return {
         "lua-language-server",
         "marksman",
         "pyright",
-        "ruff-lsp",
+        "ruff",
         "sqlls",
         "typescript-language-server",
         "yaml-language-server",
@@ -46,6 +46,7 @@ return {
         "shfmt",
         "stylua",
         "gofumpt",
+        "gopls",
         -- goimports requires per-project configuration in .lazy.lua
         -- return {
         --  {
