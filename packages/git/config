@@ -17,8 +17,9 @@
   fo = fetch --prune origin
   fa = fetch --prune --all
 
+  um = update-ref refs/heads/master origin/master
+
   rr = "!f() { if git rev-parse --verify refs/remotes/upstream/HEAD >/dev/null 2>&1; then git rebase -i $(git merge-base HEAD refs/remotes/upstream/HEAD); else git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD); fi; }; f"
-  rro = rebase -i refs/remotes/origin/HEAD
   rc = rebase --continue
 
   ap = add --patch
@@ -30,7 +31,7 @@
   # commit all amend leave message alone
   camm = "!f() { git add -A && git commit -a --amend -CHEAD \"$@\"; }; f"
 
-  wip = ca --allow-empty -m "WIP"
+  wip = ca --allow-empty -m "WIP" --no-verify
 
   # amend
   cm = commit --amend
@@ -38,6 +39,8 @@
   cmm = commit --amend -CHEAD
 
   pu = push --force-with-lease
+
+  gip = grep -iP
 
   h = help
 
