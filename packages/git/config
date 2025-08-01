@@ -107,6 +107,9 @@
   autoSetupRebase = always
   sort = -committerdate
 
+[pull]
+  rebase = true
+
 [core]
 	editor = nvim
   pager = delta
