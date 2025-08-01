@@ -29,6 +29,7 @@ golangci-lint = "latest"
 "npm:sort-package-json" = "latest"
 pnpm = "latest"
 "npm:claude" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "latest"
 
 [settings]
 experimental = true
