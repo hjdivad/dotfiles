@@ -125,6 +125,16 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+--TODO: this doesn't work properly because BufNewFile is not called during
+--VimEnter, see :he VimEnter
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "**/*.prompt.md" },
+  group = ft_group,
+  callback = function()
+    require("luasnip").filetype_extend("markdown", { "prompt" })
+  end,
+})
+
 term.setup()
 
 
