@@ -26,7 +26,8 @@ alias 'nvim-debug'='nvim -V12 --cmd "set verbosefile=/tmp/vim.log"'
 set -o vi
 
 # set up cursor
-alias curs='cursor'
+alias curs='cursor-agent'
+alias cursor-ide='cursor'
 
 
 # set up fzf
