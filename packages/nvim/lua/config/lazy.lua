@@ -21,6 +21,9 @@ require("lazy").setup({
     {
       "LazyVim/LazyVim",
       import = "lazyvim.plugins",
+      opts = {
+        colorscheme = "catppuccin-mocha"
+      }
     },
     { import = "plugins" },
     -- NOTE: local_nvim is symlinked in from local-dotfiles to allow for local
@@ -38,9 +41,10 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   -- TODO: configure tokyonight? https://github.com/folke/tokyonight.nvim#%EF%B8%8F-configuration
+  -- TODO: configure catppuccin https://github.com/catppuccin/nvim?tab=readme-ov-file#configuration
   install = {
     missing = install_missing_plugins,
-    colorscheme = { "tokyonight", "habamax" },
+    colorscheme = { "catpuccin-mocha", "tokyonight", "habamax" },
   },
   checker = {
     -- disable automatic plugin updating.
