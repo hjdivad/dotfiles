@@ -54,6 +54,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { ".mise/tasks/*.sh", ".mise-tasks/*.sh"},
+  group = ft_group,
+  callback = function()
+    require("luasnip").filetype_extend("sh", { "mise_sh" })
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = ".markdownlintrc",
   group = ft_group,
   callback = function()
