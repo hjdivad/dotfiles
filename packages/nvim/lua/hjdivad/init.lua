@@ -1,4 +1,4 @@
-local map_stack = require("hjdivad_util/map_stack")
+local map_stack = require("hjdivad/map_stack")
 
 local M = {}
 

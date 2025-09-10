@@ -72,5 +72,5 @@ require("lazy").setup({
 --after +cmds and I won't be able to do nvim +StartAgent
 vim.api.nvim_create_user_command("StartAgent", function()
   -- TODO: take an arg (autocomplete agent names from agent lib)
-  require('hjdivad_util.agent').StartAgent()
+  require('hjdivad.agent').StartAgent()
 end, { desc = "Start a CLI Agent" })

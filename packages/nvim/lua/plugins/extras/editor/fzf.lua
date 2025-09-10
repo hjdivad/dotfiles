@@ -1,4 +1,4 @@
-local tmux = require("hjdivad_util.tmux")
+local tmux = require("hjdivad.tmux")
 
 -- TODO: maybe switch to Snacks.picker?
 

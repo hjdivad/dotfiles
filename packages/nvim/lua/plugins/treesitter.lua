@@ -8,7 +8,7 @@ return {
     event = "LazyFile",
     opts = { enable = true, mode = "cursor", max_lines = 3 },
     config = function(_, opts)
-      local overrides = require("hjdivad_util.ts_overrides")
+      local overrides = require("hjdivad.ts_overrides")
       overrides.load_ts_query_overrides()
       require("treesitter-context").setup(opts)
     end,

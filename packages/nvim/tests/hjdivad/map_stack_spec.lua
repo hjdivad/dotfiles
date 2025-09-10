@@ -1,7 +1,7 @@
 describe("map_stack", function()
 	local assert = require("luassert")
 	---@type MapStack
-	local map_stack = require("hjdivad_util/map_stack")
+	local map_stack = require("hjdivad.map_stack")
 
 	local function filter_keymaps(keymaps, properties)
 		local result = {}

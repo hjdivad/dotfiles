@@ -1,4 +1,4 @@
-local tmux = require("hjdivad_util.tmux")
+local tmux = require("hjdivad.tmux")
 
 describe("tmux", function()
 	local assert = require("luassert")

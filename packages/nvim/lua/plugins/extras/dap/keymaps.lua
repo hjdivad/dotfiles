@@ -1,9 +1,9 @@
-local hjdivad_util = require("hjdivad_util")
-local hjdivad_os = require("hjdivad_util.os")
+local hjdivad = require("hjdivad.init")
+local hjdivad_os = require("hjdivad.os")
 local ft_keymaps = vim.api.nvim_create_augroup("nvim_dap_keymaps", { clear = true })
-local debugger = require("hjdivad_util.debugger")
+local debugger = require("hjdivad.debugger")
 
-local args_list = hjdivad_util.args_list
+local args_list = hjdivad.args_list
 local ConfigurationsPath = hjdivad_os.cache_path("dap-configurations.json")
 
 local function load_configurations()
@@ -34,7 +34,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   callback = function()
     vim.keymap.set("n", "<leader>dr", function()
       local n = require("noice")
-      local venv = require("hjdivad_util/venv")
+      local venv = require("hjdivad.venv")
       local dap = require("dap")
 
       local function echo(msg)
@@ -215,7 +215,7 @@ return {
       end
       dap.listeners.after.event_initialized["dapui_keymaps"] = function()
         ---@type MapStack
-        local map_stack = require("hjdivad_util/map_stack")
+        local map_stack = require("hjdivad.map_stack")
         map_stack.push(function(keymap)
           -- dap thinks stacks grow down
           keymap.set("n", "<c-j>", dap.up, { desc = "down one stack frame" })
@@ -257,7 +257,7 @@ return {
       end
       dap.listeners.before.event_terminated["dapui_keymaps"] = function()
         ---@type MapStack
-        local map_stack = require("hjdivad_util/map_stack")
+        local map_stack = require("hjdivad.map_stack")
         map_stack.pop()
       end
     end,
