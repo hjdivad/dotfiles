@@ -229,6 +229,10 @@ export PWS_CHARPOOL="${ALPHANUM}~@$%^*()_+="
 export PWS_LENGTH=16
 export PWS_SECONDS=60
 
+# This should be redundant, but a bunch of libraries really want to put config
+# in ~/Library/Application Support
+export XDG_CONFIG_HOME="$HOME/.config"
+
 
 # set up android
 if [[ -n "$(which android > /dev/null 2>&1)" ]]; then
