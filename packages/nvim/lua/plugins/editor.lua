@@ -1,3 +1,11 @@
+
+local function show_git_changes_tree()
+  local hjdivad = require('hjdivad.git')
+  local merge_base = hjdivad.merge_base()
+  vim.cmd(string.format("Neotree git_status git_base=%s reveal=true", merge_base))
+  hjdivad.set_gs_to_merge_base(merge_base)
+end
+
 ---@type LazyPluginSpec[]
 return {
   -- see https://www.lazyvim.org/plugins/editor
@@ -27,7 +35,7 @@ return {
       { "<leader>E", false },
       {
         "<leader>eg",
-        "<cmd>Neotree git_status git_base=origin/HEAD reveal=true<cr>",
+        show_git_changes_tree,
         desc = "Show git status tree",
         remap = true,
       },
@@ -177,7 +185,7 @@ return {
         map("n", "<leader>gb", function()
           gs.blame_line({ full = true })
         end, "Blame Line")
-        map("n", "<leader>Gd", gs.diffthis, "Diff This")
+        map("n", "<leader>gd", gs.diffthis, "Diff This")
         map("n", "<leader>GB", update_git_base, "Set git base to --merge-base")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
         map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
