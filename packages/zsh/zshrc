@@ -361,6 +361,11 @@ __mov2gif() {
 }
 alias mov2gif='__mov2gif'
 
+function pkce_challenge() {
+  local code_verifier="$1"
+  printf %s "$code_verifier" | openssl dgst -sha256 -binary | openssl base64 -A | tr '+/' '-_' | tr -d '='
+}
+
 
 # Enable proxyman to capture node http traffic
 # see <https://docs.proxyman.com/debug-devices/nodejs#id-1.-new-automatic-solution-v4.7.0-or-later>
