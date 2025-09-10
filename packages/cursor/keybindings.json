@@ -135,7 +135,7 @@
     "when": "editorTextFocus"
   },
   {
-    "key": "cmd+s cmd+s",
+    "key": "cmd+f cmd+s",
     "command": "workbench.action.showAllSymbols"
   },
   {
