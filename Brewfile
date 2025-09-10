@@ -135,8 +135,6 @@ cask "iterm2"
 cask "krisp"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
-# Get up and running with large language models locally
-cask "ollama"
 # Notepad with a built-in calculator
 cask "soulver"
 # Open-source code editor
