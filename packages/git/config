@@ -8,7 +8,7 @@
 	ff = merge --ff-only
 
   b = branch -vv --sort=committerdate
-  br = "!f() { git branch -r -l 'origin/*'| egrep -v '(HEAD|master|dependabot/)' | xargs git branch -r --sort=committerdate --format='  %(refname:lstrip=3) %(color:white)%(objectname:short)' -l --; }; f"
+  br = "!f() { git branch -r -l 'origin/*'$1'*' | egrep -v '(HEAD|master|dependabot/)' | xargs git branch -r --sort=committerdate --format='  %(refname:lstrip=3) %(color:white)%(objectname:short)' -l --; }; f"
 
   delete-merged-branches = !git branch --merged | egrep -v \"(^\\*|master|main)\" | xargs -n 1 git branch -d && git remote prune origin
 
