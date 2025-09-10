@@ -30,6 +30,7 @@ golangci-lint = "latest"
 pnpm = "latest"
 "npm:claude" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
+"npm:ccstatusline" = "latest"
 
 [settings]
 experimental = true

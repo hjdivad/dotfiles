@@ -167,6 +167,8 @@ tasks:
         - "packages/alfred/preferences/features/websearch/yahoo|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yahoo"
         - "packages/alfred/preferences/features/websearch/youtube|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/youtube"
         - "packages/alfred/preferences/features/websearch/yubnub|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yubnub"
+        - "packages/ccstatusline/|$HOME/.config/ccstatusline"
+        - "packages/claude/settings.json|$HOME/.claude/settings.json"
         - "local-packages/claude/claude_desktop_config.json|$HOME/Library/Application Support/Claude/claude_desktop_config.json"
         - "packages/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
         - "local-packages/cursor/settings.json|$HOME/Library/Application Support/Cursor/User/settings.json"
