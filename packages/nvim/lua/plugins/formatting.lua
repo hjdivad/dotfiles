@@ -26,6 +26,7 @@ return {
       formatters_by_ft = {
         typescript = { "prettier" },
         go = { "golines", "goimports", "gofmt" },
+        toml = { "taplo" },
       },
     },
   },

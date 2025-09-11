@@ -31,6 +31,7 @@ return {
         "typescript-language-server",
         "yaml-language-server",
         "json-lsp",
+        "taplo",
 
         -- dap
         "codelldb",
@@ -165,6 +166,7 @@ return {
             },
           },
         },
+        taplo = {},
       },
     },
   },
