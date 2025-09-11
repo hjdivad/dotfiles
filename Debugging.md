@@ -4,8 +4,8 @@
 
 *WIP* osv is not properly configured yet*
 
-- `<leader>daL` - "dap adapter Lua (server)"
-- `<leader>dal>` - "dap adapter lua (client)"
+- `<leader>dL` - "start lua debug server"
+- `<leader>dc` (in lua file) - "attach to running debug server"
 
 ### Troubleshooting
 
