@@ -1,6 +1,7 @@
 [alias]
   c = checkout
   cb = "!f() { git checkout $(git branch | sed 's/^.\\{2\\}//' | fzf -m --bind 'ctrl-h:clear-query'); }; f"
+  cbr = "!f() { git checkout $(git branch -r -l 'origin/*'$1'*' | egrep -v '(HEAD|master|dependabot/)' | xargs git branch -lr --sort=committerdate --format='%(refname:lstrip=3)' | fzf -m --bind 'ctrl-h:clear-query'); }; f"
   cbm = "!f() { git show-ref --verify --quiet refs/heads/master && git checkout master || git checkout main; }; f"
   cbd = "!f() { git show-ref --verify --quiet refs/remotes/origin/master && git checkout --detach origin/master || git checkout --detach refs/remotes/origin/main; }; f"
 
