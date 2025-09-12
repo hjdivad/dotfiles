@@ -1,10 +1,6 @@
 
-local function show_git_changes_tree()
-  local hjdivad = require('hjdivad.git')
-  local merge_base = hjdivad.merge_base()
-  vim.cmd(string.format("Neotree git_status git_base=%s reveal=true", merge_base))
-  hjdivad.set_gs_to_merge_base(merge_base)
-end
+-- Git changes tree function moved to hjdivad.neotree module
+local neotree_git = require('hjdivad.neotree')
 
 ---@type LazyPluginSpec[]
 return {
@@ -35,7 +31,7 @@ return {
       { "<leader>E", false },
       {
         "<leader>eg",
-        show_git_changes_tree,
+        neotree_git.show_git_changes_tree,
         desc = "Show git status tree",
         remap = true,
       },
@@ -86,6 +82,20 @@ return {
             cmd.open(state)
             vim.cmd([[Neotree close]])
           end,
+        },
+      },
+      git_status = {
+        window = {
+          mappings = {
+            ["<cr>"] = function(state)
+              local node = state.tree:get_node()
+              if node and node.type == "file" then
+                require('hjdivad.neotree').open_file_for_diff(state)
+              else
+                require("neo-tree/sources/common/commands").toggle_node(state)
+              end
+            end
+          },
         },
       },
       filesystem = {
@@ -185,7 +195,7 @@ return {
         map("n", "<leader>gb", function()
           gs.blame_line({ full = true })
         end, "Blame Line")
-        map("n", "<leader>gd", gs.diffthis, "Diff This")
+        map("n", "<leader>Gd", gs.diffthis, "Diff This")
         map("n", "<leader>GB", update_git_base, "Set git base to --merge-base")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
         map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
