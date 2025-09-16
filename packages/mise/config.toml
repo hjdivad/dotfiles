@@ -31,6 +31,7 @@ pnpm = "latest"
 "npm:claude" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 "npm:ccstatusline" = "latest"
+"npm:codex" = "latest"
 
 [settings]
 experimental = true
