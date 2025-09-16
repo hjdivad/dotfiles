@@ -46,6 +46,19 @@ return {
         desc = "find spelling suggestion",
       },
       {
+        "<leader>gs",
+        function()
+          local git = require("hjdivad.git")
+          local ref = git.merge_base()
+          if ref == nil or ref == "" then
+            vim.notify("git: no merge base found", vim.log.levels.WARN)
+            return
+          end
+          require("fzf-lua").git_diff({ commit = ref })
+        end,
+        desc = "git diff vs merge-base",
+      },
+      {
         "<leader>tsd",
         function()
           tmux.goto_tmux_session("📋 todos", "todos")
