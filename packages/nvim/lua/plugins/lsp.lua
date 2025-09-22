@@ -1,5 +1,3 @@
-local lsputil = require("lspconfig.util")
-
 local function diagnostic_goto(next, severity)
   local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
@@ -63,7 +61,7 @@ return {
         --  	},
         --  },
         -- }
-        "goimports",
+        "goimports"
       },
       setup = {
         -- skip mason setup; rely on rust_analyzer from rustacean (which uses rustup)
@@ -167,16 +165,6 @@ return {
               desc = "Toggle OSV (lua debugee server)",
             },
           },
-        },
-        pyright = {
-          root_dir = lsputil.root_pattern(
-            "pyrightconfig.json",
-            "pyproject.toml",
-            "setup.cfg",
-            "setup.py",
-            "requirements.txt",
-            ".git"
-          ),
         },
         taplo = {},
       },
