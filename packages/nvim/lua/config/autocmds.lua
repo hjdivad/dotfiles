@@ -62,6 +62,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = {  ".github/dependabot.yml", ".github/dependabot.yaml" },
+  group = ft_group,
+  callback = function()
+    require("luasnip").filetype_extend("yaml", { "dependabot" })
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = ".markdownlintrc",
   group = ft_group,
   callback = function()
