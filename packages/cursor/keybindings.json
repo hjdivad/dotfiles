@@ -141,9 +141,5 @@
   {
     "key": "cmd+t",
     "command": "-workbench.action.showAllSymbols"
-  },
-  {
-    "key": "cmd+e",
-    "command": "composerMode.background"
   }
 ]
