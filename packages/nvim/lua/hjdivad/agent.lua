@@ -2,7 +2,7 @@ local M = {}
 
 local agents = {
   claude = "claude --dangerously-skip-permissions",
-  cursor = "cursor-agent",
+  cursor = "cursor-agent -f",
 }
 
 local function do_start_agent(agent_cmd)
