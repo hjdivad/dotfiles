@@ -1,4 +1,16 @@
-snippet @agent:build
-  Investigate however much you want: read files, search the web, &c.  Then formulate a plan.  
+snippet @agent_plan
+  Investigate however much you want: read files, search the web, &c. Ask any clarifying questions and then
+  formulate a plan.
 
-  DO NOT MAKE ANY EDITS until first confirming the plan with me.
+snippet @agent_scio_migration
+  We're working on a release migration.
+
+  Find the migrations at python_scio/deployment/upgrades/common.
+  Here's an example: python_scio/deployment/upgrades/common/release_20250918.py
+
+  We're adding to the next migration.  Check the current date to determine which one that is.  We cut releases
+  tuesdays and thursdays.  If the migration script for the next migration doesn't exist yet, create it.  Use
+  python_scio/deployment/upgrades/common/release_20250918.py as a template.  You'll have to update
+  python_scio/deployment/upgrades/common/BUILD.bazel as well.
+
+  If our migration requires SQL, put those files in java/com/askscio/storage/sql/scripts/upgrade_operations/
