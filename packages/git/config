@@ -4,6 +4,7 @@
   cbr = "!f() { git checkout $(git branch -r -l 'origin/*'$1'*' | egrep -v '(HEAD|master|dependabot/)' | xargs git branch -lr --sort=committerdate --format='%(refname:lstrip=3)' | fzf -m --bind 'ctrl-h:clear-query'); }; f"
   cbm = "!f() { git show-ref --verify --quiet refs/heads/master && git checkout master || git checkout main; }; f"
   cbd = "!f() { git show-ref --verify --quiet refs/remotes/origin/master && git checkout --detach origin/master || git checkout --detach refs/remotes/origin/main; }; f"
+  cbdr = "!f() { git fam && git cbd; }; f"
 
   backup = "!f() { local name=`git name-rev HEAD | cut -d' ' -f 2`; git branch -D \"backup/$name\" 2> /dev/null; git branch \"backup/$name\"; }; f"
 	ff = merge --ff-only
