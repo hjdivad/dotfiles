@@ -71,6 +71,25 @@ return {
         tmux.goto_fzf_tmux_session,
         desc = "tmux -> fzf session",
       },
+      {
+        "<leader>hh",
+        function()
+          local harpoon = require("harpoon")
+          local harpoon_files = harpoon:list()
+          local file_paths = {}
+
+          for _, item in ipairs(harpoon_files.items) do
+            table.insert(file_paths, item.value)
+          end
+
+          require("fzf-lua").fzf_exec(file_paths, {
+            prompt = "Harpoon> ",
+            actions = require("fzf-lua").defaults.actions.files,
+            previewer = "builtin",
+          })
+        end,
+        desc = "Harpoon files (fzf)",
+      },
     },
   },
 }

@@ -35,14 +35,6 @@ return {
         end,
         desc = "Harpoon File (toggle)",
       },
-      {
-        "<leader>hh",
-        function()
-          local harpoon = require("harpoon")
-          harpoon.ui:toggle_quick_menu(harpoon:list())
-        end,
-        desc = "Harpoon Quick Menu",
-      },
     }
 
     for i = 1, 5 do
