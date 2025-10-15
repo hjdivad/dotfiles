@@ -241,7 +241,7 @@ function M.switch_to_git_changes_tab()
   end
 
   -- Create new tab
-  vim.cmd("tabnew")
+  vim.cmd("-tabnew")
   M.git_changes_tab = vim.api.nvim_get_current_tabpage()
 end
 
