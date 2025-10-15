@@ -2,7 +2,7 @@
 # see https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#snipmate
 # see https://github.com/garbas/vim-snipmate/blob/525f331320427bf7aeb07651e2536b1f8a23df03/doc/SnipMate.txt#L310-L513
 
-snippet __dirname "get __dirname of a script"
+snippet @dirname "get __dirname of a script"
 	local function __dirname()
 		local fullpath = debug.getinfo(1,"S").source:sub(2)
 		local dirname, filename = fullpath:match('^(.*/)([^/]-)$')
@@ -10,7 +10,7 @@ snippet __dirname "get __dirname of a script"
 		return dirname, filename
 	end
 
-snippet class "create a class in lua"
+snippet @class "create a class in lua"
 	local ${1:ClassName} = {}
 	${1:ClassName}.__index = ${1:ClassName}
 
@@ -22,15 +22,18 @@ snippet class "create a class in lua"
 
 	${0}
 
+snippet @lint_disable_next_line_missing_fields
+  ---@diagnostic disable-next-line: missing-fields
+
 # vim snippets
 
-snippet opts "options with defaults"
+snippet @opts "options with defaults"
   ---@type ${1:OptionsTypeName}
   local default_options = { ${0:defaults} }
   ---@type ${1:OptionsTypeName}
   local opts = vim.tbl_deep_extend("force", default_options, options or {})
 
-snippet autocmd
+snippet @autocmd
 	vim.api.nvim_create_autocmd({ "${1:BufEnter}" }, {
 		pattern = "${2:*.lua}",
 		group = vim.api.nvim_create_augroup("${3:hjdivad_exrc}", { clear=true }),
@@ -39,15 +42,15 @@ snippet autocmd
 		end,
 	})
 
-snippet usercmd
+snippet @usercmd
 	vim.api.nvim_create_user_command("${1:HiUserCommand}", function()
 		${0}
 	end, { desc = "${2:What does it do?}" })
 
-snippet stylua-ignore "don't format the next line"
+snippet @stylua_ignore "don't format the next line"
 	-- stylua: ignore
 
-snippet local-snippets "create project local snippets setup in .nvim.lua"
+snippet @local_snippets "create project local snippets setup in .nvim.lua"
 	-- .nvim.lua
 	-- TODO: mkdir -p .nvim/snippets && touch .nvim/snippets/${0}_local.snippets
 	local ls = require("luasnip")
