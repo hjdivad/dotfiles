@@ -13,7 +13,8 @@ uv = "latest"
 
 # software verification (see https://mise.jdx.dev/tips-and-tricks.html#software-verification)
 slsa-verifier = "latest"
-cosign = "latest"
+# see <https://github.com/jdx/mise/discussions/6655>
+# cosign = "latest"
 
 # provides completion and parsing support for tasks see:
 # https://mise.jdx.dev/tasks/file-tasks.html#arguments
@@ -28,7 +29,6 @@ usage = "latest"
 golangci-lint = "latest"
 "npm:sort-package-json" = "latest"
 pnpm = "latest"
-"npm:claude" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 "npm:ccstatusline" = "latest"
 "npm:codex" = "latest"
