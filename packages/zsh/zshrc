@@ -158,6 +158,10 @@ else
   fi
 fi
 
+if which ov > /dev/null 2>&1; then
+  export MANPAGER="ov --section-delimiter '^[^\s]' --section-header"
+fi
+
 if which gron > /dev/null 2>&1; then
   function __qj() {
     gron "$@" | fzf

@@ -103,6 +103,7 @@ tasks:
         - "packages/git/ignore|$HOME/.config/git/ignore"
         - "packages/git/attributes|$HOME/.config/git/attributes"
         - "packages/gh/config.yml|$HOME/.config/gh/config.yml"
+        - "packages/ov|$HOME/.config/ov"
         - "packages/tmux/tmux.conf|$HOME/.tmux.conf"
         - "packages/cargo/config.toml|$HOME/.cargo/config.toml"
         - "packages/binutils/config/|$HOME/.config/binutils"

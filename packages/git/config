@@ -123,7 +123,7 @@
 
 [core]
 	editor = nvim
-  pager = delta
+  pager = "ov -F"
 
 [color]
   grep = true
@@ -167,6 +167,12 @@
 
 [pager]
   branch =  false
+  # Using standard diff
+  ; diff = "ov -F --section-delimiter '^diff' --section-header"
+  # Using difftastic
+  diff = "ov -F --section-delimiter '^[a-zA-Z\\/]+' --section-header"
+  log = "ov -F --section-delimiter '^commit' --section-header-num 3"
+  show = "ov -F --header 3"
 
 [push]
   default = upstream
