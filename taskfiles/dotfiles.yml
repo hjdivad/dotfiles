@@ -101,6 +101,7 @@ tasks:
         - "packages/atuin|$HOME/.config/atuin"
         - "packages/git/config|$HOME/.config/git/config"
         - "packages/git/ignore|$HOME/.config/git/ignore"
+        - "packages/git/attributes|$HOME/.config/git/attributes"
         - "packages/gh/config.yml|$HOME/.config/gh/config.yml"
         - "packages/tmux/tmux.conf|$HOME/.tmux.conf"
         - "packages/cargo/config.toml|$HOME/.cargo/config.toml"
