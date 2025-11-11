@@ -35,6 +35,11 @@ return {
         end,
         desc = "Harpoon File (toggle)",
       },
+      {
+        "<leader>hH",
+        function() require('harpoon.ui'):toggle_quick_menu(require('harpoon'):list()) end,
+        desc = "Harpoon List (non-fzf)"
+      }
     }
 
     for i = 1, 5 do
