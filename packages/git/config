@@ -52,12 +52,13 @@
 
   h = help
 
+  sh = show --ext-diff
+  head = "!f() { echo 'DEPRECATED: run git sh'; }; f" 
+
   master = "!f() { git show-ref --verify --quiet refs/remotes/origin/master && echo origin/master || { git-show-ref --verify --quiet refs/remotes/origin/main && echo origin/main; }; }; f"
   changed-files = "!f() { git diff --name-only $(git merge-base HEAD $(git master))..HEAD; }; f"
   ; changed-files = git diff --name-only $(git merge-base HEAD origin/master)..HEAD
-  wc = whatchanged -p -w -B
-  wcw = whatchanged -p -w --color-words
-  wcwb = whatchanged -p -w --color-words origin/HEAD..
+  wc = "!f() { git log -u --ext-diff $(git master)..; }; f"
 
   log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!(dependabot|svc-))'"
   log-sans-botm =  "!f() { git log --no-merges \"$@\"; }; f -P --author='^(?!dependabot)'"
@@ -82,7 +83,6 @@
 
   yuno = check-ignore -nv
 
-  head = show 
   ; these options don't make sense when using delta
   ; head = show -w --color-words HEAD
   msg = log --pretty="%s%n%n%b" -n 1
@@ -146,6 +146,8 @@
   tag = "#83a598"
 
 [diff]
+  # brew install difftastic
+  external = difft
   renames = true
 
 [fetch]
