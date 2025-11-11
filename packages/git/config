@@ -24,7 +24,10 @@
   ; um = update-ref refs/heads/master origin/master
   ; fam = "!f() { git fa && git um; }; f"
 
-  rr = "!f() { if git rev-parse --verify refs/remotes/upstream/HEAD >/dev/null 2>&1; then git rebase -i $(git merge-base HEAD refs/remotes/upstream/HEAD); else git rebase -i $(git merge-base HEAD refs/remotes/origin/HEAD); fi; }; f"
+  rr = "!f() { git rebase -i $(git merge-base $(git master) HEAD); }; f"
+  rrm = "!f() { git rebase $(git master); }; f"
+  # fetch all; rebase [origin/]master
+  farm = "!f() { git fa && git rrm; }; f"
   rc = rebase --continue
 
   ap = add --patch
@@ -47,6 +50,8 @@
   # work on a branch with commits stacked to PRs, rebase with --update-refs and
   # then `git pu` to push the whole stack.
   pu = push --force-with-lease origin :
+  # push one origin
+  poo = push --force-with-lease origin
 
   gip = grep -iP
 
