@@ -28,11 +28,18 @@ return {
       -- disable LazyVim keymaps
       { "<leader>fe", false },
       { "<leader>fE", false },
+      { "<leader>e", false },
       { "<leader>E", false },
       {
         "<leader>eg",
         neotree_git.show_git_changes_tree,
         desc = "Show git status tree",
+        remap = true,
+      },
+      {
+        "<leader>eG",
+        neotree_git.show_git_changes_tree_head_only,
+        desc = "Show git status tree (HEAD only)",
         remap = true,
       },
       { "<leader>ee", "<cmd>Neotree reveal=false<cr>", desc = "Show filesystem tree", remap = true },

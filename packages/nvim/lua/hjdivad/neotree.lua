@@ -266,4 +266,25 @@ function M.show_git_changes_tree()
   git.set_gs_to_merge_base(merge_base)
 end
 
+---Show git changes tree for HEAD commit only
+---
+---Shows only the changes in the HEAD commit itself (git diff HEAD~1 HEAD).
+---When opening files, automatically run gitsigns.diffthis.
+---Gitsigns base is NOT changed (keeps using origin/HEAD or whatever is configured).
+---
+---Add <c-j>, <c-k> stacked bindings to navigate next/prev file for diffing.
+function M.show_git_changes_tree_head_only()
+  if M.current_map_stack then
+    pcall(map_stack.pop) -- Use pcall to handle empty stack gracefully
+    M.current_map_stack = nil
+  end
+
+  M.switch_to_git_changes_tab()
+
+  -- Show only changes in HEAD commit (compared to HEAD~1)
+  vim.cmd("Neotree git_status git_base=HEAD~1 reveal=true")
+  -- Note: We do NOT call git.set_gs_to_merge_base() here,
+  -- so gitsigns keeps using its configured base (origin/HEAD)
+end
+
 return M

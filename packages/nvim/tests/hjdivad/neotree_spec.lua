@@ -375,4 +375,41 @@ describe("neotree", function()
       neotree.switch_to_git_changes_tab = original_switch
     end)
   end)
+
+  describe("show_git_changes_tree_head_only", function()
+    it("invokes Neotree with HEAD~1 and does NOT update gitsigns base", function()
+      -- avoid tab/window creation in this test
+      local original_switch = neotree.switch_to_git_changes_tab
+      neotree.switch_to_git_changes_tab = function() end
+
+      local cmds = {}
+      local original_cmd = vim.cmd
+      vim.cmd = function(c)
+        table.insert(cmds, c)
+      end
+
+      local called_set = false
+      package.loaded["hjdivad.git"].set_gs_to_merge_base = function()
+        called_set = true
+      end
+
+      neotree.show_git_changes_tree_head_only()
+
+      -- assert Neotree command uses HEAD~1
+      local found = false
+      for _, c in ipairs(cmds) do
+        if c == "Neotree git_status git_base=HEAD~1 reveal=true" then
+          found = true
+          break
+        end
+      end
+      assert.is_true(found)
+      -- assert that gitsigns base was NOT changed
+      assert.is_false(called_set)
+
+      -- restore
+      vim.cmd = original_cmd
+      neotree.switch_to_git_changes_tab = original_switch
+    end)
+  end)
 end)
