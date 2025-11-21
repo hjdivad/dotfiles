@@ -23,15 +23,16 @@ return {
     opts = {
       ensure_installed = {
         -- lsp
+        "bash-language-server",
+        "json-lsp",
         "lua-language-server",
         "marksman",
         "pyright",
         "ruff",
         "sqlls",
+        "taplo",
         "typescript-language-server",
         "yaml-language-server",
-        "json-lsp",
-        "taplo",
 
         -- dap
         "codelldb",
