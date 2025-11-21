@@ -31,7 +31,6 @@ golangci-lint = "latest"
 pnpm = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 "npm:ccstatusline" = "latest"
-"npm:codex" = "latest"
 "npm:chrome-devtools-mcp" = "latest"
 
 [settings]
