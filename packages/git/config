@@ -51,7 +51,7 @@
   # then `git pu` to push the whole stack.
   pu = push --force-with-lease origin :
   # push one origin
-  poo = push --force-with-lease origin
+  pf = push --force-with-lease origin @
 
   gip = grep -iP
 
