@@ -1,32 +1,32 @@
 snippet @to-cleanup
 	-> 🧹
 
-snippet agenda
+snippet @agenda
 	**Agenda**:
 
 	${0}
 
-snippet sitrep
+snippet @sitrep
 	**SitRep**:
 
 	${0}
 
-snippet tasks
+snippet @tasks
 	**Tasks**:
 
 	${0}
 
-snippet discussion
+snippet @discussion
 	**Discussion**:
 
 	${0}
 
-snippet notes
+snippet @notes
 	**Notes**:
 
 	${0}
 
-snippet outstanding-questions
+snippet @outstanding_questions
 	**Outstanding Question**:
 
 	${0}
@@ -41,59 +41,29 @@ snippet @open-questions
 
 	${0}
 
-snippet decisions
+snippet @decisions
 	**Decisions**:
 
 	${0}
 
-snippet project
+snippet @project
 	# ${1:Project Name}
-  ${0}
+	${0}
 	## Log
 
-snippet daily:log
+snippet @daily_log
 	### ${1:day}
 
 	🗒️ [[todo]]
 	💰 [[purchase]]
 
-  [[ref/index]]
+	[[ref|Home References]]
 
 	#### Notes
 
-  ${0}
+	${0}
 
-snippet daily:tasks "daily checklist @ 💻"
-	**daily**:
-	- [ ]${0} calendar
-	- [ ] chat (telegram dms)
-	- [ ] email
-	- [ ] weekly:tasks if friday
-	- [[todo]]
-
-snippet weekly:tasks "weekly checklist @ 💻"
-	**weekly**:
-	- [ ] ${0}drain intake
-	- [ ] review phone intake/reading tab
-	- [ ] tidy up ongoing/
-	- [ ] tidy up projects/
-	- [ ] tidy up [[todo]]
-	- [ ] physical intake (kitchen basket mail, computer room box)
-	- [ ] monthly:tasks:1 if 2nd Friday
-	- [ ] monthly:tasks:2 if 3nd Friday
-
-snippet monthly:tasks:1 "monthly (primary) checklist @ 💻"
-	**weekly**:
-	- [ ] ${0}expense receipts (phone, internet)
-	- [ ] savings snapshot
-	- [ ] tidy up someday/
-
-snippet monthly:tasks:2 "monthly (alternate) checklist @ 💻"
-	**weekly**:
-	- [ ] review [GitHub notifications](https://github.com/notifications)
-	- [ ] drain [GitHub saved notifications](https://github.com/notifications?query=is%3Asaved)
-
-snippet quarter
+snippet @quarter
 	# cy${1:22q1}
 
 	- [[cy${3:22}/index]]
