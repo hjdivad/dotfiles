@@ -169,16 +169,4 @@ return {
       },
     },
   },
-
-  -- TODO: workaround for a codecompanion + blink bug
-  -- see <https://github.com/olimorris/codecompanion.nvim/issues/968#issuecomment-2672905893>
-  -- see <https://github.com/Saghen/blink.cmp/issues/1303>
-  {
-    "saghen/blink.cmp",
-    optional = true,
-    tag = "v0.12.2",
-    opts = function(_, opts)
-      opts.completion.accept.dot_repeat = false
-    end,
-  },
 }

@@ -9,7 +9,7 @@ end
 ---@type LazyPluginSpec[]
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     dependencies = { "Zeioth/mason-extra-cmds", opts = {} },
     cmd = {
       "Mason",
@@ -62,7 +62,7 @@ return {
         --  	},
         --  },
         -- }
-        "goimports"
+        "goimports",
       },
       setup = {
         -- skip mason setup; rely on rust_analyzer from rustacean (which uses rustup)
@@ -90,54 +90,25 @@ return {
       },
     },
   },
+
+  -- Please set keymaps via the `keys` field in the LSP server config.
+  -- ```lua
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   opts = {
+  --     servers = {
+  --       ['*'] = {
+  --         keys = {
+  --           { "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", has = "definition"},
+  --         },
+  --       },
+  --     },
+  --   },
+  -- }
+  -- ```
   {
     -- see https://www.lazyvim.org/plugins/lsp
     "neovim/nvim-lspconfig",
-    -- override LSP keybindings here
-    init = function()
-      -- see https://www.lazyvim.org/plugins/lsp#%EF%B8%8F-customizing-lsp-keymaps
-      -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/lsp/keymaps.lua
-      local keys = require("lazyvim.plugins.lsp.keymaps").get()
-
-      -- FIXME: these are no longer being removed
-      --
-      -- remove unwanted
-      keys[#keys + 1] = { "gy", false }
-      keys[#keys + 1] = { "gI", false }
-      keys[#keys + 1] = { "gd", false }
-      keys[#keys + 1] = { "<leader>cs", false }
-      keys[#keys + 1] = { "<c-k>", false, mode = "i" }
-      keys[#keys + 1] = { "<C-k>", false, mode = "i" }
-
-      -- see :he fzf-lua-lsp/diagnostics
-      -- add missing
-      keys[#keys + 1] = {
-        "gt",
-        "<cmd>FzfLua lsp_typedefs<cr>",
-        desc = "Goto [T]ype Definition",
-      }
-
-      keys[#keys + 1] = {
-        "gd",
-        "<cmd>FzfLua lsp_definitions<cr>",
-        desc = "Goto Definition",
-        has = "definition",
-      }
-
-      keys[#keys + 1] = {
-        "gi",
-        "<cmd>FzfLua lsp_implementations<cr>",
-        desc = "Goto Implementation",
-      }
-
-      keys[#keys + 1] = { "<leader>cL", vim.diagnostic.open_float, desc = "Line Diagnostics" }
-      keys[#keys + 1] = { "<leader>cj", diagnostic_goto(true, "ERROR"), desc = "Next Error Diagnostic" }
-      keys[#keys + 1] = { "<leader>ck", diagnostic_goto(false, "ERROR"), desc = "Prev Error Diagnostic" }
-      keys[#keys + 1] = { "<leader>cJ", diagnostic_goto(true), desc = "Next Diagnostic" }
-      keys[#keys + 1] = { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" }
-      keys[#keys + 1] =
-        { "<c-h>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" }
-    end,
     ---@type PluginLspOpts
     opts = {
       -- see https://www.lazyvim.org/plugins/lsp#nvim-lspconfig / Full Spec
@@ -147,6 +118,25 @@ return {
       ---@type lspconfig.options
       ---@diagnostic disable-next-line: missing-fields
       servers = {
+        ["*"] = {
+          { "gy", false },
+          { "gI", false },
+          { "gd", false },
+          { "<leader>cs", false },
+          { "<c-k", false, mode = "i" },
+          { "<c-K", false, mode = "i" },
+
+          { "gt", "<cmd>FzfLua lsp_typedefs<cr>", desc = "Goto [T]ype Definition" },
+          { "gd", "<cmd>FzfLua lsp_definitions<cr>", desc = "Goto Definition", has = "definition" },
+          { "gi", "<cmd>FzfLua lsp_implementations<cr>", desc = "Goto Implementation" },
+
+          { "<leader>cL", vim.diagnostic.open_float, desc = "Line Diagnostics" },
+          { "<leader>cj", diagnostic_goto(true, "ERROR"), desc = "Next Error Diagnostic" },
+          { "<leader>ck", diagnostic_goto(false, "ERROR"), desc = "Prev Error Diagnostic" },
+          { "<leader>cJ", diagnostic_goto(true), desc = "Next Diagnostic" },
+          { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" },
+          { "<c-h>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+        },
         ---@diagnostic disable-next-line: missing-fields
         lua_ls = {
           --TODO: mv this to  packages/nvim/lua/plugins/extras/dap/keymaps.lua
@@ -171,12 +161,5 @@ return {
       },
     },
   },
-
-  -- NOTE: pin mason related pcakges to ^1.x while the various LazyVim internal
-  -- features are updated to support 2.x
-  -- https://github.com/LazyVim/LazyVim/issues/6039
-  -- https://github.com/LazyVim/LazyVim/pull/6053
-  { "williamboman/mason.nvim", version = "^1.0.0" },
-  { "williamboman/mason-lspconfig.nvim", version = "^1.0.0" },
   { "Zeioth/mason-extra-cmds", version = "^1.0.0" },
 }
