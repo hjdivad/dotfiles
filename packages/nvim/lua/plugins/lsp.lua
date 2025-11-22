@@ -91,21 +91,6 @@ return {
     },
   },
 
-  -- Please set keymaps via the `keys` field in the LSP server config.
-  -- ```lua
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   opts = {
-  --     servers = {
-  --       ['*'] = {
-  --         keys = {
-  --           { "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", has = "definition"},
-  --         },
-  --       },
-  --     },
-  --   },
-  -- }
-  -- ```
   {
     -- see https://www.lazyvim.org/plugins/lsp
     "neovim/nvim-lspconfig",
@@ -119,23 +104,25 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       servers = {
         ["*"] = {
-          { "gy", false },
-          { "gI", false },
-          { "gd", false },
-          { "<leader>cs", false },
-          { "<c-k", false, mode = "i" },
-          { "<c-K", false, mode = "i" },
+          keys = {
+            { "gy", false },
+            { "gI", false },
+            { "gd", false },
+            { "<leader>cs", false },
+            { "<c-k", false, mode = "i" },
+            { "<c-K", false, mode = "i" },
 
-          { "gt", "<cmd>FzfLua lsp_typedefs<cr>", desc = "Goto [T]ype Definition" },
-          { "gd", "<cmd>FzfLua lsp_definitions<cr>", desc = "Goto Definition", has = "definition" },
-          { "gi", "<cmd>FzfLua lsp_implementations<cr>", desc = "Goto Implementation" },
+            { "gt", "<cmd>FzfLua lsp_typedefs<cr>", desc = "Goto [T]ype Definition" },
+            { "gd", "<cmd>FzfLua lsp_definitions<cr>", desc = "Goto Definition", has = "definition" },
+            { "gi", "<cmd>FzfLua lsp_implementations<cr>", desc = "Goto Implementation" },
 
-          { "<leader>cL", vim.diagnostic.open_float, desc = "Line Diagnostics" },
-          { "<leader>cj", diagnostic_goto(true, "ERROR"), desc = "Next Error Diagnostic" },
-          { "<leader>ck", diagnostic_goto(false, "ERROR"), desc = "Prev Error Diagnostic" },
-          { "<leader>cJ", diagnostic_goto(true), desc = "Next Diagnostic" },
-          { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" },
-          { "<c-h>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+            { "<leader>cL", vim.diagnostic.open_float, desc = "Line Diagnostics" },
+            { "<leader>cj", diagnostic_goto(true, "ERROR"), desc = "Next Error Diagnostic" },
+            { "<leader>ck", diagnostic_goto(false, "ERROR"), desc = "Prev Error Diagnostic" },
+            { "<leader>cJ", diagnostic_goto(true), desc = "Next Diagnostic" },
+            { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" },
+            { "<c-h>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+          },
         },
         ---@diagnostic disable-next-line: missing-fields
         lua_ls = {
