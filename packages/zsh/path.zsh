@@ -26,6 +26,11 @@ function __ensure_first_path() {
 
 export CARGO_HOME="$HOME/.cargo"
 
+if [ -z "$ZSH_SYS_ORIG_PATH" ]; then
+  export ZSH_SYS_ORIG_PATH="$PATH"
+fi
+
+__ensure_first_path "/usr/local/bin"
 __ensure_first_path "/opt/homebrew/bin"
 __ensure_first_path "/opt/homebrew/sbin"
 __ensure_first_path "$CARGO_HOME/bin"

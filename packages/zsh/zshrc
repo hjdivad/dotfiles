@@ -375,7 +375,9 @@ function setup_proxyman {
 alias proxyman_setup=setup_proxyman
 
 
-
+if [ -n "$ZSH_SYS_ORIG_PATH" ]; then
+  export PATH="$ZSH_SYS_ORIG_PATH"
+fi
 source $ZSH_PATHRC
 
 
