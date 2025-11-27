@@ -1,5 +1,7 @@
-snippet bash_script "bash script with sane defaults"
+snippet @bash_script "bash script with sane defaults"
   #!/usr/bin/env bash
   # fail on cmd errors and undefined variables
   # pipelines fail if any element fails
   set -euo pipefail
+
+  ${0}

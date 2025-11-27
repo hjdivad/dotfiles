@@ -119,9 +119,6 @@ snippet @rollover
 snippet @downstream
 	🌊 
 
-snippet @okay
-	🍏${0}
-
 snippet @waiting-until
 	⏰ (${1}) $0
 
@@ -137,6 +134,12 @@ snippet @waiting-for_review
 snippet @waiting-for_ci
   ⏰ (🔄🧪) $0
 
+snippet @waiting
+  ⏰${0}
+
+snippet @working
+  🔄${0}
+
 snippet @timebox
 	⏳${0}
 
@@ -146,8 +149,17 @@ snippet @depends-on
 snippet @done
 	✅${0}
 
-snippet @progress
-	🍏${0}
+snippet @heart
+  💛${0}
+
+snippet @okay
+	✅${0}
+
+snippet @good
+	✅${0}
+
+snippet @yes
+	✅${0}
 
 snippet @failed
 	❌${0}
@@ -157,12 +169,6 @@ snippet @bad
 
 snippet @no
 	❌${0}
-
-snippet @good
-	✅${0}
-
-snippet @yes
-	✅${0}
 
 snippet @??
 	❓${0}
