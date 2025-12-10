@@ -176,6 +176,10 @@ if which gron > /dev/null 2>&1; then
   # compdef _qj qj
 fi
 
+if which claude > /dev/null 2>&1; then
+  alias claude-yolo='claude --dangerously-skip-permissions'
+fi
+
 # Support colour in pager, tabsize 2 and case insensitive searching.
 export LESS='-R -x2 -i'
 
