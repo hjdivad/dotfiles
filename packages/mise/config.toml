@@ -9,12 +9,11 @@ lua = "latest"
 ruby = "latest"
 rust = { version = "latest", components = "rust-analyzer,clippy" }
 python = "latest"
+pipx = "latest"
 uv = "latest"
 
 # software verification (see https://mise.jdx.dev/tips-and-tricks.html#software-verification)
 slsa-verifier = "latest"
-# see <https://github.com/jdx/mise/discussions/6655>
-# cosign = "latest"
 
 # provides completion and parsing support for tasks see:
 # https://mise.jdx.dev/tasks/file-tasks.html#arguments
@@ -32,6 +31,8 @@ pnpm = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 "npm:ccstatusline" = "latest"
 "npm:chrome-devtools-mcp" = "latest"
+# I'd rather install via uv but it doesn't work
+"pipx:petname" = "latest"
 
 [settings]
 experimental = true
