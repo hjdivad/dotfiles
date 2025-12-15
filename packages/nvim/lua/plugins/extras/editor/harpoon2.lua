@@ -1,8 +1,21 @@
----@type LazySpec[]
+---@type LazyPluginSpec
 return {
   -- see $HOME/.local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/editor/harpoon2.lua
   "ThePrimeagen/harpoon",
   branch = "harpoon2",
+  opts = {
+    settings = {
+      key = function()
+        if vim.g.harpoon_key then
+          return vim.g.harpoon_key
+        end
+
+        local git_remote = vim.fn.systemlist("git config --get remote.origin.url")[1]
+        vim.g.harpoon_key = git_remote or vim.loop.cwd()
+        return vim.g.harpoon_key
+      end,
+    },
+  },
   keys = function()
     local keys = {
       {
@@ -37,9 +50,11 @@ return {
       },
       {
         "<leader>hH",
-        function() require('harpoon.ui'):toggle_quick_menu(require('harpoon'):list()) end,
-        desc = "Harpoon List (non-fzf)"
-      }
+        function()
+          require("harpoon.ui"):toggle_quick_menu(require("harpoon"):list())
+        end,
+        desc = "Harpoon List (non-fzf)",
+      },
     }
 
     for i = 1, 5 do
