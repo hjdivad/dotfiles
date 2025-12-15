@@ -39,6 +39,7 @@ return {
         typescript = { "prettier" },
         go = { "golines", "goimports", "gofmt" },
         toml = { "taplo" },
+        python = { "ruff_format" },
       },
     },
   },

@@ -70,6 +70,7 @@ return {
           return true
         end,
       },
+      PATH = "skip",
     },
   },
   {

@@ -33,6 +33,7 @@ fi
 __ensure_first_path "/usr/local/bin"
 __ensure_first_path "/opt/homebrew/bin"
 __ensure_first_path "/opt/homebrew/sbin"
+__ensure_first_path "$HOME/.local/share/nvim/mason/bin"
 __ensure_first_path "$CARGO_HOME/bin"
 __ensure_first_path "$HOME/src/github/malleatus/shared_binutils/global/target/debug"
 __ensure_first_path "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
