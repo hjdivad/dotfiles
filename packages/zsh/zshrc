@@ -246,6 +246,10 @@ fi
 # set up node
 export NODE_BIGMEM="--max-old-space-size=16384" # mb
 
+function node_skip_tls {
+  echo "export NODE_TLS_REJECT_UNAUTHORIZED=0"
+}
+
 # Update dependencies interactively
 alias npm-check-updates='npx npm-check-updates -i'
 alias nr='npm run'
@@ -293,17 +297,28 @@ function __ts_todos {
   fi
 }
 
+# TODO: This impl is now a mess, but it may not matter once I ascend to zellij.
 if which fd > /dev/null 2>&1; then
   function __ts_go_source {
     local to_dir=$(
-      fd . --type directory --max-depth 3 "$HOME/src" |\
+      fd . --type directory --max-depth 3 "$HOME/src" "$HOME/wk/github" |\
       sd "$HOME/src/" '' |\
+      sd "$HOME/wk/github" '' |\
       sd "/$" '' |\
       fzf\
     )
 
     if [[ -n "$to_dir" && -d $HOME/src/$to_dir ]]; then
       cd $HOME/src/$to_dir
+      if [[ -n $TMUX ]]; then
+        local window_name=$(
+          echo "$to_dir" |\
+          sd "hjdivad/" ''
+        )
+        tmux rename-window "${window_name}"
+      fi
+    elif [[ -n "$to_dir" && -d $HOME/wk/github/$to_dir ]]; then
+      cd $HOME/wk/github/$to_dir
       if [[ -n $TMUX ]]; then
         local window_name=$(
           echo "$to_dir" |\
@@ -374,7 +389,7 @@ function pkce_challenge() {
 # see <https://docs.proxyman.com/debug-devices/nodejs#id-1.-new-automatic-solution-v4.7.0-or-later>
 # Proxyman -> Setup -> Manual -> copy code
 function setup_proxyman {
-  set -a && source "/Users/hjdivad/Library/Application Support/com.proxyman.NSProxy/app-data/proxyman_env_automatic_setup.sh" && set +a
+  set -a && source "/Users/hjdivad/Library/Application\ Support/com.proxyman.NSProxy/app-data/proxyman_env_automatic_setup.sh" && set +a
 }
 alias proxyman_setup=setup_proxyman
 
@@ -382,7 +397,7 @@ alias proxyman_setup=setup_proxyman
 if [ -n "$ZSH_SYS_ORIG_PATH" ]; then
   export PATH="$ZSH_SYS_ORIG_PATH"
 fi
-source $ZSH_PATHRC
+source "$ZSH_PATHRC"
 
 
 
