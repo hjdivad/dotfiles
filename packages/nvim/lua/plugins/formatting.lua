@@ -32,7 +32,7 @@ return {
       formatters = {
         -- Configure sqlfluff formatter to run from git root
         sqlfluff = {
-          cwd = require("conform.util").root_file(".sqlfluff", ".git"),
+          cwd = require("conform.util").root_file({ ".sqlfluff", ".git" }),
         },
       },
       formatters_by_ft = {
