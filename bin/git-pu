@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# === Configuration ===
+# Change this to your username/prefix for forked usage
+BRANCH_PREFIX="hjdivad"
+
+# === Parse arguments ===
+DRY_RUN=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -n|--dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    -h|--help)
+      echo "Usage: git pu [-n|--dry-run]"
+      echo ""
+      echo "Push all branches matching '${BRANCH_PREFIX}/{name}/*' with --force-with-lease"
+      echo ""
+      echo "Options:"
+      echo "  -n, --dry-run  Print the git push command without executing it"
+      echo "  -h, --help     Show this help message"
+      exit 0
+      ;;
+    *)
+      echo "Error: Unknown option '$1'" >&2
+      echo "Usage: git pu [-n|--dry-run]" >&2
+      exit 1
+      ;;
+  esac
+done
+
+# Get current branch
+current_branch=$(git branch --show-current)
+
+if [[ -z "$current_branch" ]]; then
+  echo "Error: Not on a branch (detached HEAD state)" >&2
+  exit 1
+fi
+
+# Check if branch matches {prefix}/{name}/*
+# Pattern: PREFIX/SOMETHING/SOMETHING_ELSE
+if [[ ! "$current_branch" =~ ^${BRANCH_PREFIX}/([^/]+)/.+ ]]; then
+  echo "Error: Current branch '$current_branch' does not match pattern '${BRANCH_PREFIX}/{name}/*'" >&2
+  echo "Expected format: ${BRANCH_PREFIX}/<name>/<feature>" >&2
+  exit 1
+fi
+
+# Extract the {name} portion
+name="${BASH_REMATCH[1]}"
+
+# Find all local branches matching {prefix}/{name}/*
+branches=()
+while IFS= read -r branch; do
+  branches+=("$branch")
+done < <(git for-each-ref --format='%(refname:short)' "refs/heads/${BRANCH_PREFIX}/${name}/*")
+
+if [[ ${#branches[@]} -eq 0 ]]; then
+  echo "Error: No branches found matching '${BRANCH_PREFIX}/${name}/*'" >&2
+  exit 1
+fi
+
+echo "Pushing ${#branches[@]} branch(es) matching '${BRANCH_PREFIX}/${name}/*':"
+printf '  - %s\n' "${branches[@]}"
+
+if [[ "$DRY_RUN" == true ]]; then
+  echo ""
+  echo "[dry-run] Would execute:"
+  echo "  git push --force-with-lease origin ${branches[*]}"
+else
+  git push --force-with-lease origin "${branches[@]}"
+fi

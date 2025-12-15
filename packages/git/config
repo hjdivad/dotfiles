@@ -46,10 +46,6 @@
   # amend leave message alone
   cmm = commit --amend -CHEAD
 
-  # push all matching refs to origin, with-lease.
-  # work on a branch with commits stacked to PRs, rebase with --update-refs and
-  # then `git pu` to push the whole stack.
-  pu = push --force-with-lease origin :
   # push one origin
   pf = push --force-with-lease origin @
 

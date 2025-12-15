@@ -39,6 +39,7 @@ __ensure_first_path "$HOME/src/github/malleatus/shared_binutils/global/target/de
 __ensure_first_path "$HOME/src/github/hjdivad/dotfiles/packages/binutils/crates/global/target/debug"
 # org global added in $HOME/.zshrc.local
 __ensure_first_path "$HOME/.local/bin"
+__ensure_first_path "$HOME/src/github/hjdivad/dotfiles/bin"
 
 
 # this is not using the `# CMD:` system because it captures `$PATH` at the time
