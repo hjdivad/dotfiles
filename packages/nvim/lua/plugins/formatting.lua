@@ -5,6 +5,12 @@ return {
     "stevearc/conform.nvim",
     opts = {
 
+      log_level = vim.log.levels.INFO,
+      default_format_opts = {
+        lsp_format = "fallback",
+        -- lsp_format = "never",
+      },
+
       -- Expected to be paired with $REPOROOT/.lazy.lua
       --
       -- return {
