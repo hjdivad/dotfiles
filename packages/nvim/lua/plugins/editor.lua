@@ -94,14 +94,22 @@ return {
       git_status = {
         window = {
           mappings = {
-            ["<cr>"] = function(state)
+            ["gd"] = function(state)
               local node = state.tree:get_node()
               if node and node.type == "file" then
                 require('hjdivad.neotree').open_file_for_diff(state)
               else
                 require("neo-tree/sources/common/commands").toggle_node(state)
               end
-            end
+            end,
+            ["<cr>"] = function(state)
+              local node = state.tree:get_node()
+              if node and node.type == "file" then
+                require('hjdivad.neotree').open_file_close_others(state)
+              else
+                require("neo-tree/sources/common/commands").toggle_node(state)
+              end
+            end,
           },
         },
       },

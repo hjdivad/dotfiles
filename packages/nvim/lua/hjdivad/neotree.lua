@@ -218,6 +218,30 @@ function M.open_file_for_diff(state)
   M.open_file_for_diff_by_path(node.path)
 end
 
+---Open a file and close other windows
+---@param state neotree.StateWithTree Neo-tree state
+function M.open_file_close_others(state)
+  local node = state.tree:get_node()
+  if not node or node.type ~= "file" then
+    return
+  end
+
+  local neotree_win = get_neotree_window()
+  if not neotree_win then
+    return
+  end
+
+  -- Move to the neotree window
+  vim.api.nvim_set_current_win(neotree_win)
+
+  -- Split to the right and open the file (this preserves neotree sizing)
+  vim.cmd("rightbelow vsplit")
+
+  local file_win = vim.api.nvim_get_current_win()
+  vim.cmd("edit " .. vim.fn.fnameescape(node.path))
+  close_other_windows(neotree_win, file_win)
+end
+
 ---Switch to or create the dedicated git changes tab
 function M.switch_to_git_changes_tab()
   -- Check if we have a tracked tab and it still exists with Neo-tree

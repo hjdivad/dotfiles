@@ -337,6 +337,137 @@ describe("neotree", function()
     end)
   end)
 
+  describe("open_file_close_others", function()
+    local function make_node(id, type_, path_)
+      return {
+        id = id,
+        type = type_,
+        path = path_,
+      }
+    end
+
+    local function make_state(selected_node)
+      return {
+        tree = {
+          get_node = function()
+            return selected_node
+          end,
+        },
+      }
+    end
+
+    it("opens the file and closes other windows", function()
+      local file = make_node("f1", "file", "/tmp/test.txt")
+      local state = make_state(file)
+
+      -- Track vim commands and API calls
+      local cmds = {}
+      local original_cmd = vim.cmd
+      vim.cmd = function(c)
+        table.insert(cmds, c)
+      end
+
+      local set_win_calls = {}
+      local original_set_win = vim.api.nvim_set_current_win
+      vim.api.nvim_set_current_win = function(win)
+        table.insert(set_win_calls, win)
+      end
+
+      local original_get_win = vim.api.nvim_get_current_win
+      vim.api.nvim_get_current_win = function()
+        return 2
+      end
+
+      -- Mock neotree window detection
+      local original_list_wins = vim.api.nvim_tabpage_list_wins
+      local original_win_get_buf = vim.api.nvim_win_get_buf
+      local original_buf_get_name = vim.api.nvim_buf_get_name
+      local original_win_close = vim.api.nvim_win_close
+
+      vim.api.nvim_tabpage_list_wins = function()
+        return { 1, 2 }
+      end
+      vim.api.nvim_win_get_buf = function(winid)
+        return winid
+      end
+      vim.api.nvim_buf_get_name = function(bufnr)
+        if bufnr == 1 then
+          return "neo-tree filesystem [1]"
+        end
+        return "/tmp/test.txt"
+      end
+
+      local closed_wins = {}
+      vim.api.nvim_win_close = function(winid, force)
+        table.insert(closed_wins, { winid = winid, force = force })
+      end
+
+      neotree.open_file_close_others(state)
+
+      -- Verify vsplit was called
+      local found_vsplit = false
+      for _, c in ipairs(cmds) do
+        if c == "rightbelow vsplit" then
+          found_vsplit = true
+          break
+        end
+      end
+      assert.is_true(found_vsplit)
+
+      -- Verify edit command was called with the file path
+      local found_edit = false
+      for _, c in ipairs(cmds) do
+        if c:match("^edit.*/tmp/test.txt$") then
+          found_edit = true
+          break
+        end
+      end
+      assert.is_true(found_edit)
+
+      -- Restore original functions
+      vim.cmd = original_cmd
+      vim.api.nvim_set_current_win = original_set_win
+      vim.api.nvim_get_current_win = original_get_win
+      vim.api.nvim_tabpage_list_wins = original_list_wins
+      vim.api.nvim_win_get_buf = original_win_get_buf
+      vim.api.nvim_buf_get_name = original_buf_get_name
+      vim.api.nvim_win_close = original_win_close
+    end)
+
+    it("no-ops when selected node is not a file", function()
+      local dir = make_node("d1", "directory", "/tmp/dir")
+      local state = make_state(dir)
+
+      local cmd_called = false
+      local original_cmd = vim.cmd
+      vim.cmd = function()
+        cmd_called = true
+      end
+
+      neotree.open_file_close_others(state)
+
+      assert.is_false(cmd_called)
+
+      vim.cmd = original_cmd
+    end)
+
+    it("no-ops when node is nil", function()
+      local state = make_state(nil)
+
+      local cmd_called = false
+      local original_cmd = vim.cmd
+      vim.cmd = function()
+        cmd_called = true
+      end
+
+      neotree.open_file_close_others(state)
+
+      assert.is_false(cmd_called)
+
+      vim.cmd = original_cmd
+    end)
+  end)
+
   describe("show_git_changes_tree", function()
     it("invokes Neotree with merge base and updates gitsigns base", function()
       -- avoid tab/window creation in this test
