@@ -389,7 +389,7 @@ function pkce_challenge() {
 # see <https://docs.proxyman.com/debug-devices/nodejs#id-1.-new-automatic-solution-v4.7.0-or-later>
 # Proxyman -> Setup -> Manual -> copy code
 function setup_proxyman {
-  set -a && source "/Users/hjdivad/Library/Application\ Support/com.proxyman.NSProxy/app-data/proxyman_env_automatic_setup.sh" && set +a
+  set -a 2>/dev/null || true; source "/Users/hjdivad/Library/Application Support/com.proxyman.NSProxy/app-data/proxyman_env_automatic_setup.sh"; set +a 2>/dev/null || true
 }
 alias proxyman_setup=setup_proxyman
 
