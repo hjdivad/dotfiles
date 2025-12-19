@@ -1,7 +1,38 @@
 # see https://mise.jdx.dev/tasks/file-tasks.html#task-configuration
 # see https://mise.jdx.dev/tasks/task-configuration.html
+# see https://mise.jdx.dev/tasks/file-tasks.html#arguments
 
 
 snippet @depends "task dependency"
   #MISE depends=["$0"]
+
+snippet @depends_post "task post-run dependency"
+  #MISE depends_post=["$0"]
+
+snippet @arg "task argument"
+  #USAGE arg <arg_name> default="value" help="argues" {
+  #USAGE  choices "v1" "v2"
+  #USAGE }
+
+  arg_name="${usage_arg_name}"
+
+snippet @flag "task flag"
+  #USAGE flag "-c --clean" help="does something probably"
+
+  flag_clean="${usage_clean:-false}"
   
+snippet @mise_task "mise task"
+  #!/bin/bash
+  set -euo pipefail
+
+  # see https://mise.jdx.dev/tasks/file-tasks.html#arguments
+
+  #MISE description="${1}"
+  #USAGE arg <arg_name> default="value" help="argues" {
+  #USAGE  choices "v1" "v2"
+  #USAGE }
+  #USAGE flag "-c --clean" help="does something probably"
+
+  arg_name="${usage_arg_name}"
+
+  ${0}
