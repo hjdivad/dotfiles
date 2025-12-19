@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE depends=["test:nvim"]
+
+# fail on cmd errors and undefined variables
+# pipelines fail if any element fails
+set -euo pipefail
+
+
