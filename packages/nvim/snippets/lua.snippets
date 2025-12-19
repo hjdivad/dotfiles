@@ -22,6 +22,16 @@ snippet @class "create a class in lua"
 
 	${0}
 
+snippet @module "create a file module with default setup"
+  ---@class ${1:MyModule}
+  local M = {}
+
+  function M.foo()
+    return
+  end
+
+  return M
+
 snippet @lint_disable_next_line_missing_fields
   ---@diagnostic disable-next-line: missing-fields
 
