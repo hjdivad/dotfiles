@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# fail on cmd errors and undefined variables
+# pipelines fail if any element fails
+set -euo pipefail
+
+git branch --merged |\
+  grep -Ev '^(\*|(\s*(master|main)))' |\
+  grep -Eo '[a-zA-Z0-9/_-]+' |\
+  git branch -d
+
+git remote prune origin
