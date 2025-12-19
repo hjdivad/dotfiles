@@ -337,6 +337,11 @@ alias tss='tmux display-popup -E -w 100% -h 100% nvim -c "lua require('"'"'hjdiv
 alias tst='tmux switch-client -l'
 alias tsd=__ts_todos
 
+# To run in verbose mode
+#
+#   MISE_QUIET=false mr the:task
+#
+export MISE_QUIET=true
 alias mr='mise run'
 
 
