@@ -3,6 +3,7 @@
 -- Add any additional keymaps here
 
 local LazyVimUtil = require("lazyvim.util")
+local zellij = require("hjdivad.zellij")
 
 local ks = vim.keymap.set
 local existing_keymaps_lhs = {}
@@ -123,16 +124,25 @@ kd("n", "<leader><Tab>[") -- previous tab
 -- add keymaps
 
 -- tab navigation
-ks({"n","t"}, "<F1>", "<Cmd>tabn 1<cr>", { desc = "go to tab 1" })
-ks({"n","t"}, "<F2>", "<Cmd>tabn 2<cr>", { desc = "go to tab 2" })
-ks({"n","t"}, "<F3>", "<Cmd>tabn 3<cr>", { desc = "go to tab 3" })
-ks({"n","t"}, "<F4>", "<Cmd>tabn 4<cr>", { desc = "go to tab 4" })
-ks({"n","t"}, "<F5>", "<Cmd>tabn 5<cr>", { desc = "go to tab 5" })
-ks({"n","t"}, "<F6>", "<Cmd>tabn 6<cr>", { desc = "go to tab 6" })
-ks({"n","t"}, "<F7>", "<Cmd>tabn 7<cr>", { desc = "go to tab 7" })
-ks({"n","t"}, "<F8>", "<Cmd>tabn 8<cr>", { desc = "go to tab 8" })
-ks({"n","t"}, "<F9>", "<Cmd>$tabn<cr>", { desc = "go to the last tab page" })
+ks({ "n", "t" }, "<F1>", "<Cmd>tabn 1<cr>", { desc = "go to tab 1" })
+ks({ "n", "t" }, "<F2>", "<Cmd>tabn 2<cr>", { desc = "go to tab 2" })
+ks({ "n", "t" }, "<F3>", "<Cmd>tabn 3<cr>", { desc = "go to tab 3" })
+ks({ "n", "t" }, "<F4>", "<Cmd>tabn 4<cr>", { desc = "go to tab 4" })
+ks({ "n", "t" }, "<F5>", "<Cmd>tabn 5<cr>", { desc = "go to tab 5" })
+ks({ "n", "t" }, "<F6>", "<Cmd>tabn 6<cr>", { desc = "go to tab 6" })
+ks({ "n", "t" }, "<F7>", "<Cmd>tabn 7<cr>", { desc = "go to tab 7" })
+ks({ "n", "t" }, "<F8>", "<Cmd>tabn 8<cr>", { desc = "go to tab 8" })
+ks({ "n", "t" }, "<F9>", "<Cmd>$tabn<cr>", { desc = "go to the last tab page" })
 -- <Cmd>0 reserved for restoring text size
+
+ks({ "n", "t" }, "<c-w>h", zellij.keymap_winleft(), { desc = "win-left (zellij-left @ edge)" })
+ks({ "n", "t" }, "<c-w><c-h>", zellij.keymap_winleft(), { desc = "win-left (zellij-left @ edge)" })
+ks({ "n", "t" }, "<c-w>l", zellij.keymap_winright(), { desc = "win-right (zellij-right @ edge)" })
+ks({ "n", "t" }, "<c-w><c-l>", zellij.keymap_winright(), { desc = "win-right (zellij-right @ edge)" })
+ks({ "n", "t" }, "<c-w>j", zellij.keymap_windown(), { desc = "win-down (zellij-down @ edge)" })
+ks({ "n", "t" }, "<c-w><c-j>", zellij.keymap_windown(), { desc = "win-down (zellij-down @ edge)" })
+ks({ "n", "t" }, "<c-w>k", zellij.keymap_winup(), { desc = "win-up (zellij-up @ edge)" })
+ks({ "n", "t" }, "<c-w><c-k>", zellij.keymap_winup(), { desc = "win-up (zellij-up @ edge)" })
 
 ks("n", "<m-;>", ":lua =", { desc = "lua cmdline" })
 ks("n", "<c-n>", ":lua =require('noice').redirect([[]])<Left><Left><Left>", { desc = "noice cmdline" })
@@ -153,7 +163,7 @@ ks(
 )
 
 local terminal = function()
-  require('snacks').terminal()
+  require("snacks").terminal()
 end
 ks("n", "<c-t>", terminal, { desc = "Terminal (root dir)" })
 ks("t", "<c-t>", terminal, { desc = "Terminal (root dir)" })
@@ -173,25 +183,16 @@ ks("n", "<leader>yF", function()
 end, { desc = "yank absolute path (buf) to clipboard" })
 
 ks("t", "<c-g><c-g>", [[<c-\><c-n>]], { desc = "Terminal goto normal mode" })
-ks("t", "<c-w>h", [[<c-\><c-n><c-w>h]], { desc = "win-left (terminal)" })
-ks("t", "<c-w><c-h>", [[<c-\><c-n><c-w>h]], { desc = "win-left (terminal)" })
-ks("t", "<c-w>j", [[<c-\><c-n><c-w>j]], { desc = "win-down (terminal)" })
-ks("t", "<c-w><c-j>", [[<c-\><c-n><c-w>j]], { desc = "win-down (terminal)" })
-ks("t", "<c-w>k", [[<c-\><c-n><c-w>k]], { desc = "win-up (terminal)" })
-ks("t", "<c-w><c-k>", [[<c-\><c-n><c-w>k]], { desc = "win-up (terminal)" })
-ks("t", "<c-w>l", [[<c-\><c-n><c-w>l]], { desc = "win-right (terminal)" })
-ks("t", "<c-w><c-l>", [[<c-\><c-n><c-w>l]], { desc = "win-right (terminal)" })
 ks("t", "<c-w>n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (terminal)" })
 ks("t", "<c-w><c-n>", [[<c-\><c-n><c-w>n<Cmd>terminal<cr>]], { desc = "win new (terminal)" })
 ks("t", "<c-w>v>", [[<c-\><c-n><c-w>v<Cmd>terminal<cr>]], { desc = "win new (vertical terminal)" })
 ks("t", "<c-w><c-v>", [[<c-\><c-n><c-w>v<Cmd>terminal<cr>]], { desc = "win new (vertical terminal)" })
-ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
-ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-right (terminal)" })
+ks("t", "<c-w>c", [[<c-\><c-n><c-w>c]], { desc = "win-close (terminal)" })
+ks("t", "<c-w><c-c>", [[<c-\><c-n><c-w>c]], { desc = "win-close (terminal)" })
 
 -- <c-w>o "only this window" by default closes all other windows, which I find useless
 -- OTOH, toggling window zoom is very useful
 Snacks.toggle.zoom():map("<c-w>o"):map("<leader>uZ")
-
 
 ks("n", "<leader>uL", function()
   LazyVimUtil.news.changelog()
@@ -203,8 +204,6 @@ ks("n", "<c-r>", "<cmd>silent! redo<cr>", {})
 
 -- use ⌘-s to save to avoid the confirmation dialog
 ks("n", "<a-s>", "<cmd>silent! wall<cr>", {})
-
-
 
 -- NOTE: local_nvim is symlinked in from local-dotfiles to allow for local
 -- system specific customizations
