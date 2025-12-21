@@ -1,10 +1,10 @@
-snippet workspaces "Set up Cargo.toml workspaces"
+snippet @workspaces "Set up Cargo.toml workspaces"
 	# see https://doc.rust-lang.org/cargo/reference/workspaces.html
 	[workspace]
 	resolver = "2"
 	members = ["crates/*"]
 
-snippet dependencies "Favourite crates"
+snippet @dependencies "Favourite crates"
 	[dependencies]
 	# Augment errors with additional context
 	# https://github.com/dtolnay/anyhow
@@ -15,7 +15,7 @@ snippet dependencies "Favourite crates"
 	serde_json = "1.0.109"
 	serde_yaml = "0.9.30"
 
-snippet patch "patch resolution"
+snippet @patch "patch resolution"
   # see <https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html#the-patch-section>
   [patch.'${1:souce-url}']
   ${2:crate} = { path = "${3:../some/relative/path/to/crate}" }

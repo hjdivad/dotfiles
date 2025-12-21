@@ -1,10 +1,3 @@
-local function __dirname()
-  local fullpath = debug.getinfo(1, "S").source:sub(2)
-  local dirname, filename = fullpath:match("^(.*/)([^/]-)$")
-
-  return dirname, filename
-end
-
 ---@module 'lazy.types'
 ---@type LazyPluginSpec[]
 return {
