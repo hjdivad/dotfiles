@@ -3,4 +3,12 @@
 # pipelines fail if any element fails
 set -euo pipefail
 
+#USAGE flag "--offline" default="false" help="Run in offline mode. This relies on minit having already been set up."
+
+offline="${usage_offline?}"
+
+if [[ "${offline}" == "true" ]]; then
+  export LAZY_OFFLINE="true"
+fi
+
 cd packages/nvim && nvim -l tests/minit.lua --minitest

@@ -15,6 +15,7 @@ Quick orientation for this `packages/nvim` tree.
 - Specs live in `packages/nvim/tests/hjdivad/*_spec.lua`.
 - Tests use `luassert` and run inside Neovim; see `packages/nvim/tests/minit.lua`.
 - Patterns: tests often stub `vim.fn`/`vim.system` (example: `packages/nvim/tests/hjdivad/git_spec.lua`).
+- Run tests with: `mise run test:nvim --offline`
 
 ## Conventions
 - Prefer `vim.system` for external commands in Lua modules (see `packages/nvim/lua/hjdivad/tmux.lua`).
