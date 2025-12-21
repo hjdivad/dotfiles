@@ -1,0 +1,33 @@
+// see <https://zellij.dev/documentation/layout-examples.html>
+
+layout {
+  default_tab_template {
+    pane size=1 borderless=true {
+      plugin location="zellij:tab-bar"
+    }
+
+    children
+
+    pane size=2 borderless=true {
+      plugin location="zellij:status-bar"
+    }
+  }
+
+  tab name="editor" {
+    pane command="nvim" name="editor"
+  }
+
+  tab split_direction="vertical" name="agent" {
+    pane name="terminals" {
+      pane
+      pane split_direction="horizontal" {
+      }
+    }
+    pane split_direction="vertical" name="prompt" {
+      command "nvim"
+      args "+StartAgentPrompt"
+    }
+    pane split_direction="vertical" command="codex" name="agent"
+  }
+
+}
