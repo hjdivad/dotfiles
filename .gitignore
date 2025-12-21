@@ -6,3 +6,4 @@
 /.task
 /.test
 /.cursor/mcp.json
+/packages/nvim/.nvimlog
