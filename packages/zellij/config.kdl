@@ -108,7 +108,6 @@ keybinds clear-defaults=true {
                 floating true
                 move_to_focused_tab true
             }
-            SwitchToMode "normal"
             SwitchToMode "locked"
         }
         bind "c" {
@@ -116,7 +115,6 @@ keybinds clear-defaults=true {
                 floating true
                 move_to_focused_tab true
             }
-            SwitchToMode "normal"
             SwitchToMode "locked"
         }
         bind "Ctrl o" { SwitchToMode "normal"; }
@@ -125,7 +123,6 @@ keybinds clear-defaults=true {
                 floating true
                 move_to_focused_tab true
             }
-            SwitchToMode "normal"
             SwitchToMode "locked"
         }
         bind "s" {
@@ -133,7 +130,6 @@ keybinds clear-defaults=true {
                 floating true
                 move_to_focused_tab true
             }
-            SwitchToMode "normal"
             SwitchToMode "locked"
         }
         bind "w" {
@@ -141,7 +137,6 @@ keybinds clear-defaults=true {
                 floating true
                 move_to_focused_tab true
             }
-            SwitchToMode "normal"
             SwitchToMode "locked"
         }
     }
