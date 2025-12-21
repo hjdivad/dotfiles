@@ -1,5 +1,6 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
+local act = wezterm.action
 
 config.color_scheme = "Tokyo Night"
 
@@ -19,13 +20,12 @@ config.debug_key_events = true
 
 config.keys = {}
 
-
 -- assumes a terminfo is installed;
 -- see <https://wezfurlong.org/wezterm/faq.html#how-do-i-enable-undercurl-curly-underlines>
 config.term = "wezterm"
 
 -- Use ⌘-n to go to tab n in neovim
-for i = 1, 9 do
+for i = 1, 8 do
 	-- {
 	-- 	key = "1",
 	-- 	mods = "CMD",
@@ -34,9 +34,32 @@ for i = 1, 9 do
 	table.insert(config.keys, {
 		key = tostring(i),
 		mods = "CMD",
-		action = wezterm.action({ SendKey = { key = "F" .. i } }),
+		-- see <https://wezterm.org/config/keys.html>
+		action = act.Multiple({
+			-- switch to zellij tab
+			act.SendKey({
+				-- FIXME: I'd rather send SUPER or CTRL|ALT but neither of these seem to
+				-- get picked up by zellij. The docs suggest it should work.
+				key = "1",
+				mods = "ALT",
+			}),
+			-- switch to nvim tab
+			act.SendKey({
+				key = "F" .. tostring(i),
+			}),
+		}),
 	})
 end
+
+-- switch to zellij agents tab
+table.insert(config.keys, {
+	key = "9",
+	mods = "CMD",
+	action = act.SendKey({
+		key = "9",
+		mods = "ALT",
+	}),
+})
 
 table.insert(config.keys, {
 	key = '`',

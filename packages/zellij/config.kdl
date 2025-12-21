@@ -235,6 +235,12 @@ keybinds clear-defaults=true {
     shared_among "session" "tmux" {
         bind "d" { Detach; }
     }
+    shared {
+      // FIXME: I'd rather these were bound to "Super" or even "Ctrl Alt" but
+      // neither seem to work with Wezterm.  The docs suggest it should.
+      bind "Alt 1" { GoToTab 1; }
+      bind "Alt 9" { GoToTab 2; }
+    }
     tmux {
         bind "left" { MoveFocus "left"; SwitchToMode "normal"; }
         bind "down" { MoveFocus "down"; SwitchToMode "normal"; }
