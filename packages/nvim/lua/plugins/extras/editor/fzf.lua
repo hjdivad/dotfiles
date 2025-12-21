@@ -1,5 +1,3 @@
-local tmux = require("hjdivad.tmux")
-
 -- TODO: maybe switch to Snacks.picker?
 
 ---@type LazySpec[]
@@ -57,19 +55,6 @@ return {
           require("fzf-lua").git_diff({ commit = ref })
         end,
         desc = "git diff vs merge-base",
-      },
-      {
-        "<leader>tsd",
-        function()
-          tmux.goto_tmux_session("📋 todos", "todos")
-        end,
-        desc = "tmux -> todos",
-      },
-      { "<leader>tst", "<Cmd>silent !tmux switch-client -l<cr>", desc = "tmux -> toggle" },
-      {
-        "<leader>tss",
-        tmux.goto_fzf_tmux_session,
-        desc = "tmux -> fzf session",
       },
       {
         "<leader>hh",

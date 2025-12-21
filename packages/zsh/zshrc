@@ -186,9 +186,6 @@ export LESS='-R -x2 -i'
 # Always colourize ls output.
 export CLICOLOR=1
 
-# go-task
-alias tt=task
-
 if which watchexec > /dev/null 2>&1; then
   alias we=watchexec
 fi
@@ -210,7 +207,6 @@ export GPG_TTY=$(tty)
 
 
 # CMD: starship init zsh
-# CMD: zoxide init zsh
 
 
 # set up homebrew
@@ -280,62 +276,10 @@ if uname -a | grep -q Microsoft; then
   fi
 fi
 
+alias z='zellij'
+# TODO: binutil (select repo, branch; arg for agent, w/default)
+alias zn='z options --session-name test --default-layout agent_codex --attach-to-session false'
 
-# setup tmux
-# see <https://github.com/rwjblue/dotfiles/blob/master/zsh/plugins/tmux.zsh>
-TODOS="📋 todos"
-
-function __ts_todos {
-  tmux select-window -t "${TODOS}:todos"
-
-  t_current_session=$(tmux display -p '#S')
-  t_current_session=${t_current_session%\n}
-  if [[ "$t_current_session" != "${TODOS}" ]]; then
-    # switch to "last" (ie last used) session
-    # switch to the todos session
-    tmux switch-client -t "${TODOS}"
-  fi
-}
-
-# TODO: This impl is now a mess, but it may not matter once I ascend to zellij.
-if which fd > /dev/null 2>&1; then
-  function __ts_go_source {
-    local to_dir=$(
-      fd . --type directory --max-depth 3 "$HOME/src" "$HOME/wk/github" |\
-      sd "$HOME/src/" '' |\
-      sd "$HOME/wk/github" '' |\
-      sd "/$" '' |\
-      fzf\
-    )
-
-    if [[ -n "$to_dir" && -d $HOME/src/$to_dir ]]; then
-      cd $HOME/src/$to_dir
-      if [[ -n $TMUX ]]; then
-        local window_name=$(
-          echo "$to_dir" |\
-          sd "hjdivad/" ''
-        )
-        tmux rename-window "${window_name}"
-      fi
-    elif [[ -n "$to_dir" && -d $HOME/wk/github/$to_dir ]]; then
-      cd $HOME/wk/github/$to_dir
-      if [[ -n $TMUX ]]; then
-        local window_name=$(
-          echo "$to_dir" |\
-          sd "hjdivad/" ''
-        )
-        tmux rename-window "${window_name}"
-      fi
-    fi
-  }
-
-  alias gs=__ts_go_source
-fi
-
-alias t='tmux'
-alias tss='tmux display-popup -E -w 100% -h 100% nvim -c "lua require('"'"'hjdivad.tmux'"'"').goto_fzf_tmux_session({ quit_on_selection=true })"'
-alias tst='tmux switch-client -l'
-alias tsd=__ts_todos
 
 # To run in verbose mode
 #

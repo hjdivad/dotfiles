@@ -33,7 +33,6 @@ return {
         { "<leader>g", group = "+goto/git" },
         { "<leader>s", group = "+search/show" },
         { "<leader>t", group = "+to" },
-        { "<leader>ts", group = "+tmux session" },
         { "<leader>y", group = "+yank (to clipboard)" },
         { "<leader>n", group = "+notifications" },
         { "<leader>u", group = "+ui" },

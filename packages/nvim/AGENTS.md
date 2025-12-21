@@ -18,7 +18,7 @@ Quick orientation for this `packages/nvim` tree.
 - Run tests with: `mise run test:nvim --offline`
 
 ## Conventions
-- Prefer `vim.system` for external commands in Lua modules (see `packages/nvim/lua/hjdivad/tmux.lua`).
+- Prefer `vim.system` for external commands in Lua modules.
 - Modules under `lua/config/*` usually return a table of functions with minimal state.
 - Keep Lua edits ASCII unless a file already uses Unicode.
 
