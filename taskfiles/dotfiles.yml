@@ -82,7 +82,6 @@ tasks:
   utils:link_dotfiles:
     internal: true
     deps:
-      # TODO: preferentially link from local-packages?
       - task: utils:link_macos_dotfiles
       - task: utils:link_linux_dotfiles
 
@@ -113,6 +112,10 @@ tasks:
         - "packages/mise/|$HOME/.config/mise"
         - "packages/mcp/|$HOME/.config/mcp"
         - "packages/hammerspoon/|$HOME/.hammerspoon"
+        - "packages/ccstatusline/|$HOME/.config/ccstatusline"
+        - "packages/claude/settings.json|$HOME/.claude/settings.json"
+        - "local-packages/cursor/mcp.json|$HOME/.cursor/mcp.json"
+        - "packages/zellij/|$HOME/.config/zellij"
 
     cmds:
       - for:
@@ -169,13 +172,9 @@ tasks:
         - "packages/alfred/preferences/features/websearch/yahoo|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yahoo"
         - "packages/alfred/preferences/features/websearch/youtube|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/youtube"
         - "packages/alfred/preferences/features/websearch/yubnub|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yubnub"
-        - "packages/ccstatusline/|$HOME/.config/ccstatusline"
-        - "packages/claude/settings.json|$HOME/.claude/settings.json"
         - "local-packages/claude/claude_desktop_config.json|$HOME/Library/Application Support/Claude/claude_desktop_config.json"
         - "packages/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
         - "local-packages/cursor/settings.json|$HOME/Library/Application Support/Cursor/User/settings.json"
-        - "local-packages/cursor/mcp.json|$HOME/.cursor/mcp.json"
-        - "packages/zellij/|$HOME/.config/zellij"
     cmds:
       - for:
           var: MACOS_DOTFILES
