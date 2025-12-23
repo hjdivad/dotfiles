@@ -57,6 +57,22 @@ if which fd > /dev/null 2>&1; then
     fd . | fzf
   }
 
+  function __go_to_src_dir {
+    local selected_dir=$(
+      {
+        fd . ~/src/github ~/src/nas --mindepth 2 --maxdepth 2 | sd "$HOME/" ''
+        fd . ~/src/local --mindepth 1 --maxdepth 1 | sd "$HOME/" ''
+        fd . ~/wk --mindepth 3 --maxdepth 3 | sd "$HOME/" ''
+      } | fzf
+    )
+
+    local selected_abs_path=$(realpath "$HOME/${selected_dir}")
+
+    if [[ -n "$selected_abs_path" ]]; then
+      cd "$selected_abs_path"
+    fi
+  }
+
   function __go_to_dir {
     local to_dir=$(__pick_dir)
 
@@ -65,8 +81,8 @@ if which fd > /dev/null 2>&1; then
     fi
   }
 
-  # "go directory (with fzf)
   alias gd='__go_to_dir'
+  alias gs='__go_to_src_dir'
   alias pd='__pick_dir'
   alias pf='__pick_file'
 fi
