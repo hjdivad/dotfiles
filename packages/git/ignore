@@ -5,6 +5,9 @@
 /.nvim.lua
 /.lazy.lua
 
+# ignore ephemeral agent files (prompt + plan &c.)
+/.uc
+
 # node
 /node_modules
 

@@ -86,19 +86,53 @@ function M.StartAgentPrompt()
     task = "task"
   end
 
-  local prompt_dir
+  local edit_cwd
+  local prompt_file
+
   if linked_worktree then
-    prompt_dir = worktree_root_abs .. "/.uc"
+    local prompt_dir = trim_trailing_slash(worktree_root_abs .. "/.uc")
+
+    edit_cwd = prompt_dir
+    prompt_file = prompt_dir .. "/" .. task .. ".prompt.md"
+
+    vim.fn.mkdir(prompt_dir, "p")
   else
-    prompt_dir = vim.fn.expand("$HOME/.local/state/uc/" .. repo_rel)
+    local prompt_dir = trim_trailing_slash(vim.fn.expand("$HOME/.local/state/uc/" .. repo_rel .. "/" .. task))
+    local link_path = worktree_root_abs .. "/.uc"
+
+    local link_stat, link_err = vim.loop.fs_lstat(link_path)
+    if link_stat ~= nil then
+      if link_stat.type ~= "link" then
+        echo_err("StartAgentPrompt: .uc already exists and is not a symlink")
+        return
+      end
+
+      local unlink_ok = vim.loop.fs_unlink(link_path)
+      if not unlink_ok then
+        echo_err("StartAgentPrompt: unable to replace existing .uc symlink")
+        return
+      end
+    elseif link_err ~= nil then
+      local err_msg = tostring(link_err)
+      if not err_msg:match("ENOENT") then
+        echo_err("StartAgentPrompt: unable to read existing .uc")
+        return
+      end
+    end
+
+    vim.fn.mkdir(prompt_dir, "p")
+
+    local symlink_ok = vim.loop.fs_symlink(prompt_dir, link_path)
+    if not symlink_ok then
+      echo_err("StartAgentPrompt: unable to create .uc symlink")
+      return
+    end
+
+    edit_cwd = worktree_root_abs
+    prompt_file = ".uc/" .. task .. ".prompt.md"
   end
 
-  prompt_dir = trim_trailing_slash(prompt_dir)
-  local prompt_file = prompt_dir .. "/" .. task .. ".prompt.md"
-
-  vim.fn.mkdir(prompt_dir, "p")
-
-  vim.cmd("cd " .. vim.fn.fnameescape(prompt_dir))
+  vim.cmd("cd " .. vim.fn.fnameescape(edit_cwd))
   vim.cmd("edit " .. vim.fn.fnameescape(prompt_file))
 end
 
