@@ -116,6 +116,7 @@ tasks:
         - "packages/claude/settings.json|$HOME/.claude/settings.json"
         - "local-packages/cursor/mcp.json|$HOME/.cursor/mcp.json"
         - "packages/zellij/|$HOME/.config/zellij"
+        - "packages/codex/AGENTS.md|$HOME/.codex/AGENTS.md"
         - "packages/codex/skills|$HOME/.codex/skills"
 
     cmds:
