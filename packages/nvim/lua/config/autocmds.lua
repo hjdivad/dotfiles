@@ -54,7 +54,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = { ".mise/tasks/*", ".mise-tasks/*"},
+  pattern = {
+    "mise/tasks/*.sh",
+    "mise/tasks/**/*.sh",
+    ".mise/tasks/*.sh",
+    ".mise/tasks/**/*.sh",
+    ".mise-tasks/*.sh",
+    ".mise-tasks/**/*.sh",
+  },
   group = ft_group,
   callback = function()
     require("luasnip").filetype_extend("sh", { "mise_sh" })
@@ -62,7 +69,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = {  ".github/dependabot.yml", ".github/dependabot.yaml" },
+  pattern = { ".github/dependabot.yml", ".github/dependabot.yaml" },
   group = ft_group,
   callback = function()
     require("luasnip").filetype_extend("yaml", { "dependabot" })
@@ -142,7 +149,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 term.setup()
-
 
 -- NOTE: local_nvim is symlinked in from local-dotfiles to allow for local
 -- system specific customizations

@@ -16,10 +16,15 @@ snippet @arg "task argument"
 
   arg_name="${usage_arg_name}"
 
-snippet @flag "task flag"
-  #USAGE flag "-c --clean" help="does something probably"
+snippet @flag_bool "task boolean flag"
+  #USAGE flag "${1:-s} --${2:long}" help="${3:does something probably}"
 
-  flag_clean="${usage_clean:-false}"
+  flag_${2}="${usage_${2}:-false}"${0}
+
+snippet @flag_arg "task arg flag"
+  #USAGE flag "${1:-s} --${2:long} <${3:arg_description}>" help="${4:does something probably}"
+
+  flag_${2}="${usage_${2}:-}"${0}
   
 snippet @mise_task "mise task"
   #!/bin/bash
