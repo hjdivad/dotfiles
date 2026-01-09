@@ -8,6 +8,7 @@ return {
     opts = function(_, opts)
       local fluff = require('lint').linters.sqlfluff
       fluff.args = { "lint", "--format=json" }
+      fluff.stdin = false
       return opts
     end,
   },
