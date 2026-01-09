@@ -162,12 +162,6 @@ ks(
   { desc = "Redraw / clear hlsearch / checktime / diff update" }
 )
 
-local terminal = function()
-  require("snacks").terminal()
-end
-ks("n", "<c-t>", terminal, { desc = "Terminal (root dir)" })
-ks("t", "<c-t>", terminal, { desc = "Terminal (root dir)" })
-
 local clipboard_reg
 if vim.fn.has("clipboard") then
   clipboard_reg = "+"
