@@ -6,6 +6,6 @@ set -euo pipefail
 git branch --merged |\
   grep -Ev '^(\*|(\s*(master|main)))' |\
   grep -Eo '[a-zA-Z0-9/_-]+' |\
-  git branch -d
+  xargs git branch -d
 
 git remote prune origin
