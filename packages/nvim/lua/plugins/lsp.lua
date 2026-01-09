@@ -29,7 +29,9 @@ return {
         "marksman",
         "pyright",
         "ruff",
-        "sqlls",
+        -- sqlls requires configuration; out of the box it will give unexpected lint errors under the "sql" namespace
+        -- https://github.com/joe-re/sql-language-server?tab=readme-ov-file
+        -- "sqlls",
         "taplo",
         "typescript-language-server",
         "yaml-language-server",
