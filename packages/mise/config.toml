@@ -34,6 +34,7 @@ pnpm = "latest"
 # I'd rather install via uv but it doesn't work
 "pipx:petname" = "latest"
 "pipx:sqlit-tui" = "latest"
+opencode = "latest"
 
 [settings]
 experimental = true
