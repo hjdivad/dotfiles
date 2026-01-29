@@ -1,6 +1,6 @@
 
 -- Git changes tree function moved to hjdivad.neotree module
-local neotree_git = require('hjdivad.neotree')
+local neotree_git = require("hjdivad.neotree")
 
 ---@type LazyPluginSpec[]
 return {
@@ -94,10 +94,13 @@ return {
       git_status = {
         window = {
           mappings = {
+            ["gg"] = function()
+              vim.cmd("normal! gg")
+            end,
             ["gd"] = function(state)
               local node = state.tree:get_node()
               if node and node.type == "file" then
-                require('hjdivad.neotree').open_file_for_diff(state)
+                require("hjdivad.neotree").open_file_for_diff(state)
               else
                 require("neo-tree/sources/common/commands").toggle_node(state)
               end
@@ -105,7 +108,7 @@ return {
             ["<cr>"] = function(state)
               local node = state.tree:get_node()
               if node and node.type == "file" then
-                require('hjdivad.neotree').open_file_close_others(state)
+                require("hjdivad.neotree").open_file_close_others(state)
               else
                 require("neo-tree/sources/common/commands").toggle_node(state)
               end
