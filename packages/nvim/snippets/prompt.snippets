@@ -6,5 +6,13 @@ snippet @prompt
   ${0}
 
 snippet @agent_plan
-  Investigate however much you want: read files, search the web, &c. Ask any clarifying questions and then
-  formulate a plan.
+  Consider what I've told you and investigate to understand the current state and the desired future state.  Use whatever read tools would be helpful.  When you understand the problem, ask any clarifying questions before presenting a plan.
+
+snippet @agent_uc
+  You can use the \`.uc/\` directory as a scratchpad.  This place is for ephemeral files for agents to track their work and communicate amongst one another.
+
+  Whenever we've agreed on a plan, write it at \`.uc/plan.md\`.  Keep this file succinct and focused on the various phases. It should contain goals and a concise context.  More detailed context can be stored in other files within \`.uc/\` and referred to from the plan.  Have the phases themselves refer to other detailed files within \`.uc/\`.  Ensure that the plan file + associated files are complete and detailed enough for other agents to execute. 
+
+  Each phase of a plan must have verification steps.  Prefer automatic verification steps when possible.  When verification requires manual human intervention, note this.
+
+  When you are executing the phase of a plan, make sure to update \`.uc/plan.md\` to indicate what phases are complete, and what phases remain to be done.
