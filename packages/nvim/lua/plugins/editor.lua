@@ -1,4 +1,3 @@
-
 -- Git changes tree function moved to hjdivad.neotree module
 local neotree_git = require("hjdivad.neotree")
 
@@ -139,6 +138,28 @@ return {
         char = {
           enabled = false,
         },
+      },
+    },
+    keys = {
+      { "<C-Space>", false },
+      {
+        "<m-v>",
+        "v",
+        mode = { "n", "o", "x"},
+        desc = "Visual Mode (default)"
+      },
+      {
+        "v",
+        mode = { "n", "o", "x"},
+        function()
+          require("flash").treesitter({
+            actions = {
+              ["<c-j>"] = "next",
+              ["<c-k>"] = "prev",
+            },
+          })
+        end,
+        desc = "Treesitter Incremental Selection",
       },
     },
   },
