@@ -35,6 +35,7 @@ pnpm = "latest"
 "pipx:petname" = "latest"
 "pipx:sqlit-tui" = "latest"
 opencode = "latest"
+"npm:@mcpjam/inspector" = "latest"
 
 [settings]
 experimental = true
