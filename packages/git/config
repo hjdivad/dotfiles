@@ -56,7 +56,6 @@
 
   master = "!f() { git show-ref --verify --quiet refs/remotes/origin/master && echo origin/master || { git-show-ref --verify --quiet refs/remotes/origin/main && echo origin/main; }; }; f"
   changed-files = "!f() { git diff --name-only $(git merge-base HEAD $(git master))..HEAD; }; f"
-  ; changed-files = git diff --name-only $(git merge-base HEAD origin/master)..HEAD
   wc = "!f() { git log -u --ext-diff $(git master)..; }; f"
 
   log-sans-bot =  "!f() { git log \"$@\"; }; f -P --author='^(?!(dependabot|svc-))'"
