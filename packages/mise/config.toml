@@ -2,16 +2,6 @@
 
 [tools]
 
-# core tools
-go = "latest"
-node = "latest"
-lua = "latest"
-ruby = "latest"
-rust = { version = "latest", components = "rust-analyzer,clippy" }
-python = "latest"
-pipx = "latest"
-uv = "latest"
-
 # software verification (see https://mise.jdx.dev/tips-and-tricks.html#software-verification)
 slsa-verifier = "latest"
 
@@ -36,6 +26,16 @@ pnpm = "latest"
 "pipx:sqlit-tui" = "latest"
 opencode = "latest"
 "npm:@mcpjam/inspector" = "latest"
+
+# core tools
+go = "latest"
+node = "latest"
+lua = "latest"
+ruby = "latest"
+rust = { version = "latest", components = "rust-analyzer,clippy" }
+python = "latest"
+pipx = "latest"
+uv = "latest"
 
 [settings]
 experimental = true
