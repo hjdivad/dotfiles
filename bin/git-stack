@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# === git-stack ===
+# Create the next branch in a stack following the pattern {NAMESPACE}/{TASK}/{SUFFIX}
+#
+# Usage: git stack [STACK_ITEM]
+#   STACK_ITEM - optional suffix for the new branch (must match [a-z]+)
+#
+# Stack items follow this sequence:
+#   a, b, c, ..., z (single letters)
+#   ba, bb, bc, ... (inserted between b and c when c exists)
+#   st is a special "stack top" branch, excluded from auto-generation
+
+# === Parse arguments ===
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  echo "Usage: git stack [STACK_ITEM]"
+  echo ""
+  echo "Create the next branch in a stack from the current branch."
+  echo "Current branch must match pattern '{NAMESPACE}/{TASK}/{SUFFIX}'"
+  echo ""
+  echo "Arguments:"
+  echo "  STACK_ITEM  Optional suffix for new branch (must match [a-z]+)"
+  echo "              If omitted, automatically determines the next item"
+  echo ""
+  echo "Examples:"
+  echo "  git stack      # Auto-generate next stack item"
+  echo "  git stack a    # Create branch with suffix 'a'"
+  echo "  git stack ba   # Create branch with suffix 'ba'"
+  exit 0
+fi
+
+STACK_ITEM="${1:-}"
+
+# === Get current branch ===
+current_branch=$(git branch --show-current)
+
+if [[ -z "$current_branch" ]]; then
+  echo "Error: Not on a branch (detached HEAD state)" >&2
+  exit 1
+fi
+
+# === Validate branch pattern ===
+if [[ ! "$current_branch" =~ ^([^/]+)/([^/]+)/([^/]+)$ ]]; then
+  echo "Error: Current branch '$current_branch' does not match pattern '{NAMESPACE}/{TASK}/{SUFFIX}'" >&2
+  echo "Expected format: {NAMESPACE}/{TASK}/{SUFFIX}" >&2
+  exit 1
+fi
+
+NAMESPACE="${BASH_REMATCH[1]}"
+TASK="${BASH_REMATCH[2]}"
+SUFFIX="${BASH_REMATCH[3]}"
+
+# Validate suffix matches [a-z]+
+if [[ ! "$SUFFIX" =~ ^[a-z]+$ ]]; then
+  echo "Error: Branch suffix '$SUFFIX' must match [a-z]+" >&2
+  exit 1
+fi
+
+# === Check git tree is clean ===
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "Error: Git tree is dirty. Please commit or stash changes first." >&2
+  exit 1
+fi
+
+# === Helper functions ===
+
+# Get all existing stack suffixes (excluding 'st')
+get_existing_suffixes() {
+  git for-each-ref --format='%(refname:short)' "refs/heads/${NAMESPACE}/${TASK}/*" 2>/dev/null | while IFS= read -r branch; do
+    suffix="${branch##*/}"
+    if [[ "$suffix" =~ ^[a-z]+$ ]] && [[ "$suffix" != "st" ]]; then
+      echo "$suffix"
+    fi
+  done
+}
+
+# Check if a suffix exists in the list
+suffix_exists() {
+  local target="$1"
+  shift
+  for s in "$@"; do
+    if [[ "$s" == "$target" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+# Increment a suffix (a->b, z->za, ba->bb, bz->bza)
+increment_suffix() {
+  local s="$1"
+  local last_char="${s: -1}"
+  local prefix="${s%?}"
+
+  if [[ "$last_char" == "z" ]]; then
+    echo "${s}a"
+  else
+    # Increment last character
+    local next_char
+    next_char=$(printf "\\x$(printf '%02x' $(($(printf '%d' "'$last_char") + 1)))")
+    echo "${prefix}${next_char}"
+  fi
+}
+
+# === Determine target suffix ===
+if [[ -n "$STACK_ITEM" ]]; then
+  # User provided explicit stack item
+  if [[ ! "$STACK_ITEM" =~ ^[a-z]+$ ]]; then
+    echo "Error: Stack item '$STACK_ITEM' must match [a-z]+" >&2
+    exit 1
+  fi
+  TARGET_SUFFIX="$STACK_ITEM"
+else
+  # Auto-generate next suffix
+  existing_suffixes=()
+  while IFS= read -r s; do
+    [[ -n "$s" ]] && existing_suffixes+=("$s")
+  done < <(get_existing_suffixes)
+
+  if [[ "$SUFFIX" == "st" ]]; then
+    # From 'st', find first available single letter
+    TARGET_SUFFIX=""
+    for c in {a..z}; do
+      if ! suffix_exists "$c" "${existing_suffixes[@]+"${existing_suffixes[@]}"}"; then
+        TARGET_SUFFIX="$c"
+        break
+      fi
+    done
+    if [[ -z "$TARGET_SUFFIX" ]]; then
+      echo "Error: Stack limit reached - all single-letter branches a-z exist" >&2
+      exit 1
+    fi
+  else
+    # Compute next_major (first char of current suffix + 1)
+    first_char="${SUFFIX:0:1}"
+    if [[ "$first_char" == "z" ]]; then
+      echo "Error: Stack limit reached - cannot create branches after z*" >&2
+      exit 1
+    fi
+
+    next_major_char=$(printf "\\x$(printf '%02x' $(($(printf '%d' "'$first_char") + 1)))")
+
+    if ! suffix_exists "$next_major_char" "${existing_suffixes[@]+"${existing_suffixes[@]}"}"; then
+      TARGET_SUFFIX="$next_major_char"
+    else
+      # next_major exists, insert in current sub-stack
+      TARGET_SUFFIX=$(increment_suffix "$SUFFIX")
+      
+      # Safety limit to prevent infinite loops
+      iterations=0
+      max_iterations=1000
+      
+      while suffix_exists "$TARGET_SUFFIX" "${existing_suffixes[@]+"${existing_suffixes[@]}"}"; do
+        TARGET_SUFFIX=$(increment_suffix "$TARGET_SUFFIX")
+        iterations=$((iterations + 1))
+        if [[ $iterations -ge $max_iterations ]]; then
+          echo "Error: Could not find available suffix after $max_iterations attempts" >&2
+          exit 1
+        fi
+      done
+    fi
+  fi
+fi
+
+TARGET_BRANCH="${NAMESPACE}/${TASK}/${TARGET_SUFFIX}"
+
+# === Check for collision ===
+if git show-ref --verify --quiet "refs/heads/${TARGET_BRANCH}"; then
+  echo "Error: Branch '$TARGET_BRANCH' already exists" >&2
+  exit 1
+fi
+
+# === Create and switch to new branch ===
+git checkout -b "$TARGET_BRANCH"
+echo "Created and switched to branch '$TARGET_BRANCH'"
