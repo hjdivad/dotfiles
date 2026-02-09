@@ -5,3 +5,24 @@ snippet @bash_script "bash script with sane defaults"
   set -euo pipefail
 
   ${0}
+
+snippet @multi_line_string "bash multi-line strings in bash"
+  "$(cat <<'EOF'
+    ${0}
+  EOF
+  )"
+
+snippet @curl_json "curl request with json body"
+  url="${1:https://example.com}"
+
+  body="$(cat <<'EOF'
+    ${0}
+  EOF
+  )"
+
+  curl \
+    -i \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d "$body" \
+    "$url"
