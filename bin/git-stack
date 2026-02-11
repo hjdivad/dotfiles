@@ -119,17 +119,25 @@ else
   done < <(get_existing_suffixes)
 
   if [[ "$SUFFIX" == "st" ]]; then
-    # From 'st', find first available single letter
-    TARGET_SUFFIX=""
-    for c in {a..z}; do
-      if ! suffix_exists "$c" "${existing_suffixes[@]+"${existing_suffixes[@]}"}"; then
-        TARGET_SUFFIX="$c"
-        break
-      fi
-    done
-    if [[ -z "$TARGET_SUFFIX" ]]; then
-      echo "Error: Stack limit reached - all single-letter branches a-z exist" >&2
-      exit 1
+    # From 'st', find the largest existing suffix and increment from there
+    if [[ ${#existing_suffixes[@]} -eq 0 ]]; then
+      TARGET_SUFFIX="a"
+    else
+      max_suffix=$(printf '%s\n' "${existing_suffixes[@]}" | sort | tail -n 1)
+      TARGET_SUFFIX=$(increment_suffix "$max_suffix")
+
+      # Safety limit to prevent infinite loops
+      iterations=0
+      max_iterations=1000
+
+      while suffix_exists "$TARGET_SUFFIX" "${existing_suffixes[@]}"; do
+        TARGET_SUFFIX=$(increment_suffix "$TARGET_SUFFIX")
+        iterations=$((iterations + 1))
+        if [[ $iterations -ge $max_iterations ]]; then
+          echo "Error: Could not find available suffix after $max_iterations attempts" >&2
+          exit 1
+        fi
+      done
     fi
   else
     # Compute next_major (first char of current suffix + 1)
