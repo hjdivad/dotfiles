@@ -231,6 +231,7 @@ return {
         map("n", "<leader>gj", gs.next_hunk, "Goto Next Hunk")
         map("n", "<leader>gk", gs.prev_hunk, "Goto Prev Hunk")
         map("n", "<leader>gp", preview_hunk, "Goto Preview Hunk")
+        map("n", "<leader>gu", gs.reset_hunk, "Undo (reset) Current Hunk")
         map("n", "<leader>gb", function()
           gs.blame_line({ full = true })
         end, "Blame Line")
