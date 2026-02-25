@@ -6,6 +6,9 @@ snippet @bash_script "bash script with sane defaults"
 
   ${0}
 
+snippet @bash_plus "bash addition"
+  ${1:TOTAL}=$((${2:VAR_A} + ${${3:VAR_B}:-0}))${0}
+
 snippet @multi_line_string "bash multi-line strings in bash"
   "$(cat <<'EOF'
     ${0}
