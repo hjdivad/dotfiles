@@ -1,8 +1,9 @@
 local M = {}
 
 local agents = {
+  -- obviously only run these in trusted directories
   claude = "claude --dangerously-skip-permissions",
-  cursor = "cursor-agent -f",
+  cursor = "cursor-agent --force --approve-mcps",
 }
 
 local function do_start_agent(agent_cmd)
