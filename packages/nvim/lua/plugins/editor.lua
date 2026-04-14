@@ -57,6 +57,7 @@ return {
     },
     opts = {
       window = {
+        width = 60,
         mappings = {
           ["a"] = {
             "add",
