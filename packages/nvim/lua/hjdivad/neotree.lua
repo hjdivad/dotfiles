@@ -304,11 +304,14 @@ function M.show_git_changes_tree_head_only()
   end
 
   M.switch_to_git_changes_tab()
-
+  --TODO: on weirdness
+  --  require('gitsigns.config').config.base
+  -- TODO: gs.change_base(HEAD~1, true)
+  --
   -- Show only changes in HEAD commit (compared to HEAD~1)
+---@diagnostic disable-next-line: param-type-mismatch
+  require('gitsigns').change_base('HEAD~1', true)
   vim.cmd("Neotree git_status git_base=HEAD~1 reveal=true")
-  -- Note: We do NOT call git.set_gs_to_merge_base() here,
-  -- so gitsigns keeps using its configured base (origin/HEAD)
 end
 
 return M
