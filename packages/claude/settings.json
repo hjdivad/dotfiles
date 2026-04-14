@@ -6,8 +6,27 @@
     "command": "~/.local/share/mise/shims/ccstatusline",
     "padding": 0
   },
+  "extraKnownMarketplaces": {
+    "pact-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "askscio/claude-plugin-oncall-pact"
+      }
+    }
+  },
+  "skipDangerousModePermissionPrompt": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754067631960
   },
-  "skipDangerousModePermissionPrompt": true
+  "enabledPlugins": {
+    "oncall-pact@pact-plugins": true
+  },
+  "hooks": {
+    "PreToolUse": [],
+    "PostToolUse": [],
+    "UserPromptSubmit": [],
+    "Stop": [],
+    "SessionStart": [],
+    "SessionEnd": []
+  }
 }
