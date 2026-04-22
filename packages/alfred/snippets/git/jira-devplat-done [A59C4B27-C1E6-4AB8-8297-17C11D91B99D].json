@@ -1,0 +1,8 @@
+{
+  "alfredsnippet" : {
+    "snippet" : "DEVPLAT-{cursor} #done",
+    "uid" : "A59C4B27-C1E6-4AB8-8297-17C11D91B99D",
+    "name" : "jira-devplat-done",
+    "keyword" : "@jdd"
+  }
+}
