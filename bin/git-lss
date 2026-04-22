@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  echo "Usage: git lss"
+  echo ""
+  echo "List branches in the current stack."
+  echo "Current branch must match pattern '{NAMESPACE}/{TASK}/{SUFFIX}'"
+  exit 0
+fi
+
+current_branch=$(git branch --show-current)
+
+if [[ -z "$current_branch" ]]; then
+  echo "Error: Not on a branch (detached HEAD state)" >&2
+  exit 1
+fi
+
+if [[ ! "$current_branch" =~ ^([^/]+)/([^/]+)/([^/]+)$ ]]; then
+  echo "Error: Current branch '$current_branch' does not match pattern '{NAMESPACE}/{TASK}/{SUFFIX}'" >&2
+  echo "Expected format: {NAMESPACE}/{TASK}/{SUFFIX}" >&2
+  exit 1
+fi
+
+namespace="${BASH_REMATCH[1]}"
+task="${BASH_REMATCH[2]}"
+
+exec git branch --list "${namespace}/${task}/*" -v
