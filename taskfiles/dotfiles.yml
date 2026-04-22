@@ -175,6 +175,8 @@ tasks:
         - "packages/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
         - "local-packages/cursor/settings.json|$HOME/Library/Application Support/Cursor/User/settings.json"
         - "local-packages/cursor/mcp.json|$HOME/.cursor/mcp.json"
+        - "local-packages/agents/AGENTS.md|$HOME/.claude/CLAUDE.md"
+        - "local-packages/agents/AGENTS.md|$HOME/.codex/AGENTS.md"
         - "packages/zellij/|$HOME/.config/zellij"
     cmds:
       - for:
