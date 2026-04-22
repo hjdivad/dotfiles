@@ -45,7 +45,7 @@
   cmm = commit --amend -CHEAD
 
   # push one origin
-  pf = push --force-with-lease origin @
+  pf = push --force-with-lease --set-upstream origin @
 
   gip = grep -iP
 
