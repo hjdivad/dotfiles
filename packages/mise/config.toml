@@ -2,9 +2,6 @@
 
 [tools]
 
-# software verification (see https://mise.jdx.dev/tips-and-tricks.html#software-verification)
-slsa-verifier = "latest"
-
 # provides completion and parsing support for tasks see:
 # https://mise.jdx.dev/tasks/file-tasks.html#arguments
 usage = "latest"
@@ -12,7 +9,6 @@ usage = "latest"
 "npm:@openai/codex" = "latest"
 "npm:prettier" = "latest"
 "npm:mcp-hub" = "latest"
-"npm:@anthropic-ai/claude-code" = "latest"
 "npm:jwt-cli" = "latest"
 "go:golang.org/x/tools/cmd/goimports" = "latest"
 golangci-lint = "latest"
@@ -31,13 +27,15 @@ opencode = "latest"
 go = "latest"
 node = "latest"
 lua = "latest"
-ruby = "latest"
 rust = { version = "latest", components = "rust-analyzer,clippy" }
 python = "latest"
 pipx = "latest"
 uv = "latest"
+claude-code = "latest"
+aube = "latest"
 
 [settings]
+lockfile = true
 experimental = true
 # Disabled due to <https://github.com/jdx/mise/issues/4600>
 # python.uv_venv_auto = true

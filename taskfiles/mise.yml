@@ -5,7 +5,7 @@ tasks:
   install:
     desc: Installs all mise based tools
     cmds:
-      - cmd: mise install
+      - cmd: mise install --locked
 
   update:
     aliases:

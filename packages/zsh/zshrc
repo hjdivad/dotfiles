@@ -254,6 +254,8 @@ function node_skip_tls {
 alias npm-check-updates='npx npm-check-updates -i'
 alias nr='npm run'
 alias create-turborepo='npx create-turbo@latest --example https://github.com/hjdivad/turborepo-template'
+# use aube instead of npm/pnpm/yarn &c.
+alias au='aube'
 
 
 # setup wsl
