@@ -1,0 +1,312 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# === git-stm ===
+# Stack Merge [Next]: merge the next-to-merge branch in the current stack.
+#
+# Usage: git stm [-n|--dry-run] [TRAILER]
+#
+# Must be run from the stack-top branch ({NAMESPACE}/{TASK}/st).
+#
+# Workflow:
+#   1. Identify M: the local stack branch whose open PR targets the
+#      repo default branch (master or main).
+#   2. Identify N: the local stack branch whose open PR targets M (if any).
+#   3. Mark N as draft (gh pr ready --undo).
+#   4. Squash-merge M with M's commit message. If TRAILER is provided,
+#      append a blank line and TRAILER to the commit body.
+#   5. Checkout /st, fetch the default branch, rebase onto it, delete
+#      local M, and run `git pu` to force-push the remaining stack.
+#   6. Mark N as ready (gh pr ready) so it can be reviewed/merged next.
+#
+# If there is no N, steps 3 and 6 are skipped and step 5 still runs.
+
+# === Helpers =================================================================
+
+err() {
+  echo "Error: $*" >&2
+}
+
+bail() {
+  err "$*"
+  exit 1
+}
+
+usage() {
+  cat <<'EOF'
+Usage: git stm [-n|--dry-run] [TRAILER]
+
+Merge the next branch in the current stack.
+
+Options:
+  -n, --dry-run  Print the commands that would be run without executing
+                 any merges, pushes, ref updates, or rebases. Read-only
+                 gh queries (repo view, pr list) still run so the plan
+                 reflects real PR state.
+
+Arguments:
+  TRAILER  Optional text appended to the squash-merge commit message
+           on its own paragraph (e.g. "JIRA-123 #done").
+
+Must be run from the stack-top branch ({NAMESPACE}/{TASK}/st).
+EOF
+}
+
+# === Parse arguments =========================================================
+
+TRAILER=""
+DRY_RUN=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -n|--dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    -*)
+      err "Unknown option '$1'"
+      usage >&2
+      exit 1
+      ;;
+    *)
+      if [[ -n "$TRAILER" ]]; then
+        bail "Unexpected extra argument '$1'"
+      fi
+      TRAILER="$1"
+      shift
+      ;;
+  esac
+done
+
+# Print "would run" command in dry-run, otherwise run it.
+#   run_or_echo <cmd> [args...]
+run_or_echo() {
+  if [[ "$DRY_RUN" == true ]]; then
+    printf '[dry-run] would run:'
+    local arg
+    for arg in "$@"; do
+      printf ' %q' "$arg"
+    done
+    printf '\n'
+  else
+    "$@"
+  fi
+}
+
+# === Validate current branch =================================================
+
+current_branch=$(git branch --show-current)
+[[ -n "$current_branch" ]] || bail "Not on a branch (detached HEAD state)"
+
+if [[ ! "$current_branch" =~ ^([^/]+)/([^/]+)/([^/]+)$ ]]; then
+  err "Current branch '$current_branch' does not match pattern '{NAMESPACE}/{TASK}/{SUFFIX}'"
+  exit 1
+fi
+
+NAMESPACE="${BASH_REMATCH[1]}"
+TASK="${BASH_REMATCH[2]}"
+SUFFIX="${BASH_REMATCH[3]}"
+
+if [[ "$SUFFIX" != "st" ]]; then
+  bail "git stm must be run from the stack-top branch '${NAMESPACE}/${TASK}/st' (currently on '${current_branch}')"
+fi
+
+# === Discover default branch (master vs main) ================================
+
+DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name' 2>/dev/null || true)
+if [[ -z "$DEFAULT_BRANCH" ]]; then
+  bail "Could not determine repository default branch via 'gh repo view'"
+fi
+
+# === Enumerate local stack branches ==========================================
+
+stack_branches=()
+while IFS= read -r branch; do
+  [[ -n "$branch" ]] || continue
+  # Skip the /st branch itself; it isn't a PR branch.
+  [[ "$branch" == "${NAMESPACE}/${TASK}/st" ]] && continue
+  stack_branches+=("$branch")
+done < <(git for-each-ref --format='%(refname:short)' "refs/heads/${NAMESPACE}/${TASK}/*")
+
+if [[ ${#stack_branches[@]} -eq 0 ]]; then
+  bail "No stack branches found matching '${NAMESPACE}/${TASK}/*' (excluding /st)"
+fi
+
+# === Build PR list as parallel arrays (bash 3.2 compatible) =================
+# pr_branches[i] / pr_bases[i] / pr_numbers[i] for branches with an open PR.
+
+pr_branches=()
+pr_bases=()
+pr_numbers=()
+
+for branch in "${stack_branches[@]}"; do
+  pr_json=$(gh pr list --head "$branch" --state open --json number,baseRefName --limit 1 2>/dev/null || echo "[]")
+  base=$(printf '%s' "$pr_json" | jq -r '.[0].baseRefName // empty')
+  num=$(printf '%s' "$pr_json" | jq -r '.[0].number // empty')
+  if [[ -n "$base" ]]; then
+    pr_branches+=("$branch")
+    pr_bases+=("$base")
+    pr_numbers+=("$num")
+  fi
+done
+
+lookup_number() {
+  local target="$1" i
+  for i in "${!pr_branches[@]}"; do
+    if [[ "${pr_branches[$i]}" == "$target" ]]; then
+      echo "${pr_numbers[$i]}"
+      return
+    fi
+  done
+}
+
+# === Identify M: branch whose PR targets the default branch ==================
+
+M=""
+for i in "${!pr_branches[@]}"; do
+  branch="${pr_branches[$i]}"
+  base="${pr_bases[$i]}"
+  if [[ "$base" == "$DEFAULT_BRANCH" ]]; then
+    if [[ -n "$M" ]]; then
+      bail "Multiple stack branches target '${DEFAULT_BRANCH}': '${M}' and '${branch}'"
+    fi
+    M="$branch"
+  fi
+done
+
+if [[ -z "$M" ]]; then
+  bail "No stack branch has an open PR targeting '${DEFAULT_BRANCH}'"
+fi
+
+M_NUMBER="$(lookup_number "$M")"
+
+# === Identify N: branch whose PR targets M (optional) ========================
+
+N=""
+N_NUMBER=""
+for i in "${!pr_branches[@]}"; do
+  branch="${pr_branches[$i]}"
+  base="${pr_bases[$i]}"
+  if [[ "$base" == "$M" ]]; then
+    if [[ -n "$N" ]]; then
+      bail "Multiple stack branches target '${M}': '${N}' and '${branch}'"
+    fi
+    N="$branch"
+    N_NUMBER="${pr_numbers[$i]}"
+  fi
+done
+
+# === Validate M has exactly one commit beyond the default branch =============
+# We need the commit message to use as the squash-merge message. Fetch the
+# default branch first so the comparison is against the latest remote state.
+
+git fetch --quiet origin "$DEFAULT_BRANCH"
+
+commit_count=$(git rev-list --count "origin/${DEFAULT_BRANCH}..${M}")
+if [[ "$commit_count" -ne 1 ]]; then
+  bail "Branch '${M}' has ${commit_count} commit(s) beyond origin/${DEFAULT_BRANCH}; expected exactly 1. Squash locally before running git stm."
+fi
+
+commit_msg=$(git log -1 --format=%B "$M")
+# Strip any trailing newlines so we can append cleanly.
+commit_msg="${commit_msg%$'\n'}"
+while [[ "$commit_msg" == *$'\n' ]]; do
+  commit_msg="${commit_msg%$'\n'}"
+done
+
+if [[ -n "$TRAILER" ]]; then
+  commit_msg="${commit_msg}"$'\n\n'"${TRAILER}"
+fi
+
+# Split into subject (first line) and body (everything after the first \n).
+subject="${commit_msg%%$'\n'*}"
+if [[ "$commit_msg" == *$'\n'* ]]; then
+  body="${commit_msg#*$'\n'}"
+  # Drop a leading blank line between subject and body if present.
+  body="${body#$'\n'}"
+else
+  body=""
+fi
+
+echo "Stack merge plan:"
+echo "  default branch : ${DEFAULT_BRANCH}"
+echo "  merging (M)    : ${M}  (PR #${M_NUMBER})"
+if [[ -n "$N" ]]; then
+  echo "  next (N)       : ${N}  (PR #${N_NUMBER})"
+else
+  echo "  next (N)       : <none>"
+fi
+echo "  commit subject : ${subject}"
+if [[ "$DRY_RUN" == true ]]; then
+  echo "  mode           : dry-run (no side effects below)"
+fi
+
+# === Step 3: Mark N as draft =================================================
+
+if [[ -n "$N" ]]; then
+  echo "Marking PR #${N_NUMBER} (${N}) as draft..."
+  run_or_echo gh pr ready --undo "$N"
+fi
+
+# === Step 4: Squash-merge M ==================================================
+
+echo "Squash-merging PR #${M_NUMBER} (${M})..."
+if ! run_or_echo gh pr merge --squash --delete-branch --subject "$subject" --body "$body" "$M"; then
+  err "Failed to squash-merge ${M}."
+  if [[ -n "$N" ]]; then
+    err "PR #${N_NUMBER} (${N}) was marked draft. After resolving, you can re-run 'git stm' or run 'gh pr ready ${N}' to restore it."
+  fi
+  exit 1
+fi
+
+# === Step 5: Update local /st: fetch, rebase, delete M, push ================
+
+ST_BRANCH="${NAMESPACE}/${TASK}/st"
+
+echo "Switching to '${ST_BRANCH}'..."
+run_or_echo git checkout --quiet "$ST_BRANCH"
+
+echo "Fetching origin/${DEFAULT_BRANCH}..."
+run_or_echo git fetch --quiet origin "$DEFAULT_BRANCH"
+
+echo "Rebasing onto origin/${DEFAULT_BRANCH}..."
+if [[ "$DRY_RUN" == true ]]; then
+  run_or_echo git rebase "origin/${DEFAULT_BRANCH}"
+elif ! git rebase "origin/${DEFAULT_BRANCH}"; then
+  err "Rebase onto origin/${DEFAULT_BRANCH} failed."
+  err "Resolve the conflicts, then run:"
+  err "  git rebase --continue"
+  err "  git branch -D ${M}    # delete the merged branch locally"
+  err "  git pu                # force-push remaining stack branches"
+  if [[ -n "$N" ]]; then
+    err "  gh pr ready ${N}      # mark the next PR ready for review"
+  fi
+  exit 1
+fi
+
+if [[ "$DRY_RUN" == true ]]; then
+  echo "Deleting local branch '${M}'..."
+  run_or_echo git branch -D "$M"
+elif git show-ref --verify --quiet "refs/heads/${M}"; then
+  echo "Deleting local branch '${M}'..."
+  git branch -D "$M" >/dev/null
+fi
+
+echo "Pushing remaining stack branches..."
+run_or_echo git pu
+
+# === Step 6: Mark N as ready =================================================
+
+if [[ -n "$N" ]]; then
+  echo "Marking PR #${N_NUMBER} (${N}) as ready for review..."
+  run_or_echo gh pr ready "$N"
+fi
+
+if [[ "$DRY_RUN" == true ]]; then
+  echo "Dry-run complete. No changes were made."
+else
+  echo "Done."
+fi

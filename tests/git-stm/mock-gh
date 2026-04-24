@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+# Mock `gh` for git-stm tests.
+#
+# State is read from / written to the file at $MOCK_GH_STATE.
+# Calls are appended to $MOCK_GH_CALLS as one line per invocation:
+#   <subcommand> <args...>
+#
+# State file format (line-oriented):
+#   default_branch=<name>
+#   pr <branch> <base> <number> <draft:true|false>
+#   upstream=<path-to-bare-upstream-repo>
+#   workdir=<path-to-the-repo-running-git-stm>   (optional but required for merge)
+#
+# Supported invocations:
+#   gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'
+#   gh pr list --head <branch> --state open --json number,baseRefName --limit 1
+#   gh pr ready --undo <branch>
+#   gh pr ready <branch>
+#   gh pr merge --squash --delete-branch --subject <s> --body <b> <branch>
+
+set -euo pipefail
+
+: "${MOCK_GH_STATE:?MOCK_GH_STATE must be set}"
+: "${MOCK_GH_CALLS:?MOCK_GH_CALLS must be set}"
+
+# Log the call (raw args).
+{
+  printf '%s' "$*"
+  printf '\n'
+} >> "$MOCK_GH_CALLS"
+
+# --- State helpers ----------------------------------------------------------
+
+state_get_kv() {
+  local key="$1"
+  awk -F= -v k="$key" '$1 == k { sub("^[^=]*=", ""); print; exit }' "$MOCK_GH_STATE"
+}
+
+# Print: <branch> <base> <number> <draft>
+state_get_pr_by_head() {
+  local head="$1"
+  awk -v h="$head" '$1 == "pr" && $2 == h { print; exit }' "$MOCK_GH_STATE"
+}
+
+state_set_pr_draft() {
+  local head="$1"
+  local draft="$2"
+  local tmp
+  tmp="$(mktemp)"
+  awk -v h="$head" -v d="$draft" '
+    $1 == "pr" && $2 == h { print $1, $2, $3, $4, d; next }
+    { print }
+  ' "$MOCK_GH_STATE" > "$tmp"
+  mv "$tmp" "$MOCK_GH_STATE"
+}
+
+state_remove_pr() {
+  local head="$1"
+  local tmp
+  tmp="$(mktemp)"
+  awk -v h="$head" '!($1 == "pr" && $2 == h)' "$MOCK_GH_STATE" > "$tmp"
+  mv "$tmp" "$MOCK_GH_STATE"
+}
+
+# --- Dispatch ---------------------------------------------------------------
+
+sub="${1:-}"; shift || true
+
+case "$sub" in
+  repo)
+    # Only support: gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'
+    if [[ "${1:-}" == "view" ]]; then
+      default_branch="$(state_get_kv default_branch)"
+      [[ -n "$default_branch" ]] || { echo "mock-gh: default_branch not set in state" >&2; exit 1; }
+      printf '%s\n' "$default_branch"
+      exit 0
+    fi
+    echo "mock-gh: unsupported repo subcommand: $*" >&2
+    exit 2
+    ;;
+
+  pr)
+    pr_sub="${1:-}"; shift || true
+    case "$pr_sub" in
+      list)
+        # Parse: --head <branch> --state open --json ... --limit 1
+        head=""
+        while [[ $# -gt 0 ]]; do
+          case "$1" in
+            --head) head="$2"; shift 2;;
+            --state|--json|--limit) shift 2;;
+            *) shift;;
+          esac
+        done
+        line="$(state_get_pr_by_head "$head")"
+        if [[ -z "$line" ]]; then
+          printf '[]\n'
+          exit 0
+        fi
+        # line: pr <branch> <base> <number> <draft>
+        # shellcheck disable=SC2086
+        set -- $line
+        base="$3"
+        number="$4"
+        printf '[{"number":%s,"baseRefName":"%s"}]\n' "$number" "$base"
+        exit 0
+        ;;
+
+      ready)
+        undo=false
+        if [[ "${1:-}" == "--undo" ]]; then
+          undo=true
+          shift
+        fi
+        branch="${1:-}"
+        [[ -n "$branch" ]] || { echo "mock-gh: pr ready missing branch" >&2; exit 1; }
+        if $undo; then
+          state_set_pr_draft "$branch" "true"
+        else
+          state_set_pr_draft "$branch" "false"
+        fi
+        exit 0
+        ;;
+
+      merge)
+        # Parse: --squash --delete-branch --subject <s> --body <b> <branch>
+        subject=""
+        body=""
+        branch=""
+        while [[ $# -gt 0 ]]; do
+          case "$1" in
+            --squash|--delete-branch) shift;;
+            --subject) subject="$2"; shift 2;;
+            --body) body="$2"; shift 2;;
+            *) branch="$1"; shift;;
+          esac
+        done
+        [[ -n "$branch" ]] || { echo "mock-gh: pr merge missing branch" >&2; exit 1; }
+
+        upstream="$(state_get_kv upstream)"
+        workdir="$(state_get_kv workdir)"
+        default_branch="$(state_get_kv default_branch)"
+        [[ -n "$upstream" && -n "$workdir" && -n "$default_branch" ]] || {
+          echo "mock-gh: state missing upstream/workdir/default_branch for merge" >&2
+          exit 1
+        }
+
+        # Build the squash commit directly in the bare upstream so its object
+        # database has the new commit before we update master.
+        branch_tree=$(git -C "$upstream" rev-parse "refs/heads/${branch}^{tree}")
+        base_commit=$(git -C "$upstream" rev-parse "refs/heads/${default_branch}")
+
+        if [[ -n "$body" ]]; then
+          full_msg="${subject}"$'\n\n'"${body}"
+        else
+          full_msg="${subject}"
+        fi
+
+        new_commit=$(
+          GIT_AUTHOR_NAME="mock-gh" \
+          GIT_AUTHOR_EMAIL="mock-gh@example.com" \
+          GIT_COMMITTER_NAME="mock-gh" \
+          GIT_COMMITTER_EMAIL="mock-gh@example.com" \
+          git -C "$upstream" commit-tree "$branch_tree" -p "$base_commit" -m "$full_msg"
+        )
+
+        git -C "$upstream" update-ref "refs/heads/${default_branch}" "$new_commit"
+        git -C "$upstream" update-ref -d "refs/heads/${branch}" || true
+
+        # Record the merge subject/body in state for assertion.
+        {
+          printf 'merged_subject=%s\n' "$subject"
+          # Body may contain newlines; encode as base64 to keep state line-oriented.
+          printf 'merged_body_b64=%s\n' "$(printf '%s' "$body" | base64 | tr -d '\n')"
+          printf 'merged_branch=%s\n' "$branch"
+        } >> "$MOCK_GH_STATE"
+
+        state_remove_pr "$branch"
+        exit 0
+        ;;
+
+      *)
+        echo "mock-gh: unsupported pr subcommand: $pr_sub $*" >&2
+        exit 2
+        ;;
+    esac
+    ;;
+
+  *)
+    echo "mock-gh: unsupported subcommand: $sub $*" >&2
+    exit 2
+    ;;
+esac
