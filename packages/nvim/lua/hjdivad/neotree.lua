@@ -294,7 +294,7 @@ end
 ---
 ---Shows only the changes in the HEAD commit itself (git diff HEAD~1 HEAD).
 ---When opening files, automatically run gitsigns.diffthis.
----Gitsigns base is NOT changed (keeps using origin/HEAD or whatever is configured).
+---Gitsigns base is changed to HEAD~1 so diffthis shows the HEAD commit.
 ---
 ---Add <c-j>, <c-k> stacked bindings to navigate next/prev file for diffing.
 function M.show_git_changes_tree_head_only()
@@ -304,13 +304,7 @@ function M.show_git_changes_tree_head_only()
   end
 
   M.switch_to_git_changes_tab()
-  --TODO: on weirdness
-  --  require('gitsigns.config').config.base
-  -- TODO: gs.change_base(HEAD~1, true)
-  --
-  -- Show only changes in HEAD commit (compared to HEAD~1)
----@diagnostic disable-next-line: param-type-mismatch
-  require('gitsigns').change_base('HEAD~1', true)
+  require("gitsigns").change_base("HEAD~1", true)
   vim.cmd("Neotree git_status git_base=HEAD~1 reveal=true")
 end
 

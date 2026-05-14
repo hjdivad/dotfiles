@@ -11,6 +11,7 @@ describe("neotree", function()
 
   local mock_gitsigns = {
     diffthis = function() end,
+    change_base = function() end,
   }
 
   local mock_map_stack = {}
@@ -36,7 +37,12 @@ describe("neotree", function()
 
   before_each(function()
     -- Reset mocks for each test
+    mock_git.merge_base = function()
+      return "abc123"
+    end
+    mock_git.set_gs_to_merge_base = function() end
     mock_gitsigns.diffthis = function() end
+    mock_gitsigns.change_base = function() end
     mock_map_stack.last_callback = nil
     mock_map_stack.push = function(cb)
       mock_map_stack.last_callback = cb
@@ -508,7 +514,7 @@ describe("neotree", function()
   end)
 
   describe("show_git_changes_tree_head_only", function()
-    it("invokes Neotree with HEAD~1 and does NOT update gitsigns base", function()
+    it("invokes Neotree with HEAD~1 and updates gitsigns base", function()
       -- avoid tab/window creation in this test
       local original_switch = neotree.switch_to_git_changes_tab
       neotree.switch_to_git_changes_tab = function() end
@@ -519,9 +525,16 @@ describe("neotree", function()
         table.insert(cmds, c)
       end
 
-      local called_set = false
+      local called_change_base = false
+      local change_base_ref
+      local change_base_attach
       package.loaded["hjdivad.git"].set_gs_to_merge_base = function()
-        called_set = true
+        error("set_gs_to_merge_base should not be called")
+      end
+      package.loaded["gitsigns"].change_base = function(ref, attach)
+        called_change_base = true
+        change_base_ref = ref
+        change_base_attach = attach
       end
 
       neotree.show_git_changes_tree_head_only()
@@ -535,8 +548,9 @@ describe("neotree", function()
         end
       end
       assert.is_true(found)
-      -- assert that gitsigns base was NOT changed
-      assert.is_false(called_set)
+      assert.is_true(called_change_base)
+      assert.equals("HEAD~1", change_base_ref)
+      assert.is_true(change_base_attach)
 
       -- restore
       vim.cmd = original_cmd
