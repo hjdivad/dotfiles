@@ -92,6 +92,10 @@ function ni(...)
   require("noice").redirect(...)
 end
 
+vim.api.nvim_create_user_command("ClearDiagnostics", function()
+  vim.diagnostic.reset(nil, vim.api.nvim_get_current_buf())
+end, { desc = "Clear diagnostics for current buffer" })
+
 -- NOTE: local_nvim is symlinked in from local-dotfiles to allow for local
 -- system specific customizations
 -- see: https://github.com/malleatus/shared_binutils/blob/master/global/src/bin/setup-local-dotfiles.rs

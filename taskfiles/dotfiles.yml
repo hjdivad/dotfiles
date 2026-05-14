@@ -178,6 +178,7 @@ tasks:
         - "local-packages/agents/AGENTS.md|$HOME/.claude/CLAUDE.md"
         - "local-packages/agents/AGENTS.md|$HOME/.codex/AGENTS.md"
         - "packages/zellij/|$HOME/.config/zellij"
+        - "local-packages/bazel/bazelrc|$HOME/.bazelrc"
     cmds:
       - for:
           var: MACOS_DOTFILES
