@@ -30,6 +30,11 @@ test_happy_two_branches() {
   assert_gh_called "pr ready --undo hjdivad/foo/b"
   assert_gh_called "pr ready hjdivad/foo/b"
 
+  # We must NOT pass --delete-branch: rely on GitHub auto-delete + our local
+  # `git branch -D`. Passing it would also delete the remote branch which
+  # interferes with auto-retargeting and any concurrent stack tooling.
+  assert_gh_not_called "delete-branch"
+
   # Local M deleted, st still present and current.
   assert_branch_not_exists "hjdivad/foo/a"
   assert_branch_exists "hjdivad/foo/st"

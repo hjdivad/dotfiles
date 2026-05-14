@@ -16,7 +16,7 @@
 #   gh pr list --head <branch> --state open --json number,baseRefName --limit 1
 #   gh pr ready --undo <branch>
 #   gh pr ready <branch>
-#   gh pr merge --squash --delete-branch --subject <s> --body <b> <branch>
+#   gh pr merge --squash [--delete-branch] --subject <s> --body <b> <branch>
 
 set -euo pipefail
 
@@ -123,7 +123,7 @@ case "$sub" in
         ;;
 
       merge)
-        # Parse: --squash --delete-branch --subject <s> --body <b> <branch>
+        # Parse: --squash [--delete-branch] --subject <s> --body <b> <branch>
         subject=""
         body=""
         branch=""

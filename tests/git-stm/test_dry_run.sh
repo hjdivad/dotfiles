@@ -25,7 +25,7 @@ test_dry_run() {
   # state-changing steps.
   assert_contains "$output" "mode           : dry-run"
   assert_contains "$output" "[dry-run] would run: gh pr ready --undo hjdivad/foo/b"
-  assert_contains "$output" "[dry-run] would run: gh pr merge --squash --delete-branch"
+  assert_contains "$output" "[dry-run] would run: gh pr merge --squash --subject"
   assert_contains "$output" "[dry-run] would run: git pu"
   assert_contains "$output" "[dry-run] would run: gh pr ready hjdivad/foo/b"
   assert_contains "$output" "Dry-run complete"

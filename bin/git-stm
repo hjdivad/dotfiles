@@ -254,7 +254,10 @@ fi
 # === Step 4: Squash-merge M ==================================================
 
 echo "Squash-merging PR #${M_NUMBER} (${M})..."
-if ! run_or_echo gh pr merge --squash --delete-branch --subject "$subject" --body "$body" "$M"; then
+# Note: no --delete-branch. We rely on GitHub's "Automatically delete head
+# branches" repo setting to remove the remote branch after merge, and we
+# delete the local copy ourselves below.
+if ! run_or_echo gh pr merge --squash --subject "$subject" --body "$body" "$M"; then
   err "Failed to squash-merge ${M}."
   if [[ -n "$N" ]]; then
     err "PR #${N_NUMBER} (${N}) was marked draft. After resolving, you can re-run 'git stm' or run 'gh pr ready ${N}' to restore it."
