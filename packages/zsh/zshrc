@@ -76,14 +76,14 @@ function __pick_branch {
 }
 alias pb='__pick_branch'
 
-function __goto_root {
+function __repo_root {
   local current_dir="$PWD"
   local root_markers=(".git" ".nvim.lua" ".lazy.lua")
   
   while [[ "$current_dir" != "/" ]]; do
     for marker in "${root_markers[@]}"; do
       if [[ -e "$current_dir/$marker" ]]; then
-        cd "$current_dir"
+        print -r -- "$current_dir"
         return 0
       fi
     done
@@ -92,7 +92,39 @@ function __goto_root {
   
   return 1
 }
+
+function __goto_root {
+  local root="$(__repo_root)" || return 1
+  cd "$root"
+}
 alias gr=__goto_root
+
+function __repo_relative_path {
+  local root="$(__repo_root)" || return 1
+  local paths=("$@")
+
+  if [[ $# -eq 0 ]]; then
+    paths=("$PWD")
+  fi
+
+  local path
+  for path in "${paths[@]}"; do
+    if [[ "$path" != /* ]]; then
+      path="$PWD/$path"
+    fi
+
+    if [[ "$path" == "$root" ]]; then
+      print -r -- "."
+    elif [[ "$path" == "$root/"* ]]; then
+      print -r -- "${path#$root/}"
+    else
+      print -u2 -r -- "rpath: path is not under repo root: $path"
+      return 1
+    fi
+  done
+}
+# TODO: set filesystem completion; auto copy to clipboard
+alias rpath=__repo_relative_path
 
 HISTSIZE=50000
 SAVEHIST=50000
