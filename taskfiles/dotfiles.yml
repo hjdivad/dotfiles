@@ -171,17 +171,25 @@ tasks:
         - "packages/alfred/preferences/features/websearch/yubnub|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yubnub"
         - "packages/ccstatusline/|$HOME/.config/ccstatusline"
         - "packages/claude/settings.json|$HOME/.claude/settings.json"
-        - "local-packages/claude/claude_desktop_config.json|$HOME/Library/Application Support/Claude/claude_desktop_config.json"
         - "packages/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
-        - "local-packages/cursor/settings.json|$HOME/Library/Application Support/Cursor/User/settings.json"
-        - "local-packages/cursor/mcp.json|$HOME/.cursor/mcp.json"
-        - "local-packages/agents/AGENTS.md|$HOME/.claude/CLAUDE.md"
-        - "local-packages/agents/AGENTS.md|$HOME/.codex/AGENTS.md"
         - "packages/zellij/|$HOME/.config/zellij"
-        - "local-packages/bazel/bazelrc|$HOME/.bazelrc"
+      LOCAL_MACOS_DOTFILES:
+        sh: |
+          file="{{.DOTFILES_DIR}}/local-packages/dotfiles/macos.links"
+          if [ -f "$file" ]; then
+            sed '/^[[:space:]]*#/d;/^[[:space:]]*$/d' "$file"
+          fi
     cmds:
       - for:
           var: MACOS_DOTFILES
+          as: DOTFILE
+        task: link_dotfile
+        vars:
+          SRC: '{{splitList "|" .DOTFILE | first}}'
+          DEST: '{{splitList "|" .DOTFILE | last}}'
+      - for:
+          var: LOCAL_MACOS_DOTFILES
+          split: "\n"
           as: DOTFILE
         task: link_dotfile
         vars:
