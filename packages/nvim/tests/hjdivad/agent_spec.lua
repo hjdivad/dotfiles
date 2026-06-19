@@ -131,6 +131,8 @@ describe("agent", function()
         "edit " .. vim.fn.fnameescape(vim.env.AGENTS_VADNU),
         "rightbelow split",
         "edit " .. vim.fn.fnameescape(vim.env.AGENTS_PROMPT),
+        "setlocal winfixheight",
+        "resize 15",
         "wincmd h",
         "terminal",
         "rightbelow split",
