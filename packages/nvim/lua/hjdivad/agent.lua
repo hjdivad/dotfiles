@@ -1,10 +1,13 @@
 local M = {}
 
+-- obviously only run these in trusted directories
 local agents = {
-  -- obviously only run these in trusted directories
   claude = "claude --dangerously-skip-permissions",
   cursor = "cursor-agent --force --approve-mcps",
+  codex = "codex",
 }
+
+local default_agent = 'codex'
 
 local function session_name(cwd)
   local path_parts = {}
@@ -81,7 +84,7 @@ local function do_start_agent(agent_cmd)
 end
 
 function M.StartAgent(agent)
-  local agent_name = agent or "claude"
+  local agent_name = agent or default_agent
   local agent_cmd = agents[agent_name]
   --FIXME: when we execute this eagerly, we run before the autocmds are set up and we don't get the prompt extensions.
   -- But when we execute in a VeryLazy callback, the filetype is never set, for some unknown reason.
