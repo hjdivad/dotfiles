@@ -113,6 +113,7 @@ gh repo checkout {my-org-user}/{my-dotfiles}.git
 
 **(Optional) Installs**
 
+- [cleanshot](https://cleanshot.com/)
 - [telegram](https://desktop.telegram.org/)
 - [spotify](https://www.spotify.com/de-en/download/mac/)
 - [signal](https://signal.org/download/macos/)
