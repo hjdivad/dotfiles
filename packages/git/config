@@ -1,3 +1,4 @@
+# vim:ft=gitconfig
 [alias]
   c = checkout
   cb = "!f() { git checkout $(git branch | sed 's/^.\\{2\\}//' | fzf -m --bind 'ctrl-h:clear-query'); }; f"
