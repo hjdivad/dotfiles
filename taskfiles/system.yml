@@ -31,7 +31,9 @@ tasks:
     cmds:
       - task: install:platform_tools
       - task: mise:install
-      - task: mise:update
+      # Update should not be part of regular install; do this manually.
+      # Better yet, workflow this with PRs.
+      # - task: mise:update
 
   install:platform_tools:
     internal: true
