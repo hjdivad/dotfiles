@@ -1,8 +1,0 @@
-{
-  "alfredsnippet" : {
-    "snippet" : "PROD-{cursor} #done",
-    "uid" : "BC113BDF-06B3-4267-9CF2-82905DC8877F",
-    "name" : "jira-qa-done",
-    "keyword" : "@jdq"
-  }
-}

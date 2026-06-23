@@ -29,6 +29,7 @@
     }
   },
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
   "feedbackSurveyState": {
     "lastShownTime": 1754067631960
   }
