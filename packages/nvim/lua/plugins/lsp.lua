@@ -107,6 +107,7 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       servers = {
         ["*"] = {
+          capabilities = require("blink.cmp").get_lsp_capabilities(nil, true),
           keys = {
             { "gy", false },
             { "gI", false },
@@ -125,6 +126,12 @@ return {
             { "<leader>cJ", diagnostic_goto(true), desc = "Next Diagnostic" },
             { "<leader>cK", diagnostic_goto(false), desc = "Prev Diagnostic" },
             { "<c-h>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+          },
+        },
+        ---@diagnostic disable-next-line: missing-fields
+        gopls = {
+          init_options = {
+            semanticTokens = true,
           },
         },
         ---@diagnostic disable-next-line: missing-fields
