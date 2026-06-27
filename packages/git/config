@@ -73,7 +73,7 @@
   dc = diff --cached
   dcw = diff --cached --ignore-all-space --color-words
   dw = diff --ignore-all-space --color-words
-  diff-files-changed = "!git --no-pager diff --name-status origin/HEAD"
+  diff-local = "!f() { git range-diff --unified=0 \"$(git merge-base origin/master origin/$(git branch-current))..origin/$(git branch-current)\" \"$(git merge-base origin/master HEAD)..HEAD\"; }; f"
   ls-files-changed = "!git --no-pager diff --name-status origin/HEAD"
 
   st = status -sb -uall
