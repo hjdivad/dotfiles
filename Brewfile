@@ -150,8 +150,6 @@ cask "1password-cli"
 cask "alfred"
 # Web browser focusing on privacy
 cask "brave-browser"
-# Anthropic's official Claude AI desktop app
-cask "claude"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # Voice and text chat software
