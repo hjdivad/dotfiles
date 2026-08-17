@@ -170,7 +170,6 @@ tasks:
         - "packages/alfred/preferences/features/websearch/youtube|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/youtube"
         - "packages/alfred/preferences/features/websearch/yubnub|$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/preferences/features/websearch/yubnub"
         - "packages/ccstatusline/|$HOME/.config/ccstatusline"
-        - "packages/claude/settings.json|$HOME/.claude/settings.json"
         - "packages/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
         - "packages/zellij/|$HOME/.config/zellij"
       LOCAL_MACOS_DOTFILES:

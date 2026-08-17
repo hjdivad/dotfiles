@@ -108,6 +108,20 @@
  | |\\/| | \\ /   | |    |  _  | |/\\| | . ` | |\n\
  | |  | | | |   | |____| | | \\  /\\  / |\\  |_|\n\
  \\_|  |_/ \\_/   \\_____/\\_| |_/\\/  \\/\\_| \\_(_)';};f"
+	append = town append
+	contribute = town contribute
+	diff-parent = town diff-parent
+	hack = town hack
+	kill = town kill
+	observe = town observe
+	park = town park
+	prepend = town prepend
+	propose = town propose
+	rename-branch = town rename-branch
+	repo = town repo
+	set-parent = town set-parent
+	ship = town ship
+	sync = town sync
 
 [advice]
   detachedHead = false
@@ -268,3 +282,6 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[git-town]
+	perennial-branches = master
+	sync-perennial-strategy = rebase

@@ -93,6 +93,18 @@ return {
       },
     },
   },
+	{
+		"idelice/nvim-jls",
+		opts = {
+			inlay_hints = {
+				-- false is the default.
+				-- I'd like to enable it, but it seems busted
+				-- I already get a weird subset of inlay hints and "enabling" doubles just them and doesn't add inlay hints
+				-- for others.
+				enabled = false,
+			},
+		},
+	},
 
   {
     -- see https://www.lazyvim.org/plugins/lsp

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+current_branch=$(git branch --show-current)
+
+if [[ -z "$current_branch" ]]; then
+  echo "Error: Not on a branch (detached HEAD state)" >&2
+  exit 1
+fi
+
+if [[ ! "$current_branch" =~ ^([^/]+)/([^/]+)/([^/]+)$ ]]; then
+  echo "Error: Current branch '$current_branch' does not match pattern '{NAMESPACE}/{TASK}/{SUFFIX}'" >&2
+  echo "Expected format: {NAMESPACE}/{TASK}/{SUFFIX}" >&2
+  exit 1
+fi
+
+namespace="${BASH_REMATCH[1]}"
+task="${BASH_REMATCH[2]}"
+
+selected_branches=()
+while IFS= read -r branch; do
+  [[ -n "$branch" ]] && selected_branches+=("$branch")
+done < <(
+  git branch --list "${namespace}/${task}/*" |
+    sed 's/^..//' |
+    fzf -m --bind 'ctrl-h:clear-query'
+)
+
+git checkout "${selected_branches[@]}"

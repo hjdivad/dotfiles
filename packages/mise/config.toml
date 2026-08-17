@@ -5,8 +5,6 @@
 # provides completion and parsing support for tasks see:
 # https://mise.jdx.dev/tasks/file-tasks.html#arguments
 usage = "latest"
-
-"npm:@openai/codex" = "latest"
 "npm:prettier" = "latest"
 "npm:jwt-cli" = "latest"
 "go:golang.org/x/tools/cmd/goimports" = "latest"
@@ -32,6 +30,8 @@ uv = "latest"
 claude-code = "latest"
 aube = "latest"
 coder = "latest"
+codex = "latest"
+"aqua:sibprogrammer/xq" = "latest"
 
 [settings]
 lockfile = true

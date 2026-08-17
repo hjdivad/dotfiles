@@ -158,6 +158,9 @@ alias mkdir='mkdir -p'
 # List TCP listen sockets
 alias lsof-tcp-listen='lsof -iTCP -sTCP:LISTEN -P'
 alias lsof-tcp='lsof -iTCP'
+alias lsof-cwd='lsof -a -d cwd'
+alias lsof-pwd='lsof -a -d cwd'
+
 
 # List only active network devices
 alias ifconfig-active="ifconfig | rg --color=never -U '^[^\t:]+:([^\n]|\n\t)*status: active'"

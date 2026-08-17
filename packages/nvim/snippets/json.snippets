@@ -1,19 +1,19 @@
-snippet schema:package.json "schema for package.json"
+snippet @schema:package.json "schema for package.json"
 	"$$schema": "https://json.schemastore.org/package.json",
 
-snippet schema:graphql-config "schema for .graphqlrc.json"
+snippet @schema:graphql-config "schema for .graphqlrc.json"
 	"$$schema": "https://unpkg.com/graphql-config@4.3.0/config-schema.json",
 
-snippet schema:tsconfig "schema for tsconfig.json"
+snippet @schema:tsconfig "schema for tsconfig.json"
 	"$$schema": "https://json.schemastore.org/tsconfig.json",
 
-snippet schema:prettier.json "schema for .prettierrc.json"
+snippet @schema:prettier.json "schema for .prettierrc.json"
   "$$schema": "https://json.schemastore.org/prettierrc.json",
 
-snippet schema:swcrc "schema for .swcrc"
+snippet @schema:swcrc "schema for .swcrc"
   "$schema": "https://json.schemastore.org/swcrc",
 
-snippet scripts
+snippet @scripts
 	"scripts": {
 		"start": "echo start",
 		"lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
@@ -22,7 +22,7 @@ snippet scripts
 		"test:ci": "npm-run-all \"test:!(ci)\"",
 	},
 
-snippet modules
+snippet @modules
 	"type": "module",
 	"main": "${1:./dist/esnext/src/index.js}",
 	"exports": {
@@ -40,7 +40,7 @@ snippet modules
 		}
 	}
 
-snippet typescript-cli-package-json "minimal package.json for a typescript CLI"
+snippet @typescript-cli-package-json "minimal package.json for a typescript CLI"
 	{
 		"$schema": "https://json.schemastore.org/package.json",
 		"$comment": "Add .eslintrc.json and use cli snippet for script/my-script.mts",
