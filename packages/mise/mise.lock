@@ -1128,6 +1128,45 @@ checksum = "sha256:ef408f85f664a4b9c9dac3cb2e36154d9baa15a88984ea800e11060e0f239
 url = "https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda"
 checksum = "sha256:368d8628424966fd8f9c8018326a9c779e06913dd39e646cf331226acc90e5b2"
 
+[[tools.antigravity-cli]]
+version = "1.1.14"
+backend = "aqua:google-antigravity/antigravity-cli"
+
+[tools.antigravity-cli."platforms.linux-arm64"]
+checksum = "sha256:89f537d62dd853b27e419d463dbbea5b17972c6307a12f03f81b88408fd8256f"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.14/agy_cli_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/518912450"
+
+[tools.antigravity-cli."platforms.linux-arm64-musl"]
+checksum = "sha256:89f537d62dd853b27e419d463dbbea5b17972c6307a12f03f81b88408fd8256f"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.14/agy_cli_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/518912450"
+
+[tools.antigravity-cli."platforms.linux-x64"]
+checksum = "sha256:345692ba5dfa201b0fe4b360c2d8e9bc6abf44b59221f190f8a6fd775b78daae"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.14/agy_cli_linux_x64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/518912451"
+
+[tools.antigravity-cli."platforms.linux-x64-musl"]
+checksum = "sha256:345692ba5dfa201b0fe4b360c2d8e9bc6abf44b59221f190f8a6fd775b78daae"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.14/agy_cli_linux_x64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/518912451"
+
+[tools.antigravity-cli."platforms.macos-arm64"]
+checksum = "sha256:077159b1adc5dbfcbd18cf979ea70f77d61061d4568ea3db48c2a60b6e3e4c2a"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.14/agy_cli_mac_arm64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/518912452"
+
+[tools.antigravity-cli."platforms.macos-x64"]
+checksum = "sha256:1231e5c132746e4c4f6ab9178b45362e1fd7d8ebe568ead6328032330aa4294c"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.14/agy_cli_mac_x64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/518912449"
+
+[tools.antigravity-cli."platforms.windows-x64"]
+checksum = "sha256:97234cb84765f08ca5186ee965e283fe4c6abeff5acf6da4f3173140eb396372"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.14/agy_cli_windows_x64.zip"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/518912455"
+
 [[tools."aqua:sibprogrammer/xq"]]
 version = "1.4.0"
 backend = "aqua:sibprogrammer/xq"
@@ -1285,43 +1324,68 @@ url = "https://github.com/coder/coder/releases/download/v2.33.9/coder_2.33.9_win
 url_api = "https://api.github.com/repos/coder/coder/releases/assets/450629048"
 
 [[tools.codex]]
-version = "0.144.6"
+version = "0.152.0"
 backend = "aqua:openai/codex"
 
 [tools.codex."platforms.linux-arm64"]
-checksum = "sha256:b4359896bb548e02fdd72ea0cb3395fe8a88d20d3a4a421c4481e504f8e8927f"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.6/codex-package-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/481505363"
+checksum = "sha256:af9777a8d62edeea31adfecbaa2a5b296bc57a4a0c3ed69c02e39c23744f5feb"
+url = "https://github.com/openai/codex/releases/download/rust-v0.152.0/codex-package-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/538792584"
 
 [tools.codex."platforms.linux-arm64-musl"]
-checksum = "sha256:b4359896bb548e02fdd72ea0cb3395fe8a88d20d3a4a421c4481e504f8e8927f"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.6/codex-package-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/481505363"
+checksum = "sha256:af9777a8d62edeea31adfecbaa2a5b296bc57a4a0c3ed69c02e39c23744f5feb"
+url = "https://github.com/openai/codex/releases/download/rust-v0.152.0/codex-package-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/538792584"
 
 [tools.codex."platforms.linux-x64"]
-checksum = "sha256:99ae48e4743da6c530ecd998ab2f7e66572c092f4190c88dca8236c07b06ce1d"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.6/codex-package-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/481505274"
+checksum = "sha256:352c24fbdc5aefaffde9c1df991b534b6bc72a06e49708794fc685fc3556c855"
+url = "https://github.com/openai/codex/releases/download/rust-v0.152.0/codex-package-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/538792457"
 
 [tools.codex."platforms.linux-x64-musl"]
-checksum = "sha256:99ae48e4743da6c530ecd998ab2f7e66572c092f4190c88dca8236c07b06ce1d"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.6/codex-package-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/481505274"
+checksum = "sha256:352c24fbdc5aefaffde9c1df991b534b6bc72a06e49708794fc685fc3556c855"
+url = "https://github.com/openai/codex/releases/download/rust-v0.152.0/codex-package-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/538792457"
 
 [tools.codex."platforms.macos-arm64"]
-checksum = "sha256:bcbfa76650b6c581505aa5178c1e799d37ff12fc43a35ff16c90b97fa757e63f"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.6/codex-package-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/481505415"
+checksum = "sha256:5287a514213f8134210677cce51b23e2eaeaff1925362f18318e4268a5ab1d1b"
+url = "https://github.com/openai/codex/releases/download/rust-v0.152.0/codex-package-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/538792593"
 
 [tools.codex."platforms.macos-x64"]
-checksum = "sha256:daa3df37c8a041280f52a2198dbe7acbead64936b23f8b660edf9d886df5f9da"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.6/codex-package-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/481505321"
+checksum = "sha256:161d9da66a0f97a93294d006f8066e6d5fad71cc9fe00f7d4ae111daf692b308"
+url = "https://github.com/openai/codex/releases/download/rust-v0.152.0/codex-package-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/538792508"
 
 [tools.codex."platforms.windows-x64"]
-checksum = "sha256:81948ef44eb00f499f32bcd38ce326f59f5a132ca4cd6ec2559fb5fc7cfd90a7"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.6/codex-package-x86_64-pc-windows-msvc.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/481505297"
+checksum = "sha256:29aaa55bcc3573c9f5d6cc59c16a461c514179161af00c43c5b49857e3d31962"
+url = "https://github.com/openai/codex/releases/download/rust-v0.152.0/codex-package-x86_64-pc-windows-msvc.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/538792472"
+
+[[tools.gcloud]]
+version = "580.0.0"
+backend = "vfox:mise-plugins/vfox-gcloud"
+
+[tools.gcloud."platforms.linux-arm64"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-580.0.0-linux-arm.tar.gz"
+
+[tools.gcloud."platforms.linux-arm64-musl"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-580.0.0-linux-arm.tar.gz"
+
+[tools.gcloud."platforms.linux-x64"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-580.0.0-linux-x86_64.tar.gz"
+
+[tools.gcloud."platforms.linux-x64-musl"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-580.0.0-linux-x86_64.tar.gz"
+
+[tools.gcloud."platforms.macos-arm64"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-580.0.0-darwin-arm.tar.gz"
+
+[tools.gcloud."platforms.macos-x64"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-580.0.0-darwin-x86_64.tar.gz"
+
+[tools.gcloud."platforms.windows-x64"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-580.0.0-windows-x86_64.zip"
 
 [[tools.go]]
 version = "1.26.4"

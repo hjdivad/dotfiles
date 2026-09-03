@@ -429,6 +429,10 @@ function pkce_challenge() {
 # Proxyman -> Setup -> Manual -> copy code
 function setup_proxyman {
   set -a 2>/dev/null || true; source "/Users/hjdivad/Library/Application Support/com.proxyman.NSProxy/app-data/proxyman_env_automatic_setup.sh"; set +a 2>/dev/null || true
+  # add support for node 26 native fetch to work with: Proxyman Version 6.8.0 (60800) | macOS: Version 26.4 (Build 25E246)
+  # might not be needed for latest ProxyMan
+  export NODE_USE_ENV_PROXY=1
+  unset NODE_TLS_REJECT_UNAUTHORIZED
 }
 alias proxyman_setup=setup_proxyman
 

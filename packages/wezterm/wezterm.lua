@@ -55,6 +55,14 @@ table.insert(config.keys, {
 	}),
 })
 table.insert(config.keys, {
+	key = "P",
+	mods = "SHIFT|SUPER",
+	action = wezterm.action.Multiple({
+		-- vim sees this as <f27>
+		wezterm.action.SendKey({ key = "F3", mods = "CTRL" }),
+	}),
+})
+table.insert(config.keys, {
 	key = ';',
 	mods = "SUPER",
 	action = wezterm.action.Multiple({

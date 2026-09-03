@@ -136,6 +136,7 @@ ks({"n","t"}, "<F9>", "<Cmd>$tabn<cr>", { desc = "go to the last tab page" })
 
 ks("n", "<m-;>", ":lua =", { desc = "lua cmdline" })
 ks("n", "<c-n>", ":lua =require('noice').redirect([[]])<Left><Left><Left>", { desc = "noice cmdline" })
+ks("n", "<F27>", "<leader>sk", { remap = true, desc = "Search keymaps" })
 
 ks("n", "<c-g>", function()
   require("noice").redirect("file")

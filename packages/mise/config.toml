@@ -32,6 +32,8 @@ aube = "latest"
 coder = "latest"
 codex = "latest"
 "aqua:sibprogrammer/xq" = "latest"
+gcloud = "latest"
+antigravity-cli = "latest"
 
 [settings]
 lockfile = true
