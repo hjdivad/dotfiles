@@ -1,21 +1,46 @@
 ---
 name: git
 description: >-
-  Use for git commits, amending commits, commit messages, staging changes, or
-  preparing local git history in this repo. Ensures only intended files are
-  staged and commit messages explain why with standard wrapped body lines.
+  Use after any task changes repository content in this repo, and for Git
+  commits, amendments, staging, commit messages, or local history preparation.
+  Ensure each completed change becomes a focused local commit. Reuse an
+  unpublished commit when the new work has the same intent.
 ---
 
 # Git
 
-Use this skill whenever committing, amending, staging, or writing commit messages in this repo.
+Use this skill after a completed task changes repository content. Also use it
+when committing, amending, staging, or writing commit messages in this repo.
+
+Do not create an empty commit for a read-only, no-op, or incomplete task. Do not
+push unless the user explicitly asks.
 
 ## Commit Workflow
 
 - Check `git status --short` before staging.
+- Inspect the commits between the upstream branch and `HEAD`.
+- Decide if the change belongs in an existing unpublished commit. Use the
+  criteria in "Reuse an Unpublished Commit."
 - Stage only files required for the requested commit. Leave unrelated dirty files untouched.
 - Inspect `git diff --cached` before committing.
-- After committing or amending, show the new `HEAD` hash and confirm `git status --short`.
+- Commit the change or update a suitable unpublished commit.
+- After committing or amending, show the local commit range, the new `HEAD`
+  hash, and `git status --short`.
+
+## Reuse an Unpublished Commit
+
+Treat a commit as unpublished only when no known remote-tracking branch contains
+it. Check remote-tracking branches before you rewrite a commit.
+
+- Reuse a commit only when the new work has the same intent and forms one
+  logical change with it. A shared file is not sufficient.
+- Amend `HEAD` directly when it is a suitable unpublished commit.
+- To update an earlier unpublished commit, use a fixup commit and autosquash
+  only when the worktree has no unrelated changes and all rewritten commits are
+  unpublished.
+- If a rewrite can disturb unrelated work, create a new focused commit.
+- If you are not sure that the intent matches, create a new focused commit.
+- Never rewrite a published commit.
 
 ## Commit Message Format
 
