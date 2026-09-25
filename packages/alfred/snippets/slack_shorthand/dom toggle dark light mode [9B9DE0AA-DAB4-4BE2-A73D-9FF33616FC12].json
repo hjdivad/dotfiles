@@ -1,0 +1,9 @@
+{
+  "alfredsnippet" : {
+    "snippet" : "document.documentElement.classList.toggle('dark-theme')",
+    "dontautoexpand" : true,
+    "uid" : "9B9DE0AA-DAB4-4BE2-A73D-9FF33616FC12",
+    "name" : "dom toggle dark light mode",
+    "keyword" : "dom:toggle:dark:light:mode"
+  }
+}
