@@ -86,6 +86,9 @@ end
 function M.StartAgent(agent)
   local agent_name = agent or default_agent
   local agent_cmd = agents[agent_name]
+  if agent == nil then
+    agent_cmd = env_path("NVIM_AGENT_CMD", agent_cmd)
+  end
   --FIXME: when we execute this eagerly, we run before the autocmds are set up and we don't get the prompt extensions.
   -- But when we execute in a VeryLazy callback, the filetype is never set, for some unknown reason.
   -- For now just execute eagerly, but we probably want to actually do this in a callback

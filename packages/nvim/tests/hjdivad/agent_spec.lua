@@ -5,6 +5,7 @@ describe("agent", function()
 
   local original_agents_prompt
   local original_agents_vadnu
+  local original_agent_cmd
   local stdpath_stub
   local getcwd_stub
   local original_cmd
@@ -13,13 +14,16 @@ describe("agent", function()
   local function restore_env()
     vim.env.AGENTS_PROMPT = original_agents_prompt
     vim.env.AGENTS_VADNU = original_agents_vadnu
+    vim.env.NVIM_AGENT_CMD = original_agent_cmd
   end
 
   before_each(function()
     original_agents_prompt = vim.env.AGENTS_PROMPT
     original_agents_vadnu = vim.env.AGENTS_VADNU
+    original_agent_cmd = vim.env.NVIM_AGENT_CMD
     vim.env.AGENTS_PROMPT = nil
     vim.env.AGENTS_VADNU = nil
+    vim.env.NVIM_AGENT_CMD = nil
     original_cmd = vim.cmd
     original_defer_fn = vim.defer_fn
   end)
@@ -101,7 +105,44 @@ describe("agent", function()
   end)
 
   describe("StartAgent", function()
+    local function start_command(agent_name)
+      local root = vim.fn.tempname()
+      vim.env.AGENTS_VADNU = root .. "/vadnu.md"
+      vim.env.AGENTS_PROMPT = root .. "/prompt.md"
+      getcwd_stub = stub(vim.fn, "getcwd", function()
+        return "/Users/me/github/repo"
+      end)
+
+      local terminal_command
+      vim.cmd = function(cmd)
+        if cmd:sub(1, 5) == "term " then
+          terminal_command = cmd
+        end
+      end
+      vim.defer_fn = function() end
+
+      agent.StartAgent(agent_name)
+      return terminal_command
+    end
+
+    it("uses NVIM_AGENT_CMD for the default agent", function()
+      vim.env.NVIM_AGENT_CMD = "custom-agent --flag value"
+
+      assert.equals("term custom-agent --flag value", start_command())
+    end)
+
+    it("uses codex when NVIM_AGENT_CMD is unset", function()
+      assert.equals("term codex", start_command())
+    end)
+
+    it("uses codex when NVIM_AGENT_CMD is empty", function()
+      vim.env.NVIM_AGENT_CMD = ""
+
+      assert.equals("term codex", start_command())
+    end)
+
     it("opens the three-column agent layout with terminals on the left and vadnu above prompt in the middle", function()
+      vim.env.NVIM_AGENT_CMD = "custom-agent --flag value"
       local root = vim.fn.tempname()
       vim.env.AGENTS_VADNU = root .. "/vadnu.md"
       vim.env.AGENTS_PROMPT = root .. "/prompt.md"
