@@ -3,6 +3,12 @@
 - This is a personal dotfiles repo organized into separate packages under `packages/`.
 - Check the relevant package directory for more detailed guidance before making package-specific changes.
 
+## Verification
+
+- For behavior changes, add or update focused tests.
+- Run the relevant package tests before committing.
+- Report any test that you cannot run.
+
 ## Commit Policy
 
 - End each completed task that changes repository content with a commit.

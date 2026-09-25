@@ -23,6 +23,7 @@ push unless the user explicitly asks.
   criteria in "Reuse an Unpublished Commit."
 - Stage only files required for the requested commit. Leave unrelated dirty files untouched.
 - Inspect `git diff --cached` before committing.
+- Check the final commit message before creating or amending a commit.
 - Commit the change or update a suitable unpublished commit.
 - After committing or amending, show the local commit range, the new `HEAD`
   hash, and `git status --short`.
@@ -48,10 +49,12 @@ it. Check remote-tracking branches before you rewrite a commit.
   `fix(nvim): fix gopls semantic token capabilities`
 - Keep the subject concise and imperative-ish.
 - Always include a body for non-trivial changes.
-- Wrap body lines to standard git commit width, about 72 columns.
+- Wrap each commit body line at 72 columns or fewer.
 - Explain why the change is needed, not just what changed.
 - Include concrete failure modes, commands, or errors when they motivated the change.
 - Use indented blocks for quoted errors or command output.
+- End each commit that Codex creates or amends with `Co-authored-by: Codex`.
+- Do not add an email address to this trailer.
 
 ## Body Template
 
