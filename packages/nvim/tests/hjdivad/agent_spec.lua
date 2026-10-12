@@ -85,12 +85,12 @@ describe("agent", function()
   end)
 
   describe("_ensure_vadnu_file", function()
-    it("creates vadnu.md with initial sections when missing", function()
+    it("creates vadnu.md with a tasks section when missing", function()
       local path = vim.fn.tempname() .. "/vadnu.md"
 
       agent._ensure_vadnu_file(path)
 
-      assert.same({ "## Stack", "## Tasks" }, vim.fn.readfile(path))
+      assert.same({ "## Tasks" }, vim.fn.readfile(path))
     end)
 
     it("leaves existing vadnu.md content alone", function()
@@ -180,7 +180,7 @@ describe("agent", function()
         "terminal",
         "wincmd l",
       }, commands)
-      assert.same({ "## Stack", "## Tasks" }, vim.fn.readfile(vim.env.AGENTS_VADNU))
+      assert.same({ "## Tasks" }, vim.fn.readfile(vim.env.AGENTS_VADNU))
       assert.equals(0, vim.fn.filereadable(vim.env.AGENTS_PROMPT))
 
       assert.is_function(deferred)

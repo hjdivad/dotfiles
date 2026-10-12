@@ -54,7 +54,7 @@ local function ensure_vadnu_file(path)
     return
   end
 
-  vim.fn.writefile({ "## Stack", "## Tasks" }, path)
+  vim.fn.writefile({ "## Tasks" }, path)
 end
 
 local function do_start_agent(agent_cmd)
