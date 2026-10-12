@@ -34,6 +34,7 @@ codex = "latest"
 "aqua:sibprogrammer/xq" = "latest"
 gcloud = "latest"
 antigravity-cli = "latest"
+oxlint = "latest"
 
 [settings]
 lockfile = true
