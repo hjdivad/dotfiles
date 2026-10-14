@@ -139,6 +139,10 @@ end
 function M.StartExternalAgentWorkspace()
   local cwd = vim.fn.getcwd()
   local project = env_path("AGENTS_PROJECT", env_path("P", nil))
+  if project ~= nil then
+    -- Older worktrees set a cwd-relative AGENTS_PROJECT; give neo-tree a clean absolute root.
+    project = vim.fs.normalize(vim.fn.fnamemodify(project, ":p"))
+  end
 
   local focus_win = vim.api.nvim_get_current_win()
   show_filesystem_tree(cwd)

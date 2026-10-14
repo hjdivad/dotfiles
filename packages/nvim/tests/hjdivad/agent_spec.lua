@@ -332,6 +332,23 @@ describe("agent", function()
       assert.equals(1002, focused_win)
     end)
 
+    it("resolves a relative project path against the working directory", function()
+      local root = vim.fn.tempname()
+      vim.fn.mkdir(root, "p")
+      root = vim.fn.resolve(root)
+      -- vim.fn.getcwd is stubbed here; use libuv for the real working directory
+      local original_dir = vim.uv.cwd()
+      vim.api.nvim_set_current_dir(root)
+      vim.env.AGENTS_PROJECT = ".agents/p/task"
+
+      local ok, err = pcall(agent.StartExternalAgentWorkspace)
+      vim.api.nvim_set_current_dir(original_dir)
+      assert(ok, err)
+
+      assert.same(project_workspace(root .. "/.agents/p/task"), ops)
+      assert.same({ "## Tasks" }, vim.fn.readfile(root .. "/.agents/p/task/vadnu.md"))
+    end)
+
     it("skips the project tab and focuses tab 1 without a project", function()
       agent.StartExternalAgentWorkspace()
 
