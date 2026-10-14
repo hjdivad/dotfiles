@@ -74,3 +74,7 @@ vim.api.nvim_create_user_command("StartAgent", function()
   -- TODO: take an arg (autocomplete agent names from agent lib)
   require('hjdivad.agent').StartAgent()
 end, { desc = "Start a CLI Agent" })
+
+vim.api.nvim_create_user_command("StartExternalAgentWorkspace", function()
+  require('hjdivad.agent').StartExternalAgentWorkspace()
+end, { desc = "Open a workspace for an external CLI agent" })

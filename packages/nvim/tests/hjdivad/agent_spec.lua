@@ -189,4 +189,174 @@ describe("agent", function()
       assert.equals("wincmd =", commands[#commands])
     end)
   end)
+
+  describe("StartExternalAgentWorkspace", function()
+    local original_agents_project
+    local original_p
+    local original_neotree_command
+    local original_neotree_manager
+    local original_neotree_renderer
+    local get_current_win_stub
+    local set_current_win_stub
+
+    local ops
+    local tree_state
+    local focused_win
+
+    local terminal_grid = {
+      "tabnew",
+      "terminal",
+      "rightbelow vsplit",
+      "terminal",
+      "rightbelow split",
+      "terminal",
+      "wincmd h",
+      "rightbelow split",
+      "terminal",
+      "wincmd =",
+    }
+
+    local function concat(...)
+      local result = {}
+      for _, list in ipairs({ ... }) do
+        vim.list_extend(result, list)
+      end
+      return result
+    end
+
+    before_each(function()
+      original_agents_project = vim.env.AGENTS_PROJECT
+      original_p = vim.env.P
+      vim.env.AGENTS_PROJECT = nil
+      vim.env.P = nil
+
+      ops = {}
+      tree_state = nil
+      focused_win = nil
+
+      original_neotree_command = package.loaded["neo-tree.command"]
+      original_neotree_manager = package.loaded["neo-tree.sources.manager"]
+      original_neotree_renderer = package.loaded["neo-tree.ui.renderer"]
+      package.loaded["neo-tree.command"] = {
+        execute = function(args)
+          table.insert(ops, {
+            neotree = args,
+            bind_to_cwd = tree_state.bind_to_cwd,
+          })
+          tree_state._ready = true
+        end,
+      }
+      package.loaded["neo-tree.sources.manager"] = {
+        get_state = function(source)
+          assert.equals("filesystem", source)
+          -- a fresh per-tab state, as neo-tree creates for each tab
+          tree_state = { bind_to_cwd = true }
+          return tree_state
+        end,
+      }
+      package.loaded["neo-tree.ui.renderer"] = {
+        window_exists = function(state)
+          return state == tree_state
+        end,
+      }
+
+      getcwd_stub = stub(vim.fn, "getcwd", function()
+        return "/Users/me/github/repo"
+      end)
+
+      local tab = 1
+      vim.cmd = function(cmd)
+        if cmd == "tabnew" then
+          tab = tab + 1
+        end
+        table.insert(ops, cmd)
+      end
+      get_current_win_stub = stub(vim.api, "nvim_get_current_win", function()
+        return 1000 + tab
+      end)
+      set_current_win_stub = stub(vim.api, "nvim_set_current_win", function(win)
+        focused_win = win
+        table.insert(ops, { focus = win })
+      end)
+    end)
+
+    after_each(function()
+      vim.env.AGENTS_PROJECT = original_agents_project
+      vim.env.P = original_p
+      package.loaded["neo-tree.command"] = original_neotree_command
+      package.loaded["neo-tree.sources.manager"] = original_neotree_manager
+      package.loaded["neo-tree.ui.renderer"] = original_neotree_renderer
+      get_current_win_stub:revert()
+      set_current_win_stub:revert()
+    end)
+
+    local function tree(dir)
+      return {
+        neotree = { action = "show", source = "filesystem", dir = dir },
+        bind_to_cwd = false,
+      }
+    end
+
+    local function project_workspace(project)
+      return concat(
+        { tree("/Users/me/github/repo") },
+        {
+          "tabnew",
+          "edit " .. vim.fn.fnameescape(project .. "/vadnu.md"),
+          tree(project),
+        },
+        terminal_grid,
+        { { focus = 1002 } }
+      )
+    end
+
+    it("opens cwd tree, unbound project tree with vadnu.md, and a terminal grid", function()
+      local project = vim.fn.tempname()
+      vim.env.AGENTS_PROJECT = project
+
+      agent.StartExternalAgentWorkspace()
+
+      assert.same(project_workspace(project), ops)
+      assert.same({ "## Tasks" }, vim.fn.readfile(project .. "/vadnu.md"))
+      assert.equals(1002, focused_win)
+    end)
+
+    it("falls back to $P when AGENTS_PROJECT is empty", function()
+      local project = vim.fn.tempname()
+      vim.env.AGENTS_PROJECT = ""
+      vim.env.P = project
+
+      agent.StartExternalAgentWorkspace()
+
+      assert.same(project_workspace(project), ops)
+      assert.equals(1002, focused_win)
+    end)
+
+    it("skips the project tab and focuses tab 1 without a project", function()
+      agent.StartExternalAgentWorkspace()
+
+      assert.same(concat({ tree("/Users/me/github/repo") }, terminal_grid, { { focus = 1001 } }), ops)
+      assert.equals(1001, focused_win)
+    end)
+
+    it("warns and continues when a tree is not ready in time", function()
+      package.loaded["neo-tree.ui.renderer"].window_exists = function()
+        return false
+      end
+      local wait_stub = stub(vim, "wait", function(_, predicate)
+        return predicate()
+      end)
+      local notify_stub = stub(vim, "notify")
+
+      agent.StartExternalAgentWorkspace()
+
+      wait_stub:revert()
+      notify_stub:revert()
+      assert.stub(notify_stub).was_called_with(
+        "Timed out waiting for neo-tree at /Users/me/github/repo",
+        vim.log.levels.WARN
+      )
+      assert.equals(1001, focused_win)
+    end)
+  end)
 end)

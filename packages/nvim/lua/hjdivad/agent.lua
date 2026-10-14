@@ -83,6 +83,81 @@ local function do_start_agent(agent_cmd)
   end, 100)
 end
 
+local tree_ready_timeout_ms = 2000
+
+-- Show a filesystem tree rooted at dir in the current tab, without changing
+-- the tab's cwd and without moving focus.
+--
+-- Neo-tree debounces navigation and renders asynchronously, then jumps back to
+-- the window that was current when the tree was requested. Wait for that to
+-- finish so a later tab doesn't get this tab's tree or lose focus to it.
+local function show_filesystem_tree(dir)
+  local win = vim.api.nvim_get_current_win()
+  -- Neo-tree keeps filesystem state per tab, so this only affects this tab.
+  local state = require("neo-tree.sources.manager").get_state("filesystem")
+  state.bind_to_cwd = false
+
+  require("neo-tree.command").execute({
+    action = "show",
+    source = "filesystem",
+    dir = dir,
+  })
+
+  local renderer = require("neo-tree.ui.renderer")
+  local ready = vim.wait(tree_ready_timeout_ms, function()
+    return state._ready == true
+      and renderer.window_exists(state)
+      and vim.api.nvim_get_current_win() == win
+  end, 10)
+
+  if not ready then
+    vim.notify("Timed out waiting for neo-tree at " .. dir, vim.log.levels.WARN)
+  end
+end
+
+local function open_terminal_grid()
+  vim.cmd("tabnew")
+  vim.cmd("terminal")
+  vim.cmd("rightbelow vsplit")
+  vim.cmd("terminal")
+  vim.cmd("rightbelow split")
+  vim.cmd("terminal")
+  vim.cmd("wincmd h")
+  vim.cmd("rightbelow split")
+  vim.cmd("terminal")
+  vim.cmd("wincmd =")
+end
+
+--- Open a workspace for working alongside an external agent.
+---
+--- Tab 1: filesystem tree at cwd, with the startup window on the right.
+--- Tab 2: filesystem tree at $AGENTS_PROJECT (or $P), with vadnu.md on the
+---        right. The tab's cwd stays at cwd. Skipped when neither is set.
+--- Tab 3: a 2x2 grid of terminals.
+---
+--- Focus ends on tab 2's vadnu.md, or tab 1's main window without tab 2.
+function M.StartExternalAgentWorkspace()
+  local cwd = vim.fn.getcwd()
+  local project = env_path("AGENTS_PROJECT", env_path("P", nil))
+
+  local focus_win = vim.api.nvim_get_current_win()
+  show_filesystem_tree(cwd)
+
+  if project ~= nil then
+    local vadnu = project .. "/vadnu.md"
+    ensure_vadnu_file(vadnu)
+
+    vim.cmd("tabnew")
+    vim.cmd("edit " .. vim.fn.fnameescape(vadnu))
+    focus_win = vim.api.nvim_get_current_win()
+    show_filesystem_tree(project)
+  end
+
+  open_terminal_grid()
+
+  vim.api.nvim_set_current_win(focus_win)
+end
+
 function M.StartAgent(agent)
   local agent_name = agent or default_agent
   local agent_cmd = agents[agent_name]
