@@ -1,0 +1,328 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Delete the local branches of a squash-merged stack, but only when every
+# branch is provably merged at its local tip.
+#
+# `git branch --merged` cannot see squash merges, so merge state comes from
+# `gh`. A branch is safe when one of its merged PRs has a head SHA equal to
+# the local tip and is authored by the current gh user. A branch with no
+# merged PR (e.g. `/st`) is safe only when its tip equals the merged head of a
+# safe branch in the same stack. If any branch is unsafe, nothing is deleted.
+#
+# Remote branches are never deleted or pushed: GitHub deletes merged PR head
+# branches itself, and `git fetch --prune origin` drops the stale
+# remote-tracking refs.
+
+# === Configuration ===
+# Change this to your username/prefix for forked usage
+BRANCH_PREFIX="hjdivad"
+
+USAGE="Usage: git stack-prune [--check [--ignore-worktree <path>]] [-n|--dry-run] [<name>]"
+
+usage() {
+  echo "$USAGE"
+  echo ""
+  echo "Delete local branches matching '${BRANCH_PREFIX}/<name>/*' once all of their"
+  echo "PRs are merged at the local tips, then run 'git fetch --prune origin'."
+  echo "Without <name>, it is derived from the current branch."
+  echo ""
+  echo "Options:"
+  echo "  --check                   Verify and report only; change nothing"
+  echo "  --ignore-worktree <path>  With --check, do not count branches checked out"
+  echo "                            in the worktree at <path> as unsafe (for callers"
+  echo "                            that are about to remove that worktree)"
+  echo "  -n, --dry-run             Verify and print what would be deleted; change nothing"
+  echo "  -h, --help                Show this help message"
+  echo ""
+  echo "Exit codes: 0 safe or done, 1 unsafe, 2 usage error or gh/git failure"
+}
+
+usage_error() {
+  echo "Error: $1" >&2
+  echo "$USAGE" >&2
+  exit 2
+}
+
+# === Parse arguments ===
+CHECK=false
+DRY_RUN=false
+IGNORE_WORKTREE=""
+name=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --check)
+      CHECK=true
+      shift
+      ;;
+    --ignore-worktree)
+      [[ $# -ge 2 && -n "$2" ]] || usage_error "--ignore-worktree requires a path"
+      IGNORE_WORKTREE="$2"
+      shift 2
+      ;;
+    -n|--dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -*)
+      usage_error "Unknown option '$1'"
+      ;;
+    *)
+      [[ -z "$name" ]] || usage_error "Unexpected argument '$1'"
+      name="$1"
+      shift
+      ;;
+  esac
+done
+
+if [[ -n "$IGNORE_WORKTREE" && "$CHECK" != true ]]; then
+  usage_error "--ignore-worktree is only valid with --check"
+fi
+
+for tool in gh jq; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "Error: '$tool' is required but was not found on PATH" >&2
+    exit 2
+  fi
+done
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "Error: Not in a git repository" >&2
+  exit 2
+fi
+
+# === Resolve the stack name ===
+if [[ -z "$name" ]]; then
+  current_branch=$(git branch --show-current)
+  if [[ -z "$current_branch" ]]; then
+    usage_error "Not on a branch (detached HEAD state); pass <name> explicitly"
+  fi
+  if [[ ! "$current_branch" =~ ^${BRANCH_PREFIX}/([^/]+)/.+ ]]; then
+    usage_error "Current branch '$current_branch' does not match pattern '${BRANCH_PREFIX}/{name}/*'; pass <name> explicitly"
+  fi
+  name="${BASH_REMATCH[1]}"
+fi
+
+# Restrict names so the ref pattern below can never reach outside the stack.
+if [[ ! "$name" =~ ^[A-Za-z0-9._-]+$ ]]; then
+  usage_error "Invalid stack name '$name' (allowed: letters, digits, '.', '_', '-')"
+fi
+
+stack_prefix="${BRANCH_PREFIX}/${name}/"
+
+# Resolve a path to its physical form so worktree paths compare reliably
+# (e.g. macOS /tmp vs /private/tmp). Falls back to the input when missing.
+physical_path() {
+  (cd "$1" 2>/dev/null && pwd -P) || printf '%s\n' "$1"
+}
+
+ignore_worktree_abs=""
+if [[ -n "$IGNORE_WORKTREE" ]]; then
+  ignore_worktree_abs=$(physical_path "$IGNORE_WORKTREE")
+fi
+
+# === Collect stack branches and tips ===
+branches=()
+tips=()
+while IFS=' ' read -r ref sha; do
+  # for-each-ref matches the literal prefix up to a slash; re-check anyway so
+  # nothing outside refs/heads/<prefix>/<name>/ is ever considered.
+  [[ "$ref" == "refs/heads/${stack_prefix}"* ]] || continue
+  branches+=("${ref#refs/heads/}")
+  tips+=("$sha")
+done < <(git for-each-ref --format='%(refname) %(objectname)' "refs/heads/${BRANCH_PREFIX}/${name}")
+
+if [[ ${#branches[@]} -eq 0 ]]; then
+  echo "No local branches match '${stack_prefix}*'; nothing to prune."
+  exit 0
+fi
+
+# === Map stack branches to the worktrees that have them checked out ===
+# Parallel arrays: checked_out_branch[i] is checked out at checked_out_path[i].
+checked_out_branch=()
+checked_out_path=()
+worktree_path=""
+while IFS= read -r line; do
+  case "$line" in
+    "worktree "*) worktree_path="${line#worktree }" ;;
+    "branch refs/heads/${stack_prefix}"*)
+      checked_out_branch+=("${line#branch refs/heads/}")
+      checked_out_path+=("$worktree_path")
+      ;;
+  esac
+done < <(git worktree list --porcelain)
+
+# Print the worktree path(s) that block <branch>, or nothing.
+blocking_worktrees() {
+  local branch="$1" i path
+  for i in "${!checked_out_branch[@]}"; do
+    [[ "${checked_out_branch[$i]}" == "$branch" ]] || continue
+    path="${checked_out_path[$i]}"
+    if [[ -n "$ignore_worktree_abs" && "$(physical_path "$path")" == "$ignore_worktree_abs" ]]; then
+      continue
+    fi
+    printf '%s\n' "$path"
+  done
+}
+
+# === Verify ===
+GH_FAILED=false
+verdicts=()   # SAFE | UNSAFE | PENDING (no merged PR; decided in pass 2)
+reasons=()
+safe_heads=() # "<sha> <branch> #<number>" for branches safe by their own PR
+
+gh_user=""
+gh_user_error=""
+if ! gh_user=$(gh api user -q .login 2>&1) || [[ -z "$gh_user" ]]; then
+  GH_FAILED=true
+  gh_user_error="${gh_user:-empty login}"
+  gh_user_error="${gh_user_error//$'\n'/ }"
+  gh_user=""
+fi
+
+for i in "${!branches[@]}"; do
+  branch="${branches[$i]}"
+  tip="${tips[$i]}"
+
+  if [[ -n "$gh_user_error" ]]; then
+    verdicts+=("UNSAFE")
+    reasons+=("gh error: could not determine gh user: ${gh_user_error}")
+    continue
+  fi
+
+  if ! prs_json=$(gh pr list --head "$branch" --state merged --json number,headRefOid,author,url 2>&1) ||
+    ! jq -e 'type == "array"' >/dev/null 2>&1 <<<"$prs_json"; then
+    GH_FAILED=true
+    verdicts+=("UNSAFE")
+    reasons+=("gh error: ${prs_json//$'\n'/ }")
+    continue
+  fi
+
+  if [[ "$(jq 'length' <<<"$prs_json")" -eq 0 ]]; then
+    verdicts+=("PENDING")
+    reasons+=("no merged PR")
+    continue
+  fi
+
+  mine=$(jq -r --arg tip "$tip" --arg me "$gh_user" \
+    '[.[] | select(.headRefOid == $tip and .author.login == $me)][0] // empty | "#\(.number) \(.url)"' \
+    <<<"$prs_json")
+  if [[ -n "$mine" ]]; then
+    verdicts+=("SAFE")
+    reasons+=("merged PR ${mine} at local tip")
+    safe_heads+=("$tip $branch ${mine%% *}")
+    continue
+  fi
+
+  others=$(jq -r --arg tip "$tip" \
+    '[.[] | select(.headRefOid == $tip)][0] // empty | "#\(.number) by \(.author.login)"' \
+    <<<"$prs_json")
+  if [[ -n "$others" ]]; then
+    verdicts+=("UNSAFE")
+    reasons+=("different author: merged PR ${others}, not ${gh_user}")
+    continue
+  fi
+
+  # Merged PRs exist, none at the local tip. Prefer the most specific reason.
+  latest=$(jq -r '.[0] | "\(.number) \(.headRefOid)"' <<<"$prs_json")
+  pr_number="${latest%% *}"
+  merged_head="${latest#* }"
+  if git merge-base --is-ancestor "$merged_head" "$tip" 2>/dev/null; then
+    verdicts+=("UNSAFE")
+    reasons+=("local commits after merge of PR #${pr_number} (merged head ${merged_head:0:12})")
+  else
+    verdicts+=("UNSAFE")
+    reasons+=("local tip differs from merged head of PR #${pr_number} (${merged_head:0:12})")
+  fi
+done
+
+# Pass 2: branches with no merged PR are safe only when their tip equals the
+# merged head of a branch that is safe by its own PR.
+for i in "${!branches[@]}"; do
+  [[ "${verdicts[$i]}" == "PENDING" ]] || continue
+  match=""
+  for entry in ${safe_heads[@]+"${safe_heads[@]}"}; do
+    [[ "${entry%% *}" == "${tips[$i]}" ]] || continue
+    match="${entry#* }"
+    break
+  done
+  if [[ -n "$match" ]]; then
+    verdicts[i]="SAFE"
+    reasons[i]="no merged PR; tip matches merged head of ${match% *} (PR ${match##* })"
+  else
+    verdicts[i]="UNSAFE"
+    reasons[i]="no merged PR, and tip matches no merged head in this stack"
+  fi
+done
+
+# A branch checked out in any worktree is never deleted.
+for i in "${!branches[@]}"; do
+  blockers=$(blocking_worktrees "${branches[$i]}")
+  [[ -n "$blockers" ]] || continue
+  verdicts[i]="UNSAFE"
+  reasons[i]="checked out in worktree ${blockers//$'\n'/, }; ${reasons[$i]}"
+done
+
+# === Report ===
+all_safe=true
+echo "Stack '${stack_prefix}*' (gh user: ${gh_user:-unknown}):"
+for i in "${!branches[@]}"; do
+  [[ "${verdicts[$i]}" == "SAFE" ]] || all_safe=false
+  printf '  %-6s  %s  %s  %s\n' "${verdicts[$i]}" "${branches[$i]}" "${tips[$i]:0:12}" "${reasons[$i]}"
+done
+
+if [[ "$all_safe" != true ]]; then
+  echo ""
+  echo "Not all branches are safe to delete; deleted nothing."
+  if [[ "$GH_FAILED" == true ]]; then
+    exit 2
+  fi
+  exit 1
+fi
+
+if [[ "$CHECK" == true ]]; then
+  echo ""
+  echo "All ${#branches[@]} branch(es) are safe to delete."
+  if [[ "$DRY_RUN" != true ]]; then
+    exit 0
+  fi
+fi
+
+if [[ "$DRY_RUN" == true ]]; then
+  echo ""
+  echo "[dry-run] Would execute:"
+  for i in "${!branches[@]}"; do
+    echo "  git update-ref -d refs/heads/${branches[$i]} ${tips[$i]}"
+  done
+  echo "  git fetch --prune origin"
+  exit 0
+fi
+
+# === Delete ===
+# Pass the verified SHA so a branch that moved since the check is kept.
+DELETE_FAILED=false
+echo ""
+for i in "${!branches[@]}"; do
+  branch="${branches[$i]}"
+  if git update-ref -d "refs/heads/${branch}" "${tips[$i]}"; then
+    git config --remove-section "branch.${branch}" 2>/dev/null || true
+    echo "Deleted ${branch} (was ${tips[$i]:0:12})"
+  else
+    DELETE_FAILED=true
+    echo "Error: failed to delete ${branch}; it may have moved since verification" >&2
+  fi
+done
+
+if [[ "$DELETE_FAILED" == true ]]; then
+  echo "Error: some branches were not deleted; skipping 'git fetch --prune origin'" >&2
+  exit 2
+fi
+
+if ! git fetch --prune origin; then
+  echo "Error: 'git fetch --prune origin' failed" >&2
+  exit 2
+fi

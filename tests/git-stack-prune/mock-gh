@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# Mock `gh` for git-stack-prune tests.
+#
+# State is read from the file at $MOCK_GH_STATE.
+# Calls are appended to $MOCK_GH_CALLS as one line per invocation.
+#
+# State file format (line-oriented):
+#   user=<login>                         login returned by `gh api user`
+#   fail_user=1                          make `gh api user` fail
+#   fail_pr_list=1                       make every `gh pr list` fail
+#   pr <head> <number> <state> <oid> <author>
+#   move_on_list <head> <repo> <ref> <sha>
+#       after listing PRs for <head>, point <ref> in <repo> at <sha>
+#       (simulates a branch moving between verification and deletion)
+#
+# Supported invocations:
+#   gh api user -q .login
+#   gh pr list --head <branch> --state <state> --json number,headRefOid,author,url
+
+set -euo pipefail
+
+: "${MOCK_GH_STATE:?MOCK_GH_STATE must be set}"
+: "${MOCK_GH_CALLS:?MOCK_GH_CALLS must be set}"
+
+printf '%s\n' "$*" >> "$MOCK_GH_CALLS"
+
+state_get_kv() {
+  local key="$1"
+  awk -F= -v k="$key" '$1 == k { sub("^[^=]*=", ""); print; exit }' "$MOCK_GH_STATE"
+}
+
+sub="${1:-}"; shift || true
+
+case "$sub" in
+  api)
+    if [[ "${1:-}" == "user" ]]; then
+      if [[ "$(state_get_kv fail_user)" == "1" ]]; then
+        echo "mock-gh: HTTP 401: Bad credentials" >&2
+        exit 1
+      fi
+      user="$(state_get_kv user)"
+      [[ -n "$user" ]] || { echo "mock-gh: user not set in state" >&2; exit 1; }
+      printf '%s\n' "$user"
+      exit 0
+    fi
+    echo "mock-gh: unsupported api call: $*" >&2
+    exit 2
+    ;;
+
+  pr)
+    pr_sub="${1:-}"; shift || true
+    if [[ "$pr_sub" != "list" ]]; then
+      echo "mock-gh: unsupported pr subcommand: $pr_sub $*" >&2
+      exit 2
+    fi
+
+    head=""
+    state=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --head) head="$2"; shift 2;;
+        --state) state="$2"; shift 2;;
+        --json|--limit) shift 2;;
+        *) shift;;
+      esac
+    done
+
+    if [[ "$(state_get_kv fail_pr_list)" == "1" ]]; then
+      echo "mock-gh: error connecting to api.github.com" >&2
+      exit 1
+    fi
+
+    # GitHub reports states in upper case; the CLI filter is lower case.
+    awk -v h="$head" -v s="$state" '
+      BEGIN { printf "["; n = 0 }
+      $1 == "pr" && $2 == h && (s == "all" || tolower($4) == tolower(s)) {
+        if (n++) printf ","
+        printf "{\"number\":%s,\"headRefOid\":\"%s\",\"author\":{\"login\":\"%s\"},\"url\":\"https://github.com/test/repo/pull/%s\"}", $3, $5, $6, $3
+      }
+      END { print "]" }
+    ' "$MOCK_GH_STATE"
+
+    while read -r _ _ repo ref sha; do
+      git -C "$repo" update-ref "$ref" "$sha"
+    done < <(awk -v h="$head" '$1 == "move_on_list" && $2 == h' "$MOCK_GH_STATE")
+    exit 0
+    ;;
+
+  *)
+    echo "mock-gh: unsupported subcommand: $sub $*" >&2
+    exit 2
+    ;;
+esac
