@@ -130,7 +130,7 @@ ks({"n","t"}, "<F4>", "<Cmd>tabn 4<cr>", { desc = "go to tab 4" })
 ks({"n","t"}, "<F5>", "<Cmd>tabn 5<cr>", { desc = "go to tab 5" })
 ks({"n","t"}, "<F6>", "<Cmd>tabn 6<cr>", { desc = "go to tab 6" })
 ks({"n","t"}, "<F7>", "<Cmd>tabn 7<cr>", { desc = "go to tab 7" })
-ks({"n","t"}, "<F8>", "<Cmd>tabn 8<cr>", { desc = "go to tab 8" })
+ks({"n","t"}, "<F8>", "<Cmd>$-tabn<cr>", { desc = "go to the second-to-last tab page" })
 ks({"n","t"}, "<F9>", "<Cmd>$tabn<cr>", { desc = "go to the last tab page" })
 -- <Cmd>0 reserved for restoring text size
 
