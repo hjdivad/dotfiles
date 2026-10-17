@@ -7,8 +7,11 @@ set -euo pipefail
 # `git branch --merged` cannot see squash merges, so merge state comes from
 # `gh`. A branch is safe when one of its merged PRs has a head SHA equal to
 # the local tip and is authored by the current gh user. A branch with no
-# merged PR (e.g. `/st`) is safe only when its tip equals the merged head of a
-# safe branch in the same stack. If any branch is unsafe, nothing is deleted.
+# merged PR is safe only when its tip equals the merged head of a safe branch
+# in the same stack. The `/st` working branch never has a PR of its own, so it
+# is also safe when its tip is already on origin's default branch (it holds no
+# commits of its own, e.g. a task abandoned before any work was committed). If
+# any branch is unsafe, nothing is deleted.
 #
 # Remote branches are never deleted or pushed: GitHub deletes merged PR head
 # branches itself, and `git fetch --prune origin` drops the stale
@@ -240,8 +243,13 @@ for i in "${!branches[@]}"; do
   fi
 done
 
+# origin's default branch (e.g. origin/master), or empty when origin/HEAD is
+# unset. Only consulted for a `/st` branch with no merged PR.
+default_ref=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null || true)
+
 # Pass 2: branches with no merged PR are safe only when their tip equals the
-# merged head of a branch that is safe by its own PR.
+# merged head of a branch that is safe by its own PR, or, for `/st`, when the
+# tip is already on origin's default branch.
 for i in "${!branches[@]}"; do
   [[ "${verdicts[$i]}" == "PENDING" ]] || continue
   match=""
@@ -253,6 +261,10 @@ for i in "${!branches[@]}"; do
   if [[ -n "$match" ]]; then
     verdicts[i]="SAFE"
     reasons[i]="no merged PR; tip matches merged head of ${match% *} (PR ${match##* })"
+  elif [[ "${branches[$i]}" == "${stack_prefix}st" && -n "$default_ref" ]] &&
+    git merge-base --is-ancestor "${tips[$i]}" "$default_ref" 2>/dev/null; then
+    verdicts[i]="SAFE"
+    reasons[i]="no merged PR; tip is on ${default_ref} (no commits of its own)"
   else
     verdicts[i]="UNSAFE"
     reasons[i]="no merged PR, and tip matches no merged head in this stack"
