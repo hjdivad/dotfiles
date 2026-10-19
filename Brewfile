@@ -158,6 +158,8 @@ cask "discord"
 cask "divvy"
 # Remote pair programming and team collaboration tool
 cask "drovio"
+# Utility for customizing which browser to start
+cask "finicky"
 # Screen colour temperature controller
 cask "flux-app"
 cask "font-hasklug-nerd-font"

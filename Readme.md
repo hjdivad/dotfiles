@@ -94,6 +94,12 @@ gh repo checkout {my-org-user}/{my-dotfiles}.git
   - vimium extension
   - brave://settings
   - brave://extensions/shortcuts
+- set up finicky (routes links opened outside the browser to Brave profiles)
+  - open Finicky once, then make it the default browser in *system settings* ->
+    *desktop & dock* -> *default web browser*
+  - rules live in `packages/finicky/finicky.ts` and the optional
+    `local-packages/finicky/finicky.ts`; after editing, run
+    `task dot:finicky:reload`
 - set up [1password commit signing](https://www.1password.dev/ssh/git-commit-signing)
 - set up obsidian
   - open local vault in `~/src/vadnu/${vault}`

@@ -71,6 +71,21 @@ tasks:
       - task: utils:copy_dotfiles
       - task: setup-local-dotfiles
       - task: shell:install
+      - task: finicky:reload
+
+  finicky:reload:
+    desc: Reload the Finicky config after editing it or its local rules
+    summary: |
+      Reload the Finicky config
+
+      Finicky caches its bundled config until the main config file's mtime
+      changes, and only rebundles on a write to that file or on launch. A
+      touch changes the mtime but is only an attribute change to the file
+      watcher, so also quit Finicky. macOS relaunches it on the next link.
+    platforms: [darwin]
+    cmds:
+      - touch "{{.DOTFILES_DIR}}/packages/finicky/finicky.ts"
+      - pkill -x Finicky || true
 
   utils:ensure_dirs:
     internal: true
@@ -172,6 +187,7 @@ tasks:
         - "packages/ccstatusline/|$HOME/.config/ccstatusline"
         - "packages/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
         - "packages/zellij/|$HOME/.config/zellij"
+        - "packages/finicky/finicky.ts|$HOME/.config/finicky/finicky.ts"
       LOCAL_MACOS_DOTFILES:
         sh: |
           file="{{.DOTFILES_DIR}}/local-packages/dotfiles/macos.links"
